@@ -1,0 +1,28 @@
+{
+  "name": "volto-plotlycharts",
+  "version": "1.0.0",
+  "description": "Plotly Charts and Editor integration for Volto",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eea/volto-plotlycharts.git"
+  },
+  "keywords": [
+    "Volto",
+    "Plone",
+    "Plotly"
+  ],
+  "author": "Tiberiu Ichim",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/eea/volto-plotlycharts/issues"
+  },
+  "homepage": "https://github.com/eea/volto-plotlycharts#readme",
+  "dependencies":  {
+    "react-chart-editor": "^0.40.0",
+    "react-plotly.js": "^2.3.0"
+  }
+}
