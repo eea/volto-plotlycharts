@@ -9,6 +9,7 @@ import EmbedChartBlockView from './ChartBlock/View';
 
 import chartIcon from '@plone/volto/icons/world.svg';
 import * as addonReducers from './reducers';
+import addonRoutes from './routes';
 
 export function applyConfig(config) {
   const hasCustomGroup = config.blocks.groupBlocksOrder.filter(
@@ -48,6 +49,10 @@ export function applyConfig(config) {
     addonReducers: {
       ...config.addonReducers,
       ...addonReducers,
+    },
+    addonRoutes: {
+      ...(config.addonRoutes || []),
+      addonRoutes,
     },
   };
 }
