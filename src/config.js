@@ -20,7 +20,11 @@ export function applyConfig(config) {
       title: 'Custom addons',
     });
   }
+
+  config.settings.nonContentRoutes.push('/data-providers-view');
+
   config.contentTypeViews.visualization = VisualizationView;
+
   config.widgets.id.viualization = ChartWidget;
   config.blocks.blocksConfig.plotly_charts = {
     id: 'plotly_chart',
