@@ -1,4 +1,4 @@
-import { GET_CHART_DATA_FROM_VISUALIZATION } from '~/constants/ActionTypes';
+import { GET_CHART_DATA_FROM_VISUALIZATION } from '../constants';
 
 const initialState = {
   error: null,
