@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { searchContent } from '@plone/volto/actions';
 import { getDataFromProvider } from '../actions';
 import { Dropdown } from 'semantic-ui-react';
+import { DATA_PROVIDER_TYPES } from '../constants';
 
 const LoadablePlotlyEditor = Loadable({
   loader: () => import('react-chart-editor'),
@@ -64,7 +65,7 @@ class Edit extends Component {
 
   componentWillMount() {
     this.props.searchContent('', {
-      object_provides: 'forests.content.interfaces.IBasicDataProvider',
+      object_provides: DATA_PROVIDER_TYPES,
     });
   }
 
