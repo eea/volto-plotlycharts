@@ -24,7 +24,7 @@ export function applyConfig(config) {
 
   config.settings.nonContentRoutes.push('/data-providers-view');
 
-  config.contentTypeViews.visualization = VisualizationView;
+  config.views.contentTypesViews.visualization = VisualizationView;
 
   config.widgets.id.viualization = ChartWidget;
   config.blocks.blocksConfig.plotly_charts = {
