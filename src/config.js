@@ -27,6 +27,7 @@ export function applyConfig(config) {
   config.views.contentTypesViews.visualization = VisualizationView;
 
   config.widgets.id.viualization = ChartWidget;
+
   config.blocks.blocksConfig.plotly_charts = {
     id: 'plotly_chart',
     title: 'Plotly Chart',
@@ -50,9 +51,6 @@ export function applyConfig(config) {
       ...config.addonReducers,
       ...addonReducers,
     },
-    addonRoutes: {
-      ...(config.addonRoutes || []),
-      addonRoutes,
-    },
+    addonRoutes: [...(config.addonRoutes || []), addonRoutes],
   };
 }

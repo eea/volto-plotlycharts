@@ -3,7 +3,7 @@ import 'react-chart-editor/lib/react-chart-editor.css';
 import Loadable from 'react-loadable';
 import { connect } from 'react-redux';
 import { searchContent } from '@plone/volto/actions';
-import { getDataFromProvider } from '~/actions';
+import { getDataFromProvider } from '../actions';
 import { Dropdown } from 'semantic-ui-react';
 
 const LoadablePlotlyEditor = Loadable({
