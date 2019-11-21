@@ -28,7 +28,7 @@ export function applyConfig(config) {
 
   config.widgets.id.visualization = ChartWidget;
 
-  config.blocks.blocksConfig.plotly_charts = {
+  config.blocks.blocksConfig.plotly_chart = {
     id: 'plotly_chart',
     title: 'Plotly Chart',
     view: PlotlyBlockView,
