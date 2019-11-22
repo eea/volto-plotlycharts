@@ -20,7 +20,6 @@ const initialState = {
  * @returns {Object} New state.
  */
 export default function data_providers(state = initialState, action = {}) {
-  console.log('called data_providers');
   switch (action.type) {
     case `${GET_DATA_FROM_PROVIDER}_PENDING`:
       return {
