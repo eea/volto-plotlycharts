@@ -15,7 +15,7 @@ export function applyConfig(config) {
   const hasCustomGroup = config.blocks.groupBlocksOrder.filter(
     el => el.id === 'custom_addons',
   );
-  if (!hasCustomGroup) {
+  if (!hasCustomGroup.length) {
     config.blocks.groupBlocksOrder.push({
       id: 'custom_addons',
       title: 'Custom addons',
