@@ -29,7 +29,6 @@ export default function data_providers(state = initialState, action = {}) {
         loading: true,
       };
     case `${GET_DATA_FROM_PROVIDER}_SUCCESS`:
-      console.log('Success getting data providers', action.result);
       return {
         ...state,
         error: null,
