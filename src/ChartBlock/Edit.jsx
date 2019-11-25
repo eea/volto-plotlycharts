@@ -33,44 +33,13 @@ class Edit extends Component {
   constructor(props) {
     super(props);
 
-    const chartData = this.props.data.chartData || {};
-
-    this.state = {
-      data: chartData.data || [],
-      layout: chartData.layout || [],
-      frames: chartData.frames || [],
-    };
-
-    this.onSubmit = this.onSubmit.bind(this);
-    this.handleChange = this.handleChange.bind(this);
     this.handleChangeProvider = this.handleChangeProvider.bind(this);
-    // this.getChartData = this.getChartData.bind(this);
   }
-
-  onSubmit() {
-    const chartData = {
-      data: this.state.data,
-      layout: this.state.layout,
-      frames: this.state.frames,
-    };
-    this.props.onChangeBlock(this.props.block, {
-      ...this.props.data,
-      chartData,
-    });
-  }
-
-  // componentWillReceiveProps(nextProps) {
-  //   console.log('got props', nextProps);
-  // }
 
   componentWillMount() {
     this.props.searchContent('', {
       object_provides: DATA_PROVIDER_TYPES,
     });
-  }
-
-  handleChange(data, layout, frames) {
-    this.setState({ data, layout, frames }, this.onSubmit);
   }
 
   handleChangeProvider(ev, { value }) {
@@ -87,6 +56,12 @@ class Edit extends Component {
       };
     });
 
+    const chartData = this.props.data.chartData || {
+      layout: {},
+      frames: [],
+      data: [],
+    };
+
     return (
       <div>
         {__CLIENT__ ? (
@@ -100,17 +75,26 @@ class Edit extends Component {
                 onChange={this.handleChangeProvider}
               />
               <LoadablePlotlyEditor
-                data={this.state.data}
-                layout={this.state.layout}
+                data={chartData.data}
+                layout={chartData.layout}
                 config={config}
-                frames={this.state.frames}
+                frames={chartData.frames}
                 dataSources={this.props.providerData || dataSources}
                 dataSourceOptions={
                   this.props.dataSourceOptions ||
                   getDataSourceOptions(dataSources)
                 }
                 plotly={plotly}
-                onUpdate={this.handleChange}
+                onUpdate={(data, layout, frames) => {
+                  this.props.onChangeBlock(this.props.block, {
+                    ...this.props.data,
+                    chartData: {
+                      data,
+                      layout,
+                      frames,
+                    },
+                  });
+                }}
                 useResizeHandler
                 debug
                 advancedTraceTypeSelector

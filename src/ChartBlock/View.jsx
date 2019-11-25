@@ -12,6 +12,7 @@ const LoadablePlot = Loadable({
 class ChartView extends Component {
   constructor(props) {
     super(props);
+    // console.log('ChartView props', props.data.chartData);
     this.state = { ...props.data.chartData };
   }
 
