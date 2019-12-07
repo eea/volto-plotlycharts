@@ -56,7 +56,7 @@ class Edit extends Component {
     this.props.onChangeValue(chartData);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.searchContent('', {
       object_provides: 'forests.content.interfaces.IBasicDataProvider',
     });
