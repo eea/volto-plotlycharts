@@ -1,5 +1,5 @@
 import React from 'react';
-import Helmet from 'react-helmet';
+import { Helmet } from '@plone/volto/helpers';
 import { Container, Image } from 'semantic-ui-react';
 import { settings } from '~/config';
 import Loadable from 'react-loadable';

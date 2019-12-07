@@ -63,7 +63,7 @@ class ChartPick extends Component {
     this.props.getChartDataFromVisualization(path);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     // get the existing visualizations
     this.props.searchContent('', {
       object_provides: 'forests.content.interfaces.IDataVisualization',
@@ -71,7 +71,7 @@ class ChartPick extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    console.log('new props', this.props);
+    // console.log('new props', this.props);
     if (this.props.remoteChartData !== prevProps.remoteChartData) {
       this.setState({
         localChartData: this.props.remoteChartData,
@@ -80,7 +80,7 @@ class ChartPick extends Component {
   }
 
   render() {
-    console.log('state in render', this.state);
+    // console.log('state in render', this.state);
     return (
       <div className="block selected">
         <div className="block-inner-wrapper">

@@ -36,7 +36,7 @@ class Edit extends Component {
     this.handleChangeProvider = this.handleChangeProvider.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.searchContent('', {
       object_provides: DATA_PROVIDER_TYPES,
     });
