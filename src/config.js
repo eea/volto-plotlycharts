@@ -9,9 +9,8 @@ import EmbedChartBlockView from './ChartBlock/View';
 
 import chartIcon from '@plone/volto/icons/world.svg';
 import * as addonReducers from './reducers';
-import addonRoutes from './routes';
 
-export function applyConfig(config) {
+function addCustomGroup(config) {
   const hasCustomGroup = config.blocks.groupBlocksOrder.filter(
     el => el.id === 'custom_addons',
   );
@@ -21,8 +20,10 @@ export function applyConfig(config) {
       title: 'Custom addons',
     });
   }
+}
 
-  config.settings.nonContentRoutes.push('/data-providers-view');
+export function applyConfig(config) {
+  addCustomGroup(config);
 
   config.views.contentTypesViews.visualization = VisualizationView;
 
@@ -51,6 +52,5 @@ export function applyConfig(config) {
       ...config.addonReducers,
       ...addonReducers,
     },
-    addonRoutes: [...(config.addonRoutes || []), ...addonRoutes],
   };
 }

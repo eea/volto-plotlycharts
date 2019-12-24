@@ -3,9 +3,9 @@ import 'react-chart-editor/lib/react-chart-editor.css';
 import Loadable from 'react-loadable';
 import { connect } from 'react-redux';
 import { searchContent } from '@plone/volto/actions';
-import { getDataFromProvider } from '../actions';
+import { getDataFromProvider } from 'volto-datablocks/actions';
 import { Dropdown } from 'semantic-ui-react';
-import { DATA_PROVIDER_TYPES } from '../constants';
+import { DATA_PROVIDER_TYPES } from 'volto-datablocks/constants';
 
 const LoadablePlotlyEditor = Loadable({
   loader: () => import('react-chart-editor'),
@@ -37,6 +37,7 @@ class Edit extends Component {
   }
 
   componentDidMount() {
+    // TODO: this needs to use a subrequest
     this.props.searchContent('', {
       object_provides: DATA_PROVIDER_TYPES,
     });

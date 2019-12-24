@@ -2,7 +2,7 @@ import Loadable from 'react-loadable';
 import React, { Component } from 'react';
 import { Dropdown } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import { getDataFromProvider } from '../actions';
+import { getDataFromProvider } from 'volto-datablocks/actions';
 import { searchContent } from '@plone/volto/actions';
 
 import 'react-chart-editor/lib/react-chart-editor.css';
@@ -57,8 +57,9 @@ class Edit extends Component {
   }
 
   componentDidMount() {
+    // TODO: this needs to use a subrequest
     this.props.searchContent('', {
-      object_provides: 'forests.content.interfaces.IBasicDataProvider',
+      object_provides: 'eea.restapi.interfaces.IBasicDataProvider',
     });
   }
 
