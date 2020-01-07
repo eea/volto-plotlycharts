@@ -35,12 +35,6 @@ function getDataSourceOptions(data) {
 const config = { editable: true };
 
 class Edit extends Component {
-  // constructor(props) {
-  //   super(props);
-  //
-  //   this.handleChangeProvider = this.handleChangeProvider.bind(this);
-  // }
-  //
   componentDidMount() {
     // TODO: this needs to use a subrequest
     this.props.searchContent('', {
@@ -51,10 +45,6 @@ class Edit extends Component {
     }
   }
 
-  // handleChangeProvider(ev, { value }) {
-  //   this.props.getDataFromProvider(value);
-  // }
-
   componentDidUpdate(prevProps) {
     if (this.props.url && this.props.url !== prevProps.url) {
       this.props.getDataFromProvider(this.props.url);
@@ -62,25 +52,10 @@ class Edit extends Component {
   }
 
   render() {
-    console.log('connect props', this.props);
-
     const plotly = require('plotly.js/dist/plotly');
     const selectProviders = this.props.providers.map(el => {
       return [el['@id'], el.title];
     });
-
-    //<Dropdown
-    //  placeholder="Select data provider"
-    //  fluid
-    //  selection
-    //  options={selectProviders}
-    //  onChange={(ev, { value }) =>
-    //    this.props.onChangeBlock(this.props.block, {
-    //      ...this.props.data,
-    //      url: value,
-    //    })
-    //  }
-    ///>
 
     const chartData = this.props.data.chartData || {
       layout: {},
