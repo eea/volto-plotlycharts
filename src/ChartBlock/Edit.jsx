@@ -141,7 +141,7 @@ function getProviderData(state, props) {
 
   const data = state.data_providers.data || {};
   const res = path ? data[path] || data[url] : [];
-  console.log('res', res);
+  // console.log('res', res);
   return res;
 }
 

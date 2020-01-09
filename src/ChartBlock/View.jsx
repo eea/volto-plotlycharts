@@ -1,5 +1,6 @@
 import { addAppURL } from '@plone/volto/helpers';
 import { getDataFromProvider } from 'volto-datablocks/actions';
+import { getConnectedDataParameters } from 'volto-datablocks/helpers';
 import { connect } from 'react-redux';
 import Loadable from 'react-loadable';
 import React, { useEffect } from 'react';
@@ -11,8 +12,9 @@ const LoadablePlot = Loadable({
   },
 });
 
-function mixProviderData(chartData, providerData) {
+function mixProviderData(chartData, providerData, parameters) {
   const providerDataColumns = Object.keys(providerData);
+  // console.log('parameters', parameters);
 
   const res = chartData.map(trace => {
     Object.keys(trace).forEach(tk => {
@@ -23,23 +25,37 @@ function mixProviderData(chartData, providerData) {
         typeof trace[tk] === 'string' &&
         providerDataColumns.includes(trace[tk])
       ) {
-        // console.log('replacing', originalColumn, tk, trace[tk]);
         let values = providerData[trace[tk]];
 
-        // if (originalColumn === 'labels') values = values.map(l => l + 'XXX');
+        // if (originalColumn === 'labels') values = values.map(l => l + 'LLL');
 
         trace[originalColumn] = values;
+
+        if (!(parameters && parameters.length)) return;
+
+        // TODO: we assume a single parameter
+        const {
+          i: filterName,
+          v: [filterValue],
+        } = parameters[0];
+
+        // tweak transformation filters using data parameters
+        (trace.transforms || []).forEach(transform => {
+          if (transform.targetsrc === filterName && filterValue) {
+            transform.value = filterValue;
+            // console.log('trace', transform, filterValue);
+          }
+        });
       }
     });
 
     return trace;
   });
-  // console.log('new chartData', res);
   return res;
 }
 
 function ChartView(props) {
-  // console.log(props);
+  // console.log('chartview props', props);
 
   useEffect(() => {
     props.getDataFromProvider(props.data.url);
@@ -53,7 +69,11 @@ function ChartView(props) {
         <LoadablePlot
           data={
             props.providerData
-              ? mixProviderData(chartData.data, props.providerData)
+              ? mixProviderData(
+                  chartData.data,
+                  props.providerData,
+                  props.connected_data_parameters,
+                )
               : chartData.data
           }
           layout={chartData.layout}
@@ -67,7 +87,6 @@ function ChartView(props) {
 
 function getProviderData(state, props) {
   let path = props?.data?.url || null;
-  // console.log('url in getProviderData', path, state);
 
   if (!path) return;
 
@@ -76,16 +95,18 @@ function getProviderData(state, props) {
 
   const data = state.data_providers.data || {};
   const res = path ? data[path] || data[url] : [];
-  // console.log('res', res);
   return res;
 }
 
 export default connect(
   (state, props) => {
     const providerData = getProviderData(state, props);
+    const url = state.router?.location?.pathname || null;
 
     return {
       providerData,
+      connected_data_parameters:
+        url !== null ? getConnectedDataParameters(state, { url }) : null,
     };
   },
   { getDataFromProvider },
