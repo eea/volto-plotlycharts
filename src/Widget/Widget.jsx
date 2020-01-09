@@ -23,7 +23,6 @@ class ModalChartEditor extends Component {
           <ChartEditor
             value={this.state.value}
             onChangeValue={value => {
-              console.log('Set chart data', value);
               this.setState({ value });
             }}
           />
@@ -41,8 +40,6 @@ class ModalChartEditor extends Component {
 class ChartWidget extends Component {
   constructor(props) {
     super(props);
-
-    console.log('Chartwidget props', props);
 
     this.state = {
       showChartEditor: false,
@@ -103,7 +100,6 @@ class ChartWidget extends Component {
                   value={value}
                   onChange={value => {
                     onChange(id, value);
-                    console.log('Got value from editor', value);
                     this.setState({
                       showChartEditor: false,
                     });

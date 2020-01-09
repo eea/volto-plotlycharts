@@ -32,41 +32,12 @@ function getDataSourceOptions(data) {
 const config = { editable: true };
 
 class Edit extends Component {
-  // constructor(props) {
-  //   super(props);
-  //
-  //   console.log('chart editor props', props);
-  //   const chartData = props.value || {};
-  //
-  //   // this.state = {
-  //   //   data: chartData.data || [],
-  //   //   layout: chartData.layout || {},
-  //   //   frames: chartData.frames || [],
-  //   //   provider_url: '',
-  //   // };
-  //
-  //   // this.onSubmit = this.onSubmit.bind(this);
-  //   // this.handleChange = this.handleChange.bind(this);
-  //   // this.handleChangeProvider = this.handleChangeProvider.bind(this);
-  // }
-
-  // onSubmit() {
-  //   // const chartData = {
-  //   //   data: this.state.data,
-  //   //   layout: this.state.layout,
-  //   //   frames: this.state.frames,
-  //   // };
-  //   const url = this.state.provider_url;
-  //   this.props.onChangeValue(chartData, url);
-  // }
-
-  // handleChange(data, layout, frames) {
-  //   this.setState({ data, layout, frames }, this.onSubmit);
-  // }
-
-  // handleChangeProvider(ev, { value }) {
-  //   this.props.getDataFromProvider(value);
-  // }
+  constructor(props) {
+    super(props);
+    this.state = {
+      plotly: require('plotly.js/dist/plotly'),
+    };
+  }
 
   componentDidMount() {
     // TODO: this needs to use a subrequest
@@ -75,8 +46,13 @@ class Edit extends Component {
     });
   }
 
+  componentDidUpdate(prevProps) {
+    const url = this.props.value?.url;
+    const prevUrl = prevProps.value?.url;
+    if (url !== prevUrl) this.props.getDataFromProvider(url);
+  }
+
   render() {
-    const plotly = require('plotly.js/dist/plotly');
     const selectProviders = this.props.providers.map(el => {
       return {
         key: el['@id'],
@@ -109,7 +85,7 @@ class Edit extends Component {
                   this.props.dataSourceOptions ||
                   getDataSourceOptions(dataSources)
                 }
-                plotly={plotly}
+                plotly={this.state.plotly}
                 onUpdate={data =>
                   this.props.onChangeValue({ ...this.props.value, data })
                 }
@@ -128,8 +104,7 @@ class Edit extends Component {
 }
 
 function getProviderData(state, props) {
-  // state.data_providers ? state.data_providers.item : {};
-  let path = props?.data?.url || null;
+  let path = props?.value?.url || null;
 
   if (!path) return;
 
@@ -138,7 +113,6 @@ function getProviderData(state, props) {
 
   const data = state.data_providers.data || {};
   const res = path ? data[path] || data[url] : [];
-  // console.log('res', res);
   return res;
 }
 
