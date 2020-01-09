@@ -3,20 +3,17 @@ import React, { Component } from 'react';
 import { Button, Modal, Form, Grid, Label } from 'semantic-ui-react';
 import { map } from 'lodash';
 
-// import showIcon from '@plone/volto/icons/show.svg';
-// import { Icon as VoltoIcon } from '@plone/volto/components';
-
 class ModalChartEditor extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      chartData: props.value,
+      value: props.value,
     };
     this.handleSave = this.handleSave.bind(this);
   }
 
   handleSave() {
-    this.props.onChange(this.state.chartData);
+    this.props.onChange(this.state.value);
   }
 
   render() {
@@ -24,10 +21,10 @@ class ModalChartEditor extends Component {
       <Modal open={true} size="fullscreen">
         <Modal.Content scrolling>
           <ChartEditor
-            value={this.props.value}
-            onChangeValue={data => {
-              console.log('Set chart data', data);
-              this.setState({ chartData: data });
+            data={this.props.value}
+            onChangeValue={value => {
+              console.log('Set chart data', value);
+              this.setState({ value });
             }}
           />
         </Modal.Content>
@@ -46,22 +43,10 @@ class ChartWidget extends Component {
     super(props);
 
     console.log('Chartwidget props', props);
-    const chartData = props.value || {};
-
-    const layout = {
-      ...chartData.layout,
-      width: (chartData.layout && chartData.layout.width) || 320,
-      height: (chartData.layout && chartData.layout.height) || 240,
-    };
 
     this.state = {
-      data: chartData.data || [],
-      layout,
-      frames: chartData.frames || [],
       showChartEditor: false,
     };
-
-    console.log('State', this.state);
   }
 
   render() {
@@ -75,7 +60,16 @@ class ChartWidget extends Component {
       onChange,
       fieldSet,
     } = this.props;
+
     if (__SERVER__) return '';
+
+    // value is { data || [], layout || {}, frames || [], provider_url }
+
+    const layout = {
+      ...this.props.value?.layout,
+      width: this.props.value?.layout?.width || 320,
+      height: this.props.value?.layout?.height || 240,
+    };
 
     const LoadablePlot = require('react-plotly.js').default;
     return (
@@ -112,9 +106,6 @@ class ChartWidget extends Component {
                     console.log('Got value from editor', value);
                     this.setState({
                       showChartEditor: false,
-                      data: (value && value.data) || [],
-                      layout: (value && value.layout) || {},
-                      frames: (value && value.frames) || [],
                     });
                   }}
                 />
@@ -123,9 +114,9 @@ class ChartWidget extends Component {
               )}
 
               <LoadablePlot
-                data={this.state.data}
-                layout={this.state.layout}
-                frames={this.state.frames}
+                data={this.props.value.data || []}
+                frames={this.props.value.frames || []}
+                layout={layout}
                 config={{ displayModeBar: false }}
               />
 

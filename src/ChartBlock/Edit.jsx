@@ -11,6 +11,7 @@ import { DATA_PROVIDER_TYPES } from 'volto-datablocks/constants';
 import { SidebarPortal, SelectWidget } from '@plone/volto/components';
 
 import { getDataFromProvider } from 'volto-datablocks/actions';
+import { changeSidebarState } from 'volto-sidebar/actions';
 
 const LoadablePlotlyEditor = Loadable({
   loader: () => import('react-chart-editor'),
@@ -43,10 +44,12 @@ class Edit extends Component {
     if (this.props.url) {
       this.props.getDataFromProvider(this.props.url);
     }
+    this.props.changeSidebarState(true);
   }
 
   componentDidUpdate(prevProps) {
     if (this.props.url && this.props.url !== prevProps.url) {
+      this.props.changeSidebarState(true);
       this.props.getDataFromProvider(this.props.url);
     }
   }
@@ -155,5 +158,5 @@ export default connect(
       dataSourceOptions: getDataSourceOptions(providerData || dataSources),
     };
   },
-  { searchContent, getDataFromProvider },
+  { searchContent, getDataFromProvider, changeSidebarState },
 )(Edit);

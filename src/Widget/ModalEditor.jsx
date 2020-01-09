@@ -2,6 +2,8 @@ import Loadable from 'react-loadable';
 import React, { Component } from 'react';
 import { Dropdown } from 'semantic-ui-react';
 import { connect } from 'react-redux';
+
+import { addAppURL } from '@plone/volto/helpers';
 import { getDataFromProvider } from 'volto-datablocks/actions';
 import { searchContent } from '@plone/volto/actions';
 
@@ -30,45 +32,47 @@ function getDataSourceOptions(data) {
 const config = { editable: true };
 
 class Edit extends Component {
-  constructor(props) {
-    super(props);
+  // constructor(props) {
+  //   super(props);
+  //
+  //   console.log('chart editor props', props);
+  //   const chartData = props.value || {};
+  //
+  //   // this.state = {
+  //   //   data: chartData.data || [],
+  //   //   layout: chartData.layout || {},
+  //   //   frames: chartData.frames || [],
+  //   //   provider_url: '',
+  //   // };
+  //
+  //   // this.onSubmit = this.onSubmit.bind(this);
+  //   // this.handleChange = this.handleChange.bind(this);
+  //   // this.handleChangeProvider = this.handleChangeProvider.bind(this);
+  // }
 
-    console.log('chart editor props', props);
-    const chartData = props.value || {};
+  // onSubmit() {
+  //   // const chartData = {
+  //   //   data: this.state.data,
+  //   //   layout: this.state.layout,
+  //   //   frames: this.state.frames,
+  //   // };
+  //   const url = this.state.provider_url;
+  //   this.props.onChangeValue(chartData, url);
+  // }
 
-    this.state = {
-      data: chartData.data || [],
-      layout: chartData.layout || {},
-      frames: chartData.frames || [],
-    };
+  // handleChange(data, layout, frames) {
+  //   this.setState({ data, layout, frames }, this.onSubmit);
+  // }
 
-    this.onSubmit = this.onSubmit.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-    this.handleChangeProvider = this.handleChangeProvider.bind(this);
-  }
-
-  onSubmit() {
-    const chartData = {
-      data: this.state.data,
-      layout: this.state.layout,
-      frames: this.state.frames,
-    };
-    this.props.onChangeValue(chartData);
-  }
+  // handleChangeProvider(ev, { value }) {
+  //   this.props.getDataFromProvider(value);
+  // }
 
   componentDidMount() {
     // TODO: this needs to use a subrequest
     this.props.searchContent('', {
       object_provides: 'eea.restapi.interfaces.IBasicDataProvider',
     });
-  }
-
-  handleChange(data, layout, frames) {
-    this.setState({ data, layout, frames }, this.onSubmit);
-  }
-
-  handleChangeProvider(ev, { value }) {
-    this.props.getDataFromProvider(value);
   }
 
   render() {
@@ -91,20 +95,24 @@ class Edit extends Component {
                 fluid
                 selection
                 options={selectProviders}
-                onChange={this.handleChangeProvider}
+                onChange={(ev, { value }) =>
+                  this.props.onChangeValue({ ...this.props.data, url: value })
+                }
               />
               <LoadablePlotlyEditor
-                data={this.state.data}
-                layout={this.state.layout}
+                data={this.props.data?.data || []}
+                layout={this.props.data?.layout || {}}
                 config={config}
-                frames={this.state.frames}
+                frames={this.props.data?.frames || []}
                 dataSources={this.props.providerData || dataSources}
                 dataSourceOptions={
                   this.props.dataSourceOptions ||
                   getDataSourceOptions(dataSources)
                 }
                 plotly={plotly}
-                onUpdate={this.handleChange}
+                onUpdate={data =>
+                  this.props.onChangeValue(data, this.props.url)
+                }
                 useResizeHandler
                 debug
                 advancedTraceTypeSelector
@@ -119,9 +127,24 @@ class Edit extends Component {
   }
 }
 
+function getProviderData(state, props) {
+  // state.data_providers ? state.data_providers.item : {};
+  let path = props?.data?.url || null;
+
+  if (!path) return;
+
+  path = `${path}/@connector-data`;
+  const url = `${addAppURL(path)}/@connector-data`;
+
+  const data = state.data_providers.data || {};
+  const res = path ? data[path] || data[url] : [];
+  // console.log('res', res);
+  return res;
+}
+
 export default connect(
   (state, props) => {
-    const providerData = state.data_providers ? state.data_providers.item : {};
+    const providerData = getProviderData(state, props);
     return {
       providers: state.search.items,
       providerData,
