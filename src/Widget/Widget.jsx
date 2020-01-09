@@ -9,11 +9,6 @@ class ModalChartEditor extends Component {
     this.state = {
       value: props.value,
     };
-    this.handleSave = this.handleSave.bind(this);
-  }
-
-  handleSave() {
-    this.props.onChange(this.state.value);
   }
 
   render() {
@@ -28,8 +23,14 @@ class ModalChartEditor extends Component {
           />
         </Modal.Content>
         <Modal.Actions>
-          <Button floated="right" onClick={this.handleSave}>
+          <Button
+            floated="right"
+            onClick={() => this.props.onChange(this.state.value)}
+          >
             Save
+          </Button>
+          <Button floated="right" onClick={this.props.onClose}>
+            Close
           </Button>
         </Modal.Actions>
       </Modal>
@@ -104,6 +105,11 @@ class ChartWidget extends Component {
                       showChartEditor: false,
                     });
                   }}
+                  onClose={() =>
+                    this.setState({
+                      showChartEditor: false,
+                    })
+                  }
                 />
               ) : (
                 ''
