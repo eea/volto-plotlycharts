@@ -60,13 +60,16 @@ class ChartPick extends Component {
   }
 
   handleChangeVisualization(id, path) {
+    // TODO: use getContent with subrequest, no need for specially dedicated
+    // action and reducer. Complication not needed.
     this.props.getChartDataFromVisualization(path);
   }
 
   componentDidMount() {
     // get the existing visualizations
     this.props.searchContent('', {
-      object_provides: 'forests.content.interfaces.IDataVisualization',
+      // object_provides: 'forests.content.interfaces.IDataVisualization',
+      portal_type: 'Visualization',
     });
   }
 

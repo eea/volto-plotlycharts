@@ -56,15 +56,17 @@ class EmbedChartView extends Component {
                   }}
                   frames={this.state.chartData.frames || []}
                   config={{ displayModeBar: false }}
-                  />
+                />
               ) : (
                 <div>No valid data.</div>
               )}
             </Grid.Column>
             <Grid.Column width={12}>
               <div>
-                <a className="discreet"
-                   href={this.props.data.chart_source_link}>
+                <a
+                  className="discreet"
+                  href={this.props.data.chart_source_link}
+                >
                   {this.props.data.chart_source}
                 </a>
               </div>
