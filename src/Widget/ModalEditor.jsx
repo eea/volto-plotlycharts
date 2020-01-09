@@ -61,6 +61,9 @@ class Edit extends Component {
       };
     });
 
+    // TODO: fingers cross that the Dropdown doesn't crash with a value not in
+    // choices
+
     return (
       <div>
         {__CLIENT__ ? (
@@ -77,6 +80,7 @@ class Edit extends Component {
                     provider_url: value,
                   })
                 }
+                value={this.props.value?.url}
               />
               <LoadablePlotlyEditor
                 data={this.props.value?.data || []}
