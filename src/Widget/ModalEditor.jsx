@@ -96,14 +96,14 @@ class Edit extends Component {
                 selection
                 options={selectProviders}
                 onChange={(ev, { value }) =>
-                  this.props.onChangeValue({ ...this.props.data, url: value })
+                  this.props.onChangeValue({ ...this.props.value, url: value })
                 }
               />
               <LoadablePlotlyEditor
-                data={this.props.data?.data || []}
-                layout={this.props.data?.layout || {}}
+                data={this.props.value?.data || []}
+                layout={this.props.value?.layout || {}}
                 config={config}
-                frames={this.props.data?.frames || []}
+                frames={this.props.value?.frames || []}
                 dataSources={this.props.providerData || dataSources}
                 dataSourceOptions={
                   this.props.dataSourceOptions ||
@@ -111,7 +111,7 @@ class Edit extends Component {
                 }
                 plotly={plotly}
                 onUpdate={data =>
-                  this.props.onChangeValue(data, this.props.url)
+                  this.props.onChangeValue({ ...this.props.value, data })
                 }
                 useResizeHandler
                 debug
