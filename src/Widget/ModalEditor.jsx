@@ -47,8 +47,8 @@ class Edit extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const url = this.props.value?.url;
-    const prevUrl = prevProps.value?.url;
+    const url = this.props.value?.provider_url;
+    const prevUrl = prevProps.value?.provider_url;
     if (url !== prevUrl) this.props.getDataFromProvider(url);
   }
 
@@ -72,7 +72,10 @@ class Edit extends Component {
                 selection
                 options={selectProviders}
                 onChange={(ev, { value }) =>
-                  this.props.onChangeValue({ ...this.props.value, url: value })
+                  this.props.onChangeValue({
+                    ...this.props.value,
+                    provider_url: value,
+                  })
                 }
               />
               <LoadablePlotlyEditor
@@ -104,7 +107,7 @@ class Edit extends Component {
 }
 
 function getProviderData(state, props) {
-  let path = props?.value?.url || null;
+  let path = props?.value?.provider_url || null;
 
   if (!path) return;
 
