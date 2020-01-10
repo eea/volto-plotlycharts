@@ -116,8 +116,8 @@ class ChartWidget extends Component {
               )}
 
               <LoadablePlot
-                data={this.props.value.data || []}
-                frames={this.props.value.frames || []}
+                data={this.props.value?.data || []}
+                frames={this.props.value?.frames || []}
                 layout={layout}
                 config={{ displayModeBar: false }}
               />
