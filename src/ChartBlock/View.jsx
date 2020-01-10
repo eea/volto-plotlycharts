@@ -74,7 +74,7 @@ function ChartView(props) {
                   props.providerData,
                   props.connected_data_parameters,
                 )
-              : chartData.data
+              : chartData.data || []
           }
           layout={chartData.layout}
           frames={chartData.frames}
