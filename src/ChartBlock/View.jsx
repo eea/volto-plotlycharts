@@ -58,11 +58,10 @@ function ChartView(props) {
   // console.log('chartview props', props);
 
   useEffect(() => {
-    props.getDataFromProvider(props.data.url);
+    props.getDataFromProvider(props.data.provider_url || props.data.url);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.data.url]);
-
-  const chartData = props.data.chartData;
+  }, [props.data.provider_url || props.data.url]);
+  const chartData = props.data.chartData || props.data;
   return (
     <div className="chartWrapperView">
       <div className="block-inner-wrapper">
@@ -76,8 +75,8 @@ function ChartView(props) {
                 )
               : chartData.data
           }
-          layout={chartData.layout}
-          frames={chartData.frames}
+          layout={chartData.layout || props.data.layout}
+          frames={chartData.frames || props.data.frames}
           config={{ displayModeBar: false }}
         />
       </div>
@@ -86,7 +85,7 @@ function ChartView(props) {
 }
 
 function getProviderData(state, props) {
-  let path = props?.data?.url || null;
+  let path = props?.data?.provider_url || props?.data?.url || null;
 
   if (!path) return;
 
