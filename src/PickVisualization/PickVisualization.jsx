@@ -42,7 +42,6 @@ class PickVisualization extends Component {
   }
 
   render() {
-    console.log('vis props', this.props);
     return (
       <Field
         title="Visualization"

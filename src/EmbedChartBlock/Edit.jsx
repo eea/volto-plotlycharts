@@ -20,7 +20,6 @@ class ChartPick extends Component {
   }
 
   render() {
-    console.log('props in render', this.props);
     return (
       <div className="block selected">
         {this.props.selected && (
