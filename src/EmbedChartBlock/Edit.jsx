@@ -2,9 +2,10 @@
  * Pick up a chart from an existing visualization, add text
  */
 
+import { doesNodeContainClick } from 'semantic-ui-react/dist/commonjs/lib';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Segment, Grid, Form as UiForm } from 'semantic-ui-react';
+import { Segment, Form as UiForm } from 'semantic-ui-react';
 
 import { Field } from '@plone/volto/components'; // EditBlock
 import { SidebarPortal } from '@plone/volto/components';
@@ -19,15 +20,34 @@ class EmbedChartBlockEdit extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      textEditorSelected: false,
+      textEditorIsActive: false,
     };
   }
   componentDidMount() {
     this.props.changeSidebarState(true);
+
+    document.addEventListener('mousedown', this.handleClickOutside, false);
   }
 
+  componentWillUnmount() {
+    document.removeEventListener('mousedown', this.handleClickOutside, false);
+  }
+
+  handleClickOutside = e => {
+    let active =
+      this.textEditorSegmentNode.current &&
+      doesNodeContainClick(this.textEditorSegmentNode.current, e)
+        ? true
+        : false;
+
+    this.setState(() => ({
+      textEditorIsActive: active,
+    }));
+  };
+
+  textEditorSegmentNode = React.createRef();
+
   render() {
-    console.log(this.props);
     return (
       <div className="block selected">
         <SidebarPortal selected={this.props.selected}>
@@ -84,14 +104,14 @@ class EmbedChartBlockEdit extends Component {
         </SidebarPortal>
 
         <div className="block-inner-wrapper">
-          <Grid columns={2} divided>
-            <Grid.Row>
-              <Grid.Column>
-                <UiForm>
+          <UiForm>
+            <Segment.Group horizontal>
+              <Segment secondary={this.state.textEditorIsActive}>
+                <div ref={this.textEditorSegmentNode}>
                   <Editor
                     index={this.props.index}
                     detached={true}
-                    selected={this.state.textEditorSelected}
+                    selected={this.state.textEditorIsActive}
                     block={this.props.block}
                     onAddBlock={this.nop}
                     onChangeBlock={(id, { text }) => {
@@ -108,9 +128,9 @@ class EmbedChartBlockEdit extends Component {
                     data={this.props.data}
                     blockNode={this.props.blockNode}
                   />
-                </UiForm>
-              </Grid.Column>
-              <Grid.Column>
+                </div>
+              </Segment>
+              <Segment secondary={this.state.activeEditorSegment === 0}>
                 {this.props.data?.chartData && (
                   <ConnectedChart
                     data={{ chartData: this.props.data.chartData }}
@@ -118,9 +138,9 @@ class EmbedChartBlockEdit extends Component {
                     config={{ displayModeBar: false }}
                   />
                 )}
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
+              </Segment>
+            </Segment.Group>
+          </UiForm>
         </div>
       </div>
     );
