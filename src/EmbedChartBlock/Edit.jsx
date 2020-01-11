@@ -12,6 +12,7 @@ import { SidebarPortal } from '@plone/volto/components';
 
 import { changeSidebarState } from 'volto-sidebar/actions';
 import Editor from '@plone/volto/components/manage/Blocks/Text/Edit';
+import MultiValuesEdit from 'volto-datablocks/DataConnectedBlock/MultiValuesEdit';
 
 import PickVisualization from '../PickVisualization';
 import ConnectedChart from '../ConnectedChart';
@@ -53,7 +54,7 @@ class EmbedChartBlockEdit extends Component {
         <SidebarPortal selected={this.props.selected}>
           <Segment.Group raised>
             <header className="header pulled">
-              <h2>Edit chart options</h2>
+              <h2>{this.props.title || 'Edit chart options'}</h2>
             </header>
             <Segment className="form sidebar-image-data">
               <PickVisualization
@@ -98,6 +99,13 @@ class EmbedChartBlockEdit extends Component {
                     chart_source_link: d,
                   })
                 }
+              />
+              <MultiValuesEdit
+                schema={this.props.schema || {}}
+                onChange={data =>
+                  this.props.onChangeBlock(this.props.block, data)
+                }
+                data={this.props.data}
               />
             </Segment>
           </Segment.Group>
