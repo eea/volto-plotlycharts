@@ -106,7 +106,7 @@ class EmbedChartBlockEdit extends Component {
         <div className="block-inner-wrapper">
           <UiForm>
             <Segment.Group horizontal>
-              <Segment secondary={this.state.textEditorIsActive}>
+              <Segment>
                 <div ref={this.textEditorSegmentNode}>
                   <Editor
                     index={this.props.index}
@@ -126,7 +126,7 @@ class EmbedChartBlockEdit extends Component {
                     onSelectBlock={this.nop}
                     onMutateBlock={this.nop}
                     data={this.props.data}
-                    blockNode={this.props.blockNode}
+                    blockNode={this.textEditorSegmentNode}
                   />
                 </div>
               </Segment>
