@@ -8,6 +8,8 @@ import ConnectedChart from '../ConnectedChart';
 
 /*
  * Pick up a chart from an existing visualization, add text
+ *
+ * TODO: this should use the PickVisualization component
  */
 class ChartPick extends Component {
   constructor(props) {
