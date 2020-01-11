@@ -4,8 +4,8 @@ import VisualizationView from './Visualization/View';
 import PlotlyBlockEdit from './ChartBlock/Edit';
 import PlotlyBlockView from './ChartBlock/View';
 
-import EmbedChartBlockEdit from './ChartBlock/Edit';
-import EmbedChartBlockView from './ChartBlock/View';
+import EmbedChartBlockEdit from './EmbedChartBlock/Edit';
+import EmbedChartBlockView from './EmbedChartBlock/View';
 
 import chartIcon from '@plone/volto/icons/world.svg';
 import * as addonReducers from './reducers';
