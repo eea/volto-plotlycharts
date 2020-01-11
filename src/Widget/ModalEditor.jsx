@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { addAppURL } from '@plone/volto/helpers';
 import { getDataFromProvider } from 'volto-datablocks/actions';
 import { searchContent } from '@plone/volto/actions';
+import PickProvider from 'volto-datablocks/PickProvider';
 
 import 'react-chart-editor/lib/react-chart-editor.css';
 
@@ -38,62 +39,38 @@ class Edit extends Component {
     super(props);
     this.state = {
       plotly: require('plotly.js/dist/plotly'),
+      providerData: null,
     };
   }
 
-  componentDidMount() {
-    // TODO: this needs to use a subrequest
-    this.props.searchContent('', {
-      object_provides: 'eea.restapi.interfaces.IBasicDataProvider',
-    });
-  }
-
-  componentDidUpdate(prevProps) {
-    const url = this.props.value?.provider_url;
-    const prevUrl = prevProps.value?.provider_url;
-    if (url !== prevUrl) this.props.getDataFromProvider(url);
-  }
-
   render() {
-    const selectProviders = this.props.providers.map(el => {
-      return {
-        key: el['@id'],
-        text: el.title,
-        value: el['@id'],
-      };
-    });
-
-    // TODO: fingers cross that the Dropdown doesn't crash with a value not in
-    // choices
-
+    const dataSourceOptions = getDataSourceOptions(
+      this.state.providerData || dataSources,
+    );
     return (
       <div>
         {__CLIENT__ ? (
           <div className="block selected">
             <div className="block-inner-wrapper">
-              <Dropdown
-                placeholder="Select data provider"
-                fluid
-                selection
-                options={selectProviders}
-                onChange={(ev, { value }) =>
+              <PickProvider
+                onLoadProviderData={providerData =>
+                  this.setState({ providerData })
+                }
+                onChange={url =>
                   this.props.onChangeValue({
                     ...this.props.value,
-                    provider_url: value,
+                    provider_url: url,
                   })
                 }
-                value={this.props.value?.url}
+                value={this.props.value?.provider_url || ''}
               />
               <LoadablePlotlyEditor
                 data={this.props.value?.data || []}
                 layout={this.props.value?.layout || {}}
                 config={config}
                 frames={this.props.value?.frames || []}
-                dataSources={this.props.providerData || dataSources}
-                dataSourceOptions={
-                  this.props.dataSourceOptions ||
-                  getDataSourceOptions(dataSources)
-                }
+                dataSourceOptions={dataSourceOptions}
+                dataSources={this.state.providerData || dataSources}
                 plotly={this.state.plotly}
                 onUpdate={data =>
                   this.props.onChangeValue({ ...this.props.value, data })
@@ -112,27 +89,7 @@ class Edit extends Component {
   }
 }
 
-function getProviderData(state, props) {
-  let path = props?.value?.provider_url || null;
-
-  if (!path) return;
-
-  path = `${path}/@connector-data`;
-  const url = `${addAppURL(path)}/@connector-data`;
-
-  const data = state.data_providers.data || {};
-  const res = path ? data[path] || data[url] : [];
-  return res;
-}
-
 export default connect(
-  (state, props) => {
-    const providerData = getProviderData(state, props);
-    return {
-      providers: state.search.items,
-      providerData,
-      dataSourceOptions: getDataSourceOptions(providerData || dataSources),
-    };
-  },
-  { searchContent, getDataFromProvider },
+  null,
+  { searchContent },
 )(Edit);

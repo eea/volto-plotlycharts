@@ -8,7 +8,6 @@ import 'react-chart-editor/lib/react-chart-editor.css';
 import { SidebarPortal } from '@plone/volto/components';
 
 import { changeSidebarState } from 'volto-sidebar/actions';
-
 import PickProvider from 'volto-datablocks/PickProvider';
 
 function getDataSourceOptions(data) {
