@@ -14,7 +14,7 @@ import { changeSidebarState } from 'volto-sidebar/actions';
 import PickVisualization from '../PickVisualization';
 import ConnectedChart from '../ConnectedChart';
 
-class ChartPick extends Component {
+class EmbedChartBlockEdit extends Component {
   componentDidMount() {
     this.props.changeSidebarState(true);
   }
@@ -116,4 +116,4 @@ class ChartPick extends Component {
 export default connect(
   null,
   { changeSidebarState },
-)(ChartPick);
+)(EmbedChartBlockEdit);
