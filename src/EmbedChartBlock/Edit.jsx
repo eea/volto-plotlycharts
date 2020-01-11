@@ -16,66 +16,72 @@ import PickVisualization from '../PickVisualization';
 import ConnectedChart from '../ConnectedChart';
 
 class EmbedChartBlockEdit extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      textEditorSelected: false,
+    };
+  }
   componentDidMount() {
     this.props.changeSidebarState(true);
   }
 
   render() {
+    console.log(this.props);
     return (
       <div className="block selected">
-        {this.props.selected && (
-          <SidebarPortal selected={true}>
-            <Segment.Group raised>
-              <header className="header pulled">
-                <h2>Edit chart options</h2>
-              </header>
-              <Segment className="form sidebar-image-data">
-                <PickVisualization
-                  onLoadChartData={chartData =>
-                    this.props.onChangeBlock(this.props.block, {
-                      ...this.props.data,
-                      chartData,
-                    })
-                  }
-                  currentChartData={this.props.data?.chartData}
-                  onChange={url =>
-                    this.props.onChangeBlock(this.props.block, {
-                      ...this.props.data,
-                      vis_url: url,
-                    })
-                  }
-                  value={this.props.data?.vis_url || ''}
-                />
-                <Field
-                  title="Source"
-                  id="chart-source"
-                  type="text"
-                  value={this.props.data.chart_source || ''}
-                  required={false}
-                  onChange={(e, d) =>
-                    this.props.onChangeBlock(this.props.block, {
-                      ...this.props.data,
-                      chart_source: d,
-                    })
-                  }
-                />
-                <Field
-                  title="Source Link"
-                  id="chart-source-link"
-                  type="text"
-                  value={this.props.data.chart_source_link || ''}
-                  required={false}
-                  onChange={(e, d) =>
-                    this.props.onChangeBlock(this.props.block, {
-                      ...this.props.data,
-                      chart_source_link: d,
-                    })
-                  }
-                />
-              </Segment>
-            </Segment.Group>
-          </SidebarPortal>
-        )}
+        <SidebarPortal selected={this.props.selected}>
+          <Segment.Group raised>
+            <header className="header pulled">
+              <h2>Edit chart options</h2>
+            </header>
+            <Segment className="form sidebar-image-data">
+              <PickVisualization
+                id={`vis-${this.props.block}`}
+                onLoadChartData={chartData =>
+                  this.props.onChangeBlock(this.props.block, {
+                    ...this.props.data,
+                    chartData,
+                  })
+                }
+                currentChartData={this.props.data?.chartData}
+                onChange={url =>
+                  this.props.onChangeBlock(this.props.block, {
+                    ...this.props.data,
+                    vis_url: url,
+                  })
+                }
+                value={this.props.data?.vis_url || ''}
+              />
+              <Field
+                title="Source"
+                id="chart-source"
+                type="text"
+                value={this.props.data.chart_source || ''}
+                required={false}
+                onChange={(e, d) =>
+                  this.props.onChangeBlock(this.props.block, {
+                    ...this.props.data,
+                    chart_source: d,
+                  })
+                }
+              />
+              <Field
+                title="Source Link"
+                id="chart-source-link"
+                type="text"
+                value={this.props.data.chart_source_link || ''}
+                required={false}
+                onChange={(e, d) =>
+                  this.props.onChangeBlock(this.props.block, {
+                    ...this.props.data,
+                    chart_source_link: d,
+                  })
+                }
+              />
+            </Segment>
+          </Segment.Group>
+        </SidebarPortal>
 
         <div className="block-inner-wrapper">
           <Grid columns={2} divided>
@@ -85,7 +91,7 @@ class EmbedChartBlockEdit extends Component {
                   <Editor
                     index={this.props.index}
                     detached={true}
-                    selected={this.props.selected}
+                    selected={this.state.textEditorSelected}
                     block={this.props.block}
                     onAddBlock={this.nop}
                     onChangeBlock={(id, { text }) => {
@@ -99,7 +105,7 @@ class EmbedChartBlockEdit extends Component {
                     onFocusNextBlock={this.nop}
                     onSelectBlock={this.nop}
                     onMutateBlock={this.nop}
-                    data={this.props.data.text}
+                    data={this.props.data}
                     blockNode={this.props.blockNode}
                   />
                 </UiForm>

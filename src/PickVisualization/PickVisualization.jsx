@@ -16,7 +16,7 @@ class PickVisualization extends Component {
         // object_provides: 'forests.content.interfaces.IDataVisualization',
         portal_type: 'visualization',
       },
-      'getVisualizations',
+      this.props.id,
     );
   };
 
@@ -59,7 +59,7 @@ export default connect(
   (state, props) => {
     // const chartData = state.data_providers ? state.data_providers.item : {};
     let visualizations = state.search
-      ? state.search.subrequests?.getVisualizations?.items || []
+      ? state.search.subrequests?.[props.id]?.items || []
       : [];
     visualizations = visualizations.map(el => [el['@id'], el.title]);
     return {
