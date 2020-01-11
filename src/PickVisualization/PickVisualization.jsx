@@ -22,19 +22,20 @@ class PickVisualization extends Component {
     this.searchVisualizations();
 
     if (this.props.value) {
-      this.props.getContent(this.props.value, null, this.props.id);
+      this.props.getContent(this.props.value, null, this.props.value);
     }
   }
 
   componentDidUpdate(prevProps) {
     if (this.props.value !== prevProps.value) {
-      this.props.getContent(this.props.value, null, this.props.id);
+      this.props.getContent(this.props.value, null, this.props.value);
     }
     if (
       JSON.stringify(this.props.currentChartData || {}) !==
       JSON.stringify(this.props.remoteChartData || {})
-    )
+    ) {
       this.props.onLoadChartData(this.props.remoteChartData);
+    }
   }
 
   render() {
@@ -57,8 +58,10 @@ export default connect(
       ? state.search.subrequests?.[props.id]?.items || []
       : [];
     visualizations = visualizations.map(el => [el['@id'], el.title]);
+
+    const content = state.content.subrequests?.[props.value] || {};
     return {
-      remoteChartData: state.content.subrequests?.[props.id]?.items || {},
+      remoteChartData: content.data?.visualization || {},
       visualizations,
     };
   },
