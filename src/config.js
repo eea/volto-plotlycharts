@@ -8,7 +8,7 @@ import EmbedChartBlockEdit from './EmbedChartBlock/Edit';
 import EmbedChartBlockView from './EmbedChartBlock/View';
 
 import chartIcon from '@plone/volto/icons/world.svg';
-import * as addonReducers from './reducers';
+// import * as addonReducers from './reducers';
 
 function addCustomGroup(config) {
   const hasCustomGroup = config.blocks.groupBlocksOrder.filter(
@@ -48,9 +48,9 @@ export function applyConfig(config) {
 
   return {
     ...config,
-    addonReducers: {
-      ...config.addonReducers,
-      ...addonReducers,
-    },
+    // addonReducers: {
+    //   ...config.addonReducers,
+    //   ...addonReducers,
+    // },
   };
 }

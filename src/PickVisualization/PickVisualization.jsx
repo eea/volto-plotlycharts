@@ -1,12 +1,10 @@
 /*
  * A component to help pick a visualization
  */
-import { searchContent } from '@plone/volto/actions';
+import { searchContent, getContent } from '@plone/volto/actions';
 import { connect } from 'react-redux';
 import React, { Component } from 'react';
 import { Field } from '@plone/volto/components'; // EditBlock
-
-import { getChartDataFromVisualization } from '../actions';
 
 class PickVisualization extends Component {
   searchVisualizations = () => {
@@ -24,15 +22,13 @@ class PickVisualization extends Component {
     this.searchVisualizations();
 
     if (this.props.value) {
-      // TODO: use getContent with subrequest, no need for specially dedicated
-      // action and reducer. Complication not needed.
-      this.props.getChartDataFromVisualization(this.props.value);
+      this.props.getContent(this.props.value, null, this.props.id);
     }
   }
 
   componentDidUpdate(prevProps) {
     if (this.props.value !== prevProps.value) {
-      this.props.getChartDataFromVisualization(this.props.value);
+      this.props.getContent(this.props.value, null, this.props.id);
     }
     if (
       JSON.stringify(this.props.currentChartData || {}) !==
@@ -57,16 +53,14 @@ class PickVisualization extends Component {
 
 export default connect(
   (state, props) => {
-    // const chartData = state.data_providers ? state.data_providers.item : {};
     let visualizations = state.search
       ? state.search.subrequests?.[props.id]?.items || []
       : [];
     visualizations = visualizations.map(el => [el['@id'], el.title]);
     return {
+      remoteChartData: state.content.subrequests?.[props.id]?.items || {},
       visualizations,
-      remoteChartData:
-        state.chart_data_visualization && state.chart_data_visualization.data,
     };
   },
-  { searchContent, getChartDataFromVisualization },
+  { searchContent, getContent },
 )(PickVisualization);
