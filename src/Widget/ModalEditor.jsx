@@ -1,10 +1,8 @@
-import Loadable from 'react-loadable';
 import React, { Component } from 'react';
-import { Dropdown } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 
-import { addAppURL } from '@plone/volto/helpers';
-import { getDataFromProvider } from 'volto-datablocks/actions';
+import Loadable from 'react-loadable';
+
 import { searchContent } from '@plone/volto/actions';
 import PickProvider from 'volto-datablocks/PickProvider';
 
@@ -63,6 +61,7 @@ class Edit extends Component {
                   })
                 }
                 value={this.props.value?.provider_url || ''}
+                currentProviderData={this.state.providerData}
               />
               <LoadablePlotlyEditor
                 data={this.props.value?.data || []}

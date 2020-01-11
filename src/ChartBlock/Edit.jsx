@@ -102,6 +102,7 @@ class Edit extends Component {
                       onLoadProviderData={providerData =>
                         this.setState({ providerData })
                       }
+                      currentProviderData={this.state.providerData}
                       onChange={url =>
                         this.props.onChangeBlock(this.props.block, {
                           ...this.props.data,

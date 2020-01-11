@@ -72,6 +72,7 @@ function ConnectedChart(props) {
   const url = props.data.url;
   const getDataFromProvider = props.getDataFromProvider;
 
+  // NOTE: this is a candidate for a HOC, withProviderData
   useEffect(() => {
     provider_url && getDataFromProvider(provider_url || url);
   }, [getDataFromProvider, provider_url, url]);
@@ -149,30 +150,3 @@ export default connect(
   },
   { getDataFromProvider },
 )(ConnectedChart);
-
-// const LoadablePlot = Loadable({
-//   loader: () => import('react-plotly.js'),
-//   loading() {
-//     return <div>Loading chart...</div>;
-//   },
-// });
-//
-// class ConnectedChart extends React.Component {
-//   render() {
-//     const { chartData } = this.props;
-//     return (
-//       <LoadablePlot
-//         className="embedded-chart"
-//         data={chartData.data || []}
-//         layout={{
-//           ...chartData.layout,
-//           autosize: true,
-//         }}
-//         frames={chartData.frames || []}
-//         config={{ displayModeBar: false }}
-//       />
-//     );
-//   }
-// }
-//
-// export default ConnectedChart;
