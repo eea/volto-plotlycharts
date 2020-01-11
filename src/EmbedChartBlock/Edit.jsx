@@ -10,6 +10,7 @@ import { Field } from '@plone/volto/components'; // EditBlock
 import { SidebarPortal } from '@plone/volto/components';
 
 import { changeSidebarState } from 'volto-sidebar/actions';
+import Editor from '@plone/volto/components/manage/Blocks/Text/Edit';
 
 import PickVisualization from '../PickVisualization';
 import ConnectedChart from '../ConnectedChart';
@@ -81,18 +82,25 @@ class EmbedChartBlockEdit extends Component {
             <Grid.Row>
               <Grid.Column>
                 <UiForm>
-                  <Field
-                    title="Text"
-                    id="chart-text"
-                    widget="cktext"
-                    value={this.props.data.text}
-                    required={false}
-                    onChange={(e, d) =>
+                  <Editor
+                    index={this.props.index}
+                    detached={true}
+                    selected={this.props.selected}
+                    block={this.props.block}
+                    onAddBlock={this.nop}
+                    onChangeBlock={(id, { text }) => {
                       this.props.onChangeBlock(this.props.block, {
                         ...this.props.data,
-                        text: d,
-                      })
-                    }
+                        text,
+                      });
+                    }}
+                    onDeleteBlock={this.nop}
+                    onFocusPreviousBlock={this.nop}
+                    onFocusNextBlock={this.nop}
+                    onSelectBlock={this.nop}
+                    onMutateBlock={this.nop}
+                    data={this.props.data.text}
+                    blockNode={this.props.blockNode}
                   />
                 </UiForm>
               </Grid.Column>
