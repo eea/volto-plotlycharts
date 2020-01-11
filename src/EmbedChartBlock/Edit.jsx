@@ -1,26 +1,10 @@
 import { getChartDataFromVisualization } from '../actions';
 import { searchContent } from '@plone/volto/actions';
 import { connect } from 'react-redux';
-import Loadable from 'react-loadable';
 import React, { Component } from 'react';
 import { Grid, Form as UiForm } from 'semantic-ui-react';
 import { Field } from '@plone/volto/components'; // EditBlock
-
-const LoadablePlot = Loadable({
-  loader: () => import('react-plotly.js'),
-  loading() {
-    return <div>Loading chart...</div>;
-  },
-});
-
-// const data = [
-//   { name: 'Finland', 'Total area': 4000, 'Forest area': 2400 },
-//   { name: 'Sweeden', 'Total area': 3000, 'Forest area': 1398 },
-//   { name: 'Slovenia', 'Total area': 2000, 'Forest area': 9800 },
-//   { name: 'Estonia', 'Total area': 2780, 'Forest area': 3908 },
-//   { name: 'Austria', 'Total area': 1890, 'Forest area': 4800 },
-//   { name: 'Slovakia', 'Total area': 1890, 'Forest area': 4800 },
-// ];
+import ConnectedChart from '../ConnectedChart';
 
 /*
  * Pick up a chart from an existing visualization, add text
@@ -91,10 +75,9 @@ class ChartPick extends Component {
             <Grid.Row>
               <Grid.Column>
                 {this.state.localChartData && (
-                  <LoadablePlot
-                    data={this.state.localChartData.data || []}
-                    layout={this.state.localChartData.layout || {}}
-                    frames={this.state.localChartData.frames || []}
+                  <ConnectedChart
+                    data={{ chartData: this.state.localChartData }}
+                    className="embedded-block-chart"
                     config={{ displayModeBar: false }}
                   />
                 )}

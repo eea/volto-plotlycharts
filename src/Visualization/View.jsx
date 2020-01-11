@@ -2,16 +2,10 @@ import React from 'react';
 import { Helmet } from '@plone/volto/helpers';
 import { Container, Image } from 'semantic-ui-react';
 import { settings } from '~/config';
-import Loadable from 'react-loadable';
-
-const LoadablePlot = Loadable({
-  loader: () => import('react-plotly.js'),
-  loading() {
-    return <div>Loading chart...</div>;
-  },
-});
+import ConnectedChart from '../ConnectedChart';
 
 const View = ({ content }) => {
+  // TODO: explain the need for the /download/file link
   return (
     <Container id="page-visualization">
       <Helmet title={content.title} />
@@ -44,7 +38,7 @@ const View = ({ content }) => {
       )}
       {content.visualization && (
         <div>
-          <LoadablePlot
+          <ConnectedChart
             config={{ displayModeBar: true }}
             {...content.visualization}
           />

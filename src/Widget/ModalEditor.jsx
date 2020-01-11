@@ -9,6 +9,7 @@ import { searchContent } from '@plone/volto/actions';
 
 import 'react-chart-editor/lib/react-chart-editor.css';
 
+// TODO: unify all plotly editors to a single module
 const LoadablePlotlyEditor = Loadable({
   loader: () => import('react-chart-editor'),
   loading() {
@@ -16,10 +17,11 @@ const LoadablePlotlyEditor = Loadable({
   },
 });
 
+// TODO: remove these fallbacks;
 const dataSources = {
-  col1: [1, 2, 3], // eslint-disable-line no-magic-numbers
-  col2: [4, 3, 2], // eslint-disable-line no-magic-numbers
-  col3: [17, 13, 9], // eslint-disable-line no-magic-numbers
+  col1: [1, 2, 3],
+  col2: [4, 3, 2],
+  col3: [17, 13, 9],
 };
 
 function getDataSourceOptions(data) {

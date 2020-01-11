@@ -1,20 +1,14 @@
-import Loadable from 'react-loadable';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Grid } from 'semantic-ui-react';
-
-const LoadablePlot = Loadable({
-  loader: () => import('react-plotly.js'),
-  loading() {
-    return <div>Loading chart...</div>;
-  },
-});
+import ConnectedChart from '../ConnectedChart';
 
 class EmbedChartView extends Component {
   constructor(props) {
     super(props);
 
-    console.log('chart data', this.props.data, this.props);
+    // console.log('chart data', this.props.data, this.props);
+    // TODO: there's no need for state and these checks, get rid of them
     let chartData = this.props.data.chartData || [];
 
     if (typeof chartData === 'string') {
@@ -47,15 +41,9 @@ class EmbedChartView extends Component {
             </Grid.Column>
             <Grid.Column width={8}>
               {this.state.chartData ? (
-                <LoadablePlot
-                  className="embedded-chart"
-                  data={this.state.chartData.data || []}
-                  layout={{
-                    ...this.state.chartData.layout,
-                    autosize: true,
-                  }}
-                  frames={this.state.chartData.frames || []}
-                  config={{ displayModeBar: false }}
+                <ConnectedChart
+                  data={this.state.chartData}
+                  className="embedded-block-chart"
                 />
               ) : (
                 <div>No valid data.</div>
