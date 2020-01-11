@@ -73,7 +73,7 @@ function ConnectedChart(props) {
   const getDataFromProvider = props.getDataFromProvider;
 
   useEffect(() => {
-    getDataFromProvider(provider_url || url);
+    provider_url && getDataFromProvider(provider_url || url);
   }, [getDataFromProvider, provider_url, url]);
 
   // TODO: decide which one is used props.data.chartData or data?

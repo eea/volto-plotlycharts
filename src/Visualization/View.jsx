@@ -40,7 +40,7 @@ const View = ({ content }) => {
         <div>
           <ConnectedChart
             config={{ displayModeBar: true }}
-            {...content.visualization}
+            data={{ chartData: content.visualization }}
           />
         </div>
       )}
