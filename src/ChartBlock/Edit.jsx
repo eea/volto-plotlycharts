@@ -5,13 +5,18 @@ import Loadable from 'react-loadable';
 import { Segment } from 'semantic-ui-react'; // , Dropdown
 import 'react-chart-editor/lib/react-chart-editor.css';
 
-import { addAppURL } from '@plone/volto/helpers';
-import { searchContent } from '@plone/volto/actions';
-import { DATA_PROVIDER_TYPES } from 'volto-datablocks/constants';
-import { SidebarPortal, SelectWidget } from '@plone/volto/components';
+import { SidebarPortal } from '@plone/volto/components';
 
-import { getDataFromProvider } from 'volto-datablocks/actions';
 import { changeSidebarState } from 'volto-sidebar/actions';
+
+import PickProvider from 'volto-datablocks/PickProvider';
+
+function getDataSourceOptions(data) {
+  return Object.keys(data).map(name => ({
+    value: name,
+    label: name,
+  }));
+}
 
 const LoadablePlotlyEditor = Loadable({
   loader: () => import('react-chart-editor'),
@@ -26,45 +31,38 @@ const dataSources = {
   col3: [17, 13, 9], // eslint-disable-line no-magic-numbers
 };
 
-function getDataSourceOptions(data) {
-  return Object.keys(data).map(name => ({
-    value: name,
-    label: name,
-  }));
-}
-
 const config = { editable: true };
 
 class Edit extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      providerData: null,
+    };
+  }
+
   componentDidMount() {
-    // TODO: this needs to use a subrequest
-    this.props.searchContent('', {
-      object_provides: DATA_PROVIDER_TYPES,
-    });
-    if (this.props.url) {
-      this.props.getDataFromProvider(this.props.url);
-    }
     this.props.changeSidebarState(true);
   }
 
   componentDidUpdate(prevProps) {
     if (this.props.url && this.props.url !== prevProps.url) {
       this.props.changeSidebarState(true);
-      this.props.getDataFromProvider(this.props.url);
+      // this.props.getDataFromProvider(this.props.url);
     }
   }
 
   render() {
     const plotly = require('plotly.js/dist/plotly');
-    const selectProviders = this.props.providers.map(el => {
-      return [el['@id'], el.title];
-    });
 
     const chartData = this.props.data.chartData || {
       layout: {},
       frames: [],
       data: [],
     };
+    const dataSourceOptions = getDataSourceOptions(
+      this.state.providerData || dataSources,
+    );
 
     return (
       <div>
@@ -76,11 +74,8 @@ class Edit extends Component {
                 layout={chartData.layout}
                 config={config}
                 frames={chartData.frames}
-                dataSources={this.props.providerData || dataSources}
-                dataSourceOptions={
-                  this.props.dataSourceOptions ||
-                  getDataSourceOptions(dataSources)
-                }
+                dataSources={this.state.providerData || dataSources}
+                dataSourceOptions={dataSourceOptions}
                 plotly={plotly}
                 onUpdate={(data, layout, frames) => {
                   this.props.onChangeBlock(this.props.block, {
@@ -104,20 +99,17 @@ class Edit extends Component {
                     <h2>Edit chart options</h2>
                   </header>
                   <Segment className="form sidebar-image-data">
-                    <SelectWidget
-                      id="select-provider-url"
-                      placeholder="Select..."
-                      title="Data provider"
-                      fluid
-                      selection
-                      choices={selectProviders}
-                      value={this.props.data.url}
-                      onChange={(id, value) =>
+                    <PickProvider
+                      onLoadProviderData={providerData =>
+                        this.setState({ providerData })
+                      }
+                      onChange={url =>
                         this.props.onChangeBlock(this.props.block, {
                           ...this.props.data,
-                          url: value,
+                          url,
                         })
                       }
+                      value={this.props.data?.url}
                     />
                   </Segment>
                 </Segment.Group>
@@ -134,29 +126,7 @@ class Edit extends Component {
   }
 }
 
-function getProviderData(state, props) {
-  let path = props?.data?.url || null;
-
-  if (!path) return;
-
-  path = `${path}/@connector-data`;
-  const url = `${addAppURL(path)}/@connector-data`;
-
-  const data = state.data_providers.data || {};
-  const res = path ? data[path] || data[url] : [];
-  // console.log('res', res);
-  return res;
-}
-
 export default connect(
-  (state, props) => {
-    const providerData = getProviderData(state, props);
-
-    return {
-      providers: state.search.items,
-      providerData,
-      dataSourceOptions: getDataSourceOptions(providerData || dataSources),
-    };
-  },
-  { searchContent, getDataFromProvider, changeSidebarState },
+  null,
+  { changeSidebarState },
 )(Edit);
