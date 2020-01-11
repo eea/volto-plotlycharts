@@ -82,7 +82,7 @@ function ConnectedChart(props) {
   const useLiveData =
     typeof props.useLiveData !== 'undefined' ? props.useLiveData : true;
 
-  let layout = chartData.layout || props.data.layout;
+  let layout = chartData.layout || props.data.layout || {};
   let autosize;
   if (typeof props.autosize !== 'undefined') {
     autosize = props.autosize;
