@@ -22,11 +22,9 @@
   },
   "homepage": "https://github.com/eea/volto-plotlycharts#readme",
   "dependencies": {
-    "lodash": "^4.17.15",
     "plotly.js": "^1.51.2",
     "react-chart-editor": "^0.40.0",
     "react-plotly.js": "^2.3.0",
-    "react-resize-detector": "^4.2.1",
-    "react-sizeme": "^2.6.10"
+    "react-resize-detector": "^4.2.1"
   }
 }

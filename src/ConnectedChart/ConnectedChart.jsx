@@ -8,7 +8,7 @@ import { getConnectedDataParameters } from 'volto-datablocks/helpers';
 import { connect } from 'react-redux';
 import Loadable from 'react-loadable';
 import React, { useEffect } from 'react';
-import ResponsiveContainer from '../ResponsiveContainer';
+// import ResponsiveContainer from '../ResponsiveContainer';
 
 const LoadablePlot = Loadable({
   loader: () => import('react-plotly.js'),
@@ -116,14 +116,14 @@ function ConnectedChart(props) {
   // console.log('plot data', data);
   // console.log('plot layout', layout);
   return (
-    <ResponsiveContainer id={props.id}>
+    // <ResponsiveContainer id={props.id}>
       <LoadablePlot
         {...props.data.chartData}
         data={data}
         layout={layout}
         frames={chartData.frames || props.data.frames}
       />
-    </ResponsiveContainer>
+    // </ResponsiveContainer>
   );
 }
 
