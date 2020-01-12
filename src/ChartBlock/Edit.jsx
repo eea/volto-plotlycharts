@@ -10,6 +10,13 @@ import { SidebarPortal } from '@plone/volto/components';
 import { changeSidebarState } from 'volto-sidebar/actions';
 import PickProvider from 'volto-datablocks/PickProvider';
 
+let plotly = [];
+if (plotly.length === 0) {
+  import('plotly.js/dist/plotly').then(module => {
+    plotly.push(module);
+  });
+}
+
 function getDataSourceOptions(data) {
   return Object.keys(data).map(name => ({
     value: name,
@@ -52,17 +59,6 @@ class Edit extends Component {
   }
 
   render() {
-    const plotly = Loadable({
-      loader: () => import('plotly.js/dist/plotly'),
-      loading() {
-        return <div>Loading chart editor...</div>;
-      },
-    });
-
-    const selectProviders = this.props.providers.map(el => {
-      return [el['@id'], el.title];
-    });
-
     const chartData = this.props.data.chartData || {
       layout: {},
       frames: [],
@@ -74,7 +70,7 @@ class Edit extends Component {
 
     return (
       <div>
-        {__CLIENT__ ? (
+        {__CLIENT__ && plotly.length > 0 ? (
           <div className="block selected">
             <div className="block-inner-wrapper">
               <LoadablePlotlyEditor
@@ -84,7 +80,7 @@ class Edit extends Component {
                 frames={chartData.frames}
                 dataSources={this.state.providerData || dataSources}
                 dataSourceOptions={dataSourceOptions}
-                plotly={plotly}
+                plotly={plotly[0]}
                 onUpdate={(data, layout, frames) => {
                   this.props.onChangeBlock(this.props.block, {
                     ...this.props.data,
