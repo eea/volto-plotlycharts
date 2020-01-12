@@ -52,7 +52,16 @@ class Edit extends Component {
   }
 
   render() {
-    const plotly = require('plotly.js/dist/plotly');
+    const plotly = Loadable({
+      loader: () => import('plotly.js/dist/plotly'),
+      loading() {
+        return <div>Loading chart editor...</div>;
+      },
+    });
+
+    const selectProviders = this.props.providers.map(el => {
+      return [el['@id'], el.title];
+    });
 
     const chartData = this.props.data.chartData || {
       layout: {},

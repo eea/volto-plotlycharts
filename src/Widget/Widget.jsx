@@ -2,6 +2,7 @@ import ChartEditor from './ModalEditor';
 import React, { Component } from 'react';
 import { Button, Modal, Form, Grid, Label } from 'semantic-ui-react';
 import { map } from 'lodash';
+import Loadable from 'react-loadable';
 
 class ModalChartEditor extends Component {
   constructor(props) {
@@ -69,7 +70,13 @@ class ChartWidget extends Component {
       height: this.props.value?.layout?.height || 240,
     };
 
-    const LoadablePlot = require('react-plotly.js').default;
+    const LoadablePlot = Loadable({
+      loader: () => import('react-plotly.js'),
+      loading() {
+        return <div>Loading chart editor...</div>;
+      },
+    }).default;
+
     return (
       <Form.Field
         inline

@@ -36,8 +36,13 @@ class Edit extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      plotly: require('plotly.js/dist/plotly'),
       providerData: null,
+      plotly: Loadable({
+        loader: () => import('plotly.js/dist/plotly'),
+        loading() {
+          return <div>Loading chart editor...</div>;
+        },
+      }),
     };
   }
 
