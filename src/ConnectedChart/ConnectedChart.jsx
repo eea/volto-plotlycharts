@@ -8,6 +8,7 @@ import { getConnectedDataParameters } from 'volto-datablocks/helpers';
 import { connect } from 'react-redux';
 import Loadable from 'react-loadable';
 import React, { useEffect } from 'react';
+import ResponsiveContainer from '../ResponsiveContainer';
 
 const LoadablePlot = Loadable({
   loader: () => import('react-plotly.js'),
@@ -65,8 +66,6 @@ function mixProviderData(chartData, providerData, parameters) {
  *
  */
 function ConnectedChart(props) {
-  // console.log('chartview props', props);
-  //
   // need to bind them in this closure, useEffect depends on them;
   const provider_url = props.data.provider_url;
   const url = props.data.url;
@@ -117,18 +116,14 @@ function ConnectedChart(props) {
   // console.log('plot data', data);
   // console.log('plot layout', layout);
   return (
-    (__CLIENT__ && (
-      <div style={{ width: '100%' }}>
-        <LoadablePlot
-          {...props.data.chartData}
-          style={{ width: '100%' }}
-          data={data}
-          layout={layout}
-          frames={chartData.frames || props.data.frames}
-        />
-      </div>
-    )) ||
-    ''
+    <ResponsiveContainer id={props.id}>
+      <LoadablePlot
+        {...props.data.chartData}
+        data={data}
+        layout={layout}
+        frames={chartData.frames || props.data.frames}
+      />
+    </ResponsiveContainer>
   );
 }
 
