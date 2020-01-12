@@ -20,7 +20,7 @@ function getDataSourceOptions(data) {
 const LoadablePlotlyEditor = Loadable({
   loader: () => import('react-chart-editor'),
   loading() {
-    return <div>Loading chart editor...</div>;
+    return <div>Loading...</div>;
   },
 });
 

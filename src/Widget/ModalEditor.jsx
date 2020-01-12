@@ -12,7 +12,7 @@ import 'react-chart-editor/lib/react-chart-editor.css';
 const LoadablePlotlyEditor = Loadable({
   loader: () => import('react-chart-editor'),
   loading() {
-    return <div>Loading chart editor...</div>;
+    return <div>Loading...</div>;
   },
 });
 
