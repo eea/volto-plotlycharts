@@ -16,6 +16,13 @@ const LoadablePlotlyEditor = Loadable({
   },
 });
 
+let plotly = [];
+if (plotly.length === 0) {
+  import('plotly.js/dist/plotly').then(module => {
+    plotly.push(module);
+  });
+}
+
 // TODO: remove these fallbacks;
 const dataSources = {
   col1: [1, 2, 3],
@@ -37,12 +44,6 @@ class Edit extends Component {
     super(props);
     this.state = {
       providerData: null,
-      plotly: Loadable({
-        loader: () => import('plotly.js/dist/plotly'),
-        loading() {
-          return <div>Loading chart editor...</div>;
-        },
-      }),
     };
   }
 
@@ -52,7 +53,7 @@ class Edit extends Component {
     );
     return (
       <div>
-        {__CLIENT__ ? (
+        {__CLIENT__ && plotly.length > 0 ? (
           <div className="block selected">
             <div className="block-inner-wrapper">
               <PickProvider
@@ -75,7 +76,7 @@ class Edit extends Component {
                 frames={this.props.value?.frames || []}
                 dataSourceOptions={dataSourceOptions}
                 dataSources={this.state.providerData || dataSources}
-                plotly={this.state.plotly}
+                plotly={plotly[0]}
                 onUpdate={data =>
                   this.props.onChangeValue({ ...this.props.value, data })
                 }

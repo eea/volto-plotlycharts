@@ -39,6 +39,13 @@ class ModalChartEditor extends Component {
   }
 }
 
+const LoadablePlot = Loadable({
+  loader: () => import('react-plotly.js'),
+  loading() {
+    return <div>Loading chart editor...</div>;
+  },
+});
+
 class ChartWidget extends Component {
   constructor(props) {
     super(props);
@@ -70,13 +77,6 @@ class ChartWidget extends Component {
       height: this.props.value?.layout?.height || 240,
     };
 
-    const LoadablePlot = Loadable({
-      loader: () => import('react-plotly.js'),
-      loading() {
-        return <div>Loading chart editor...</div>;
-      },
-    }).default;
-
     return (
       <Form.Field
         inline
@@ -102,7 +102,6 @@ class ChartWidget extends Component {
               >
                 Open Chart Editor
               </Button>
-
               {this.state.showChartEditor ? (
                 <ModalChartEditor
                   value={value}
@@ -121,14 +120,12 @@ class ChartWidget extends Component {
               ) : (
                 ''
               )}
-
               <LoadablePlot
                 data={this.props.value?.data || []}
                 frames={this.props.value?.frames || []}
                 layout={layout}
                 config={{ displayModeBar: false }}
               />
-
               {map(error, message => (
                 <Label key={message} basic color="red" pointing>
                   {message}

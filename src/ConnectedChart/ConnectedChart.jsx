@@ -9,7 +9,6 @@ import { connect } from 'react-redux';
 import React, { useEffect } from 'react';
 import ResponsiveContainer from '../ResponsiveContainer';
 
-
 function mixProviderData(chartData, providerData, parameters) {
   const providerDataColumns = Object.keys(providerData);
   // console.log('parameters', parameters);
