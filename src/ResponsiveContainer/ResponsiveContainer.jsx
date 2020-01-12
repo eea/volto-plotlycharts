@@ -9,6 +9,14 @@ import classNames from 'classnames';
 import ReactResizeDetector from 'react-resize-detector';
 import { isString, debounce } from 'lodash';
 
+import Loadable from 'react-loadable';
+const LoadablePlot = Loadable({
+  loader: () => import('react-plotly.js'),
+  loading() {
+    return <div>Loading chart...</div>;
+  },
+});
+
 // interface Props {
 //   aspect?: number;
 //   width?: string | number;
@@ -106,7 +114,7 @@ class ResponsiveContainer extends Component {
     }
   };
 
-  renderChart() {
+  renderChart(plotData) {
     const { containerWidth, containerHeight } = this.state;
 
     if (containerWidth < 0 || containerHeight < 0) {
@@ -175,10 +183,24 @@ class ResponsiveContainer extends Component {
 
     console.log('calculated width', calculatedWidth);
 
-    return React.cloneElement(children, {
-      width: calculatedWidth,
-      height: calculatedHeight,
-    });
+    // return React.cloneElement(children, {
+    //   width: calculatedWidth,
+    //   height: calculatedHeight,
+    // });
+    // plotData.layout.width = calculatedWidth;
+    // plotData.layout.height = calculatedHeight;
+    return (
+      <LoadablePlot
+        {...plotData.chartData}
+        data={plotData.data}
+        layout={{
+          ...plotData.layout,
+          // height: calculatedHeight,
+          width: calculatedWidth,
+        }}
+        frames={plotData.frames}
+      />
+    );
   }
 
   render() {
@@ -202,7 +224,7 @@ class ResponsiveContainer extends Component {
           this.container = node;
         }}
       >
-        {this.renderChart()}
+        {this.renderChart(this.props.plotData)}
         <ReactResizeDetector
           handleWidth
           handleHeight
