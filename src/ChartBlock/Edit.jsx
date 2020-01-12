@@ -11,6 +11,8 @@ import { changeSidebarState } from 'volto-sidebar/actions';
 import PickProvider from 'volto-datablocks/PickProvider';
 
 let plotly = [];
+
+// TODO: use setState for this
 if (plotly.length === 0) {
   if (__CLIENT__) {
     import('plotly.js/dist/plotly').then(module => {
