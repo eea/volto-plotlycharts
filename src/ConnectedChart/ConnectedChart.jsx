@@ -95,7 +95,7 @@ function ConnectedChart(props) {
 
   layout = {
     ...layout,
-    autosize,
+    autosize: true,
   };
 
   const data =
@@ -114,13 +114,21 @@ function ConnectedChart(props) {
   //          layout: {},
   //          frames: []
   // }
+  // console.log('plot data', data);
+  // console.log('plot layout', layout);
   return (
-    <LoadablePlot
-      {...props.data.chartData}
-      data={data}
-      layout={layout}
-      frames={chartData.frames || props.data.frames}
-    />
+    (__CLIENT__ && (
+      <div style={{ width: '100%' }}>
+        <LoadablePlot
+          {...props.data.chartData}
+          style={{ width: '100%' }}
+          data={data}
+          layout={layout}
+          frames={chartData.frames || props.data.frames}
+        />
+      </div>
+    )) ||
+    ''
   );
 }
 
