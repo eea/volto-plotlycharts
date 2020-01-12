@@ -6,8 +6,7 @@
 
 import React, { Component } from 'react';
 import classNames from 'classnames';
-import ReactResizeDetector from 'react-resize-detector';
-import { isString, debounce } from 'lodash';
+import { SizeMe } from 'react-sizeme';
 
 // interface Props {
 //   aspect?: number;
@@ -27,13 +26,13 @@ import { isString, debounce } from 'lodash';
 //   containerHeight: number;
 // }
 
-const isPercent = value =>
-  isString(value) && value.indexOf('%') === value.length - 1;
+// const isPercent = value =>
+//   isString(value) && value.indexOf('%') === value.length - 1;
 
-function asNumber(value) {
-  if (isString(value)) return value.toInteger();
-  return value;
-}
+// function asNumber(value) {
+//   if (isString(value)) return value.toInteger();
+//   return value;
+// }
 
 class ResponsiveContainer extends Component {
   static defaultProps = {
@@ -106,78 +105,78 @@ class ResponsiveContainer extends Component {
     }
   };
 
-  renderChart() {
-    const { containerWidth, containerHeight } = this.state;
+  renderChart(size) {
+    // const { containerWidth, containerHeight } = this.state;
 
-    if (containerWidth < 0 || containerHeight < 0) {
-      return null;
-    }
+    // if (containerWidth < 0 || containerHeight < 0) {
+    //   return null;
+    // }
 
-    const {
-      aspect,
-      width,
-      height,
-      minWidth,
-      minHeight,
-      maxHeight,
-      children,
-    } = this.props;
+    // const {
+    //   aspect,
+    //   width,
+    //   height,
+    //   minWidth,
+    //   minHeight,
+    //   maxHeight,
+    //   children,
+    // } = this.props;
 
-    console.warn(
-      isPercent(width) || isPercent(height),
-      `The width(%s) and height(%s) are both fixed numbers,
-       maybe you don't need to use a ResponsiveContainer.`,
-      width,
-      height,
-    );
+    // console.warn(
+    //   isPercent(width) || isPercent(height),
+    //   `The width(%s) and height(%s) are both fixed numbers,
+    //    maybe you don't need to use a ResponsiveContainer.`,
+    //   width,
+    //   height,
+    // );
 
-    console.warn(
-      !aspect || aspect > 0,
-      'The aspect(%s) must be greater than zero.',
-      aspect,
-    );
+    // console.warn(
+    //   !aspect || aspect > 0,
+    //   'The aspect(%s) must be greater than zero.',
+    //   aspect,
+    // );
 
-    let calculatedWidth = isPercent(width) ? containerWidth : asNumber(width);
-    let calculatedHeight = isPercent(height)
-      ? containerHeight
-      : asNumber(height);
+    // let calculatedWidth = isPercent(width) ? containerWidth : asNumber(width);
+    // let calculatedHeight = isPercent(height)
+    //   ? containerHeight
+    //   : asNumber(height);
 
-    if (aspect && aspect > 0) {
-      // Preserve the desired aspect ratio
-      if (calculatedWidth) {
-        // Will default to using width for aspect ratio
-        calculatedHeight = calculatedWidth / aspect;
-      } else if (calculatedHeight) {
-        // But we should also take height into consideration
-        calculatedWidth = calculatedHeight * aspect;
-      }
+    // if (aspect && aspect > 0) {
+    //   // Preserve the desired aspect ratio
+    //   if (calculatedWidth) {
+    //     // Will default to using width for aspect ratio
+    //     calculatedHeight = calculatedWidth / aspect;
+    //   } else if (calculatedHeight) {
+    //     // But we should also take height into consideration
+    //     calculatedWidth = calculatedHeight * aspect;
+    //   }
 
-      // if maxHeight is set, overwrite if calculatedHeight is greater than maxHeight
-      if (maxHeight && calculatedHeight > maxHeight) {
-        calculatedHeight = maxHeight;
-      }
-    }
+    //   // if maxHeight is set, overwrite if calculatedHeight is greater than maxHeight
+    //   if (maxHeight && calculatedHeight > maxHeight) {
+    //     calculatedHeight = maxHeight;
+    //   }
+    // }
 
-    console.warn(
-      calculatedWidth > 0 || calculatedHeight > 0,
-      `The width(%s) and height(%s) of chart should be greater than 0,
-       please check the style of container, or the props width(%s) and height(%s),
-       or add a minWidth(%s) or minHeight(%s) or use aspect(%s) to control the
-       height and width.`,
-      calculatedWidth,
-      calculatedHeight,
-      width,
-      height,
-      minWidth,
-      minHeight,
-      aspect,
-    );
+    // console.warn(
+    //   calculatedWidth > 0 || calculatedHeight > 0,
+    //   `The width(%s) and height(%s) of chart should be greater than 0,
+    //    please check the style of container, or the props width(%s) and height(%s),
+    //    or add a minWidth(%s) or minHeight(%s) or use aspect(%s) to control the
+    //    height and width.`,
+    //   calculatedWidth,
+    //   calculatedHeight,
+    //   width,
+    //   height,
+    //   minWidth,
+    //   minHeight,
+    //   aspect,
+    // );
 
-    console.log('calculated width', calculatedWidth);
+    // console.log('calculated width', calculatedWidth);
 
     return React.cloneElement(children, {
-      width: calculatedWidth,
-      height: calculatedHeight,
+      width: size.width,
+      height: size.height,
     });
   }
 
@@ -202,12 +201,12 @@ class ResponsiveContainer extends Component {
           this.container = node;
         }}
       >
-        {this.renderChart()}
-        <ReactResizeDetector
+        {/* <ReactResizeDetector
           handleWidth
           handleHeight
           onResize={this.handleResize}
-        />
+        /> */}
+        <SizeMe>{({ size }) => this.renderChart(size)}</SizeMe>
       </div>
     );
   }
