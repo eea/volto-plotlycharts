@@ -12,9 +12,11 @@ import PickProvider from 'volto-datablocks/PickProvider';
 
 let plotly = [];
 if (plotly.length === 0) {
-  import('plotly.js/dist/plotly').then(module => {
-    plotly.push(module);
-  });
+  if (__CLIENT__) {
+    import('plotly.js/dist/plotly').then(module => {
+      plotly.push(module);
+    });
+  }
 }
 
 function getDataSourceOptions(data) {
