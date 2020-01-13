@@ -127,7 +127,10 @@ class EmbedChartBlockEdit extends Component {
           <UiForm>
             <Segment.Group horizontal>
               <Segment>
-                <div ref={this.textEditorSegmentNode}>
+                <div
+                  style={{ minWidth: '73px' }}
+                  ref={this.textEditorSegmentNode}
+                >
                   <Editor
                     index={this.props.index}
                     detached={true}
