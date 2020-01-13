@@ -30,15 +30,19 @@ class EmbedChartBlockEdit extends Component {
   componentDidMount() {
     this.props.changeSidebarState(true);
 
-    document.addEventListener('mousedown', this.handleClickOutside, false);
+    __CLIENT__ &&
+      document &&
+      document.addEventListener('mousedown', this.handleClickOutside, false);
   }
 
   componentWillUnmount() {
-    document.removeEventListener('mousedown', this.handleClickOutside, false);
+    __CLIENT__ &&
+      document &&
+      document.removeEventListener('mousedown', this.handleClickOutside, false);
   }
 
   handleClickOutside = e => {
-    let toolbar = document.getElementById(toolbarId);
+    let toolbar = __CLIENT__ && document && document.getElementById(toolbarId);
 
     let active =
       (this.textEditorSegmentNode.current &&
