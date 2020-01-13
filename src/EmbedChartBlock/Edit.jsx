@@ -16,6 +16,9 @@ import MultiValuesEdit from 'volto-datablocks/DataConnectedBlock/MultiValuesEdit
 
 import PickVisualization from '../PickVisualization';
 import ConnectedChart from '../ConnectedChart';
+import { v4 as uuid } from 'uuid';
+
+const toolbarId = uuid();
 
 class EmbedChartBlockEdit extends Component {
   constructor(props) {
@@ -35,9 +38,14 @@ class EmbedChartBlockEdit extends Component {
   }
 
   handleClickOutside = e => {
+    let toolbar = document.getElementById(toolbarId);
+
     let active =
-      this.textEditorSegmentNode.current &&
-      doesNodeContainClick(this.textEditorSegmentNode.current, e)
+      (this.textEditorSegmentNode.current &&
+        doesNodeContainClick(this.textEditorSegmentNode.current, e)) ||
+      (this.textEditorSegmentNode.current &&
+        toolbar &&
+        doesNodeContainClick(toolbar, e))
         ? true
         : false;
 
@@ -135,6 +143,7 @@ class EmbedChartBlockEdit extends Component {
                     onMutateBlock={this.nop}
                     data={this.props.data}
                     blockNode={this.textEditorSegmentNode}
+                    toolbarId={toolbarId}
                   />
                 </div>
               </Segment>
