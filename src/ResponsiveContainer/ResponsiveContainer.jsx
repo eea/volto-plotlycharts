@@ -131,19 +131,19 @@ class ResponsiveContainer extends Component {
       children,
     } = this.props;
 
-    console.warn(
-      isPercent(width) || isPercent(height),
-      `The width(%s) and height(%s) are both fixed numbers,
-       maybe you don't need to use a ResponsiveContainer.`,
-      width,
-      height,
-    );
+    // console.warn(
+    //   isPercent(width) || isPercent(height),
+    //   `The width(%s) and height(%s) are both fixed numbers,
+    //    maybe you don't need to use a ResponsiveContainer.`,
+    //   width,
+    //   height,
+    // );
 
-    console.warn(
-      !aspect || aspect > 0,
-      'The aspect(%s) must be greater than zero.',
-      aspect,
-    );
+    // console.warn(
+    //   !aspect || aspect > 0,
+    //   'The aspect(%s) must be greater than zero.',
+    //   aspect,
+    // );
 
     let calculatedWidth = isPercent(width) ? containerWidth : asNumber(width);
     let calculatedHeight = isPercent(height)
@@ -166,22 +166,22 @@ class ResponsiveContainer extends Component {
       }
     }
 
-    console.warn(
-      calculatedWidth > 0 || calculatedHeight > 0,
-      `The width(%s) and height(%s) of chart should be greater than 0,
-       please check the style of container, or the props width(%s) and height(%s),
-       or add a minWidth(%s) or minHeight(%s) or use aspect(%s) to control the
-       height and width.`,
-      calculatedWidth,
-      calculatedHeight,
-      width,
-      height,
-      minWidth,
-      minHeight,
-      aspect,
-    );
+    // console.warn(
+    //   calculatedWidth > 0 || calculatedHeight > 0,
+    //   `The width(%s) and height(%s) of chart should be greater than 0,
+    //    please check the style of container, or the props width(%s) and height(%s),
+    //    or add a minWidth(%s) or minHeight(%s) or use aspect(%s) to control the
+    //    height and width.`,
+    //   calculatedWidth,
+    //   calculatedHeight,
+    //   width,
+    //   height,
+    //   minWidth,
+    //   minHeight,
+    //   aspect,
+    // );
 
-    console.log('calculated width', calculatedWidth);
+    // console.log('calculated width', calculatedWidth);
 
     // return React.cloneElement(children, {
     //   width: calculatedWidth,

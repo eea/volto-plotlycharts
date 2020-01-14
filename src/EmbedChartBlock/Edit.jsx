@@ -126,7 +126,7 @@ class EmbedChartBlockEdit extends Component {
         <div className="block-inner-wrapper">
           <UiForm>
             <Segment.Group horizontal>
-              <Segment>
+              <Segment style={{ maxWidth: '40%' }}>
                 <div
                   style={{ minWidth: '73px' }}
                   ref={this.textEditorSegmentNode}
