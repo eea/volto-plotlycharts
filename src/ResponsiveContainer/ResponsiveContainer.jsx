@@ -197,8 +197,10 @@ class ResponsiveContainer extends Component {
           ...plotData.layout,
           // height: calculatedHeight,
           width: calculatedWidth,
+          margin: { t: 25, l: 45, r: 0, b: 0 },
         }}
         frames={plotData.frames}
+        config={{ displayModeBar: false }}
       />
     );
   }

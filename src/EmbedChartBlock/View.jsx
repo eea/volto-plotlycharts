@@ -7,10 +7,11 @@ import ViewText from '@plone/volto/components/manage/Blocks/Text/View';
 const EmbedChartView = props => {
   return (
     <div className="chartWrapperView">
+      {props.data.block_title ? <h5>{props.data.block_title}</h5> : ''}
       <div className="block-inner-wrapper">
         <Grid>
           <Grid.Column width={4}>
-            <div className="block-text-content">
+            <div className="block-text-content" style={{ marginTop: '2rem' }}>
               <ViewText {...props} />
             </div>
           </Grid.Column>
