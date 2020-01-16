@@ -5,6 +5,7 @@ import Loadable from 'react-loadable';
 
 import { searchContent } from '@plone/volto/actions';
 import PickProvider from 'volto-datablocks/PickProvider';
+import { updateChartDataFromProvider } from 'volto-datablocks/helpers';
 
 import 'react-chart-editor/lib/react-chart-editor.css';
 
@@ -40,26 +41,22 @@ function getDataSourceOptions(data) {
 const config = { editable: true };
 
 class Edit extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      providerData: null,
-    };
-  }
-
   render() {
     const dataSourceOptions = getDataSourceOptions(
-      this.state.providerData || dataSources,
+      this.props.providerData || dataSources,
     );
+
+    const updatedData = updateChartDataFromProvider(
+      this.props.value?.data || [],
+      [],
+    );
+
     return (
       <div>
         {__CLIENT__ && plotly.length > 0 ? (
           <div className="block selected">
             <div className="block-inner-wrapper">
               <PickProvider
-                onLoadProviderData={providerData =>
-                  this.setState({ providerData })
-                }
                 onChange={url =>
                   this.props.onChangeValue({
                     ...this.props.value,
@@ -67,15 +64,14 @@ class Edit extends Component {
                   })
                 }
                 value={this.props.value?.provider_url || ''}
-                currentProviderData={this.state.providerData}
               />
               <LoadablePlotlyEditor
-                data={this.props.value?.data || []}
+                data={updatedData}
                 layout={this.props.value?.layout || {}}
                 config={config}
                 frames={this.props.value?.frames || []}
                 dataSourceOptions={dataSourceOptions}
-                dataSources={this.state.providerData || dataSources}
+                dataSources={this.props.providerData || dataSources}
                 plotly={plotly[0]}
                 onUpdate={(data, layout, frames) => {
                   return this.props.onChangeValue({
@@ -100,6 +96,15 @@ class Edit extends Component {
 }
 
 export default connect(
-  null,
+  (state, props) => {
+    const provider_url = props.value?.provider_url
+      ? `${props.value?.provider_url}/@connector-data`
+      : null;
+    return {
+      providerData: provider_url
+        ? state.data_providers.data?.[provider_url]
+        : null,
+    };
+  },
   { searchContent },
 )(Edit);

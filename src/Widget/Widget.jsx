@@ -1,8 +1,11 @@
-import ChartEditor from './ModalEditor';
+import { connect } from 'react-redux';
+import ChartEditor from './ChartEditor';
 import React, { Component } from 'react';
 import { Button, Modal, Form, Grid, Label } from 'semantic-ui-react';
 import { map } from 'lodash';
 import Loadable from 'react-loadable';
+import { updateChartDataFromProvider } from 'volto-datablocks/helpers';
+import { getDataFromProvider } from 'volto-datablocks/actions';
 
 class ModalChartEditor extends Component {
   constructor(props) {
@@ -52,7 +55,14 @@ class ChartWidget extends Component {
 
     this.state = {
       showChartEditor: false,
+      // providerData: null,
     };
+  }
+
+  componentWillMount() {
+    // NOTE: this might trigger double data requests, need to pay attention
+    // if (this.props.value?.provider_url && !this.props.providerData)
+    //   this.props.getDataFromProvider(this.props.value.provider_url);
   }
 
   render() {
@@ -68,6 +78,8 @@ class ChartWidget extends Component {
     } = this.props;
 
     if (__SERVER__) return '';
+
+    // console.log('widget provider data', this.props.providerData);
 
     // value is { data || [], layout || {}, frames || [], provider_url }
 
@@ -121,7 +133,10 @@ class ChartWidget extends Component {
                 ''
               )}
               <LoadablePlot
-                data={this.props.value?.data || []}
+                data={updateChartDataFromProvider(
+                  this.props.value?.data || [],
+                  this.props.providerData,
+                )}
                 frames={this.props.value?.frames || []}
                 layout={layout}
                 config={{ displayModeBar: false }}
@@ -146,4 +161,16 @@ class ChartWidget extends Component {
   }
 }
 
-export default ChartWidget;
+export default connect(
+  (state, props) => {
+    const provider_url = props.value?.provider_url
+      ? `${props.value?.provider_url}/@connector-data`
+      : null;
+    return {
+      providerData: provider_url
+        ? state.data_providers.data?.[provider_url]
+        : null,
+    };
+  },
+  { getDataFromProvider },
+)(ChartWidget);
