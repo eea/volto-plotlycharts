@@ -64,6 +64,7 @@ class Edit extends Component {
                   })
                 }
                 value={this.props.value?.provider_url || ''}
+                showReload={true}
               />
               <LoadablePlotlyEditor
                 data={updatedData}
