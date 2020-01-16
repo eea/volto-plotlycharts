@@ -77,9 +77,14 @@ class Edit extends Component {
                 dataSourceOptions={dataSourceOptions}
                 dataSources={this.state.providerData || dataSources}
                 plotly={plotly[0]}
-                onUpdate={data =>
-                  this.props.onChangeValue({ ...this.props.value, data })
-                }
+                onUpdate={(data, layout, frames) => {
+                  return this.props.onChangeValue({
+                    ...this.props.value,
+                    data,
+                    layout,
+                    frames,
+                  });
+                }}
                 useResizeHandler
                 debug
                 advancedTraceTypeSelector
