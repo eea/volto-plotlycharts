@@ -43,19 +43,14 @@ const dataSources = {
 
 const config = { editable: true };
 
+// TODO: this should be rewritten to use ModalEditor widget
 class Edit extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      providerData: null,
-    };
-  }
-
   componentDidMount() {
     this.props.changeSidebarState(true);
   }
 
   componentDidUpdate(prevProps) {
+    // I think this should always be true
     if (this.props.url && this.props.url !== prevProps.url) {
       this.props.changeSidebarState(true);
       // this.props.getDataFromProvider(this.props.url);
@@ -69,7 +64,7 @@ class Edit extends Component {
       data: [],
     };
     const dataSourceOptions = getDataSourceOptions(
-      this.state.providerData || dataSources,
+      this.props.providerData || dataSources,
     );
 
     return (
@@ -82,7 +77,7 @@ class Edit extends Component {
                 layout={chartData.layout}
                 config={config}
                 frames={chartData.frames}
-                dataSources={this.state.providerData || dataSources}
+                dataSources={this.props.providerData || dataSources}
                 dataSourceOptions={dataSourceOptions}
                 plotly={plotly[0]}
                 onUpdate={(data, layout, frames) => {
@@ -108,10 +103,6 @@ class Edit extends Component {
                   </header>
                   <Segment className="form sidebar-image-data">
                     <PickProvider
-                      onLoadProviderData={providerData =>
-                        this.setState({ providerData })
-                      }
-                      currentProviderData={this.state.providerData}
                       onChange={url =>
                         this.props.onChangeBlock(this.props.block, {
                           ...this.props.data,
@@ -136,6 +127,15 @@ class Edit extends Component {
 }
 
 export default connect(
-  null,
+  (state, props) => {
+    const provider_url = props.data?.url
+      ? `${props.data.url}/@connector-data`
+      : null;
+    return {
+      providerData: provider_url
+        ? state.data_providers.data?.[provider_url]
+        : null,
+    };
+  },
   { changeSidebarState },
 )(Edit);
