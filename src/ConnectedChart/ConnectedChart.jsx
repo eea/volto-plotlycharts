@@ -3,6 +3,7 @@
  */
 
 import { addAppURL } from '@plone/volto/helpers';
+import { getContent } from '@plone/volto/actions';
 import { getDataFromProvider } from 'volto-datablocks/actions';
 import { getConnectedDataParameters } from 'volto-datablocks/helpers';
 import { connect } from 'react-redux';
@@ -63,13 +64,21 @@ function ConnectedChart(props) {
   const url = props.data.url;
   const getDataFromProvider = props.getDataFromProvider;
 
+  const source_url = props.source;
+  const getContent = props.getContent;
+
   // NOTE: this is a candidate for a HOC, withProviderData
   useEffect(() => {
     provider_url && getDataFromProvider(provider_url || url);
-  }, [getDataFromProvider, provider_url, url]);
+    source_url && getContent(source_url, null, source_url);
+  }, [getDataFromProvider, provider_url, url, source_url, getContent]);
 
   // TODO: decide which one is used props.data.chartData or data?
-  const chartData = props.data.chartData || props.data;
+  // chartDataFromVis: live data fetched from the original visualization
+  // data.chartData: saved chart data in the block, from the original edit
+  // props.data??? not sure where it's used
+  const chartData =
+    props.chartDataFromVis || props.data.chartData || props.data;
 
   const useLiveData =
     typeof props.useLiveData !== 'undefined' ? props.useLiveData : true;
@@ -99,22 +108,14 @@ function ConnectedChart(props) {
       : chartData.data || [];
 
   // Pass additional configs in chartData if you want:
-  // const chartData = {
-  //          config:{{ displayModeBar: false }}
-  //          data: [],
-  //          layout: {},
-  //          frames: []
-  // }
-  // console.log('plot data', data);
-  // console.log('plot layout', layout);
+  // const chartConfig={{ config:{ displayModeBar: false } }}
+  //
   return (
     <ResponsiveContainer
-      plotData={{
-        chartData: { ...props.data.chartData },
-        data,
-        layout,
-        frames: chartData.frames || props.data.frames,
-      }}
+      data={data}
+      layout={layout}
+      frames={chartData.frames || props.data.frames}
+      chartConfig={props.data.chartData}
       id={props.id}
     >
       {/* <LoadablePlot /> */}
@@ -135,16 +136,26 @@ function getProviderData(state, props) {
   return res;
 }
 
+function getVisualizationData(state, props) {
+  const vis_url = props.source;
+  const res = vis_url
+    ? state.content.subrequests?.[vis_url]?.data?.visualization
+    : null;
+  return res;
+}
+
 export default connect(
   (state, props) => {
     const providerData = getProviderData(state, props);
+    const chartDataFromVis = getVisualizationData(state, props);
     const url = state.router?.location?.pathname || null;
 
     return {
       providerData,
+      chartDataFromVis,
       connected_data_parameters:
         url !== null ? getConnectedDataParameters(state, { url }) : null,
     };
   },
-  { getDataFromProvider },
+  { getDataFromProvider, getContent },
 )(ConnectedChart);

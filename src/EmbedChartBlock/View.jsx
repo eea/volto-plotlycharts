@@ -18,6 +18,7 @@ const EmbedChartView = props => {
           <Grid.Column width={8}>
             {props.data.chartData ? (
               <ConnectedChart
+                source={props.data.vis_url}
                 data={props.data.chartData}
                 className="embedded-block-chart"
               />

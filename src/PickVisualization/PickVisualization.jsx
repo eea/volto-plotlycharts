@@ -5,6 +5,8 @@ import { searchContent, getContent } from '@plone/volto/actions';
 import { connect } from 'react-redux';
 import React, { Component } from 'react';
 import { Field } from '@plone/volto/components'; // EditBlock
+import { Form, Grid } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
 
 class PickVisualization extends Component {
   searchVisualizations = () => {
@@ -40,14 +42,23 @@ class PickVisualization extends Component {
 
   render() {
     return (
-      <Field
-        title="Visualization"
-        id="chart-data"
-        choices={this.props.visualizations}
-        required={true}
-        onChange={(id, value) => this.props.onChange(value)}
-        value={this.props.value}
-      />
+      <>
+        <Field
+          title="Visualization"
+          id="chart-data"
+          choices={this.props.visualizations}
+          required={true}
+          onChange={(id, value) => this.props.onChange(value)}
+          value={this.props.value}
+        />
+        <Form.Field>
+          <Grid>
+            <Grid.Column width={12}>
+              {this.props.value ? <Link to={this.props.value}>View</Link> : ''}
+            </Grid.Column>
+          </Grid>
+        </Form.Field>
+      </>
     );
   }
 }

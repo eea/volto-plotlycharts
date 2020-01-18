@@ -114,7 +114,7 @@ class ResponsiveContainer extends Component {
     }
   };
 
-  renderChart(plotData) {
+  renderChart(props) {
     const { containerWidth, containerHeight } = this.state;
 
     if (containerWidth < 0 || containerHeight < 0) {
@@ -125,10 +125,14 @@ class ResponsiveContainer extends Component {
       aspect,
       width,
       height,
-      minWidth,
-      minHeight,
+      // minWidth,
+      // minHeight,
       maxHeight,
-      children,
+      // children,
+      data,
+      layout,
+      frames,
+      chartConfig,
     } = this.props;
 
     // console.warn(
@@ -191,14 +195,14 @@ class ResponsiveContainer extends Component {
     // plotData.layout.height = calculatedHeight;
     return (
       <LoadablePlot
-        {...plotData.chartData}
-        data={plotData.data}
+        {...chartConfig}
+        data={data}
         layout={{
-          ...plotData.layout,
+          ...layout,
           // height: calculatedHeight,
           width: calculatedWidth,
         }}
-        frames={plotData.frames}
+        frames={frames}
         config={{ displayModeBar: false }}
       />
     );
@@ -225,7 +229,7 @@ class ResponsiveContainer extends Component {
           this.container = node;
         }}
       >
-        {this.renderChart(this.props.plotData)}
+        {this.renderChart(this.props)}
         <ReactResizeDetector
           handleWidth
           handleHeight
