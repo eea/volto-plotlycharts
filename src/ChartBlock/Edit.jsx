@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Loadable from 'react-loadable';
+import { Field } from '@plone/volto/components'; // EditBlock
 
 import { Segment } from 'semantic-ui-react'; // , Dropdown
 import 'react-chart-editor/lib/react-chart-editor.css';
@@ -110,6 +111,32 @@ class Edit extends Component {
                         })
                       }
                       value={this.props.data?.url}
+                    />
+                    <Field
+                      title="Source"
+                      id="chart-source"
+                      type="text"
+                      value={this.props.data.chart_source || ''}
+                      required={false}
+                      onChange={(e, d) =>
+                        this.props.onChangeBlock(this.props.block, {
+                          ...this.props.data,
+                          chart_source: d,
+                        })
+                      }
+                    />
+                    <Field
+                      title="Source Link"
+                      id="chart-source-link"
+                      type="text"
+                      value={this.props.data.chart_source_link || ''}
+                      required={false}
+                      onChange={(e, d) =>
+                        this.props.onChangeBlock(this.props.block, {
+                          ...this.props.data,
+                          chart_source_link: d,
+                        })
+                      }
                     />
                   </Segment>
                 </Segment.Group>
