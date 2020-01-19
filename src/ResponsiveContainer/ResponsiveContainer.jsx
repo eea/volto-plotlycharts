@@ -199,7 +199,7 @@ class ResponsiveContainer extends Component {
         data={data}
         layout={{
           ...layout,
-          // height: calculatedHeight,
+          height: calculatedHeight,
           width: calculatedWidth,
         }}
         frames={frames}

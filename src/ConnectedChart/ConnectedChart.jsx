@@ -7,6 +7,7 @@ import { getContent } from '@plone/volto/actions';
 import { getDataFromProvider } from 'volto-datablocks/actions';
 import { getConnectedDataParameters } from 'volto-datablocks/helpers';
 import { connect } from 'react-redux';
+import { settings } from '~/config';
 import React, { useEffect } from 'react';
 import ResponsiveContainer from '../ResponsiveContainer';
 
@@ -96,9 +97,13 @@ function ConnectedChart(props) {
   layout = {
     ...layout,
     autosize: true,
+    font: {
+      ...layout.font,
+      family: settings.chartLayoutFontFamily || "'Roboto', sans-serif",
+    },
   };
 
-  const data =
+  let data =
     props.providerData && useLiveData
       ? mixProviderData(
           chartData.data,
@@ -106,10 +111,20 @@ function ConnectedChart(props) {
           props.connected_data_parameters,
         )
       : chartData.data || [];
+  data = data.map(trace => ({
+    ...trace,
+    textfont: {
+      ...trace.textfont,
+      family: settings.chartDataFontFamily || "'Roboto', sans-serif",
+    },
+  }));
 
   // Pass additional configs in chartData if you want:
   // const chartConfig={{ config:{ displayModeBar: false } }}
   //
+  console.log('chart data', data);
+  console.log('chart layout', layout);
+
   return (
     <ResponsiveContainer
       data={data}
