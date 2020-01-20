@@ -7,7 +7,10 @@ const ChartView = props => {
       <div className="block-inner-wrapper">
         <ConnectedChart {...props} className="chart-block-chart" />
         <div>
-          <a className="discreet" href={props.data.chart_source_link}>
+          <a
+            className="discreet block_source"
+            href={props.data.chart_source_link}
+          >
             {props.data.chart_source}
           </a>
         </div>

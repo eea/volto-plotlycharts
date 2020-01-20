@@ -58,6 +58,8 @@ class EmbedChartBlockEdit extends Component {
     }));
   };
 
+  nop = () => {};
+
   textEditorSegmentNode = React.createRef();
 
   render() {
