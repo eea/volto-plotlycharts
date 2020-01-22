@@ -16,7 +16,7 @@ const EmbedChartView = props => {
         <Grid>
           <Grid.Row>
             {hasText ? (
-              <Grid.Column width={4}>
+              <Grid.Column computer={4} largeScreen={4} tablet={12} mobile={12}>
                 <div
                   className="block-text-content"
                   style={{ padding: '1rem', marginTop: '.5rem' }}
@@ -28,7 +28,12 @@ const EmbedChartView = props => {
               ''
             )}
 
-            <Grid.Column width={hasText ? 8 : 12}>
+            <Grid.Column
+              computer={hasText ? 8 : 12}
+              largeScreen={hasText ? 8 : 12}
+              tablet={12}
+              mobile={12}
+            >
               {props.data.chartData ? (
                 <ConnectedChart
                   source={props.data.vis_url}
