@@ -10,6 +10,8 @@ const ChartView = props => {
           <a
             className="discreet block_source"
             href={props.data.chart_source_link}
+            target="_blank"
+            rel="noopener noreferrer"
           >
             {props.data.chart_source}
           </a>
