@@ -103,6 +103,9 @@ function ConnectedChart(props) {
     },
   };
 
+  if (layout.xaxis) layout.xaxis = { ...layout.xaxis, range: [] };
+  if (layout.yaxis) layout.yaxis = { ...layout.yaxis, range: [] };
+
   let data =
     props.providerData && useLiveData
       ? mixProviderData(
