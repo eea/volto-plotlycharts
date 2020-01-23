@@ -44,6 +44,7 @@ function mixProviderData(chartData, providerData, parameters) {
         (trace.transforms || []).forEach(transform => {
           if (transform.targetsrc === filterName && filterValue) {
             transform.value = filterValue;
+            transform.target = providerData[transform.targetsrc];
             // console.log('trace', transform, filterValue);
           }
         });
