@@ -116,7 +116,7 @@ function ConnectedChart(props) {
           props.providerData,
           props.connected_data_parameters,
         )
-      : []; // chartData.data ||
+      : chartData.data || [];
   data = data.map(trace => ({
     ...trace,
     textfont: {
