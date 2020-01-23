@@ -13,7 +13,9 @@ import ResponsiveContainer from '../ResponsiveContainer';
 
 function mixProviderData(chartData, providerData, parameters) {
   const providerDataColumns = Object.keys(providerData);
-  // console.log('parameters', parameters);
+  console.log('chartData', chartData);
+  console.log('providerData', providerData);
+  console.log('parameters', parameters);
 
   const res = chartData.map(trace => {
     Object.keys(trace).forEach(tk => {
@@ -113,7 +115,7 @@ function ConnectedChart(props) {
           props.providerData,
           props.connected_data_parameters,
         )
-      : chartData.data || [];
+      : []; // chartData.data ||
   data = data.map(trace => ({
     ...trace,
     textfont: {
@@ -125,8 +127,9 @@ function ConnectedChart(props) {
   // Pass additional configs in chartData if you want:
   // const chartConfig={{ config:{ displayModeBar: false } }}
   //
-  console.log('chart data', data);
-  console.log('chart layout', layout);
+  // console.log('connected data parameters', props.connected_data_parameters);
+  // console.log('chart data', data);
+  // console.log('chart layout', layout);
 
   return (
     <ResponsiveContainer
