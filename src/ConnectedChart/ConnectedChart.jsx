@@ -14,9 +14,9 @@ import VisibilitySensor from 'react-visibility-sensor';
 
 function mixProviderData(chartData, providerData, parameters) {
   const providerDataColumns = Object.keys(providerData);
-  console.log('chartData', chartData);
-  console.log('providerData', providerData);
-  console.log('parameters', parameters);
+  // console.log('chartData', chartData);
+  // console.log('providerData', providerData);
+  // console.log('parameters', parameters);
 
   const res = chartData.map(trace => {
     Object.keys(trace).forEach(tk => {
@@ -110,7 +110,7 @@ function ConnectedChart(props) {
   if (layout.xaxis) layout.xaxis = { ...layout.xaxis, range: [] };
   if (layout.yaxis) layout.yaxis = { ...layout.yaxis, range: [] };
 
-  console.log('chart props', props);
+  // console.log('chart props', props);
   // TODO: only use fallback data if chartData.data.url doesn't exist
   // or the connected_data_parameters don't exist
 
