@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
 import { settings } from '~/config';
 import React, { useEffect } from 'react';
 import ResponsiveContainer from '../ResponsiveContainer';
+import VisibilitySensor from 'react-visibility-sensor';
 
 function mixProviderData(chartData, providerData, parameters) {
   const providerDataColumns = Object.keys(providerData);
@@ -137,15 +138,17 @@ function ConnectedChart(props) {
   // console.log('chart layout', layout);
 
   return (
-    <ResponsiveContainer
-      data={data}
-      layout={layout}
-      frames={chartData.frames || props.data.frames}
-      chartConfig={props.data.chartData}
-      id={props.id}
-    >
-      {/* <LoadablePlot /> */}
-    </ResponsiveContainer>
+    <VisibilitySensor partialVisibility={true}>
+      <ResponsiveContainer
+        data={data}
+        layout={layout}
+        frames={chartData.frames || props.data.frames}
+        chartConfig={props.data.chartData}
+        id={props.id}
+      >
+        {/* <LoadablePlot /> */}
+      </ResponsiveContainer>
+    </VisibilitySensor>
   );
 }
 

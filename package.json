@@ -25,6 +25,7 @@
     "plotly.js": "^1.51.2",
     "react-chart-editor": "^0.40.0",
     "react-plotly.js": "^2.3.0",
-    "react-resize-detector": "^4.2.1"
+    "react-resize-detector": "^4.2.1",
+    "react-visibility-sensor": "^5.1.1"
   }
 }
