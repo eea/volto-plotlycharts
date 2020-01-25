@@ -5,7 +5,10 @@
 import { addAppURL } from '@plone/volto/helpers';
 import { getContent } from '@plone/volto/actions';
 import { getDataFromProvider } from 'volto-datablocks/actions';
-import { getConnectedDataParameters } from 'volto-datablocks/helpers';
+import {
+  getConnectedDataParametersForContext,
+  getConnectedDataParametersForProvider,
+} from 'volto-datablocks/helpers';
 import { connect } from 'react-redux';
 import { settings } from '~/config';
 import React, { useEffect } from 'react';
@@ -177,13 +180,21 @@ export default connect(
   (state, props) => {
     const providerData = getProviderData(state, props);
     const chartDataFromVis = getVisualizationData(state, props);
+
+    const providerUrl = props?.data?.provider_url || props?.data?.url || null;
     const url = state.router?.location?.pathname || null;
+
+    const byProvider = getConnectedDataParametersForProvider(
+      state,
+      providerUrl,
+    );
+    const byContext = getConnectedDataParametersForContext(state, url);
 
     return {
       providerData,
       chartDataFromVis,
       connected_data_parameters:
-        url !== null ? getConnectedDataParameters(state, { url }) : null,
+        providerUrl !== null ? byProvider || byContext : byContext,
     };
   },
   { getDataFromProvider, getContent },
