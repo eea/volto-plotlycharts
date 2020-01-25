@@ -68,17 +68,20 @@ function mixProviderData(chartData, providerData, parameters) {
  */
 function ConnectedChart(props) {
   // need to bind them in this closure, useEffect depends on them;
-  const provider_url = props.data.provider_url;
+  const provider_url =
+    props.data.provider_url || props.chartDataFromVis?.provider_url;
   const url = props.data.url;
   const getDataFromProvider = props.getDataFromProvider;
 
   const source_url = props.source;
   const getContent = props.getContent;
 
+  // console.log('provider_url', provider_url);
+
   // NOTE: this is a candidate for a HOC, withProviderData
   useEffect(() => {
-    provider_url && getDataFromProvider(provider_url || url);
     source_url && getContent(source_url, null, source_url);
+    provider_url && getDataFromProvider(provider_url || url);
   }, [getDataFromProvider, provider_url, url, source_url, getContent]);
 
   // TODO: decide which one is used props.data.chartData or data?
@@ -113,7 +116,7 @@ function ConnectedChart(props) {
   if (layout.xaxis) layout.xaxis = { ...layout.xaxis, range: [] };
   if (layout.yaxis) layout.yaxis = { ...layout.yaxis, range: [] };
 
-  // console.log('chart props', props);
+  console.debug('chart props', props);
   // TODO: only use fallback data if chartData.data.url doesn't exist
   // or the connected_data_parameters don't exist
 
@@ -155,9 +158,12 @@ function ConnectedChart(props) {
   );
 }
 
-function getProviderData(state, props) {
-  let path = props?.data?.provider_url || props?.data?.url || null;
+function getProviderData(state, props, providerForVis) {
+  let path =
+    providerForVis || props?.data?.provider_url || props?.data?.url || null;
 
+  // console.log('getProviderData props', props);
+  // console.log('getProviderData path', path);
   if (!path) return;
 
   path = `${path}/@connector-data`;
@@ -178,8 +184,12 @@ function getVisualizationData(state, props) {
 
 export default connect(
   (state, props) => {
-    const providerData = getProviderData(state, props);
     const chartDataFromVis = getVisualizationData(state, props);
+    const providerData = getProviderData(
+      state,
+      props,
+      chartDataFromVis?.provider_url,
+    );
 
     const providerUrl = props?.data?.provider_url || props?.data?.url || null;
     const url = state.router?.location?.pathname || null;
