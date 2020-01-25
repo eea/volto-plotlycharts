@@ -48,6 +48,7 @@ class ResponsiveContainer extends Component {
     width: '100%',
     height: '100%',
     debounce: 0,
+    visible: false,
   };
 
   // private handleResize: () => void;
@@ -229,7 +230,7 @@ class ResponsiveContainer extends Component {
           this.container = node;
         }}
       >
-        {this.renderChart(this.props)}
+        {this.props.visible && this.renderChart(this.props)}
         <ReactResizeDetector
           handleWidth
           handleHeight

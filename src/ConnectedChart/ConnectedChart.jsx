@@ -11,7 +11,7 @@ import {
 } from 'volto-datablocks/helpers';
 import { connect } from 'react-redux';
 import { settings } from '~/config';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import ResponsiveContainer from '../ResponsiveContainer';
 import VisibilitySensor from 'react-visibility-sensor';
 
@@ -84,6 +84,8 @@ function ConnectedChart(props) {
     provider_url && getDataFromProvider(provider_url || url);
   }, [getDataFromProvider, provider_url, url, source_url, getContent]);
 
+  const [visible, setVisible] = useState(false);
+
   // TODO: decide which one is used props.data.chartData or data?
   // chartDataFromVis: live data fetched from the original visualization
   // data.chartData: saved chart data in the block, from the original edit
@@ -144,13 +146,14 @@ function ConnectedChart(props) {
   // console.log('chart layout', layout);
 
   return (
-    <VisibilitySensor partialVisibility={true}>
+    <VisibilitySensor partialVisibility={true} onChange={setVisible}>
       <ResponsiveContainer
         data={data}
         layout={layout}
         frames={chartData.frames || props.data.frames}
         chartConfig={props.data.chartData}
         id={props.id}
+        visible={visible}
       >
         {/* <LoadablePlot /> */}
       </ResponsiveContainer>
