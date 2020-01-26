@@ -239,7 +239,7 @@ class ResponsiveContainer extends Component {
           this.container = node;
         }}
       >
-        {this.props.visible && this.renderChart(this.props)}
+        {this.renderChart(this.props)}
         <ReactResizeDetector
           handleWidth
           handleHeight
