@@ -27,7 +27,6 @@ const EmbedChartView = props => {
             ) : (
               ''
             )}
-
             <Grid.Column
               computer={hasText ? 8 : 12}
               largeScreen={hasText ? 8 : 12}

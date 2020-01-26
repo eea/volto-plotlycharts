@@ -8,6 +8,7 @@ import React, { Component } from 'react';
 import classNames from 'classnames';
 import ReactResizeDetector from 'react-resize-detector';
 import { isString, debounce } from 'lodash';
+import { Placeholder } from 'semantic-ui-react';
 
 import Loadable from 'react-loadable';
 const LoadablePlot = Loadable({
@@ -118,9 +119,9 @@ class ResponsiveContainer extends Component {
   renderChart(props) {
     const { containerWidth, containerHeight } = this.state;
 
-    if (containerWidth < 0 || containerHeight < 0) {
-      return null;
-    }
+    // if (containerWidth < 0 || containerHeight < 0) {
+    //   return null;
+    // }
 
     const {
       aspect,
@@ -194,7 +195,11 @@ class ResponsiveContainer extends Component {
     // });
     // plotData.layout.width = calculatedWidth;
     // plotData.layout.height = calculatedHeight;
-    return (
+    //   <Placeholder>
+    //   <Placeholder.Image rectangular />
+    // </Placeholder>
+    // return <div>alalalalalala =>>>>>>>>>.{JSON.stringify(data)}</div>
+    return __CLIENT__ ? (
       <LoadablePlot
         {...chartConfig}
         data={data}
@@ -206,6 +211,10 @@ class ResponsiveContainer extends Component {
         frames={frames}
         config={{ displayModeBar: false }}
       />
+    ) : (
+      <Placeholder>
+        <Placeholder.Image rectangular />
+      </Placeholder>
     );
   }
 
