@@ -144,20 +144,20 @@ function ConnectedChart(props) {
   // console.log('connected data parameters', props.connected_data_parameters);
   // console.log('chart data', data);
   // console.log('chart layout', layout);
+  //<VisibilitySensor partialVisibility={true} onChange={setVisible}>
+  //</VisibilitySensor>
 
   return (
-    <VisibilitySensor partialVisibility={true} onChange={setVisible}>
-      <ResponsiveContainer
-        data={data}
-        layout={layout}
-        frames={chartData.frames || props.data.frames}
-        chartConfig={props.data.chartData}
-        id={props.id}
-        visible={visible}
-      >
-        {/* <LoadablePlot /> */}
-      </ResponsiveContainer>
-    </VisibilitySensor>
+    <ResponsiveContainer
+      data={data}
+      layout={layout}
+      frames={chartData.frames || props.data.frames}
+      chartConfig={props.data.chartData}
+      id={props.id}
+      visible={visible}
+    >
+      {/* <LoadablePlot /> */}
+    </ResponsiveContainer>
   );
 }
 
