@@ -3,7 +3,6 @@
  */
 
 import { addAppURL } from '@plone/volto/helpers';
-import { getContent } from '@plone/volto/actions';
 import { getDataFromProvider } from 'volto-datablocks/actions';
 import {
   getConnectedDataParametersForContext,
@@ -11,9 +10,12 @@ import {
 } from 'volto-datablocks/helpers';
 import { connect } from 'react-redux';
 import { settings } from '~/config';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react'; // , useState
 import ResponsiveContainer from '../ResponsiveContainer';
-import VisibilitySensor from 'react-visibility-sensor';
+import { getChartDataFromVisualization } from 'volto-plotlycharts/actions';
+
+// import VisibilitySensor from 'react-visibility-sensor';
+// import { getContent } from '@plone/volto/actions';
 
 function mixProviderData(chartData, providerData, parameters) {
   const providerDataColumns = Object.keys(providerData);
@@ -74,24 +76,30 @@ function ConnectedChart(props) {
   const getDataFromProvider = props.getDataFromProvider;
 
   const source_url = props.source;
-  const getContent = props.getContent;
+  const getChartDataFromVisualization = props.getChartDataFromVisualization;
 
-  // console.log('provider_url', provider_url);
+  const visData = props.chartDataFromVis;
 
   // NOTE: this is a candidate for a HOC, withProviderData
   useEffect(() => {
-    source_url && getContent(source_url, null, source_url);
-    provider_url && getDataFromProvider(provider_url || url);
-  }, [getDataFromProvider, provider_url, url, source_url, getContent]);
+    if (source_url && !visData) getChartDataFromVisualization(source_url);
+    if (provider_url) getDataFromProvider(provider_url || url);
+  }, [
+    getChartDataFromVisualization,
+    provider_url,
+    visData,
+    url,
+    source_url,
+    getDataFromProvider,
+  ]);
 
-  const [visible, setVisible] = useState(false);
+  // const [visible, setVisible] = useState(false);
 
   // TODO: decide which one is used props.data.chartData or data?
-  // chartDataFromVis: live data fetched from the original visualization
+  // visData: live data fetched from the original visualization
   // data.chartData: saved chart data in the block, from the original edit
   // props.data??? not sure where it's used
-  const chartData =
-    props.chartDataFromVis || props.data.chartData || props.data;
+  const chartData = visData || props.data.chartData || props.data;
 
   const useLiveData =
     typeof props.useLiveData !== 'undefined' ? props.useLiveData : true;
@@ -154,7 +162,7 @@ function ConnectedChart(props) {
       frames={chartData.frames || props.data.frames}
       chartConfig={props.data.chartData}
       id={props.id}
-      visible={visible}
+      visible={true}
     >
       {/* <LoadablePlot /> */}
     </ResponsiveContainer>
@@ -179,10 +187,10 @@ function getProviderData(state, props, providerForVis) {
 
 function getVisualizationData(state, props) {
   const vis_url = props.source;
-  const res = vis_url
-    ? state.content.subrequests?.[vis_url]?.data?.visualization
-    : null;
-  return res;
+  // const res = vis_url
+  //   ? state.content.subrequests?.[vis_url]?.data?.visualization
+  //   : null;
+  return state.chart_data_visualization[vis_url]?.item;
 }
 
 export default connect(
@@ -210,5 +218,5 @@ export default connect(
         providerUrl !== null ? byProvider || byContext : byContext,
     };
   },
-  { getDataFromProvider, getContent },
+  { getDataFromProvider, getChartDataFromVisualization }, // getContent,
 )(ConnectedChart);
