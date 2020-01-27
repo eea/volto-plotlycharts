@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Grid } from 'semantic-ui-react';
 import ConnectedChart from '../ConnectedChart';
 import ViewText from '@plone/volto/components/manage/Blocks/Text/View';
-import SourceView from '~/components/theme/Blocks/SourceView';
+import SourceView from 'volto-datablocks/theme/Blocks/SourceView';
 
 const EmbedChartView = props => {
   const hasText =
