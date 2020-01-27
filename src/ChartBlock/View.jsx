@@ -1,20 +1,17 @@
 import React from 'react';
 import ConnectedChart from '../ConnectedChart';
-
+import SourceView from '~/components/theme/Blocks/SourceView';
 const ChartView = props => {
   return (
     <div className="chartWrapperView">
       <div className="block-inner-wrapper">
         <ConnectedChart {...props} className="chart-block-chart" />
         <div>
-          <a
-            className="discreet block_source"
-            href={props.data.chart_source_link}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {props.data.chart_source}
-          </a>
+          <SourceView
+            initialSource={props.data.chart_source}
+            initialSourceLink={props.data.chart_source_link}
+            multipleSources={props.data.chartSources}
+          />
         </div>
       </div>
     </div>

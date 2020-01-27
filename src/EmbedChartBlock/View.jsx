@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Grid } from 'semantic-ui-react';
 import ConnectedChart from '../ConnectedChart';
 import ViewText from '@plone/volto/components/manage/Blocks/Text/View';
+import SourceView from '~/components/theme/Blocks/SourceView';
 
 const EmbedChartView = props => {
   const hasText =
@@ -45,14 +46,11 @@ const EmbedChartView = props => {
             </Grid.Column>
             <Grid.Column width={12}>
               <div>
-                <a
-                  className="discreet block_source"
-                  href={props.data.chart_source_link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {props.data.chart_source}
-                </a>
+                <SourceView
+                  initialSource={props.data.chart_source}
+                  initialSourceLink={props.data.chart_source_link}
+                  multipleSources={props.data.chartSources}
+                />
               </div>
             </Grid.Column>
           </Grid.Row>
