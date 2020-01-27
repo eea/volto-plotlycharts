@@ -29,12 +29,12 @@ function getDataSourceOptions(data) {
   }));
 }
 
-const LoadablePlotlyEditor = Loadable({
-  loader: () => import('react-chart-editor'),
-  loading() {
-    return <div>Loading...</div>;
-  },
-});
+// const LoadablePlotlyEditor = Loadable({
+//   loader: () => import('react-chart-editor'),
+//   loading() {
+//     return <div>Loading...</div>;
+//   },
+// });
 
 const dataSources = {
   col1: [1, 2, 3], // eslint-disable-line no-magic-numbers
@@ -46,8 +46,18 @@ const config = { editable: true };
 
 // TODO: this should be rewritten to use ModalEditor widget
 class Edit extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      LoadablePlotlyEditor: false,
+    };
+  }
   componentDidMount() {
     this.props.changeSidebarState(true);
+
+    import(
+      /* webpackChunkName: 'LoadablePlotlyEditor' */ 'react-chart-editor'
+    ).then(module => this.setState({ LoadablePlotlyEditor: module.default }));
   }
 
   componentDidUpdate(prevProps) {
@@ -68,9 +78,11 @@ class Edit extends Component {
       this.props.providerData || dataSources,
     );
 
+    const LoadablePlotlyEditor = this.state.LoadablePlotlyEditor;
+
     return (
       <div>
-        {__CLIENT__ && plotly.length > 0 ? (
+        {__CLIENT__ && plotly.length > 0 && LoadablePlotlyEditor ? (
           <div className="block selected">
             <div className="block-inner-wrapper">
               <LoadablePlotlyEditor
