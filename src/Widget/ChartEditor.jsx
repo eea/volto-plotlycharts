@@ -17,13 +17,6 @@ const LoadablePlotlyEditor = Loadable({
   },
 });
 
-let plotly = [];
-if (plotly.length === 0) {
-  import('plotly.js/dist/plotly').then(module => {
-    plotly.push(module);
-  });
-}
-
 // TODO: remove these fallbacks;
 const dataSources = {
   col1: [1, 2, 3],
@@ -41,6 +34,17 @@ function getDataSourceOptions(data) {
 const config = { editable: true };
 
 class Edit extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      plotly: null,
+    };
+  }
+  componentDidMount() {
+    import(/* webpackChunkName: 'plotlydist' */ 'plotly.js/dist/plotly').then(
+      module => this.setState({ plotly: module.default }),
+    );
+  }
   render() {
     const dataSourceOptions = getDataSourceOptions(
       this.props.providerData || dataSources,
