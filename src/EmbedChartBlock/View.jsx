@@ -46,16 +46,14 @@ const EmbedChartView = props => {
                 <div>No valid data.</div>
               )}
             </Grid.Column>
-            <Grid.Column width={12}>
-              <div>
-                <SourceView
-                  initialSource={props.data.chart_source}
-                  initialSourceLink={props.data.chart_source_link}
-                  multipleSources={props.data.chartSources}
-                  providerUrl={props.providerUrl}
-                />
-              </div>
-            </Grid.Column>
+            <div>
+              <SourceView
+                initialSource={props.data.chart_source}
+                initialSourceLink={props.data.chart_source_link}
+                multipleSources={props.data.chartSources}
+                providerUrl={props.providerUrl}
+              />
+            </div>
           </Grid.Row>
         </Grid>
       </div>
