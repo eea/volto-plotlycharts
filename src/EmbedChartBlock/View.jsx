@@ -11,7 +11,7 @@ const EmbedChartView = props => {
     (props.data.text?.blocks?.length > 1 && props.data.text?.blocks) ||
     (props.data.text?.blocks?.length === 1 &&
       props.data.text?.blocks?.[0].text);
-  console.log('embed chart props', props);
+  // console.log('embed chart props', props);
   return (
     <div className="chartWrapperView">
       {props.data.block_title ? <h5>{props.data.block_title}</h5> : ''}
