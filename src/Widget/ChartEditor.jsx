@@ -42,7 +42,9 @@ class Edit extends Component {
   }
   componentDidMount() {
     import(/* webpackChunkName: 'plotlydist' */ 'plotly.js/dist/plotly').then(
-      module => this.setState({ plotly: module.default }),
+      module => {
+        this.setState({ plotly: module.default });
+      },
     );
   }
   render() {
@@ -57,7 +59,7 @@ class Edit extends Component {
 
     return (
       <div>
-        {__CLIENT__ && plotly.length > 0 ? (
+        {__CLIENT__ && this.state.plotly ? (
           <div className="block selected">
             <div className="block-inner-wrapper">
               <PickProvider
@@ -77,7 +79,7 @@ class Edit extends Component {
                 frames={this.props.value?.frames || []}
                 dataSourceOptions={dataSourceOptions}
                 dataSources={this.props.providerData || dataSources}
-                plotly={plotly[0]}
+                plotly={this.state.plotly}
                 onUpdate={(data, layout, frames) => {
                   return this.props.onChangeValue({
                     ...this.props.value,
