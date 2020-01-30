@@ -117,6 +117,7 @@ function ConnectedChart(props) {
   layout = {
     ...layout,
     autosize: true,
+    dragmode: false,
     // hovertemplate: '%{x:.0%}',
     font: {
       ...layout.font,
