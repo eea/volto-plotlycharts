@@ -199,6 +199,8 @@ class ResponsiveContainer extends Component {
     //   <Placeholder.Image rectangular />
     // </Placeholder>
     // return <div>alalalalalala =>>>>>>>>>.{JSON.stringify(data)}</div>
+    // console.log('plot data', data);
+    // console.log('layout', data);
     return __CLIENT__ ? (
       <LoadablePlot
         {...chartConfig}
