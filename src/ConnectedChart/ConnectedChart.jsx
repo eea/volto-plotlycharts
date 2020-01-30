@@ -117,14 +117,27 @@ function ConnectedChart(props) {
   layout = {
     ...layout,
     autosize: true,
+    // hovertemplate: '%{x:.0%}',
     font: {
       ...layout.font,
       family: settings.chartLayoutFontFamily || "'Roboto', sans-serif",
     },
   };
 
-  if (layout.xaxis) layout.xaxis = { ...layout.xaxis, range: [] };
-  if (layout.yaxis) layout.yaxis = { ...layout.yaxis, range: [] };
+  if (layout.xaxis)
+    layout.xaxis = {
+      ...layout.xaxis,
+      fixedrange: true,
+      hoverformat: '.2s',
+      range: [],
+    };
+  if (layout.yaxis)
+    layout.yaxis = {
+      ...layout.yaxis,
+      hoverformat: '.2s',
+      fixedrange: true,
+      range: [],
+    };
 
   console.debug('chart props', props);
   // TODO: only use fallback data if chartData.data.url doesn't exist
