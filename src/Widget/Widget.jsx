@@ -31,7 +31,7 @@ class ModalChartEditor extends Component {
             floated="right"
             onClick={() => this.props.onChange(this.state.value)}
           >
-            Save
+            Apply changes
           </Button>
           <Button floated="right" onClick={this.props.onClose}>
             Close
