@@ -91,6 +91,31 @@ class EmbedChartBlockEdit extends Component {
                 value={this.props.data?.vis_url || ''}
               />
               <Field
+                title="Hover format"
+                id="hover-format"
+                type="text"
+                value={this.props.data.hover_format_xy || ''}
+                description={
+                  <div>
+                    See{' '}
+                    <a
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      href="https://github.com/d3/d3-3.x-api-reference/blob/master/Formatting.md#d3_format"
+                    >
+                      d3 format documentation
+                    </a>
+                  </div>
+                }
+                required={false}
+                onChange={(e, d) =>
+                  this.props.onChangeBlock(this.props.block, {
+                    ...this.props.data,
+                    hover_format_xy: d,
+                  })
+                }
+              />
+              <Field
                 title="Source"
                 id="chart-source"
                 type="text"

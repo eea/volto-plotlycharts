@@ -61,6 +61,7 @@ const EmbedChartView = props => {
                 source={props.data.vis_url}
                 data={props.data.chartData}
                 className="embedded-block-chart"
+                hoverFormatXY={props.data.hover_format_xy}
               />
             ) : (
               <div>No valid data.</div>

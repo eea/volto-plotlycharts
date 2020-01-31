@@ -129,13 +129,13 @@ function ConnectedChart(props) {
     layout.xaxis = {
       ...layout.xaxis,
       fixedrange: true,
-      hoverformat: '.2s',
+      hoverformat: props.hoverFormatXY || '.2s',
       range: [],
     };
   if (layout.yaxis)
     layout.yaxis = {
       ...layout.yaxis,
-      hoverformat: '.2s',
+      hoverformat: props.hoverFormatXY || '.2s',
       fixedrange: true,
       range: [],
     };
