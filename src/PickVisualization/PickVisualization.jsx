@@ -1,27 +1,26 @@
 /*
  * A component to help pick a visualization
  */
+
 import { searchContent, getContent } from '@plone/volto/actions';
 import { connect } from 'react-redux';
 import React, { Component } from 'react';
-import { Field } from '@plone/volto/components'; // EditBlock
-import { Form, Grid } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
+import PickObject from 'volto-addons/PickObject';
 
 class PickVisualization extends Component {
-  searchVisualizations = () => {
-    this.props.searchContent(
-      '',
-      {
-        // object_provides: 'forests.content.interfaces.IDataVisualization',
-        portal_type: 'visualization',
-      },
-      this.props.id,
-    );
-  };
+  // searchVisualizations = () => {
+  //   this.props.searchContent(
+  //     '',
+  //     {
+  //       // object_provides: 'forests.content.interfaces.IDataVisualization',
+  //       portal_type: 'visualization',
+  //     },
+  //     this.props.id,
+  //   );
+  // };
 
   componentDidMount() {
-    this.searchVisualizations();
+    // this.searchVisualizations();
 
     if (this.props.value) {
       this.props.getContent(this.props.value, null, this.props.value);
@@ -29,7 +28,7 @@ class PickVisualization extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.value !== prevProps.value) {
+    if (this.props.value !== prevProps.value && this.props.value) {
       this.props.getContent(this.props.value, null, this.props.value);
     }
     if (
@@ -40,33 +39,13 @@ class PickVisualization extends Component {
     }
   }
 
-  // <Field
-  //   id="chart-data"
-  //   choices={this.props.visualizations}
-  //   required={true}
-  //   onChange={(id, value) => this.props.onChange(value)}
-  //   value={this.props.value}
-  // />
   render() {
     return (
-      <TextWidget
-        id="Origin"
-        title={
-          this.props.value ? (
-            <Link to={this.props.value}>View</Link>
-          ) : (
-            'Visualization'
-          )
-        }
-        required={true}
+      <PickObject
+        id="visualization"
+        title="Visualization"
         value={this.props.value}
-        icon={this.props.value ? clearSVG : navTreeSVG}
-        iconAction={
-          this.props.value
-            ? () => onChange(null)
-            : () => openObjectBrowser({ mode: 'link' })
-        }
-        onChange={() => {}}
+        onChange={this.props.onChange}
       />
     );
   }
@@ -74,15 +53,15 @@ class PickVisualization extends Component {
 
 export default connect(
   (state, props) => {
-    let visualizations = state.search
-      ? state.search.subrequests?.[props.id]?.items || []
-      : [];
-    visualizations = visualizations.map(el => [el['@id'], el.title]);
+    // let visualizations = state.search
+    //   ? state.search.subrequests?.[props.id]?.items || []
+    //   : [];
+    // visualizations = visualizations.map(el => [el['@id'], el.title]);
 
     const content = state.content.subrequests?.[props.value] || {};
     return {
       remoteChartData: content.data?.visualization || {},
-      visualizations,
+      // visualizations,
     };
   },
   { searchContent, getContent },
