@@ -1,6 +1,6 @@
 import React from 'react';
 import ConnectedChart from '../ConnectedChart';
-import SourceView from 'volto-datablocks/theme/Blocks/SourceView';
+import { SourceView } from 'volto-datablocks/Sources';
 import cx from 'classnames';
 
 const ChartView = ({ data, ...props }) => {
