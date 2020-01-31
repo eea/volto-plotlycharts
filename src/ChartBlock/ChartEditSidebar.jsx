@@ -3,6 +3,8 @@ import { Segment } from 'semantic-ui-react'; // , Dropdown
 import { Field, SidebarPortal, TextWidget } from '@plone/volto/components';
 import { Button } from 'semantic-ui-react';
 import PickProvider from 'volto-datablocks/PickProvider';
+import { AlignBlock } from '@plone/volto/helpers';
+import { Form, Grid } from 'semantic-ui-react';
 
 const ChartEditSidebar = ({ onChangeBlock, block, data }) => (
   <SidebarPortal selected={true}>
@@ -45,6 +47,25 @@ const ChartEditSidebar = ({ onChangeBlock, block, data }) => (
             })
           }
         />
+        <Form.Field inline required={false}>
+          <Grid>
+            <Grid.Row>
+              <Grid.Column width="4">
+                <div className="wrapper">
+                  <label htmlFor="field-align">Alignment</label>
+                </div>
+              </Grid.Column>
+              <Grid.Column width="8" className="align-tools">
+                <AlignBlock
+                  align={data.align}
+                  onChangeBlock={onChangeBlock}
+                  data={data}
+                  block={block}
+                />
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+        </Form.Field>
         <Field
           title="Source"
           id="chart-source"

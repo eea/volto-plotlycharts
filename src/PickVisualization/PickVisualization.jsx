@@ -47,20 +47,3 @@ export default connect(
   },
   { searchContent, getContent },
 )(PickVisualization);
-
-// visualizations,
-// this.searchVisualizations();
-// let visualizations = state.search
-//   ? state.search.subrequests?.[props.id]?.items || []
-//   : [];
-// visualizations = visualizations.map(el => [el['@id'], el.title]);
-// searchVisualizations = () => {
-//   this.props.searchContent(
-//     '',
-//     {
-//       // object_provides: 'forests.content.interfaces.IDataVisualization',
-//       portal_type: 'visualization',
-//     },
-//     this.props.id,
-//   );
-// };
