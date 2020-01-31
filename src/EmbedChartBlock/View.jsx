@@ -8,6 +8,8 @@ import { connect } from 'react-redux';
 import WidthBasedLayoutProvider from '~/components/theme/LayoutProvider/WidthBasedLayoutProvider';
 
 const EmbedChartView = ({ data, layout_type, providerUrl, ...props }) => {
+  if (!data) return '';
+
   const hasText =
     (data.text?.blocks?.length > 1 && data.text?.blocks) ||
     (data.text?.blocks?.length === 1 && data.text?.blocks?.[0].text);
