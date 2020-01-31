@@ -41,7 +41,7 @@ const EmbedChartView = ({ data, layout_type, providerUrl, ...props }) => {
                 className="block-text-content"
                 style={{ padding: '1rem', marginTop: '.5rem' }}
               >
-                <ViewText {...props} />
+                <ViewText data={data} {...props} />
               </div>
             </div>
           ) : (
