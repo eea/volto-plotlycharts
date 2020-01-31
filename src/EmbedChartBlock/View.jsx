@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Grid } from 'semantic-ui-react';
 import ConnectedChart from '../ConnectedChart';
 import ViewText from '@plone/volto/components/manage/Blocks/Text/View';
 import SourceView from 'volto-datablocks/theme/Blocks/SourceView';
@@ -8,11 +7,10 @@ import { connect } from 'react-redux';
 
 import WidthBasedLayoutProvider from '~/components/theme/LayoutProvider/WidthBasedLayoutProvider';
 
-const EmbedChartView = props => {
+const EmbedChartView = ({ data, layout_type, providerUrl, ...props }) => {
   const hasText =
-    (props.data.text?.blocks?.length > 1 && props.data.text?.blocks) ||
-    (props.data.text?.blocks?.length === 1 &&
-      props.data.text?.blocks?.[0].text);
+    (data.text?.blocks?.length > 1 && data.text?.blocks) ||
+    (data.text?.blocks?.length === 1 && data.text?.blocks?.[0].text);
 
   const grid = {
     text_column: {
@@ -32,15 +30,11 @@ const EmbedChartView = props => {
   // console.log('embed chart props', props);
   return (
     <div className="chartWrapperView">
-      {props.data.block_title ? <h5>{props.data.block_title}</h5> : ''}
+      {data.block_title ? <h5>{data.block_title}</h5> : ''}
       <div className="block-inner-wrapper">
         <div className="element-grid">
           {hasText ? (
-            <div
-              className={`${props.layout_type}-${
-                grid.text_column[props.layout_type]
-              }`}
-            >
+            <div className={`${layout_type}-${grid.text_column[layout_type]}`}>
               <div
                 className="block-text-content"
                 style={{ padding: '1rem', marginTop: '.5rem' }}
@@ -51,17 +45,13 @@ const EmbedChartView = props => {
           ) : (
             ''
           )}
-          <div
-            className={`${props.layout_type}-${
-              grid.chart_column[props.layout_type]
-            }`}
-          >
-            {props.data.chartData ? (
+          <div className={`${layout_type}-${grid.chart_column[layout_type]}`}>
+            {data.chartData ? (
               <ConnectedChart
-                source={props.data.vis_url}
-                data={props.data.chartData}
+                source={data.vis_url}
+                data={data.chartData}
                 className="embedded-block-chart"
-                hoverFormatXY={props.data.hover_format_xy}
+                hoverFormatXY={data.hover_format_xy}
               />
             ) : (
               <div>No valid data.</div>
@@ -69,10 +59,10 @@ const EmbedChartView = props => {
           </div>
           <div>
             <SourceView
-              initialSource={props.data.chart_source}
-              initialSourceLink={props.data.chart_source_link}
-              multipleSources={props.data.chartSources}
-              providerUrl={props.providerUrl}
+              initialSource={data.chart_source}
+              initialSourceLink={data.chart_source_link}
+              multipleSources={data.chartSources}
+              providerUrl={providerUrl}
             />
           </div>
         </div>

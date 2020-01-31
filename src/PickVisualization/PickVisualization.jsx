@@ -40,25 +40,34 @@ class PickVisualization extends Component {
     }
   }
 
+  // <Field
+  //   id="chart-data"
+  //   choices={this.props.visualizations}
+  //   required={true}
+  //   onChange={(id, value) => this.props.onChange(value)}
+  //   value={this.props.value}
+  // />
   render() {
     return (
-      <>
-        <Field
-          title="Visualization"
-          id="chart-data"
-          choices={this.props.visualizations}
-          required={true}
-          onChange={(id, value) => this.props.onChange(value)}
-          value={this.props.value}
-        />
-        <Form.Field>
-          <Grid>
-            <Grid.Column width={12}>
-              {this.props.value ? <Link to={this.props.value}>View</Link> : ''}
-            </Grid.Column>
-          </Grid>
-        </Form.Field>
-      </>
+      <TextWidget
+        id="Origin"
+        title={
+          this.props.value ? (
+            <Link to={this.props.value}>View</Link>
+          ) : (
+            'Visualization'
+          )
+        }
+        required={true}
+        value={this.props.value}
+        icon={this.props.value ? clearSVG : navTreeSVG}
+        iconAction={
+          this.props.value
+            ? () => onChange(null)
+            : () => openObjectBrowser({ mode: 'link' })
+        }
+        onChange={() => {}}
+      />
     );
   }
 }
