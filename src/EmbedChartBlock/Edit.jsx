@@ -104,8 +104,9 @@ class EmbedChartBlockEdit extends Component {
               <Segment secondary={this.state.activeEditorSegment === 0}>
                 {this.props.data?.chartData && (
                   <ConnectedChart
-                    data={{ chartData: this.props.data.chartData }}
                     className="embedded-block-chart"
+                    data={{ chartData: this.props.data.chartData }}
+                    hoverFormatXY={this.props.data?.hover_format_xy}
                     config={{ displayModeBar: false }}
                   />
                 )}
