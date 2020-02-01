@@ -1,12 +1,11 @@
 import React from 'react';
 
-import { Button } from 'semantic-ui-react';
-import { TextWidget } from '@plone/volto/components';
 import { Field, SidebarPortal } from '@plone/volto/components'; // EditBlock
 import { Segment } from 'semantic-ui-react';
-import MultiValuesEdit from 'volto-datablocks/DataConnectedBlock/MultiValuesEdit';
 
-import PickVisualization from '../PickVisualization';
+import MultiValuesEdit from 'volto-datablocks/DataConnectedBlock/MultiValuesEdit';
+import { SourceEdit } from 'volto-datablocks/Sources';
+import PickVisualization from 'volto-plotlycharts/PickVisualization';
 
 const ChartEmbedSidebar = ({
   block,
@@ -64,91 +63,7 @@ const ChartEmbedSidebar = ({
             })
           }
         />
-        <Field
-          title="Source"
-          id="chart-source"
-          type="text"
-          value={data.chart_source || ''}
-          required={false}
-          onChange={(e, d) =>
-            onChangeBlock(block, {
-              ...data,
-              chart_source: d,
-            })
-          }
-        />
-        <Field
-          title="Source Link"
-          id="chart-source-link"
-          type="text"
-          value={data.chart_source_link || ''}
-          required={false}
-          onChange={(e, d) =>
-            onChangeBlock(block, {
-              ...data,
-              chart_source_link: d,
-            })
-          }
-        />
-        {data.chartSources && data.chartSources.length
-          ? data.chartSources.map((item, index) => (
-              <React.Fragment>
-                <TextWidget
-                  title="Source"
-                  id={`chart-source_${index}`}
-                  type="text"
-                  value={item.chart_source}
-                  required={false}
-                  onChange={(e, d) => {
-                    const dataClone = JSON.parse(
-                      JSON.stringify(data.chartSources),
-                    );
-                    dataClone[index].chart_source = d;
-                    onChangeBlock(block, {
-                      ...data,
-                      chartSources: dataClone,
-                    });
-                  }}
-                />
-                <TextWidget
-                  title="Source Link"
-                  id={`chart-source_link_${index}`}
-                  type="text"
-                  value={item.chart_source_link}
-                  required={false}
-                  onChange={(e, d) => {
-                    const dataClone = JSON.parse(
-                      JSON.stringify(data.chartSources),
-                    );
-                    dataClone[index].chart_source_link = d;
-                    onChangeBlock(block, {
-                      ...data,
-                      chartSources: dataClone,
-                    });
-                  }}
-                />
-              </React.Fragment>
-            ))
-          : ''}
-        <Button
-          primary
-          onClick={() => {
-            const chartSources =
-              data.chartSources && data.chartSources.length
-                ? JSON.parse(JSON.stringify(data.chartSources))
-                : [];
-            chartSources.push({
-              chart_source_link: '',
-              chart_source: '',
-            });
-            onChangeBlock(block, {
-              ...data,
-              chartSources: chartSources,
-            });
-          }}
-        >
-          Add source
-        </Button>
+        <SourceEdit data={data} onChangeBlock={onChangeBlock} block={block} />
         <MultiValuesEdit
           schema={schema || {}}
           onChange={data => onChangeBlock(block, data)}
