@@ -8,12 +8,14 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Segment, Form as UiForm } from 'semantic-ui-react';
 
-import { changeSidebarState } from 'volto-sidebar/actions';
 import Editor from '@plone/volto/components/manage/Blocks/Text/Edit';
+import { SidebarPortal } from '@plone/volto/components'; // EditBlock
 
-import ConnectedChart from '../ConnectedChart';
-import ChartEmbedSidebar from './ChartEmbedSidebar';
-// import OldChartSidebar from './ChartEmbedSidebar_full';
+import { changeSidebarState } from 'volto-sidebar/actions';
+import { BlockEditForm } from 'volto-addons/BlockForm';
+import ConnectedChart from 'volto-plotlycharts/ConnectedChart';
+
+import schema from './schema';
 
 const toolbarId = uuid();
 
@@ -58,19 +60,33 @@ class EmbedChartBlockEdit extends Component {
   nop = () => {};
 
   textEditorSegmentNode = React.createRef();
+  // <ChartEmbedSidebar
+  //   {...this.props}
+  //   onChangeBlock={(id, value) => {
+  //     this.props.onChangeBlock(id, value);
+  //   }}
+  // />
 
   render() {
     const { block } = this.props; // , data, onChangeBlock, selected, title
+    console.log('editProps', this.props);
     return (
       <div className="block selected">
         <div className="block-inner-wrapper">
-          {/* <OldChartSidebar {...this.props} /> */}
-          <ChartEmbedSidebar
-            {...this.props}
-            onChangeBlock={(id, value) => {
-              this.props.onChangeBlock(id, value);
-            }}
-          />
+          <SidebarPortal selected={this.props.selected}>
+            <BlockEditForm
+              schema={schema}
+              title={schema.title}
+              onChangeField={(id, value) => {
+                this.props.onChangeBlock(block, {
+                  ...this.props.data,
+                  [id]: value,
+                });
+              }}
+              formData={this.props.data}
+            />
+          </SidebarPortal>
+
           <UiForm>
             <Segment.Group horizontal>
               <Segment style={{ maxWidth: '40%' }}>

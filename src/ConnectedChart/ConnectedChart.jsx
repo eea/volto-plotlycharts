@@ -140,7 +140,7 @@ function ConnectedChart(props) {
       range: [],
     };
 
-  console.debug('chart props', props);
+  // console.debug('chart props', props);
   // TODO: only use fallback data if chartData.data.url doesn't exist
   // or the connected_data_parameters don't exist
 

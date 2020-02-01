@@ -33,7 +33,6 @@ class PickVisualization extends Component {
       JSON.stringify(prevProps.remoteChartData || {}) !==
         JSON.stringify(this.props.remoteChartData || {})
     ) {
-      console.log('onChangeField', this.props.remoteChartData, this.props);
       this.props.onChange('chartData', this.props.remoteChartData);
     }
   }

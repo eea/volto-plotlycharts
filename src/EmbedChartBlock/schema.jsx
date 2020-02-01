@@ -1,6 +1,38 @@
+/*
+ * Schema format mostly follows Volto's Form.jsx requirement
+ *
+ */
+
 import React from 'react';
 
-const schema = {
+const SourceSchema = {
+  title: 'Source',
+
+  fieldsets: [
+    {
+      id: 'default',
+      title: 'Default',
+      fields: ['chart_source', 'chart_source_link'],
+    },
+  ],
+
+  properties: {
+    chart_source: {
+      type: 'string',
+      title: 'Source',
+    },
+    chart_source_link: {
+      type: 'string',
+      title: 'Link',
+    },
+  },
+
+  required: ['source'],
+};
+
+const ChartEmbedSchema = {
+  title: 'Embed Visualization',
+
   fieldsets: [
     {
       id: 'default',
@@ -10,11 +42,15 @@ const schema = {
     {
       id: 'sources',
       title: 'Sources',
-      fields: ['source'],
+      fields: ['sources'],
+    },
+    {
+      id: 'source',
+      title: 'Source (obsolete)',
+      fields: ['chart_source', 'chart_source_link'],
     },
   ],
-  title: 'Embed Visualization',
-  required: ['vis_url'],
+
   properties: {
     vis_url: {
       widget: 'pick_visualization',
@@ -36,11 +72,23 @@ const schema = {
         </>
       ),
     },
-    source: {
+    sources: {
+      widget: 'objectlist',
+      title: 'Sources',
+      // this is an invention, should confront with dexterity serializer
+      schema: SourceSchema,
+    },
+    chart_source: {
       type: 'string',
       title: 'Source',
     },
+    chart_source_link: {
+      type: 'string',
+      title: 'Source link',
+    },
   },
+
+  required: ['vis_url'],
 };
 
-export default schema;
+export default ChartEmbedSchema;
