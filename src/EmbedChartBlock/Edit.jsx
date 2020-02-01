@@ -13,6 +13,7 @@ import Editor from '@plone/volto/components/manage/Blocks/Text/Edit';
 
 import ConnectedChart from '../ConnectedChart';
 import ChartEmbedSidebar from './ChartEmbedSidebar';
+// import OldChartSidebar from './ChartEmbedSidebar_full';
 
 const toolbarId = uuid();
 
@@ -59,11 +60,17 @@ class EmbedChartBlockEdit extends Component {
   textEditorSegmentNode = React.createRef();
 
   render() {
+    const { block } = this.props; // , data, onChangeBlock, selected, title
     return (
       <div className="block selected">
-        <ChartEmbedSidebar {...this.props} />
-
         <div className="block-inner-wrapper">
+          {/* <OldChartSidebar {...this.props} /> */}
+          <ChartEmbedSidebar
+            {...this.props}
+            onChangeBlock={(id, value) => {
+              this.props.onChangeBlock(id, value);
+            }}
+          />
           <UiForm>
             <Segment.Group horizontal>
               <Segment style={{ maxWidth: '40%' }}>
@@ -78,7 +85,7 @@ class EmbedChartBlockEdit extends Component {
                     block={this.props.block}
                     onAddBlock={this.nop}
                     onChangeBlock={(id, { text }) => {
-                      this.props.onChangeBlock(this.props.block, {
+                      this.props.onChangeBlock(block, {
                         ...this.props.data,
                         text,
                       });

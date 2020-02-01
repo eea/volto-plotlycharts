@@ -1,3 +1,5 @@
+import PickVisualization from './PickVisualization';
+
 import ChartWidget from './Widget/Widget';
 import VisualizationView from './Visualization/View';
 
@@ -28,6 +30,7 @@ export function applyConfig(config) {
   config.views.contentTypesViews.visualization = VisualizationView;
 
   config.widgets.id.visualization = ChartWidget;
+  config.widgets.widget.pick_visualization = PickVisualization;
 
   config.blocks.blocksConfig.plotly_chart = {
     id: 'plotly_chart',
