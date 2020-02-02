@@ -3,15 +3,19 @@ import ChartEditor from './ChartEditor';
 import React, { Component } from 'react';
 import { Button, Modal, Form, Grid, Label } from 'semantic-ui-react';
 import { map } from 'lodash';
-import Loadable from 'react-loadable';
-import { updateChartDataFromProvider } from 'volto-datablocks/helpers';
+
 import { getDataFromProvider } from 'volto-datablocks/actions';
+import ConnectedChart from 'volto-plotlycharts/ConnectedChart';
+import PickProvider from 'volto-datablocks/PickProvider';
+
+import './styles.css';
 
 class ModalChartEditor extends Component {
   constructor(props) {
     super(props);
     this.state = {
       value: props.value,
+      providerData: null,
     };
   }
 
@@ -21,34 +25,47 @@ class ModalChartEditor extends Component {
         <Modal.Content scrolling>
           <ChartEditor
             value={this.state.value}
+            providerData={this.state.providerData}
             onChangeValue={value => {
               this.setState({ value });
             }}
           />
         </Modal.Content>
         <Modal.Actions>
-          <Button
-            floated="right"
-            onClick={() => this.props.onChange(this.state.value)}
-          >
-            Apply changes
-          </Button>
-          <Button floated="right" onClick={this.props.onClose}>
-            Close
-          </Button>
+          <Grid>
+            <Grid.Row>
+              <Grid.Column width="8">
+                <PickProvider
+                  onChange={(id, provider_url) => {
+                    this.setState({
+                      value: { ...this.state.value, provider_url },
+                    });
+                  }}
+                  onLoadProviderData={providerData =>
+                    this.setState({ providerData })
+                  }
+                  value={this.state.value?.provider_url || ''}
+                  showReload={true}
+                />
+              </Grid.Column>
+              <Grid.Column width="4">
+                <Button
+                  floated="right"
+                  onClick={() => this.props.onChange(this.state.value)}
+                >
+                  Apply changes
+                </Button>
+                <Button floated="right" onClick={this.props.onClose}>
+                  Close
+                </Button>
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
         </Modal.Actions>
       </Modal>
     );
   }
 }
-
-// TODO: use ConnectedChart component
-const LoadablePlot = Loadable({
-  loader: () => import('react-plotly.js'),
-  loading() {
-    return <div>Loading chart editor...</div>;
-  },
-});
 
 class ChartWidget extends Component {
   constructor(props) {
@@ -60,12 +77,6 @@ class ChartWidget extends Component {
     };
   }
 
-  componentWillMount() {
-    // NOTE: this might trigger double data requests, need to pay attention
-    // if (this.props.value?.provider_url && !this.props.providerData)
-    //   this.props.getDataFromProvider(this.props.value.provider_url);
-  }
-
   render() {
     const {
       id,
@@ -73,7 +84,7 @@ class ChartWidget extends Component {
       required,
       description,
       error,
-      value,
+      value, // like: { data || [], layout || {}, frames || [], provider_url }
       onChange,
       fieldSet,
     } = this.props;
@@ -82,13 +93,13 @@ class ChartWidget extends Component {
 
     // console.log('widget provider data', this.props.providerData);
 
-    // value is { data || [], layout || {}, frames || [], provider_url }
-
     const layout = {
       ...this.props.value?.layout,
       width: this.props.value?.layout?.width || 320,
       height: this.props.value?.layout?.height || 240,
     };
+    // const data = this.props.value?.data;
+    // console.log('ChartWidget layout, data', layout, data); // this.props
 
     return (
       <Form.Field
@@ -131,17 +142,12 @@ class ChartWidget extends Component {
                   }
                 />
               ) : (
-                ''
+                <ConnectedChart
+                  data={{ chartData: this.props.value }}
+                  frames={this.props.value?.frames || []}
+                  layout={layout}
+                />
               )}
-              <LoadablePlot
-                data={updateChartDataFromProvider(
-                  this.props.value?.data || [],
-                  this.props.providerData,
-                )}
-                frames={this.props.value?.frames || []}
-                layout={layout}
-                config={{ displayModeBar: false }}
-              />
               {map(error, message => (
                 <Label key={message} basic color="red" pointing>
                   {message}
