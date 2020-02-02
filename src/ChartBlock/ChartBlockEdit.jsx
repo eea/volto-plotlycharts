@@ -25,7 +25,7 @@ class Edit extends Component {
       data: [],
     };
 
-    console.log('chartBlockEdit.jsx', this.props);
+    // console.log('chartBlockEdit.jsx', this.props);
 
     return (
       <div className="block selected">
