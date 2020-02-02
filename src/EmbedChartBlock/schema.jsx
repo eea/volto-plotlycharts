@@ -42,7 +42,7 @@ const ChartEmbedSchema = {
     {
       id: 'sources',
       title: 'Sources',
-      fields: ['sources'],
+      fields: ['chartSources'],
     },
     {
       id: 'source',
@@ -59,6 +59,7 @@ const ChartEmbedSchema = {
     hover_format_xy: {
       type: 'string',
       title: 'Hover format',
+      placeholder: '.3s',
       description: (
         <>
           See{' '}
@@ -72,7 +73,7 @@ const ChartEmbedSchema = {
         </>
       ),
     },
-    sources: {
+    chartSources: {
       widget: 'objectlist',
       title: 'Sources',
       // this is an invention, should confront with dexterity serializer
