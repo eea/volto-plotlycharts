@@ -69,7 +69,6 @@ class EmbedChartBlockEdit extends Component {
 
   render() {
     const { block } = this.props; // , data, onChangeBlock, selected, title
-    console.log('editProps', this.props);
     return (
       <div className="block selected">
         <div className="block-inner-wrapper">

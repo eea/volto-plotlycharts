@@ -3,8 +3,8 @@ import PickVisualization from './PickVisualization';
 import ChartWidget from './Widget/Widget';
 import VisualizationView from './Visualization/View';
 
-import PlotlyBlockEdit from './ChartBlock/Edit';
-import PlotlyBlockView from './ChartBlock/View';
+import ChartBlockEdit from './ChartBlock/ChartBlockEdit';
+import ChartBlockView from './ChartBlock/ChartBlockView';
 
 import EmbedChartBlockEdit from './EmbedChartBlock/Edit';
 import EmbedChartBlockView from './EmbedChartBlock/View';
@@ -35,8 +35,8 @@ export function applyConfig(config) {
   config.blocks.blocksConfig.plotly_chart = {
     id: 'plotly_chart',
     title: 'Plotly Chart',
-    view: PlotlyBlockView,
-    edit: PlotlyBlockEdit,
+    view: ChartBlockView,
+    edit: ChartBlockEdit,
     icon: chartIcon,
     group: 'custom_addons',
   };

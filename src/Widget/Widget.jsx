@@ -42,6 +42,7 @@ class ModalChartEditor extends Component {
   }
 }
 
+// TODO: use ConnectedChart component
 const LoadablePlot = Loadable({
   loader: () => import('react-plotly.js'),
   loading() {
