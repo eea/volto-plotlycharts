@@ -13,10 +13,13 @@ const ChartView = ({ data, ...props }) => {
         },
         data.align,
       )}
+      style={
+        data.align === 'full' ? { position: 'static', height: '45vh' } : {}
+      }
     >
       <div
-        className={cx('video-inner', {
-          'full-width': data.align === 'full',
+        className={cx({
+          'full-width-block': data.align === 'full',
         })}
       >
         <div className="chartWrapperView">
