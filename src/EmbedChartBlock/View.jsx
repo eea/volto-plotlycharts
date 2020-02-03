@@ -7,7 +7,13 @@ import { connect } from 'react-redux';
 
 import WidthBasedLayoutProvider from '~/components/theme/LayoutProvider/WidthBasedLayoutProvider';
 
-const EmbedChartView = ({ data, layout_type, providerUrl, ...props }) => {
+const EmbedChartView = ({
+  data,
+  layout_type,
+  providerUrl,
+  min_width,
+  ...props
+}) => {
   if (!data) return '';
 
   const hasText =
@@ -29,7 +35,6 @@ const EmbedChartView = ({ data, layout_type, providerUrl, ...props }) => {
     },
   };
 
-  // console.log('embed chart props', props);
   return (
     <div className="chartWrapperView">
       {data.block_title ? <h5>{data.block_title}</h5> : ''}
@@ -49,12 +54,19 @@ const EmbedChartView = ({ data, layout_type, providerUrl, ...props }) => {
           )}
           <div className={`${layout_type}-${grid.chart_column[layout_type]}`}>
             {data.chartData ? (
-              <ConnectedChart
-                source={data.vis_url}
-                data={data.chartData}
-                className="embedded-block-chart"
-                hoverFormatXY={data.hover_format_xy}
-              />
+              <div
+                style={{
+                  overflow: data.min_width ? 'auto' : 'unset',
+                }}
+              >
+                <ConnectedChart
+                  source={data.vis_url}
+                  data={data.chartData}
+                  className="embedded-block-chart"
+                  hoverFormatXY={data.hover_format_xy}
+                  min_width={data.min_width}
+                />
+              </div>
             ) : (
               <div>No valid data.</div>
             )}

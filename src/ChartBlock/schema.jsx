@@ -36,7 +36,7 @@ const ChartSchema = {
     {
       id: 'default',
       title: 'Default',
-      fields: ['url', 'hover_format_xy', 'align'],
+      fields: ['url', 'hover_format_xy', 'align', 'min_width'],
     },
     {
       id: 'sources',
@@ -89,6 +89,10 @@ const ChartSchema = {
     align: {
       title: 'Alignment',
       widget: 'align',
+      type: 'string',
+    },
+    min_width: {
+      title: 'Minimum width',
       type: 'string',
     },
   },

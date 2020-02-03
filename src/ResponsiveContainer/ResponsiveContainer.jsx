@@ -231,14 +231,18 @@ class ResponsiveContainer extends Component {
       className,
     } = this.props;
     const style = { width, height, minWidth, minHeight, maxHeight };
-
     return (
       <div
         id={`${id}`}
         className={classNames('recharts-responsive-container', className)}
-        style={style}
         ref={node => {
           this.container = node;
+        }}
+        style={{
+          minWidth: this.props.min_width
+            ? this.props.min_width + 'px'
+            : 'unset',
+          style,
         }}
       >
         {this.renderChart(this.props)}

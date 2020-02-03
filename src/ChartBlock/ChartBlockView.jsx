@@ -23,7 +23,12 @@ const ChartView = ({ data, ...props }) => {
         })}
       >
         <div className="chartWrapperView">
-          <div className="block-inner-wrapper">
+          <div
+            className="block-inner-wrapper"
+            style={{
+              overflow: data.min_width ? 'auto' : 'unset',
+            }}
+          >
             <ConnectedChart
               {...props}
               data={data}

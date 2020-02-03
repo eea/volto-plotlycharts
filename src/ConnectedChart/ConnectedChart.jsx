@@ -163,7 +163,6 @@ function ConnectedChart(props) {
   // Pass additional configs in chartData if you want:
   // const chartConfig={{ config:{ displayModeBar: false } }}
   //
-  // console.log('connected data parameters', props.connected_data_parameters);
   // console.log('chart data', data);
   // console.log('chart layout', layout);
   //<VisibilitySensor partialVisibility={true} onChange={setVisible}>
@@ -177,6 +176,7 @@ function ConnectedChart(props) {
       chartConfig={props.data.chartData}
       id={props.id}
       visible={true}
+      min_width={props.data?.min_width || props.min_width}
     >
       {/* <LoadablePlot /> */}
     </ResponsiveContainer>

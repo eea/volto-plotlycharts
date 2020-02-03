@@ -37,7 +37,7 @@ const ChartEmbedSchema = {
     {
       id: 'default',
       title: 'Default',
-      fields: ['vis_url', 'hover_format_xy'],
+      fields: ['vis_url', 'hover_format_xy', 'min_width'],
     },
     {
       id: 'sources',
@@ -86,6 +86,10 @@ const ChartEmbedSchema = {
     chart_source_link: {
       type: 'string',
       title: 'Source link',
+    },
+    min_width: {
+      title: 'Minimum width',
+      type: 'string',
     },
   },
 
