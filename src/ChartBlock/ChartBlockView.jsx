@@ -1,9 +1,12 @@
-import React from 'react';
 import ConnectedChart from '../ConnectedChart';
 import { SourceView } from 'volto-datablocks/Sources';
 import cx from 'classnames';
+import useMarginCalculator from '../MarginCalculator';
+import React from 'react';
 
 const ChartView = ({ data, ...props }) => {
+  const margins = useMarginCalculator();
+
   return (
     <div
       className={cx(
@@ -14,7 +17,9 @@ const ChartView = ({ data, ...props }) => {
         data.align,
       )}
       style={
-        data.align === 'full' ? { position: 'static', height: '45vh' } : {}
+        data.align === 'full'
+          ? { marginLeft: `-${margins}px`, marginRight: `-${margins}px` }
+          : {}
       }
     >
       <div
