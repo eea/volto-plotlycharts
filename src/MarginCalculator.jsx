@@ -2,11 +2,12 @@ import { useState, useLayoutEffect } from 'react';
 
 const useMarginCalculator = () => {
   const calculateMargins = () => {
-    const viewWidth = __CLIENT__
-      ? document.getElementById('view').offsetWidth
+    const view = document.getElementById('view')
+    const viewWidth = __CLIENT__ && view
+      ? view.offsetWidth
       : undefined;
     const grid = document.querySelector('#view #page-document');
-    const gridWidth = __CLIENT__ ? grid.offsetWidth : undefined;
+    const gridWidth = __CLIENT__ && grid ? grid.offsetWidth : undefined;
     return (viewWidth - gridWidth) / 2;
   };
 
