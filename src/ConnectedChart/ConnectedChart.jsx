@@ -194,17 +194,21 @@ function getProviderData(state, props, providerForVis) {
   path = `${path}/@connector-data`;
   const url = `${addAppURL(path)}/@connector-data`;
 
-  const data = state.data_providers.data || {};
+  const data = state.data_providers?.data || {};
   const res = path ? data[path] || data[url] : [];
   return res;
 }
 
 function getVisualizationData(state, props) {
   const vis_url = props.source;
+  if (!vis_url) {
+    // this is not a visualization derived chart
+    return props.data?.chartData;
+  }
   // const res = vis_url
   //   ? state.content.subrequests?.[vis_url]?.data?.visualization
   //   : null;
-  return state.chart_data_visualization[vis_url]?.item;
+  return state.chart_data_visualization?.[vis_url]?.item;
 }
 
 export default connect(
