@@ -27,5 +27,8 @@
     "react-plotly.js": "^2.3.0",
     "react-resize-detector": "^4.2.1",
     "react-visibility-sensor": "^5.1.1"
+  },
+  "peerDependencies": {
+    "react-component-queries": "^0.0.0"
   }
 }

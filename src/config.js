@@ -40,6 +40,7 @@ export function applyConfig(config) {
     icon: chartIcon,
     group: 'custom_addons',
   };
+
   config.blocks.blocksConfig.embed_chart = {
     id: 'embed_chart',
     title: 'Embed Chart',

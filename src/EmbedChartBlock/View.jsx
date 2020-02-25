@@ -5,7 +5,7 @@ import ViewText from '@plone/volto/components/manage/Blocks/Text/View';
 import { SourceView } from 'volto-datablocks/Sources';
 import { connect } from 'react-redux';
 
-import WidthBasedLayoutProvider from '~/components/theme/LayoutProvider/WidthBasedLayoutProvider';
+import WidthBasedLayoutProvider from 'volto-plotlycharts/LayoutProvider/WidthBasedLayoutProvider';
 
 const EmbedChartView = ({
   data,
