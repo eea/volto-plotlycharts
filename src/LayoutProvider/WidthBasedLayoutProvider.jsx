@@ -1,12 +1,7 @@
-// Note: this component depends on volto-mosaic
-// This needs to be made optional.
-
 import React from 'react';
 import componentQueries from 'react-component-queries';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-
-// import mosaic_width from '../../../addons/volto-mosaic/src/reducers/mosaic_width';
 
 const WidthBasedLayoutProvider = WrappedComponent => props => {
   return <WrappedComponent {...props} />;
