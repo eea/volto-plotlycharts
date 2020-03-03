@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import { SidebarPortal } from '@plone/volto/components'; // EditBlock
 
-import { changeSidebarState } from 'volto-sidebar/actions';
+import { changeSidebarState } from 'volto-plotlycharts/actions';
 import { BlockEditForm } from 'volto-addons/BlockForm';
 import ChartEditor from 'volto-plotlycharts/Widget/ChartEditor';
 

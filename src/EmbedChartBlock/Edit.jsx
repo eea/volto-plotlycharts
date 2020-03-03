@@ -11,7 +11,7 @@ import { Segment, Form as UiForm } from 'semantic-ui-react';
 import Editor from '@plone/volto/components/manage/Blocks/Text/Edit';
 import { SidebarPortal } from '@plone/volto/components'; // EditBlock
 
-import { changeSidebarState } from 'volto-sidebar/actions';
+import { changeSidebarState } from 'volto-plotlycharts/actions';
 import { BlockEditForm } from 'volto-addons/BlockForm';
 import ConnectedChart from 'volto-plotlycharts/ConnectedChart';
 
