@@ -14,7 +14,7 @@ import { Colorscale } from 'react-colorscales';
 const dataSources = {
   col1: [1, 2, 3],
   col2: [4, 3, 2],
-  col3: [17, 13, 9],
+  col3: [172121121.21, 143112121.5332, 122121.213],
 };
 
 const config = { editable: true };
@@ -40,7 +40,8 @@ class Edit extends Component {
       plotly: null,
       PlotlyEditor: null,
       showColorscalePicker: false,
-      selectedColor: []
+      selectedColor: [],
+      precision: ',f'
     };
   }
   componentDidMount() {
@@ -57,7 +58,10 @@ class Edit extends Component {
       ...this.props.value,
       layout: {
         ...this.props.value.layout,
-        colorway: defaultColor
+        colorway: defaultColor,
+        yaxis: {
+          hoverformat: this.state.precision,
+        }
       },
     });
     this.setState({ selectedColor: defaultColor })
@@ -79,6 +83,19 @@ class Edit extends Component {
     this.setState({ showColorscalePicker: !this.state.showColorscalePicker })
   }
 
+  handlePrecisionSelect = (precision) => {
+    this.setState({ precision })
+    this.props.onChangeValue({
+      ...this.props.value,
+      layout: {
+        ...this.props.value.layout,
+        yaxis: {
+          hoverformat: precision,
+        }
+      },
+    });
+  }
+
   render() {
     if (__SERVER__) return '';
 
@@ -94,7 +111,6 @@ class Edit extends Component {
     const { plotly, PlotlyEditor } = this.state;
     return (
       <div>
-        {/* <button onClick={() => console.log('plain plotly', this.state.plotly)}>kosole</button> */}
         {plotly && PlotlyEditor && (
           <div className="block selected">
             <div style={styles.contentBlock} className="block-inner-wrapper">
@@ -130,6 +146,22 @@ class Edit extends Component {
                 <p style={styles.title}>
                   Toggle Colorscale Picker
                   </p>
+              </div>
+              <div
+                onClick={() => { }}
+                style={styles.precisionButton}
+              >
+                <p style={styles.title}>
+                  Set Precision
+                  </p>
+
+                <select style={styles.select} onChange={(e) => this.handlePrecisionSelect(e.target.value)}>
+                  <option value=",f">.</option>
+                  <option value=",.1f">.0</option>
+                  <option value=",.2f">.00</option>
+                  <option value=",.3f">.000</option>
+                  <option value=",.4f">.0000</option>
+                </select>
               </div>
               {this.state.showColorscalePicker && (
                 <div style={styles.scaleItem}>
@@ -190,5 +222,19 @@ const styles = {
     borderRadius: "10px",
     cursor: 'pointer'
   },
-  contentBlock: { position: "relative" }
+  precisionButton: {
+    position: "absolute",
+    bottom: 0,
+    left: "450px",
+    padding: "5px",
+    background: "#EAF0F8",
+    border: "1px solid #C9D4E3",
+    borderRadius: "10px",
+  },
+  contentBlock: { position: "relative" },
+  select: {
+    width: "100%",
+    background: "white",
+    borderRadius: "5px",
+  }
 }
