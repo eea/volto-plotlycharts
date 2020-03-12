@@ -9,6 +9,7 @@ import { updateChartDataFromProvider } from 'volto-datablocks/helpers';
 import { connect } from 'react-redux';
 import 'react-chart-editor/lib/react-chart-editor.css';
 import { Colorscale } from 'react-colorscales';
+import { CirclePicker } from 'react-color';
 
 // TODO: remove these fallbacks;
 const dataSources = {
@@ -41,7 +42,9 @@ class Edit extends Component {
       PlotlyEditor: null,
       showColorscalePicker: false,
       selectedColor: [],
-      precision: ',f'
+      precision: ',f',
+      selectedTrace: 0,
+      traceColor: ""
     };
   }
   componentDidMount() {
@@ -96,6 +99,19 @@ class Edit extends Component {
     });
   }
 
+  handleTraceSelect = (selectedTrace) => {
+    this.setState({ selectedTrace })
+  }
+
+  handleTraceColorChange = () => {
+    const { selectedTrace, traceColor } = this.state;
+
+    var colorscale = [...this.state.selectedColor]
+    colorscale[selectedTrace] = traceColor;
+
+    this.onChangeColor(colorscale)
+  }
+
   render() {
     if (__SERVER__) return '';
 
@@ -148,8 +164,7 @@ class Edit extends Component {
                   </p>
               </div>
               <div
-                onClick={() => { }}
-                style={styles.precisionButton}
+                style={styles.precisionContainer}
               >
                 <p style={styles.title}>
                   Set Precision
@@ -165,8 +180,8 @@ class Edit extends Component {
               </div>
               {this.state.showColorscalePicker && (
                 <div style={styles.scaleItem}>
-                  {customColors.map(item =>
-                    <div onClick={() => { this.onChangeColor(item.colorscale) }}
+                  {customColors.map((item, index) =>
+                    <div id={index} onClick={() => { this.onChangeColor(item.colorscale) }}
                       style={{
                         cursor: 'pointer'
                       }}>
@@ -177,6 +192,19 @@ class Edit extends Component {
                       />
                     </div>
                   )}
+                  <div>
+                    <p>Change Trace Color</p>
+                    <CirclePicker onChange={(e) => this.setState({ traceColor: e.hex })} />
+                    <div style={styles.row}>
+                      <select style={styles.select} onChange={(e) => this.handleTraceSelect(e.target.value)}>
+                        {this.state.selectedColor.map((item, index) =>
+                          <option id={index} value={index}>{index + 1}</option>
+                        )}
+
+                      </select>
+                      <button style={styles.applyButton} onClick={() => this.handleTraceColorChange()}>Apply</button>
+                    </div>
+                  </div>
                 </div>
               )}
             </div>
@@ -222,7 +250,7 @@ const styles = {
     borderRadius: "10px",
     cursor: 'pointer'
   },
-  precisionButton: {
+  precisionContainer: {
     position: "absolute",
     bottom: 0,
     left: "450px",
@@ -236,5 +264,16 @@ const styles = {
     width: "100%",
     background: "white",
     borderRadius: "5px",
+  },
+  row: {
+    display: "flex",
+    marginTop: "10px"
+  },
+  applyButton: {
+    background: "white",
+    borderRadius: "5px",
+    border: "1px solid #C9D4E3",
+    marginLeft: "5px",
+    padding: "5px"
   }
 }
