@@ -79,6 +79,7 @@ class Edit extends Component {
                     frames,
                   });
                 }}
+                showFieldTooltips
                 useResizeHandler
                 debug
                 advancedTraceTypeSelector
