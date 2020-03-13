@@ -8,6 +8,7 @@ import { updateChartDataFromProvider } from 'volto-datablocks/helpers';
 
 import { connect } from 'react-redux';
 import 'react-chart-editor/../lib/react-chart-editor.css';
+import './fixes.css';
 //import 'react-chart-editor/styles/main.scss';
 
 // TODO: remove these fallbacks;
