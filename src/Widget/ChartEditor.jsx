@@ -11,6 +11,25 @@ import 'react-chart-editor/../lib/react-chart-editor.css';
 import './fixes.css';
 //import 'react-chart-editor/styles/main.scss';
 
+const imports = {
+  PlotlyEditor:
+    __CLIENT__ &&
+    import(/* webpackChunkName: 'plotlyeditor' */ 'react-chart-editor'),
+  plotly:
+    __CLIENT__ &&
+    import(/* webpackChunkName: 'plotlydist' */ 'plotly.js/dist/plotly'),
+  CustomEditor:
+    __CLIENT__ && import(/* webpackChunkName: 'plotlydist' */ './CustomEditor'),
+};
+
+const resolveImports = async imports => {
+  const res = {};
+  for (const name in imports) {
+    await imports[name].then(module => (res[name] = module)); // .default
+  }
+  return res;
+};
+
 // TODO: remove these fallbacks;
 const dataSources = {
   col1: [1, 2, 3],
@@ -62,21 +81,6 @@ const chartHelp = {
   timeseries: { helpDoc: 'https://help.plot.ly/range-slider/' },
 };
 
-const imports = {
-  PlotlyEditor: import(
-    /* webpackChunkName: 'plotlyeditor' */ 'react-chart-editor'
-  ),
-  plotly: import(/* webpackChunkName: 'plotlydist' */ 'plotly.js/dist/plotly'),
-};
-
-const resolveImports = async imports => {
-  const res = {};
-  for (const name in imports) {
-    await imports[name].then(module => (res[name] = module.default));
-  }
-  return res;
-};
-
 class Edit extends Component {
   constructor(props) {
     super(props);
@@ -86,8 +90,10 @@ class Edit extends Component {
     };
   }
   async componentDidMount() {
-    const modules = await resolveImports(imports);
-    this.setState({ ...modules });
+    if (__CLIENT__) {
+      const modules = await resolveImports(imports);
+      this.setState({ ...modules });
+    }
   }
   render() {
     if (__SERVER__) return '';
@@ -101,21 +107,23 @@ class Edit extends Component {
       [],
     );
 
-    const { plotly, PlotlyEditor } = this.state;
-
+    const { plotly, PlotlyEditor, CustomEditor } = this.state;
+    const { DefaultEditor, Panel } = PlotlyEditor || {};
+    // https://www.eea.europa.eu/++resource++eea.translations.images/pdflogo-web.png
     return (
       <div>
-        {plotly && PlotlyEditor && (
+        {plotly && PlotlyEditor && DefaultEditor && (
           <div className="block selected">
             <div className="block-inner-wrapper">
-              <PlotlyEditor
+              <PlotlyEditor.default
                 config={config}
                 data={updatedData}
                 layout={this.props.value?.layout || {}}
                 frames={this.props.value?.frames || []}
                 dataSourceOptions={dataSourceOptions}
                 dataSources={this.props.providerData || dataSources}
-                plotly={this.state.plotly}
+                plotly={this.state.plotly.default}
+                divId="gd"
                 onUpdate={(data, layout, frames) => {
                   return this.props.onChangeValue({
                     ...this.props.value,
@@ -129,7 +137,11 @@ class Edit extends Component {
                 useResizeHandler
                 debug
                 advancedTraceTypeSelector
-              />
+              >
+                <CustomEditor.default logoSrc="">
+                  <Panel group="EEA" name="Various" />
+                </CustomEditor.default>
+              </PlotlyEditor.default>
             </div>
           </div>
         )}
