@@ -8,6 +8,9 @@ import { updateChartDataFromProvider } from 'volto-datablocks/helpers';
 
 import { connect } from 'react-redux';
 import 'react-chart-editor/../lib/react-chart-editor.css';
+import Select from 'react-select';
+import Inspector from 'react-inspector';
+
 import './fixes.css';
 //import 'react-chart-editor/styles/main.scss';
 
@@ -89,6 +92,7 @@ class Edit extends Component {
       PlotlyEditor: null,
     };
   }
+
   async componentDidMount() {
     if (__CLIENT__) {
       const modules = await resolveImports(imports);
@@ -125,6 +129,8 @@ class Edit extends Component {
                 plotly={this.state.plotly.default}
                 divId="gd"
                 onUpdate={(data, layout, frames) => {
+                  console.log('updated data', data);
+                  console.log('updated layout', layout);
                   return this.props.onChangeValue({
                     ...this.props.value,
                     data,
@@ -139,7 +145,29 @@ class Edit extends Component {
                 advancedTraceTypeSelector
               >
                 <CustomEditor.default logoSrc="">
-                  <Panel group="EEA" name="Various" />
+                  <Panel group="Dev" name="Inspector">
+                    <button
+                      className="devbtn"
+                      onClick={() => {
+                        const gd = document.getElementById('gd') || {};
+                        this.setState({
+                          full: {
+                            _fullData: gd._fullData || [],
+                            _fullLayout: gd._fullLayout || {},
+                          },
+                        });
+                      }}
+                    >
+                      Refresh
+                    </button>
+                    <div style={{ height: '80vh' }}>
+                      <Inspector
+                        data={{ _full: this.state.full }}
+                        expandLevel={2}
+                        sortObjectKeys={true}
+                      />
+                    </div>
+                  </Panel>
                 </CustomEditor.default>
               </PlotlyEditor.default>
             </div>

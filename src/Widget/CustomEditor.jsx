@@ -11,22 +11,22 @@ import {
   StyleShapesPanel,
   StyleSlidersPanel,
   StyleImagesPanel,
-  StyleTracesPanel,
+  // StyleTracesPanel,
   StyleColorbarsPanel,
   StyleUpdateMenusPanel,
-  // StyleAxesPanel,
+  StyleAxesPanel,
 } from 'react-chart-editor/default_panels';
 // import { traceHasColorbar } from './default_panels/StyleColorbarsPanel';
 import Logo from 'react-chart-editor/components/widgets/Logo';
 import { PanelMenuWrapper } from 'react-chart-editor/components';
 
-import StyleAxesPanel from './StyleAxesPanel';
+// import StyleAxesPanel from './StyleAxesPanel';
+import StyleTracesPanel from './StyleTracesPanel';
 
 class CustomEditor extends DefaultEditor {
   render() {
     if (__SERVER__) return '';
     const _ = this.context.localize;
-    console.log('underscore', _);
     const logo = this.props.logoSrc && (
       <Logo src={this.props.logoSrc} style={{ width: '100%' }} />
     );
