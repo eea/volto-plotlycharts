@@ -16,6 +16,7 @@ import {
   StyleUpdateMenusPanel,
   StyleAxesPanel,
 } from 'react-chart-editor';
+import StyleGeneralPanel from './StyleGeneralPanel'
 // import { traceHasColorbar } from './default_panels/StyleColorbarsPanel';
 import { Logo } from 'react-chart-editor';
 import { PanelMenuWrapper } from 'react-chart-editor';
@@ -40,6 +41,7 @@ class CustomEditor extends DefaultEditor {
           <GraphTransformsPanel group={_('Structure')} name={_('Transforms')} />
         )}
         <StyleLayoutPanel group={_('Style')} name={_('General')} />
+        <StyleGeneralPanel group={_('Style')} name={_('Generalll')} />
         <StyleTracesPanel group={_('Style')} name={_('Traces')} />
         {this.hasAxes() && (
           <StyleAxesPanel group={_('Style')} name={_('Axes')} />
