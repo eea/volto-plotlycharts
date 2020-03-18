@@ -7,12 +7,14 @@ import React, { Component } from 'react';
 import { updateChartDataFromProvider } from 'volto-datablocks/helpers';
 
 import { connect } from 'react-redux';
-import 'react-chart-editor/../lib/react-chart-editor.css';
-import Select from 'react-select';
+import 'react-chart-editor/lib/react-chart-editor.css';
 import Inspector from 'react-inspector';
 
 import './fixes.css';
-//import 'react-chart-editor/styles/main.scss';
+
+// import 'react-chart-editor/../lib/react-chart-editor.css';
+// import 'react-chart-editor/styles/main.scss';
+// import Select from 'react-select';
 
 const imports = {
   PlotlyEditor:

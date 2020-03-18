@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { connectToContainer } from 'react-chart-editor/lib';
-import Field from 'react-chart-editor/components/fields/Field';
-import TextInput from 'react-chart-editor/components/widgets/TextInput';
+import { connectToContainer } from 'react-chart-editor';
+import { Field } from 'react-chart-editor';
+import { TextInput } from 'react-chart-editor';
 
 export class UnconnectedHoverFormatString extends Component {
   render() {

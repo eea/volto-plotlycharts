@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Field from 'react-chart-editor/components/fields/Field';
-import TextInput from 'react-chart-editor/components/fields/Text';
+// import Field from 'react-chart-editor/components/fields/Field';
+import { TextInput } from 'react-chart-editor';
 
 import {
   Flaglist,
@@ -40,7 +40,7 @@ import {
   NumericOrDate,
   AxisInterval,
   HoverLabelNameLength,
-} from 'react-chart-editor/components';
+} from 'react-chart-editor';
 import {
   BinningDropdown,
   NumericReciprocal,
@@ -48,9 +48,9 @@ import {
   TextInfo,
   HoveronDropdown,
   LevelRendered,
-} from 'react-chart-editor/components/fields/derived';
-import { traceTypes } from 'react-chart-editor/lib/traceTypes';
-import localize from 'react-chart-editor/lib/localize';
+} from 'react-chart-editor';
+import { traceTypes } from 'react-chart-editor/lib/lib/traceTypes';
+import { localize } from 'react-chart-editor';
 import HoverFormatString from './HoverFormatString';
 
 const allTraceTypes = traceTypes(localize).map(({ value }) => value);
@@ -973,25 +973,6 @@ const StyleTracesPanel = (props, { localize: _ }) => (
       />
     </PlotlySection>
 
-    <TraceTypeSection
-      name="Hover format"
-      traceTypes={['bar', 'scatter']}
-      mode="layout"
-    >
-      <LayoutSection attr="xaxis">
-        <HoverFormatString
-          attr="xaxis.hoverformat"
-          label="HoverX axis format"
-          defaultValue=".3s"
-        />
-        <TextInput
-          defaultValue=".3s"
-          attr="yaxis.hoverformat"
-          label="Y axis format"
-        />
-      </LayoutSection>
-    </TraceTypeSection>
-
     <PlotlySection name={_('Hover/Tooltip')}>
       <HoveronDropdown attr="hoveron" label={_('Hover on')} />
       <Radio
@@ -1043,6 +1024,23 @@ const StyleTracesPanel = (props, { localize: _ }) => (
       <Text label={_('Value Format')} attr="valueformat" />
       <Text label={_('Value Suffix')} attr="valuesuffix" />
     </PlotlySection>
+
+    <TraceTypeSection
+      name="Hover format"
+      traceTypes={['bar', 'scatter']}
+      mode="layout"
+    >
+      <LayoutSection attr="xaxis">
+        {/* The custom HoverFormatString is just to show how to create a custom field */}
+        <HoverFormatString
+          attr="xaxis.hoverformat"
+          label="X axis"
+          defaultValue=".3s"
+        />
+        <TextInput defaultValue=".3s" attr="yaxis.hoverformat" label="Y axis" />
+      </LayoutSection>
+    </TraceTypeSection>
+
     <TraceTypeSection
       name={_('Error Bars X')}
       traceTypes={['scatter', 'scattergl', 'scatter3d', 'bar']}

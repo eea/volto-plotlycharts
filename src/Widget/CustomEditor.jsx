@@ -15,10 +15,10 @@ import {
   StyleColorbarsPanel,
   StyleUpdateMenusPanel,
   StyleAxesPanel,
-} from 'react-chart-editor/default_panels';
+} from 'react-chart-editor';
 // import { traceHasColorbar } from './default_panels/StyleColorbarsPanel';
-import Logo from 'react-chart-editor/components/widgets/Logo';
-import { PanelMenuWrapper } from 'react-chart-editor/components';
+import { Logo } from 'react-chart-editor';
+import { PanelMenuWrapper } from 'react-chart-editor';
 
 // import StyleAxesPanel from './StyleAxesPanel';
 import StyleTracesPanel from './StyleTracesPanel';
