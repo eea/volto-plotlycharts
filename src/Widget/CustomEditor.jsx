@@ -11,18 +11,18 @@ import {
   StyleShapesPanel,
   StyleSlidersPanel,
   StyleImagesPanel,
-  // StyleTracesPanel,
+  StyleTracesPanel,
   StyleColorbarsPanel,
   StyleUpdateMenusPanel,
-  StyleAxesPanel,
+  //StyleAxesPanel,
 } from 'react-chart-editor';
 import StyleGeneralPanel from './StyleGeneralPanel'
 // import { traceHasColorbar } from './default_panels/StyleColorbarsPanel';
 import { Logo } from 'react-chart-editor';
 import { PanelMenuWrapper } from 'react-chart-editor';
 
-// import StyleAxesPanel from './StyleAxesPanel';
-import StyleTracesPanel from './StyleTracesPanel';
+import StyleAxesPanel from './StyleAxesPanel';
+//import StyleTracesPanel from './StyleTracesPanel';
 
 class CustomEditor extends DefaultEditor {
   render() {
