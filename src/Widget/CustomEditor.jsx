@@ -39,9 +39,8 @@ class CustomEditor extends DefaultEditor {
         <GraphSubplotsPanel group={_('Structure')} name={_('Subplots')} />
         {this.hasTransforms() && (
           <GraphTransformsPanel group={_('Structure')} name={_('Transforms')} />
-        )}
-        <StyleLayoutPanel group={_('Style')} name={_('General')} />
-        <StyleGeneralPanel group={_('Style')} name={_('Generalll')} />
+          )}
+        <StyleGeneralPanel value={this.props.value} onChangeValue={this.props.onChangeValue} group={_('Style')} name={_('General')} />
         <StyleTracesPanel group={_('Style')} name={_('Traces')} />
         {this.hasAxes() && (
           <StyleAxesPanel group={_('Style')} name={_('Axes')} />

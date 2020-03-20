@@ -106,6 +106,7 @@ class Edit extends Component {
       //   layout,
       //   frames,
       // });
+      
     }
   }
   render() {
@@ -128,7 +129,6 @@ class Edit extends Component {
         {plotly && PlotlyEditor && DefaultEditor && (
           <div className="block selected">
             <div className="block-inner-wrapper">
-              <button onClick={()=>console.log('editor', )}>koonsole</button>
               <PlotlyEditor.default
                 config={config}
                 data={updatedData}
@@ -154,7 +154,7 @@ class Edit extends Component {
                 debug
                 advancedTraceTypeSelector
               >
-                <CustomEditor.default logoSrc="">
+                <CustomEditor.default onChangeValue={this.props.onChangeValue} value={this.props.value} logoSrc="">
                   <Panel group="Dev" name="Inspector">
                     <button
                       className="devbtn"
