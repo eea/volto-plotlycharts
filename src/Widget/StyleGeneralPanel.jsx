@@ -40,18 +40,6 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
 
     }
 
-    const onChangePrecision = (customColor) => {
-        console.log('something is changing')
-        props.onChangeValue({
-            ...props.value,
-            layout: {
-                ...props.value.layout,
-                colorway: customColor
-            },
-        });
-
-    }
-
     return (
         <LayoutPanel>
             <PlotlyFold name={_('Defaults')}>
