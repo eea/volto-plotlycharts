@@ -40,6 +40,18 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
 
     }
 
+    const onChangePrecision = (customColor) => {
+        console.log('something is changing')
+        props.onChangeValue({
+            ...props.value,
+            layout: {
+                ...props.value.layout,
+                colorway: customColor
+            },
+        });
+
+    }
+
     return (
         <LayoutPanel>
             <PlotlyFold name={_('Defaults')}>
@@ -105,6 +117,38 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
                             { label: _('1 234.56'), value: ', ' },
                             { label: _('1 234,56'), value: ', ' },
                             { label: _('1.234,56'), value: ',.' },
+                        ]}
+                        clearable={false}
+                    />
+                    <Dropdown
+                    attr="yaxis.hoverformat"
+                        label={_('Precision format y-axis')}
+                        options={[
+                            { label: _('Default'), value: '' },
+                            { label: _('No Digit'), value: ',.1s' },
+                            { label: _('1 Digit'), value: ',.2s' },
+                            { label: _('2 Digits'), value: ',.3s' },
+                            { label: _('3 Digits'), value: ',.4s' },
+                            { label: _('4 Digits'), value: ',.5s' },
+                            { label: _('5 Digits'), value: ',.6s' },
+                            { label: _('6 Digits'), value: ',.7s' },
+                            { label: _('7 Digits'), value: ',.8s' },
+                        ]}
+                        clearable={false}
+                    />
+                     <Dropdown
+                    attr="xaxis.hoverformat"
+                        label={_('Precision format x-axis')}
+                        options={[
+                            { label: _('Default'), value: '' },
+                            { label: _('No Digit'), value: ',.1s' },
+                            { label: _('1 Digit'), value: ',.2s' },
+                            { label: _('2 Digits'), value: ',.3s' },
+                            { label: _('3 Digits'), value: ',.4s' },
+                            { label: _('4 Digits'), value: ',.5s' },
+                            { label: _('5 Digits'), value: ',.6s' },
+                            { label: _('6 Digits'), value: ',.7s' },
+                            { label: _('7 Digits'), value: ',.8s' },
                         ]}
                         clearable={false}
                     />
