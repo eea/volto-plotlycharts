@@ -38,8 +38,8 @@ const resolveImports = async imports => {
 // TODO: remove these fallbacks;
 const dataSources = {
   col1: [1, 2, 3],
-  col2: [4, 3, 2],
-  col3: [17, 13, 9],
+  col2: [4213321.567, 3231123.4, 2929845.5721],
+  col3: [1746.424, 12353.532, 9124.21],
 };
 
 const config = { editable: true };
@@ -99,6 +99,14 @@ class Edit extends Component {
     if (__CLIENT__) {
       const modules = await resolveImports(imports);
       this.setState({ ...modules });
+
+      // this.props.onChangeValue({
+      //   ...this.props.value,
+      //   data,
+      //   layout,
+      //   frames,
+      // });
+      
     }
   }
   render() {
@@ -146,7 +154,7 @@ class Edit extends Component {
                 debug
                 advancedTraceTypeSelector
               >
-                <CustomEditor.default logoSrc="">
+                <CustomEditor.default onChangeValue={this.props.onChangeValue} value={this.props.value} logoSrc="">
                   <Panel group="Dev" name="Inspector">
                     <button
                       className="devbtn"

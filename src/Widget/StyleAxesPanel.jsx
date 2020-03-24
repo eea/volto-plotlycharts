@@ -21,7 +21,7 @@ import {
   VisibilitySelect,
   DropdownCustom,
   TickFormat,
-} from 'react-chart-editor/components';
+} from 'react-chart-editor/lib/components';
 
 class StyleAxesPanel extends Component {
   render() {
