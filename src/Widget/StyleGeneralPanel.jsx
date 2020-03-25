@@ -5,6 +5,7 @@ import {
   ColorwayPicker,
   ColorscalePicker,
   Dropdown,
+  DropdownCustom,
   FontSelector,
   PlotlyFold,
   Numeric,
@@ -35,6 +36,27 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
         colorway: customColor
       },
     });
+
+  }
+  const handleTickFormat = (format) => {
+    console.log(format, "format");
+
+    props.onChangeValue({
+      ...props.value,
+      layout: {
+        ...props.value.layout,
+        xaxis: {
+          ...props.value.layout.xaxis,
+          tickformat: format
+        },
+        yaxis: {
+          ...props.value.layout.yaxis,
+          tickformat: format
+        }
+      }
+
+    })
+    console.log(props.value, "data");
 
   }
 
@@ -137,6 +159,19 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
             ]}
             clearable={false}
           />
+          <div style={styles.scaleContainer} className="field field__widget">
+            <p style={{ width: '70px', fontSize: "12px" }}>Tick precision</p>
+            <select className="dropdown-container" style={styles.customDropdown} onChange={(e) => handleTickFormat(e.target.value)}>
+              <option label={_('Default')} value=''></option>
+              <option label={_('No Digit')} value=',.1s'></option>
+              <option label={_('1 Digit')} value=',.2s'></option>
+              <option label={_('2 Digits')} value=',.3s'></option>
+              <option label={_('3 Digits')} value=',.4s'></option>
+              <option label={_('4 Digits')} value=',.5s'></option>
+              <option label={_('5 Digits')} value=',.6s'></option>
+              <option label={_('6 Digits')} value=',.7s'></option>
+            </select>
+          </div>
           <Dropdown
             label={_('Uniform Text Mode')}
             attr="uniformtext.mode"
@@ -293,5 +328,13 @@ export default StyleGeneralPanel;
 const styles = {
   scaleContainer: {
     padding: '12px', fontWeight: "400 !important", color: "black !important",
+  },
+  customDropdown:{
+    border: "1px solid #c8d4e3",
+    backgroundColor: "var(--color-background-inputs) !important",
+    padding: "7px",
+    borderRadius: "5px",
+    backgroundColor: "white",
+    color: "var(--color-text-active)",
   }
 }
