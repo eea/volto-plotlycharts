@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   ColorPicker,
@@ -20,13 +20,30 @@ import {
 import { HoverColor } from 'react-chart-editor/lib/components/fields/derived';
 import DataSelector from 'react-chart-editor/lib/components/fields/DataSelector';
 import { Colorscale } from 'react-colorscales'
+import downKeySVG from '@plone/volto/icons/down-key.svg';
+import { Icon } from '@plone/volto/components';
+import Select from 'react-select';
 
 import { settings } from '~/config'
 
 const customColors = settings.plotlyCustomColors || []
 
+
 const StyleGeneralPanel = (props, { localize: _ }) => {
 
+  const [tickFormat, setTickFormat] = useState({ "xaxis": { label: _('Default'), value: '' }, 'yaxis': { label: _('Default'), value: '' } })
+
+  const numbersFormat = [
+    { label: _('Default'), value: '' },
+    { label: _('No Digit'), value: ',.1s' },
+    { label: _('1 Digit'), value: ',.2s' },
+    { label: _('2 Digits'), value: ',.3s' },
+    { label: _('3 Digits'), value: ',.4s' },
+    { label: _('4 Digits'), value: ',.5s' },
+    { label: _('5 Digits'), value: ',.6s' },
+    { label: _('6 Digits'), value: ',.7s' },
+    { label: _('7 Digits'), value: ',.8s' },
+  ]
   const onChangeColor = (customColor) => {
     props.onChangeValue({
       ...props.value,
@@ -36,6 +53,40 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
       },
     });
 
+  }
+  const handleTickFormatX = (format) => {
+    setTickFormat({
+      ...tickFormat,
+      xaxis: format
+    })
+
+    props.onChangeValue({
+      ...props.value,
+      layout: {
+        ...props.value.layout,
+        xaxis: {
+          ...props.value.layout.xaxis,
+          tickformat: format.value
+        },
+      }
+    })
+  }
+
+  const handleTickFormatY = (format) => {
+    setTickFormat({
+      ...tickFormat,
+      yaxis: format
+    })
+    props.onChangeValue({
+      ...props.value,
+      layout: {
+        ...props.value.layout,
+        yaxis: {
+          ...props.value.layout.yaxis,
+          tickformat: format.value
+        },
+      }
+    })
   }
 
   return (
@@ -95,49 +146,6 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
           <Numeric label={_('Base Font Size')} attr="font.size" units="px" />
           <ColorPicker label={_('Font Color')} attr="font.color" />
           <Dropdown
-            label={_('Number format')}
-            attr="separators"
-            options={[
-              { label: _('1,234.56'), value: '.,' },
-              { label: _('1 234.56'), value: ', ' },
-              { label: _('1 234,56'), value: ', ' },
-              { label: _('1.234,56'), value: ',.' },
-            ]}
-            clearable={false}
-          />
-          <Dropdown
-            attr="yaxis.hoverformat"
-            label={_('Precision format y-axis')}
-            options={[
-              { label: _('Default'), value: '' },
-              { label: _('No Digit'), value: ',.1s' },
-              { label: _('1 Digit'), value: ',.2s' },
-              { label: _('2 Digits'), value: ',.3s' },
-              { label: _('3 Digits'), value: ',.4s' },
-              { label: _('4 Digits'), value: ',.5s' },
-              { label: _('5 Digits'), value: ',.6s' },
-              { label: _('6 Digits'), value: ',.7s' },
-              { label: _('7 Digits'), value: ',.8s' },
-            ]}
-            clearable={false}
-          />
-          <Dropdown
-            attr="xaxis.hoverformat"
-            label={_('Precision format x-axis')}
-            options={[
-              { label: _('Default'), value: '' },
-              { label: _('No Digit'), value: ',.1s' },
-              { label: _('1 Digit'), value: ',.2s' },
-              { label: _('2 Digits'), value: ',.3s' },
-              { label: _('3 Digits'), value: ',.4s' },
-              { label: _('4 Digits'), value: ',.5s' },
-              { label: _('5 Digits'), value: ',.6s' },
-              { label: _('6 Digits'), value: ',.7s' },
-              { label: _('7 Digits'), value: ',.8s' },
-            ]}
-            clearable={false}
-          />
-          <Dropdown
             label={_('Uniform Text Mode')}
             attr="uniformtext.mode"
             options={[
@@ -150,7 +158,60 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
           <Numeric label={_('Uniform Text Size Minimum')} attr="uniformtext.minsize" units="px" />
         </PlotlySection>
       </PlotlyFold>
+      <PlotlyFold name={_('Precision Format')}>
 
+        <Dropdown
+          label={_('Number format')}
+          attr="separators"
+          options={[
+            { label: _('1,234.56'), value: '.,' },
+            { label: _('1 234.56'), value: ', ' },
+            { label: _('1 234,56'), value: ', ' },
+            { label: _('1.234,56'), value: ',.' },
+          ]}
+          clearable={false}
+        />
+        <Dropdown
+          attr="yaxis.hoverformat"
+          label={_('Hover Format y-axis')}
+          options={numbersFormat}
+          clearable={false}
+        />
+        <Dropdown
+          attr="xaxis.hoverformat"
+          label={_('Hover Format x-axis')}
+          options={numbersFormat}
+          clearable={false}
+        />
+        <div style={styles.scaleContainer} className="field field__widget">
+          <p style={{ width: '70px', fontSize: "12px", color: "#506784" }}>Tick Format Y-axis</p>
+          <div style={styles.customDropdown}>
+            <Select
+              value={tickFormat.yaxis}
+              onChange={(e) => handleTickFormatY(e)}
+              styles={selectStyles}
+              components={{
+                IndicatorSeparator: () => null
+              }}
+              options={numbersFormat}
+            />
+          </div>
+        </div>
+        <div style={styles.scaleContainer} className="field field__widget">
+          <p style={{ width: '70px', fontSize: "12px", color: "#506784" }}>Tick Format X-axis</p>
+          <div style={styles.customDropdown}>
+            <Select
+              value={tickFormat.xaxis}
+              onChange={(e) => handleTickFormatX(e)}
+              styles={selectStyles}
+              components={{
+                IndicatorSeparator: () => null
+              }}
+              options={numbersFormat}
+            />
+          </div>
+        </div>
+      </PlotlyFold>
       <PlotlyFold name={_('Title')}>
         <TextEditor attr="title.text" />
         <FontSelector label={_('Typeface')} attr="title.font.family" clearable={false} />
@@ -292,6 +353,23 @@ export default StyleGeneralPanel;
 
 const styles = {
   scaleContainer: {
-    padding: '12px', fontWeight: "400 !important", color: "black !important",
-  }
+    padding: '10px', fontWeight: "400 !important", color: "black !important"
+  },
+  customDropdown: {
+    backgroundColor: "var(--color-background-inputs) !important",
+    borderRadius: "5px",
+    backgroundColor: "white",
+    color: "var(--color-text-active)",
+    marginLeft: "10px",
+    webkitAppearance: "none",
+    flex: '1'
+  },
+}
+
+const selectStyles = {
+  control: base => ({
+    ...base,
+    borderColor: "#C9D4E2",
+    boxShadow: 'none'
+  })
 }
