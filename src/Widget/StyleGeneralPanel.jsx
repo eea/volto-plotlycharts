@@ -20,8 +20,6 @@ import {
 import { HoverColor } from 'react-chart-editor/lib/components/fields/derived';
 import DataSelector from 'react-chart-editor/lib/components/fields/DataSelector';
 import { Colorscale } from 'react-colorscales'
-import downKeySVG from '@plone/volto/icons/down-key.svg';
-import { Icon } from '@plone/volto/components';
 import Select from 'react-select';
 
 import { settings } from '~/config'
@@ -32,6 +30,8 @@ const customColors = settings.plotlyCustomColors || []
 const StyleGeneralPanel = (props, { localize: _ }) => {
 
   const [tickFormat, setTickFormat] = useState({ "xaxis": { label: _('Default'), value: '' }, 'yaxis': { label: _('Default'), value: '' } })
+
+  const [textFormat, setTextFormat] = useState()
 
   const numbersFormat = [
     { label: _('Default'), value: '' },
@@ -66,7 +66,8 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
         ...props.value.layout,
         xaxis: {
           ...props.value.layout.xaxis,
-          tickformat: format.value
+          tickformat: format.value,
+          format: format.value
         },
       }
     })
@@ -83,12 +84,12 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
         ...props.value.layout,
         yaxis: {
           ...props.value.layout.yaxis,
-          tickformat: format.value
+          tickformat: format.value,
+          format: format.value
         },
       }
     })
   }
-
   return (
     <LayoutPanel>
       <PlotlyFold name={_('Defaults')}>

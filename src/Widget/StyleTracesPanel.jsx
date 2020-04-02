@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 // import Field from 'react-chart-editor/components/fields/Field';
 import { TextInput } from 'react-chart-editor';
@@ -52,10 +52,15 @@ import {
 import { traceTypes } from 'react-chart-editor/lib/lib/traceTypes';
 import { localize } from 'react-chart-editor';
 import HoverFormatString from './HoverFormatString';
+import Select from 'react-select';
 
 const allTraceTypes = traceTypes(localize).map(({ value }) => value);
 
-const StyleTracesPanel = (props, { localize: _ }) => (
+const StyleTracesPanel = (props, { localize: _ }) => {
+
+const [textAxis, setTextAxis] = useState({ label: _('X Axis'), value: 'x' })
+
+return (
   <TraceAccordion canGroup>
     <TextEditor label={_('Name')} attr="name" richTextOnly />
     <NumericFraction label={_('Trace Opacity')} attr="opacity" />
@@ -720,7 +725,38 @@ const StyleTracesPanel = (props, { localize: _ }) => (
       <HoverTemplateSwitch attr="texttemplate" label={_('Mode')} />
       <TextInfo attr="textinfo" label={_('Show')} />
       <HoverTemplateText attr="texttemplate" label={_('Template')} />
-      <DataSelector label={_('Text')} attr="text" />
+      {/* <DataSelector label={_('Text')} attr="text" /> */}
+      <div style={styles.scaleContainer} className="field field__widget">
+          <p style={{ width: '70px', fontSize: "12px", color: "#506784" }}>Text Axis</p>
+          <div style={styles.customDropdown}>
+            <Select
+              value={textAxis}
+              onChange={(e) => setTextAxis(e)}
+              styles={selectStyles}
+              components={{
+                IndicatorSeparator: () => null
+              }}
+              options={[ { label: _('X Axis'), value: 'x' },
+              { label: _('Y Axis'), value: 'y' },]}
+            />
+          </div>
+        </div>
+      <Dropdown
+        label={_('Text format template')}
+        attr="texttemplate"
+        options={[
+          { label: _('Default'), value: '' },
+          { label: _('No Digit'), value: `%{${textAxis.value}:,.1s}` },
+          { label: _('1 Digit'), value: `%{${textAxis.value}:,.2s}` },
+          { label: _('2 Digits'), value: `%{${textAxis.value}:,.3s}` },
+          { label: _('3 Digits'), value: `%{${textAxis.value}:,.4s}` },
+          { label: _('4 Digits'), value: `%{${textAxis.value}:,.5s}` },
+          { label: _('5 Digits'), value: `%{${textAxis.value}:,.6s}` },
+          { label: _('6 Digits'), value: `%{${textAxis.value}:,.7s}` },
+          { label: _('7 Digits'), value: `%{${textAxis.value}:,.8s}` },
+        ]}
+      />
+
       <FontSelector label={_('Typeface')} attr="textfont.family" />
       <Numeric label={_('Font Size')} attr="textfont.size" units="px" />
       <MultiColorPicker label={_('Font Color')} attr="textfont.color" />
@@ -1025,13 +1061,12 @@ const StyleTracesPanel = (props, { localize: _ }) => (
       <Text label={_('Value Suffix')} attr="valuesuffix" />
     </PlotlySection>
 
-    <TraceTypeSection
+    {/* <TraceTypeSection
       name="Hover format"
       traceTypes={['bar', 'scatter']}
       mode="layout"
     >
       <LayoutSection attr="xaxis">
-        {/* The custom HoverFormatString is just to show how to create a custom field */}
         <HoverFormatString
           attr="xaxis.hoverformat"
           label="X axis"
@@ -1039,15 +1074,15 @@ const StyleTracesPanel = (props, { localize: _ }) => (
         />
         <TextInput defaultValue=".3s" attr="yaxis.hoverformat" label="Y axis" />
       </LayoutSection>
-    </TraceTypeSection>
+    </TraceTypeSection> */}
 
-    <TraceTypeSection
+    {/* <TraceTypeSection
       name={_('Error Bars X')}
       traceTypes={['scatter', 'scattergl', 'scatter3d', 'bar']}
       mode="trace"
     >
       <ErrorBars attr="error_x" />
-    </TraceTypeSection>
+    </TraceTypeSection> */}
     <TraceTypeSection
       name={_('Error Bars Y')}
       traceTypes={['scatter', 'scattergl', 'scatter3d', 'bar']}
@@ -1063,10 +1098,33 @@ const StyleTracesPanel = (props, { localize: _ }) => (
       <ErrorBars attr="error_z" />
     </TraceTypeSection>
   </TraceAccordion>
-);
+);}
 
 StyleTracesPanel.contextTypes = {
   localize: PropTypes.func,
 };
 
 export default StyleTracesPanel;
+
+const styles = {
+  scaleContainer: {
+    padding: '10px', fontWeight: "400 !important", color: "black !important"
+  },
+  customDropdown: {
+    backgroundColor: "var(--color-background-inputs) !important",
+    borderRadius: "5px",
+    backgroundColor: "white",
+    color: "var(--color-text-active)",
+    marginLeft: "10px",
+    webkitAppearance: "none",
+    flex: '1'
+  },
+}
+
+const selectStyles = {
+  control: base => ({
+    ...base,
+    borderColor: "#C9D4E2",
+    boxShadow: 'none'
+  })
+}
