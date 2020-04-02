@@ -31,7 +31,8 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
 
   const [tickFormat, setTickFormat] = useState({ "xaxis": { label: _('Default'), value: '' }, 'yaxis': { label: _('Default'), value: '' } })
 
-  const [textFormat, setTextFormat] = useState()
+  const [textFormat, setTextFormat] = useState({ label: _('Default'), value: '' })
+
 
   const numbersFormat = [
     { label: _('Default'), value: '' },
@@ -44,6 +45,20 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
     { label: _('6 Digits'), value: ',.7s' },
     { label: _('7 Digits'), value: ',.8s' },
   ]
+
+  const textInfoFormat = [
+    { label: _('Default'), value: '' },
+    { label: _('No Digit'), value: '0' },
+    { label: _('1 Digit'), value: '1' },
+    { label: _('2 Digits'), value: '2' },
+    { label: _('3 Digits'), value: '3' },
+    { label: _('4 Digits'), value: '4' },
+    { label: _('5 Digits'), value: '5' },
+    { label: _('6 Digits'), value: '6' },
+    { label: _('7 Digits'), value: '7' },
+  ]
+
+
   const onChangeColor = (customColor) => {
     props.onChangeValue({
       ...props.value,
@@ -54,6 +69,28 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
     });
 
   }
+
+  const handleTextInfoFormat = (e) => {
+    setTextFormat(e)
+
+    const newData = props.value.data.map(trace => {
+      if (trace.text && trace.text.length > 0) {
+        return {
+          ...trace, text: [...trace.text].map(item => {
+            if (isNaN(parseFloat(item))) { return item }
+            else { return parseFloat(item).toFixed(e.value) }
+          })
+        }
+      }
+      else return trace
+    })
+
+    props.onChangeValue({
+      ...props.value,
+      data: newData
+    })
+  }
+
   const handleTickFormatX = (format) => {
     setTickFormat({
       ...tickFormat,
@@ -212,6 +249,21 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
             />
           </div>
         </div>
+        <div style={styles.scaleContainer} className="field field__widget">
+          <p style={{ width: '70px', fontSize: "12px", color: "#506784" }}>Text Info Precision</p>
+          <div style={styles.customDropdown}>
+            <Select
+              value={textFormat}
+              onChange={(e) => handleTextInfoFormat(e)}
+              styles={selectStyles}
+              components={{
+                IndicatorSeparator: () => null
+              }}
+              options={textInfoFormat}
+            />
+          </div>
+        </div>
+
       </PlotlyFold>
       <PlotlyFold name={_('Title')}>
         <TextEditor attr="title.text" />
