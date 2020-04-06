@@ -33,6 +33,9 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
 
   const [textFormat, setTextFormat] = useState({ label: _('Default'), value: '' })
 
+  const [precisionAxis, setPrecisionAxis] = useState("all")
+
+
 
   const numbersFormat = [
     { label: _('Default'), value: '' },
@@ -198,8 +201,20 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
       </PlotlyFold>
       <PlotlyFold name={_('Precision Format')}>
 
+        <div style={styles.precisionRadio} className="radio-block radio-block__group">
+          <div onClick={()=>setPrecisionAxis("all")} className={`radio-block__option ${precisionAxis==="all"?"radio-block__option--active" : "" }`}>
+            <span>All</span>
+          </div>
+          <div onClick={()=>setPrecisionAxis("x")} className={`radio-block__option ${precisionAxis==="x"?"radio-block__option--active" : "" }`}>
+            <span>X</span>
+          </div>
+          <div onClick={()=>setPrecisionAxis("y")} className={`radio-block__option ${precisionAxis==="y"?"radio-block__option--active" : "" }`}>
+            <span>Y</span>
+          </div>
+        </div>
+
         <Dropdown
-          label={_('Number format')}
+          label={_('Number')}
           attr="separators"
           options={[
             { label: _('1,234.56'), value: '.,' },
@@ -209,34 +224,22 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
           ]}
           clearable={false}
         />
+       {precisionAxis !== "y" && <Dropdown
+          attr="xaxis.hoverformat"
+          label={_('Hover X')}
+          options={numbersFormat}
+          clearable={false}
+        />}
+        {precisionAxis !== "x" && 
         <Dropdown
           attr="yaxis.hoverformat"
-          label={_('Hover Format y-axis')}
+          label={_('Hover Y')}
           options={numbersFormat}
           clearable={false}
-        />
-        <Dropdown
-          attr="xaxis.hoverformat"
-          label={_('Hover Format x-axis')}
-          options={numbersFormat}
-          clearable={false}
-        />
+        />}
+        {precisionAxis !== "y" && 
         <div style={styles.scaleContainer} className="field field__widget">
-          <p style={{ width: '70px', fontSize: "12px", color: "#506784" }}>Tick Format Y-axis</p>
-          <div style={styles.customDropdown}>
-            <Select
-              value={tickFormat.yaxis}
-              onChange={(e) => handleTickFormatY(e)}
-              styles={selectStyles}
-              components={{
-                IndicatorSeparator: () => null
-              }}
-              options={numbersFormat}
-            />
-          </div>
-        </div>
-        <div style={styles.scaleContainer} className="field field__widget">
-          <p style={{ width: '70px', fontSize: "12px", color: "#506784" }}>Tick Format X-axis</p>
+          <p style={{ width: '70px', fontSize: "12px", color: "#506784" }}>Tick X</p>
           <div style={styles.customDropdown}>
             <Select
               value={tickFormat.xaxis}
@@ -249,8 +252,25 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
             />
           </div>
         </div>
+          }
+        {precisionAxis !== "x" && 
         <div style={styles.scaleContainer} className="field field__widget">
-          <p style={{ width: '70px', fontSize: "12px", color: "#506784" }}>Text Info Precision</p>
+          <p style={{ width: '70px', fontSize: "12px", color: "#506784" }}>Tick Y</p>
+          <div style={styles.customDropdown}>
+            <Select
+              value={tickFormat.yaxis}
+              onChange={(e) => handleTickFormatY(e)}
+              styles={selectStyles}
+              components={{
+                IndicatorSeparator: () => null
+              }}
+              options={numbersFormat}
+            />
+          </div>
+        </div>}
+
+        <div style={styles.scaleContainer} className="field field__widget">
+          <p style={{ width: '70px', fontSize: "12px", color: "#506784" }}>Trace Text</p>
           <div style={styles.customDropdown}>
             <Select
               value={textFormat}
@@ -417,6 +437,9 @@ const styles = {
     webkitAppearance: "none",
     flex: '1'
   },
+  precisionRadio: {
+    padding: "10px"
+  }
 }
 
 const selectStyles = {
