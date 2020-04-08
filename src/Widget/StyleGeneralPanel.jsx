@@ -23,6 +23,7 @@ import { Colorscale } from 'react-colorscales'
 import Select from 'react-select';
 
 import { settings } from '~/config'
+import { useEffect } from 'react';
 
 const customColors = settings.plotlyCustomColors || []
 
@@ -41,8 +42,6 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
 
   const [precisionAxis, setPrecisionAxis] = useState("all")
 
-
-
   const numbersFormat = [
     { label: _('Default'), value: '' },
     { label: _('No Digit'), value: ',.1s' },
@@ -55,17 +54,35 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
     { label: _('7 Digits'), value: ',.8s' },
   ]
 
-  const textInfoFormat = [
-    { label: _('Default'), value: '' },
-    { label: _('No Digit'), value: '0' },
-    { label: _('1 Digit'), value: '1' },
-    { label: _('2 Digits'), value: '2' },
-    { label: _('3 Digits'), value: '3' },
-    { label: _('4 Digits'), value: '4' },
-    { label: _('5 Digits'), value: '5' },
-    { label: _('6 Digits'), value: '6' },
-    { label: _('7 Digits'), value: '7' },
-  ]
+  useEffect(() => {
+    const data = props.value.data
+    const cleanFormats = numbersFormat.slice(1, numbersFormat.length)
+    if (data.length !== 0) {
+      if (data[0].texttemplate) {
+        const existingTextFormat = cleanFormats.find(format => data[0].texttemplate.includes(format.value))
+        setTextFormat(existingTextFormat)
+      }
+    }
+    // const layoutx = props.value.layout.xaxis
+    // const layouty = props.value.layout.yaxis
+
+    // if (layoutx && layouty) {
+    //   if (layoutx.tickFormat === layouty.tickFormat) {
+    //     const existingTickFormat = cleanFormats.find(format => format.value === layoutx.tickFormat)
+    //     setTickFormat({
+    //       ...tickFormat,
+    //       all: format
+    //     })
+    //   }
+    // }
+
+  
+
+
+
+  }, [])
+
+
 
 
   const onChangeColor = (customColor) => {
@@ -79,19 +96,15 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
 
   }
 
-  const handleTextInfoFormat = (e) => {
+  const handleTextFormat = (e) => {
     setTextFormat(e)
 
     const newData = props.value.data.map(trace => {
-      if (trace.text && trace.text.length > 0) {
+      if (trace.text && !isNaN(parseFloat(trace.text[0]))) {
         return {
-          ...trace, text: [...trace.text].map(item => {
-            if (isNaN(parseFloat(item))) { return item }
-            else { return parseFloat(item).toFixed(e.value) }
-          })
+          ...trace, texttemplate: `%{text:${e.value}}`
         }
-      }
-      else return trace
+      } else return trace
     })
 
     props.onChangeValue({
@@ -349,12 +362,12 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
             <div style={styles.customDropdown}>
               <Select
                 value={textFormat}
-                onChange={(e) => handleTextInfoFormat(e)}
+                onChange={(e) => handleTextFormat(e)}
                 styles={selectStyles}
                 components={{
                   IndicatorSeparator: () => null
                 }}
-                options={textInfoFormat}
+                options={numbersFormat}
               />
             </div>
           </div>
