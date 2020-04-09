@@ -45,42 +45,69 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
   const numbersFormat = [
     { label: _('Default'), value: '' },
     { label: _('No Digit'), value: ',.1s' },
-    { label: _('1 Digit'), value: ',.2s' },
-    { label: _('2 Digits'), value: ',.3s' },
-    { label: _('3 Digits'), value: ',.4s' },
-    { label: _('4 Digits'), value: ',.5s' },
-    { label: _('5 Digits'), value: ',.6s' },
-    { label: _('6 Digits'), value: ',.7s' },
-    { label: _('7 Digits'), value: ',.8s' },
+    { label: _('1 Digit'), value: ',.3s' },
+    { label: _('2 Digits'), value: ',.4s' },
+    { label: _('3 Digits'), value: ',.5s' },
+    { label: _('4 Digits'), value: ',.6s' },
+    { label: _('5 Digits'), value: ',.7s' },
+    { label: _('6 Digits'), value: ',.8s' },
+    { label: _('7 Digits'), value: ',.9s' },
+  ]
+  const textFormats = [
+    { label: _('Default'), value: '%{text}' },
+    { label: _('No Digit'), value: '%{text:,.s}' },
+    { label: _('1 Digit'), value: '%{text:,.2s}' },
+    { label: _('2 Digits'), value: '%{text:,.3s}' },
+    { label: _('3 Digits'), value: '%{text:,.4s}' },
+    { label: _('4 Digits'), value: '%{text:,.5s}' },
+    { label: _('5 Digits'), value: '%{text:,.6s}' },
+    { label: _('6 Digits'), value: '%{text:,.7s}' },
+    { label: _('7 Digits'), value: '%{text:,.8s}' },
   ]
 
   useEffect(() => {
     const data = props.value.data
     const cleanFormats = numbersFormat.slice(1, numbersFormat.length)
+
+    //state persistence of precision dropdowns 
     if (data.length !== 0) {
       if (data[0].texttemplate) {
-        const existingTextFormat = cleanFormats.find(format => data[0].texttemplate.includes(format.value))
+        const existingTextFormat = textFormats.find(format => data[0].texttemplate.includes(format.value))
         setTextFormat(existingTextFormat)
       }
     }
-    // const layoutx = props.value.layout.xaxis
-    // const layouty = props.value.layout.yaxis
+    const layoutx = props.value.layout.xaxis
+    const layouty = props.value.layout.yaxis
 
-    // if (layoutx && layouty) {
-    //   if (layoutx.tickFormat === layouty.tickFormat) {
-    //     const existingTickFormat = cleanFormats.find(format => format.value === layoutx.tickFormat)
-    //     setTickFormat({
-    //       ...tickFormat,
-    //       all: format
-    //     })
-    //   }
-    // }
+    if (layoutx.hoverformat && layouty.hoverformat && layoutx.hoverformat === layouty.hoverformat) {
+      const existingHoverFormat = cleanFormats.find(format => format.value === layoutx.hoverformat)
+      setHoverFormatAll(existingHoverFormat)
+    } else setHoverFormatAll(numbersFormat[0])
 
-  
+    if (layoutx.tickformat && layouty.tickformat && layoutx.tickformat === layouty.tickformat) {
+      const existingTickFormat = cleanFormats.find(format => format.value === layoutx.tickformat)
+      setTickFormat({
+        ...tickFormat,
+        all: existingTickFormat
+      })
+    } else setTickFormat({ ...tickFormat, all: numbersFormat[0] })
 
+    if (layoutx.tickformat) {
+      const xtickFormat = cleanFormats.find(format => format.value === layoutx.tickformat)
+      setTickFormat({
+        ...tickFormat,
+        xaxis: xtickFormat
+      })
+    }
 
-
-  }, [])
+    if (layouty.tickformat) {
+      const ytickFormat = cleanFormats.find(format => format.value === layouty.tickformat)
+      setTickFormat({
+        ...tickFormat,
+        yaxis: ytickFormat
+      })
+    }
+  }, [props.value])
 
 
 
@@ -102,7 +129,7 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
     const newData = props.value.data.map(trace => {
       if (trace.text && !isNaN(parseFloat(trace.text[0]))) {
         return {
-          ...trace, texttemplate: `%{text:${e.value}}`
+          ...trace, texttemplate: e.value
         }
       } else return trace
     })
@@ -358,7 +385,7 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
           </div>}
         {precisionAxis === "all" &&
           <div style={styles.scaleContainer} className="field field__widget">
-            <p style={{ width: '70px', fontSize: "12px", color: "#506784" }}>Trace</p>
+            <p style={{ width: '70px', fontSize: "12px", color: "#506784" }}>Text</p>
             <div style={styles.customDropdown}>
               <Select
                 value={textFormat}
@@ -367,7 +394,7 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
                 components={{
                   IndicatorSeparator: () => null
                 }}
-                options={numbersFormat}
+                options={textFormats}
               />
             </div>
           </div>
