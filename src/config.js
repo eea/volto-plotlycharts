@@ -39,6 +39,7 @@ export function applyConfig(config) {
     edit: ChartBlockEdit,
     icon: chartIcon,
     group: 'custom_addons',
+    sidebarTab: 1,
   };
 
   config.blocks.blocksConfig.embed_chart = {
@@ -48,6 +49,7 @@ export function applyConfig(config) {
     edit: EmbedChartBlockEdit,
     icon: chartIcon,
     group: 'custom_addons',
+    sidebarTab: 1,
   };
 
   return {
