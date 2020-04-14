@@ -23,6 +23,7 @@ import { Colorscale } from 'react-colorscales'
 import Select from 'react-select';
 
 import { settings } from '~/config'
+import { useEffect } from 'react';
 
 const customColors = settings.plotlyCustomColors || []
 
@@ -41,31 +42,74 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
 
   const [precisionAxis, setPrecisionAxis] = useState("all")
 
-
-
   const numbersFormat = [
     { label: _('Default'), value: '' },
     { label: _('No Digit'), value: ',.1s' },
-    { label: _('1 Digit'), value: ',.2s' },
-    { label: _('2 Digits'), value: ',.3s' },
-    { label: _('3 Digits'), value: ',.4s' },
-    { label: _('4 Digits'), value: ',.5s' },
-    { label: _('5 Digits'), value: ',.6s' },
-    { label: _('6 Digits'), value: ',.7s' },
-    { label: _('7 Digits'), value: ',.8s' },
+    { label: _('1 Digit'), value: ',.3s' },
+    { label: _('2 Digits'), value: ',.4s' },
+    { label: _('3 Digits'), value: ',.5s' },
+    { label: _('4 Digits'), value: ',.6s' },
+    { label: _('5 Digits'), value: ',.7s' },
+    { label: _('6 Digits'), value: ',.8s' },
+    { label: _('7 Digits'), value: ',.9s' },
+  ]
+  const textFormats = [
+    { label: _('Default'), value: '%{text}' },
+    { label: _('No Digit'), value: '%{text:,.s}' },
+    { label: _('1 Digit'), value: '%{text:,.2s}' },
+    { label: _('2 Digits'), value: '%{text:,.3s}' },
+    { label: _('3 Digits'), value: '%{text:,.4s}' },
+    { label: _('4 Digits'), value: '%{text:,.5s}' },
+    { label: _('5 Digits'), value: '%{text:,.6s}' },
+    { label: _('6 Digits'), value: '%{text:,.7s}' },
+    { label: _('7 Digits'), value: '%{text:,.8s}' },
   ]
 
-  const textInfoFormat = [
-    { label: _('Default'), value: '' },
-    { label: _('No Digit'), value: '0' },
-    { label: _('1 Digit'), value: '1' },
-    { label: _('2 Digits'), value: '2' },
-    { label: _('3 Digits'), value: '3' },
-    { label: _('4 Digits'), value: '4' },
-    { label: _('5 Digits'), value: '5' },
-    { label: _('6 Digits'), value: '6' },
-    { label: _('7 Digits'), value: '7' },
-  ]
+  useEffect(() => {
+    const data = props.value.data
+    const cleanFormats = numbersFormat.slice(1, numbersFormat.length)
+
+    //state persistence of precision dropdowns 
+    if (data.length !== 0) {
+      if (data[0].texttemplate) {
+        const existingTextFormat = textFormats.find(format => data[0].texttemplate.includes(format.value))
+        setTextFormat(existingTextFormat)
+      }
+    }
+    const layoutx = props.value.layout.xaxis
+    const layouty = props.value.layout.yaxis
+
+    if (layoutx.hoverformat && layouty.hoverformat && layoutx.hoverformat === layouty.hoverformat) {
+      const existingHoverFormat = cleanFormats.find(format => format.value === layoutx.hoverformat)
+      setHoverFormatAll(existingHoverFormat)
+    } else setHoverFormatAll(numbersFormat[0])
+
+    if (layoutx.tickformat && layouty.tickformat && layoutx.tickformat === layouty.tickformat) {
+      const existingTickFormat = cleanFormats.find(format => format.value === layoutx.tickformat)
+      setTickFormat({
+        ...tickFormat,
+        all: existingTickFormat
+      })
+    } else setTickFormat({ ...tickFormat, all: numbersFormat[0] })
+
+    if (layoutx.tickformat) {
+      const xtickFormat = cleanFormats.find(format => format.value === layoutx.tickformat)
+      setTickFormat({
+        ...tickFormat,
+        xaxis: xtickFormat
+      })
+    }
+
+    if (layouty.tickformat) {
+      const ytickFormat = cleanFormats.find(format => format.value === layouty.tickformat)
+      setTickFormat({
+        ...tickFormat,
+        yaxis: ytickFormat
+      })
+    }
+  }, [props.value])
+
+
 
 
   const onChangeColor = (customColor) => {
@@ -79,19 +123,15 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
 
   }
 
-  const handleTextInfoFormat = (e) => {
+  const handleTextFormat = (e) => {
     setTextFormat(e)
 
     const newData = props.value.data.map(trace => {
-      if (trace.text && trace.text.length > 0) {
+      if (trace.text && !isNaN(parseFloat(trace.text[0]))) {
         return {
-          ...trace, text: [...trace.text].map(item => {
-            if (isNaN(parseFloat(item))) { return item }
-            else { return parseFloat(item).toFixed(e.value) }
-          })
+          ...trace, texttemplate: e.value
         }
-      }
-      else return trace
+      } else return trace
     })
 
     props.onChangeValue({
@@ -345,16 +385,16 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
           </div>}
         {precisionAxis === "all" &&
           <div style={styles.scaleContainer} className="field field__widget">
-            <p style={{ width: '70px', fontSize: "12px", color: "#506784" }}>Trace</p>
+            <p style={{ width: '70px', fontSize: "12px", color: "#506784" }}>Text</p>
             <div style={styles.customDropdown}>
               <Select
                 value={textFormat}
-                onChange={(e) => handleTextInfoFormat(e)}
+                onChange={(e) => handleTextFormat(e)}
                 styles={selectStyles}
                 components={{
                   IndicatorSeparator: () => null
                 }}
-                options={textInfoFormat}
+                options={textFormats}
               />
             </div>
           </div>
