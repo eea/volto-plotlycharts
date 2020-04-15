@@ -55,14 +55,14 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
   ]
   const textFormats = [
     { label: _('Default'), value: '%{text}' },
-    { label: _('No Digit'), value: '%{text:,.s}' },
-    { label: _('1 Digit'), value: '%{text:,.2s}' },
-    { label: _('2 Digits'), value: '%{text:,.3s}' },
-    { label: _('3 Digits'), value: '%{text:,.4s}' },
-    { label: _('4 Digits'), value: '%{text:,.5s}' },
-    { label: _('5 Digits'), value: '%{text:,.6s}' },
-    { label: _('6 Digits'), value: '%{text:,.7s}' },
-    { label: _('7 Digits'), value: '%{text:,.8s}' },
+    { label: _('No Digit'), value: '%{text:,f}' },
+    { label: _('1 Digit'), value: '%{text:,.1f}' },
+    { label: _('2 Digits'), value: '%{text:,.2f}' },
+    { label: _('3 Digits'), value: '%{text:,.3f}' },
+    { label: _('4 Digits'), value: '%{text:,.4f}' },
+    { label: _('5 Digits'), value: '%{text:,.5f}' },
+    { label: _('6 Digits'), value: '%{text:,.6f}' },
+    { label: _('7 Digits'), value: '%{text:,.7f}' },
   ]
 
   useEffect(() => {
@@ -282,124 +282,127 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
           <Numeric label={_('Uniform Text Size Minimum')} attr="uniformtext.minsize" units="px" />
         </PlotlySection>
       </PlotlyFold>
-      <PlotlyFold name={_('Precision Format')}>
 
-        <div style={styles.precisionRadio} className="radio-block radio-block__group">
-          <div onClick={() => setPrecisionAxis("all")} className={`radio-block__option ${precisionAxis === "all" ? "radio-block__option--active" : ""}`}>
-            <span>All</span>
-          </div>
-          <div onClick={() => setPrecisionAxis("x")} className={`radio-block__option ${precisionAxis === "x" ? "radio-block__option--active" : ""}`}>
-            <span>X</span>
-          </div>
-          <div onClick={() => setPrecisionAxis("y")} className={`radio-block__option ${precisionAxis === "y" ? "radio-block__option--active" : ""}`}>
-            <span>Y</span>
-          </div>
-        </div>
+      <div style={{ position: 'relative', zIndex: '2' }}>
+        <PlotlyFold name={_('Precision Format')}>
 
-        <Dropdown
-          label={_('Number')}
-          attr="separators"
-          options={[
-            { label: _('1,234.56'), value: '.,' },
-            { label: _('1 234.56'), value: ', ' },
-            { label: _('1 234,56'), value: ', ' },
-            { label: _('1.234,56'), value: ',.' },
-          ]}
-          clearable={false}
-        />
-        {precisionAxis === "all" &&
-          <div style={styles.scaleContainer} className="field field__widget">
-            <p style={{ width: '70px', fontSize: "12px", color: "#506784" }}>Hover</p>
-            <div style={styles.customDropdown}>
-              <Select
-                value={hoverFormatAll}
-                onChange={(e) => handleHoverFormatAll(e)}
-                styles={selectStyles}
-                components={{
-                  IndicatorSeparator: () => null
-                }}
-                options={numbersFormat}
-              />
+          <div style={styles.precisionRadio} className="radio-block radio-block__group">
+            <div onClick={() => setPrecisionAxis("all")} className={`radio-block__option ${precisionAxis === "all" ? "radio-block__option--active" : ""}`}>
+              <span>All</span>
+            </div>
+            <div onClick={() => setPrecisionAxis("x")} className={`radio-block__option ${precisionAxis === "x" ? "radio-block__option--active" : ""}`}>
+              <span>X</span>
+            </div>
+            <div onClick={() => setPrecisionAxis("y")} className={`radio-block__option ${precisionAxis === "y" ? "radio-block__option--active" : ""}`}>
+              <span>Y</span>
             </div>
           </div>
-        }
-        {precisionAxis === "x" && <Dropdown
-          attr="xaxis.hoverformat"
-          label={_('Hover X')}
-          options={numbersFormat}
-          clearable={false}
-        />}
-        {precisionAxis === "y" &&
+
           <Dropdown
-            attr="yaxis.hoverformat"
-            label={_('Hover Y')}
+            label={_('Number')}
+            attr="separators"
+            options={[
+              { label: _('1,234.56'), value: '.,' },
+              { label: _('1 234.56'), value: ', ' },
+              { label: _('1 234,56'), value: ', ' },
+              { label: _('1.234,56'), value: ',.' },
+            ]}
+            clearable={false}
+          />
+          {precisionAxis === "all" &&
+            <div style={styles.scaleContainer} className="field field__widget">
+              <p style={{ width: '70px', fontSize: "12px", color: "#506784" }}>Hover</p>
+              <div style={styles.customDropdown}>
+                <Select
+                  value={hoverFormatAll}
+                  onChange={(e) => handleHoverFormatAll(e)}
+                  styles={selectStyles}
+                  components={{
+                    IndicatorSeparator: () => null
+                  }}
+                  options={numbersFormat}
+                />
+              </div>
+            </div>
+          }
+          {precisionAxis === "x" && <Dropdown
+            attr="xaxis.hoverformat"
+            label={_('Hover X')}
             options={numbersFormat}
             clearable={false}
           />}
-        {precisionAxis === "all" &&
-          <div style={styles.scaleContainer} className="field field__widget">
-            <p style={{ width: '70px', fontSize: "12px", color: "#506784" }}>Tick</p>
-            <div style={styles.customDropdown}>
-              <Select
-                value={tickFormat.all}
-                onChange={(e) => handleTickFormatAll(e)}
-                styles={selectStyles}
-                components={{
-                  IndicatorSeparator: () => null
-                }}
-                options={numbersFormat}
-              />
+          {precisionAxis === "y" &&
+            <Dropdown
+              attr="yaxis.hoverformat"
+              label={_('Hover Y')}
+              options={numbersFormat}
+              clearable={false}
+            />}
+          {precisionAxis === "all" &&
+            <div style={styles.scaleContainer} className="field field__widget">
+              <p style={{ width: '70px', fontSize: "12px", color: "#506784" }}>Tick</p>
+              <div style={styles.customDropdown}>
+                <Select
+                  value={tickFormat.all}
+                  onChange={(e) => handleTickFormatAll(e)}
+                  styles={selectStyles}
+                  components={{
+                    IndicatorSeparator: () => null
+                  }}
+                  options={numbersFormat}
+                />
+              </div>
             </div>
-          </div>
-        }
-        {precisionAxis === "x" &&
-          <div style={styles.scaleContainer} className="field field__widget">
-            <p style={{ width: '70px', fontSize: "12px", color: "#506784" }}>Tick X</p>
-            <div style={styles.customDropdown}>
-              <Select
-                value={tickFormat.xaxis}
-                onChange={(e) => handleTickFormatX(e)}
-                styles={selectStyles}
-                components={{
-                  IndicatorSeparator: () => null
-                }}
-                options={numbersFormat}
-              />
+          }
+          {precisionAxis === "x" &&
+            <div style={styles.scaleContainer} className="field field__widget">
+              <p style={{ width: '70px', fontSize: "12px", color: "#506784" }}>Tick X</p>
+              <div style={styles.customDropdown}>
+                <Select
+                  value={tickFormat.xaxis}
+                  onChange={(e) => handleTickFormatX(e)}
+                  styles={selectStyles}
+                  components={{
+                    IndicatorSeparator: () => null
+                  }}
+                  options={numbersFormat}
+                />
+              </div>
             </div>
-          </div>
-        }
-        {precisionAxis === "y" &&
-          <div style={styles.scaleContainer} className="field field__widget">
-            <p style={{ width: '70px', fontSize: "12px", color: "#506784" }}>Tick Y</p>
-            <div style={styles.customDropdown}>
-              <Select
-                value={tickFormat.yaxis}
-                onChange={(e) => handleTickFormatY(e)}
-                styles={selectStyles}
-                components={{
-                  IndicatorSeparator: () => null
-                }}
-                options={numbersFormat}
-              />
+          }
+          {precisionAxis === "y" &&
+            <div style={styles.scaleContainer} className="field field__widget">
+              <p style={{ width: '70px', fontSize: "12px", color: "#506784" }}>Tick Y</p>
+              <div style={styles.customDropdown}>
+                <Select
+                  value={tickFormat.yaxis}
+                  onChange={(e) => handleTickFormatY(e)}
+                  styles={selectStyles}
+                  components={{
+                    IndicatorSeparator: () => null
+                  }}
+                  options={numbersFormat}
+                />
+              </div>
+            </div>}
+          {precisionAxis === "all" &&
+            <div style={styles.scaleContainer} className="field field__widget">
+              <p style={{ width: '70px', fontSize: "12px", color: "#506784" }}>Text</p>
+              <div style={styles.customDropdown}>
+                <Select
+                  value={textFormat}
+                  onChange={(e) => handleTextFormat(e)}
+                  styles={selectStyles}
+                  components={{
+                    IndicatorSeparator: () => null
+                  }}
+                  options={textFormats}
+                />
+              </div>
             </div>
-          </div>}
-        {precisionAxis === "all" &&
-          <div style={styles.scaleContainer} className="field field__widget">
-            <p style={{ width: '70px', fontSize: "12px", color: "#506784" }}>Text</p>
-            <div style={styles.customDropdown}>
-              <Select
-                value={textFormat}
-                onChange={(e) => handleTextFormat(e)}
-                styles={selectStyles}
-                components={{
-                  IndicatorSeparator: () => null
-                }}
-                options={textFormats}
-              />
-            </div>
-          </div>
-        }
-      </PlotlyFold>
+          }
+        </PlotlyFold>
+      </div>
       <PlotlyFold name={_('Title')}>
         <TextEditor attr="title.text" />
         <FontSelector label={_('Typeface')} attr="title.font.family" clearable={false} />
