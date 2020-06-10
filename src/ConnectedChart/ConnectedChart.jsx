@@ -99,12 +99,13 @@ function ConnectedChart(props) {
   // visData: live data fetched from the original visualization
   // data.chartData: saved chart data in the block, from the original edit
   // props.data??? not sure where it's used
-  const chartData = visData || props.data.chartData || props.data;
+  const chartData = props.data.chartData;
 
   const useLiveData =
     typeof props.useLiveData !== 'undefined' ? props.useLiveData : true;
 
-  let layout = chartData.layout || props.data.layout || {};
+  let layout = chartData.layout;
+
   let autosize;
   if (typeof props.autosize !== 'undefined') {
     autosize = props.autosize;
@@ -130,19 +131,17 @@ function ConnectedChart(props) {
       ...layout.xaxis,
       fixedrange: true,
       hoverformat: props.hoverFormatXY || '.3s',
-      range: [],
     };
   if (layout.yaxis)
     layout.yaxis = {
       ...layout.yaxis,
       hoverformat: props.hoverFormatXY || '.3s',
       fixedrange: true,
-      range: [],
     };
 
   // console.debug('chart props', props);
   // TODO: only use fallback data if chartData.data.url doesn't exist
-  // or the connected_data_parameters don't exist
+  // or the connected_data_parameters don't exis
 
   let data =
     props.providerData && useLiveData
