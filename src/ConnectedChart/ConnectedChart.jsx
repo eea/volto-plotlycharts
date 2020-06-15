@@ -51,7 +51,7 @@ function mixProviderData(chartData, providerData, parameters) {
           if (transform.targetsrc === filterName && filterValue) {
             transform.value = filterValue;
             transform.target = providerData[transform.targetsrc];
-            // console.log('trace', transform, filterValue);
+            // console.log('trace', tdransform, filterValue);
           }
         });
       }
@@ -99,7 +99,7 @@ function ConnectedChart(props) {
   // visData: live data fetched from the original visualization
   // data.chartData: saved chart data in the block, from the original edit
   // props.data??? not sure where it's used
-  const chartData = visData || props.data.chartData || props.data;
+  const chartData = props.data.chartData || visData;
 
   const useLiveData =
     typeof props.useLiveData !== 'undefined' ? props.useLiveData : true;
@@ -130,14 +130,12 @@ function ConnectedChart(props) {
       ...layout.xaxis,
       fixedrange: true,
       hoverformat: props.hoverFormatXY || '.3s',
-      range: [],
     };
   if (layout.yaxis)
     layout.yaxis = {
       ...layout.yaxis,
       hoverformat: props.hoverFormatXY || '.3s',
       fixedrange: true,
-      range: [],
     };
 
   // console.debug('chart props', props);
@@ -159,14 +157,6 @@ function ConnectedChart(props) {
       family: settings.chartDataFontFamily || "'Roboto', sans-serif",
     },
   }));
-
-  // Pass additional configs in chartData if you want:
-  // const chartConfig={{ config:{ displayModeBar: false } }}
-  //
-  // console.log('chart data', data);
-  // console.log('chart layout', layout);
-  //<VisibilitySensor partialVisibility={true} onChange={setVisible}>
-  //</VisibilitySensor>
 
   return (
     <ResponsiveContainer
