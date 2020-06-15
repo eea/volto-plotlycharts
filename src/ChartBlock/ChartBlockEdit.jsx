@@ -22,7 +22,10 @@ class Edit extends Component {
     console.log('this value', value);
     this.props.onChangeBlock(this.props.block, {
       ...this.props.data,
-      chartData: value,
+      ...this.props.data.chartData,
+      data: value.data,
+      layout: value.layout,
+      frames: value.frames,
     });
   }
   render() {

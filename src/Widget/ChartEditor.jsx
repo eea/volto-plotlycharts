@@ -106,7 +106,6 @@ class Edit extends Component {
       //   layout,
       //   frames,
       // });
-      
     }
   }
   render() {
@@ -154,7 +153,11 @@ class Edit extends Component {
                 debug
                 advancedTraceTypeSelector
               >
-                <CustomEditor.default onChangeValue={this.props.onChangeValue} value={this.props.value} logoSrc="">
+                <CustomEditor.default
+                  onChangeValue={this.props.onChangeValue}
+                  value={this.props.value}
+                  logoSrc=""
+                >
                   <Panel group="Dev" name="Inspector">
                     <button
                       className="devbtn"
