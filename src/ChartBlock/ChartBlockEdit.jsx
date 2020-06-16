@@ -23,14 +23,14 @@ class Edit extends Component {
     this.props.onChangeBlock(this.props.block, {
       ...this.props.data,
       ...this.props.data.chartData,
-      data: value.data,
-      layout: value.layout,
-      frames: value.frames,
       chartData: {
         data: value.data,
         layout: value.layout,
         frames: value.frames,
       },
+      data: value.data,
+      layout: value.layout,
+      frames: value.frames,
     });
   };
 

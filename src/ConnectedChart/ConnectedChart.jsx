@@ -89,6 +89,8 @@ function ConnectedChart(props) {
     visData,
     url,
     source_url,
+    getChartDataFromVisualization,
+    getDataFromProvider,
   ]);
 
   // const [visible, setVisible] = useState(false);
@@ -97,7 +99,7 @@ function ConnectedChart(props) {
   // visData: live data fetched from the original visualization
   // data.chartData: saved chart data in the block, from the original edit
   // props.data??? not sure where it's used
-  const chartData = props.data.chartData || visData || props.data;
+  const chartData = props.data.chartData || visData;
 
   const useLiveData =
     typeof props.useLiveData !== 'undefined' ? props.useLiveData : true;
