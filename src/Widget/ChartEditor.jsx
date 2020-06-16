@@ -99,14 +99,6 @@ class Edit extends Component {
     if (__CLIENT__) {
       const modules = await resolveImports(imports);
       this.setState({ ...modules });
-
-      // this.props.onChangeValue({
-      //   ...this.props.value,
-      //   data,
-      //   layout,
-      //   frames,
-      // });
-      
     }
   }
   render() {

@@ -85,12 +85,10 @@ function ConnectedChart(props) {
     if (source_url && !visData) getChartDataFromVisualization(source_url);
     if (provider_url) getDataFromProvider(provider_url || url);
   }, [
-    getChartDataFromVisualization,
     provider_url,
     visData,
     url,
     source_url,
-    getDataFromProvider,
   ]);
 
   // const [visible, setVisible] = useState(false);
@@ -99,7 +97,7 @@ function ConnectedChart(props) {
   // visData: live data fetched from the original visualization
   // data.chartData: saved chart data in the block, from the original edit
   // props.data??? not sure where it's used
-  const chartData = visData || props.data.chartData || props.data;
+  const chartData = props.data.chartData || visData || props.data;
 
   const useLiveData =
     typeof props.useLiveData !== 'undefined' ? props.useLiveData : true;
@@ -130,14 +128,12 @@ function ConnectedChart(props) {
       ...layout.xaxis,
       fixedrange: true,
       hoverformat: props.hoverFormatXY || '.3s',
-      range: [],
     };
   if (layout.yaxis)
     layout.yaxis = {
       ...layout.yaxis,
       hoverformat: props.hoverFormatXY || '.3s',
       fixedrange: true,
-      range: [],
     };
 
   // console.debug('chart props', props);
