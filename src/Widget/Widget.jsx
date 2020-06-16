@@ -27,6 +27,7 @@ class ModalChartEditor extends Component {
             value={this.state.value}
             providerData={this.state.providerData}
             onChangeValue={value => {
+              console.log('imyourreal editor');
               this.setState({ value });
             }}
           />
@@ -77,6 +78,18 @@ class ChartWidget extends Component {
     };
   }
 
+  handleModalChange(value) {
+    console.log('the value', value);
+    this.props.onChange(this.props.id, {
+      data: value.data,
+      frames: value.frames,
+      layout: value.layout,
+    });
+    this.setState({
+      showChartEditor: false,
+    });
+  }
+
   render() {
     const {
       id,
@@ -100,7 +113,6 @@ class ChartWidget extends Component {
     };
     // const data = this.props.value?.data;
     // console.log('ChartWidget layout, data', layout, data); // this.props
-
     return (
       <Form.Field
         inline
@@ -129,12 +141,9 @@ class ChartWidget extends Component {
               {this.state.showChartEditor ? (
                 <ModalChartEditor
                   value={value}
-                  onChange={value => {
-                    onChange(id, value);
-                    this.setState({
-                      showChartEditor: false,
-                    });
-                  }}
+                  onChange={changedValue =>
+                    this.handleModalChange(changedValue)
+                  }
                   onClose={() =>
                     this.setState({
                       showChartEditor: false,

@@ -133,7 +133,7 @@ class Edit extends Component {
                 onUpdate={(data, layout, frames) => {
                   console.log('updated data', data);
                   console.log('updated layout', layout);
-                  return this.props.onChangeValue({
+                  this.props.onChangeValue({
                     ...this.props.value,
                     data,
                     layout,
@@ -146,7 +146,11 @@ class Edit extends Component {
                 debug
                 advancedTraceTypeSelector
               >
-                <CustomEditor.default onChangeValue={this.props.onChangeValue} value={this.props.value} logoSrc="">
+                <CustomEditor.default
+                  onChangeValue={this.props.onChangeValue}
+                  value={this.props.value}
+                  logoSrc=""
+                >
                   <Panel group="Dev" name="Inspector">
                     <button
                       className="devbtn"

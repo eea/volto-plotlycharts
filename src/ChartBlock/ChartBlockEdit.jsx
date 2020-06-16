@@ -20,17 +20,20 @@ class Edit extends Component {
 
   onChangeEditorValue = value => {
     console.log('chartdata', this.props.data);
+
+    const chartData = {
+      data: value.data,
+      layout: value.layout,
+      frames: value.frames,
+    };
     this.props.onChangeBlock(this.props.block, {
       ...this.props.data,
-      ...this.props.data.chartData,
+      ...chartData,
       chartData: {
         data: value.data,
         layout: value.layout,
         frames: value.frames,
       },
-      data: value.data,
-      layout: value.layout,
-      frames: value.frames,
     });
   };
 
@@ -49,7 +52,10 @@ class Edit extends Component {
         <ChartEditor
           value={chartData}
           provider_url={this.props.data?.url}
-          onChangeValue={value => this.onChangeEditorValue(value)}
+          onChangeValue={value => {
+            console.log('ime also here', value);
+            this.onChangeEditorValue(value);
+          }}
         />
         <SidebarPortal selected={this.props.selected}>
           <BlockEditForm
