@@ -79,11 +79,19 @@ class ChartWidget extends Component {
   }
 
   handleModalChange(value) {
-    console.log('the value', value);
-    this.props.onChange(this.props.id, {
+    const chartData = {
       data: value.data,
       frames: value.frames,
       layout: value.layout,
+      provider_url: value.provider_url,
+    };
+    this.props.onChange(this.props.id, {
+      ...this.props.value,
+      chartData,
+      data: value.data,
+      frames: value.frames,
+      layout: value.layout,
+      provider_url: value.provider_url,
     });
     this.setState({
       showChartEditor: false,

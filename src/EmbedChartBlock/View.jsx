@@ -16,6 +16,9 @@ const EmbedChartView = ({
 }) => {
   if (!data) return '';
 
+  console.log('fromoverriden layout', data.fromOverriddenLayout);
+
+  console.log('data in embed', data);
   const hasText =
     (data.text?.blocks?.length > 1 && data.text?.blocks) ||
     (data.text?.blocks?.length === 1 && data.text?.blocks?.[0].text);
