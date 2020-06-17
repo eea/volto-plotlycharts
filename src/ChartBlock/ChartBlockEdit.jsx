@@ -19,8 +19,6 @@ class Edit extends Component {
   }
 
   onChangeEditorValue = value => {
-    console.log('chartdata', this.props.data);
-
     const chartData = {
       data: value.data,
       layout: value.layout,
@@ -53,7 +51,6 @@ class Edit extends Component {
           value={chartData}
           provider_url={this.props.data?.url}
           onChangeValue={value => {
-            console.log('ime also here', value);
             this.onChangeEditorValue(value);
           }}
         />

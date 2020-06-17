@@ -19,9 +19,6 @@ import { getChartDataFromVisualization } from 'volto-plotlycharts/actions';
 
 function mixProviderData(chartData, providerData, parameters) {
   const providerDataColumns = Object.keys(providerData);
-  // console.log('chartData', chartData);
-  // console.log('providerData', providerData);
-  // console.log('parameters', parameters);
 
   const res = chartData.map(trace => {
     Object.keys(trace).forEach(tk => {
@@ -76,7 +73,6 @@ function ConnectedChart(props) {
   const getDataFromProvider = props.getDataFromProvider;
 
   const source_url = props.source;
-  const getChartDataFromVisualization = props.getChartDataFromVisualization;
 
   const visData = props.chartDataFromVis;
 
@@ -89,8 +85,7 @@ function ConnectedChart(props) {
     visData,
     url,
     source_url,
-    getChartDataFromVisualization,
-    getDataFromProvider,
+    props.data,
   ]);
 
   // const [visible, setVisible] = useState(false);
@@ -99,12 +94,24 @@ function ConnectedChart(props) {
   // visData: live data fetched from the original visualization
   // data.chartData: saved chart data in the block, from the original edit
   // props.data??? not sure where it's used
-  const chartData = props.data.chartData || visData;
+
+  const chartData =
+    props.data && props.data.chartData ? props.data.chartData : visData;
+
+  console.log('this will be in chart data', props.data.chartData);
+  console.log('this will be in vis data', visData);
 
   const useLiveData =
     typeof props.useLiveData !== 'undefined' ? props.useLiveData : true;
 
-  let layout = chartData.layout || props.data.layout || {};
+  const propsLayout = props.data && props.data.layout ? props.data.layout : {};
+
+  let layout = chartData.layout ? chartData.layout : propsLayout;
+
+  console.log('layout chart', chartData.layout);
+  console.log('layout props', props.data.layout);
+  console.log('layout final', layout);
+
   let autosize;
   if (typeof props.autosize !== 'undefined') {
     autosize = props.autosize;

@@ -27,7 +27,6 @@ class ModalChartEditor extends Component {
             value={this.state.value}
             providerData={this.state.providerData}
             onChangeValue={value => {
-              console.log('imyourreal editor');
               this.setState({ value });
             }}
           />
