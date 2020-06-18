@@ -3,7 +3,6 @@
  */
 
 import { addAppURL } from '@plone/volto/helpers';
-import { getDataFromProvider } from 'volto-datablocks/actions';
 import {
   getConnectedDataParametersForContext,
   getConnectedDataParametersForProvider,
@@ -12,6 +11,7 @@ import { connect } from 'react-redux';
 import { settings } from '~/config';
 import React, { useEffect } from 'react'; // , useState
 import ResponsiveContainer from '../ResponsiveContainer';
+import { getDataFromProvider } from 'volto-datablocks/actions';
 import { getChartDataFromVisualization } from 'volto-plotlycharts/actions';
 
 // import VisibilitySensor from 'react-visibility-sensor';
@@ -71,6 +71,7 @@ function ConnectedChart(props) {
     props.data.provider_url || props.chartDataFromVis?.provider_url;
   const url = props.data.url;
   const getDataFromProvider = props.getDataFromProvider;
+  const getChartDataFromVisualization = props.getChartDataFromVisualization;
 
   const source_url = props.source;
 
@@ -78,7 +79,9 @@ function ConnectedChart(props) {
 
   // NOTE: this is a candidate for a HOC, withProviderData
   useEffect(() => {
-    if (source_url && !visData) getChartDataFromVisualization(source_url);
+    if (source_url && !visData) {
+      getChartDataFromVisualization(source_url);
+    }
     if (provider_url) getDataFromProvider(provider_url || url);
   }, [
     provider_url,
@@ -86,6 +89,8 @@ function ConnectedChart(props) {
     url,
     source_url,
     props.data,
+    getDataFromProvider,
+    getChartDataFromVisualization,
   ]);
 
   // const [visible, setVisible] = useState(false);
@@ -95,11 +100,9 @@ function ConnectedChart(props) {
   // data.chartData: saved chart data in the block, from the original edit
   // props.data??? not sure where it's used
 
-  const chartData =
-    props.data && props.data.chartData ? props.data.chartData : visData;
+  //use visData first to dinamicaly update all visualizations
 
-  console.log('this will be in chart data', props.data.chartData);
-  console.log('this will be in vis data', visData);
+  const chartData = visData ? visData : props.data.chartData;
 
   const useLiveData =
     typeof props.useLiveData !== 'undefined' ? props.useLiveData : true;
@@ -107,10 +110,6 @@ function ConnectedChart(props) {
   const propsLayout = props.data && props.data.layout ? props.data.layout : {};
 
   let layout = chartData.layout ? chartData.layout : propsLayout;
-
-  console.log('layout chart', chartData.layout);
-  console.log('layout props', props.data.layout);
-  console.log('layout final', layout);
 
   let autosize;
   if (typeof props.autosize !== 'undefined') {
@@ -165,14 +164,6 @@ function ConnectedChart(props) {
     },
   }));
 
-  // Pass additional configs in chartData if you want:
-  // const chartConfig={{ config:{ displayModeBar: false } }}
-  //
-  // console.log('chart data', data);
-  // console.log('chart layout', layout);
-  //<VisibilitySensor partialVisibility={true} onChange={setVisible}>
-  //</VisibilitySensor>
-
   return (
     <ResponsiveContainer
       data={data}
@@ -192,8 +183,6 @@ function getProviderData(state, props, providerForVis) {
   let path =
     providerForVis || props?.data?.provider_url || props?.data?.url || null;
 
-  // console.log('getProviderData props', props);
-  // console.log('getProviderData path', path);
   if (!path) return;
 
   path = `${path}/@connector-data`;
@@ -210,9 +199,7 @@ function getVisualizationData(state, props) {
     // this is not a visualization derived chart
     return props.data?.chartData;
   }
-  // const res = vis_url
-  //   ? state.content.subrequests?.[vis_url]?.data?.visualization
-  //   : null;
+
   return state.chart_data_visualization?.[vis_url]?.item;
 }
 

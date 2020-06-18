@@ -16,6 +16,7 @@ export default function viz_chart_data(state = initialState, action = {}) {
         },
       };
     case `${GET_CHART_DATA_FROM_VISUALIZATION}_SUCCESS`:
+      console.log('action here success', action);
       return {
         ...state,
         [action.path]: {
@@ -26,7 +27,6 @@ export default function viz_chart_data(state = initialState, action = {}) {
         },
       };
     case `${GET_CHART_DATA_FROM_VISUALIZATION}_FAIL`:
-      console.log('action', action);
       return {
         ...state,
         [action.path]: {
