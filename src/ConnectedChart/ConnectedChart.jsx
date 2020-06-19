@@ -165,17 +165,19 @@ function ConnectedChart(props) {
   }));
 
   return (
-    <ResponsiveContainer
-      data={data}
-      layout={layout}
-      frames={chartData.frames || props.data.frames}
-      chartConfig={props.data.chartData}
-      id={props.id}
-      visible={true}
-      min_width={props.data?.min_width || props.min_width}
-    >
-      {/* <LoadablePlot /> */}
-    </ResponsiveContainer>
+    <React.Fragment>
+      {chartData && data && layout && (
+        <ResponsiveContainer
+          data={data}
+          layout={layout}
+          frames={chartData.frames || props.data.frames}
+          chartConfig={props.data.chartData}
+          id={props.id}
+          visible={true}
+          min_width={props.data?.min_width || props.min_width}
+        />
+      )}
+    </React.Fragment>
   );
 }
 
