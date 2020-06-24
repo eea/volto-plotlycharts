@@ -12,10 +12,6 @@ import Inspector from 'react-inspector';
 
 import './fixes.css';
 
-// import 'react-chart-editor/../lib/react-chart-editor.css';
-// import 'react-chart-editor/styles/main.scss';
-// import Select from 'react-select';
-
 const imports = {
   PlotlyEditor:
     __CLIENT__ &&
@@ -54,15 +50,11 @@ function getDataSourceOptions(data) {
 const chartHelp = {
   area: {
     helpDoc: 'https://help.plot.ly/make-an-area-graph/',
-    examplePlot: () => {
-      console.log('example bar plot!');
-    },
+    examplePlot: () => {},
   },
   bar: {
     helpDoc: 'https://help.plot.ly/stacked-bar-chart/',
-    examplePlot: () => {
-      console.log('example bar plot!');
-    },
+    examplePlot: () => {},
   },
   box: { helpDoc: 'https://help.plot.ly/make-a-box-plot/' },
   candlestick: { helpDoc: 'https://help.plot.ly/make-a-candlestick/' },
@@ -99,14 +91,6 @@ class Edit extends Component {
     if (__CLIENT__) {
       const modules = await resolveImports(imports);
       this.setState({ ...modules });
-
-      // this.props.onChangeValue({
-      //   ...this.props.value,
-      //   data,
-      //   layout,
-      //   frames,
-      // });
-      
     }
   }
   render() {
@@ -139,9 +123,7 @@ class Edit extends Component {
                 plotly={this.state.plotly.default}
                 divId="gd"
                 onUpdate={(data, layout, frames) => {
-                  console.log('updated data', data);
-                  console.log('updated layout', layout);
-                  return this.props.onChangeValue({
+                  this.props.onChangeValue({
                     ...this.props.value,
                     data,
                     layout,
@@ -154,7 +136,11 @@ class Edit extends Component {
                 debug
                 advancedTraceTypeSelector
               >
-                <CustomEditor.default onChangeValue={this.props.onChangeValue} value={this.props.value} logoSrc="">
+                <CustomEditor.default
+                  onChangeValue={this.props.onChangeValue}
+                  value={this.props.value}
+                  logoSrc=""
+                >
                   <Panel group="Dev" name="Inspector">
                     <button
                       className="devbtn"

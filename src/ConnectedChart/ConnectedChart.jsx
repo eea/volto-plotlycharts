@@ -3,7 +3,6 @@
  */
 
 import { addAppURL } from '@plone/volto/helpers';
-import { getDataFromProvider } from 'volto-datablocks/actions';
 import {
   getConnectedDataParametersForContext,
   getConnectedDataParametersForProvider,
@@ -12,16 +11,12 @@ import { connect } from 'react-redux';
 import { settings } from '~/config';
 import React, { useEffect } from 'react'; // , useState
 import ResponsiveContainer from '../ResponsiveContainer';
+import { getDataFromProvider } from 'volto-datablocks/actions';
 import { getChartDataFromVisualization } from 'volto-plotlycharts/actions';
 
-// import VisibilitySensor from 'react-visibility-sensor';
-// import { getContent } from '@plone/volto/actions';
 
 function mixProviderData(chartData, providerData, parameters) {
   const providerDataColumns = Object.keys(providerData);
-  // console.log('chartData', chartData);
-  // console.log('providerData', providerData);
-  // console.log('parameters', parameters);
 
   const res = chartData.map(trace => {
     Object.keys(trace).forEach(tk => {
@@ -33,8 +28,6 @@ function mixProviderData(chartData, providerData, parameters) {
         providerDataColumns.includes(trace[tk])
       ) {
         let values = providerData[trace[tk]];
-
-        // if (originalColumn === 'labels') values = values.map(l => l + 'LLL');
 
         trace[originalColumn] = values;
 
@@ -51,7 +44,6 @@ function mixProviderData(chartData, providerData, parameters) {
           if (transform.targetsrc === filterName && filterValue) {
             transform.value = filterValue;
             transform.target = providerData[transform.targetsrc];
-            // console.log('trace', transform, filterValue);
           }
         });
       }
@@ -74,23 +66,26 @@ function ConnectedChart(props) {
     props.data.provider_url || props.chartDataFromVis?.provider_url;
   const url = props.data.url;
   const getDataFromProvider = props.getDataFromProvider;
+  const getChartDataFromVisualization = props.getChartDataFromVisualization;
 
   const source_url = props.source;
-  const getChartDataFromVisualization = props.getChartDataFromVisualization;
 
   const visData = props.chartDataFromVis;
 
   // NOTE: this is a candidate for a HOC, withProviderData
   useEffect(() => {
-    if (source_url && !visData) getChartDataFromVisualization(source_url);
+    if (source_url && !visData) {
+      getChartDataFromVisualization(source_url);
+    }
     if (provider_url) getDataFromProvider(provider_url || url);
   }, [
-    getChartDataFromVisualization,
     provider_url,
     visData,
     url,
     source_url,
+    props.data,
     getDataFromProvider,
+    getChartDataFromVisualization,
   ]);
 
   // const [visible, setVisible] = useState(false);
@@ -99,12 +94,18 @@ function ConnectedChart(props) {
   // visData: live data fetched from the original visualization
   // data.chartData: saved chart data in the block, from the original edit
   // props.data??? not sure where it's used
-  const chartData = visData || props.data.chartData || props.data;
+
+  //use visData first to dinamicaly update all visualizations
+
+  const chartData = visData ? visData : props.data.chartData;
 
   const useLiveData =
     typeof props.useLiveData !== 'undefined' ? props.useLiveData : true;
 
-  let layout = chartData.layout || props.data.layout || {};
+  const propsLayout = props.data && props.data.layout ? props.data.layout : {};
+
+  let layout = chartData.layout ? chartData.layout : propsLayout;
+
   let autosize;
   if (typeof props.autosize !== 'undefined') {
     autosize = props.autosize;
@@ -118,7 +119,6 @@ function ConnectedChart(props) {
     ...layout,
     autosize: true,
     dragmode: false,
-    // hovertemplate: '%{x:.0%}',
     font: {
       ...layout.font,
       family: settings.chartLayoutFontFamily || "'Roboto', sans-serif",
@@ -130,17 +130,14 @@ function ConnectedChart(props) {
       ...layout.xaxis,
       fixedrange: true,
       hoverformat: props.hoverFormatXY || '.3s',
-      range: [],
     };
   if (layout.yaxis)
     layout.yaxis = {
       ...layout.yaxis,
       hoverformat: props.hoverFormatXY || '.3s',
       fixedrange: true,
-      range: [],
     };
 
-  // console.debug('chart props', props);
   // TODO: only use fallback data if chartData.data.url doesn't exist
   // or the connected_data_parameters don't exist
 
@@ -160,26 +157,20 @@ function ConnectedChart(props) {
     },
   }));
 
-  // Pass additional configs in chartData if you want:
-  // const chartConfig={{ config:{ displayModeBar: false } }}
-  //
-  // console.log('chart data', data);
-  // console.log('chart layout', layout);
-  //<VisibilitySensor partialVisibility={true} onChange={setVisible}>
-  //</VisibilitySensor>
-
   return (
-    <ResponsiveContainer
-      data={data}
-      layout={layout}
-      frames={chartData.frames || props.data.frames}
-      chartConfig={props.data.chartData}
-      id={props.id}
-      visible={true}
-      min_width={props.data?.min_width || props.min_width}
-    >
-      {/* <LoadablePlot /> */}
-    </ResponsiveContainer>
+    <React.Fragment>
+      {chartData && data && layout && (
+        <ResponsiveContainer
+          data={data}
+          layout={layout}
+          frames={chartData.frames || props.data.frames}
+          chartConfig={props.data.chartData}
+          id={props.id}
+          visible={true}
+          min_width={props.data?.min_width || props.min_width}
+        />
+      )}
+    </React.Fragment>
   );
 }
 
@@ -187,8 +178,6 @@ function getProviderData(state, props, providerForVis) {
   let path =
     providerForVis || props?.data?.provider_url || props?.data?.url || null;
 
-  // console.log('getProviderData props', props);
-  // console.log('getProviderData path', path);
   if (!path) return;
 
   path = `${path}/@connector-data`;
@@ -205,9 +194,7 @@ function getVisualizationData(state, props) {
     // this is not a visualization derived chart
     return props.data?.chartData;
   }
-  // const res = vis_url
-  //   ? state.content.subrequests?.[vis_url]?.data?.visualization
-  //   : null;
+
   return state.chart_data_visualization?.[vis_url]?.item;
 }
 

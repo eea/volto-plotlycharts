@@ -19,7 +19,6 @@ class PickVisualization extends Component {
 
   componentDidUpdate(prevProps) {
     if (this.props.value !== prevProps.value && this.props.value) {
-      console.warn('TODO: Getting data form vis, this is probably not needed');
       this.props.getChartDataFromVisualization(this.props.value);
     }
 

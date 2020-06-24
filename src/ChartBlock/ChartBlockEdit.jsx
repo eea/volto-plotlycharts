@@ -18,6 +18,23 @@ class Edit extends Component {
     this.props.changeSidebarState(true);
   }
 
+  onChangeEditorValue = value => {
+    const chartData = {
+      data: value.data,
+      layout: value.layout,
+      frames: value.frames,
+    };
+    this.props.onChangeBlock(this.props.block, {
+      ...this.props.data,
+      ...chartData,
+      chartData: {
+        data: value.data,
+        layout: value.layout,
+        frames: value.frames,
+      },
+    });
+  };
+
   render() {
     const chartData = this.props.data.chartData || {
       layout: {},
@@ -25,20 +42,15 @@ class Edit extends Component {
       data: [],
     };
 
-    // console.log('chartBlockEdit.jsx', this.props);
-
     return (
       <div className="block selected">
         <div className="block-inner-wrapper" />
         <ChartEditor
           value={chartData}
           provider_url={this.props.data?.url}
-          onChangeValue={value =>
-            this.props.onChangeBlock(this.props.block, {
-              ...this.props.data,
-              chartData: value,
-            })
-          }
+          onChangeValue={value => {
+            this.onChangeEditorValue(value);
+          }}
         />
         <SidebarPortal selected={this.props.selected}>
           <BlockEditForm
@@ -63,8 +75,3 @@ export default connect(
   { changeSidebarState },
 )(Edit);
 
-// // I think this should always be true
-// if (this.props.url && this.props.url !== prevProps.url) {
-//   this.props.changeSidebarState(true);
-//   // this.props.getDataFromProvider(this.props.url);
-// }

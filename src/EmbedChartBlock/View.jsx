@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import ConnectedChart from '../ConnectedChart';
 import ViewText from '@plone/volto/components/manage/Blocks/Text/View';
@@ -61,7 +61,7 @@ const EmbedChartView = ({
               >
                 <ConnectedChart
                   source={data.vis_url}
-                  data={data.chartData}
+                  data={{ chartData: data.chartData }}
                   className="embedded-block-chart"
                   hoverFormatXY={data.hover_format_xy}
                   min_width={data.min_width}
