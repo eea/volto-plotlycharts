@@ -29,9 +29,9 @@ const customColors = settings.plotlyCustomColors || [];
 
 const StyleGeneralPanel = (props, { localize: _ }) => {
   const [tickFormat, setTickFormat] = useState({
-    xaxis: { label: _('Default'), value: '' },
-    yaxis: { label: _('Default'), value: '' },
-    all: { label: _('Default'), value: '' },
+    "xaxis": { label: _('Default'), value: '' },
+    "yaxis": { label: _('Default'), value: '' },
+    "all": { label: _('Default'), value: '' },
   });
 
   const [hoverFormatAll, setHoverFormatAll] = useState({
@@ -129,7 +129,7 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
         yaxis: ytickFormat,
       });
     }
-  }, [numbersFormat, props.value, textFormats, tickFormat]);
+  }, [props.value]);
 
   const onChangeColor = customColor => {
     props.onChangeValue({
