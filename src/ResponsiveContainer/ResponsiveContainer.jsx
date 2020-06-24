@@ -18,24 +18,6 @@ const LoadablePlot = Loadable({
   },
 });
 
-// interface Props {
-//   aspect?: number;
-//   width?: string | number;
-//   height?: string | number;
-//   minWidth?: string | number;
-//   minHeight?: string | number;
-//   maxHeight?: number;
-//   children: ReactElement;
-//   debounce?: number;
-//   id?: string | number;
-//   className?: string | number;
-// }
-//
-// interface State {
-//   containerWidth: number;
-//   containerHeight: number;
-// }
-
 const isPercent = value =>
   isString(value) && value.indexOf('%') === value.length - 1;
 
@@ -51,10 +33,6 @@ class ResponsiveContainer extends Component {
     debounce: 0,
     visible: false,
   };
-
-  // private handleResize: () => void;
-  // private mounted: boolean;
-  // private container: HTMLDivElement;
 
   constructor(props) {
     super(props);
@@ -119,10 +97,6 @@ class ResponsiveContainer extends Component {
   renderChart(props) {
     const { containerWidth, containerHeight } = this.state;
 
-    // if (containerWidth < 0 || containerHeight < 0) {
-    //   return null;
-    // }
-
     const {
       aspect,
       width,
@@ -136,20 +110,6 @@ class ResponsiveContainer extends Component {
       frames,
       chartConfig,
     } = this.props;
-
-    // console.warn(
-    //   isPercent(width) || isPercent(height),
-    //   `The width(%s) and height(%s) are both fixed numbers,
-    //    maybe you don't need to use a ResponsiveContainer.`,
-    //   width,
-    //   height,
-    // );
-
-    // console.warn(
-    //   !aspect || aspect > 0,
-    //   'The aspect(%s) must be greater than zero.',
-    //   aspect,
-    // );
 
     let calculatedWidth = isPercent(width) ? containerWidth : asNumber(width);
     let calculatedHeight = isPercent(height)
@@ -172,35 +132,6 @@ class ResponsiveContainer extends Component {
       }
     }
 
-    // console.warn(
-    //   calculatedWidth > 0 || calculatedHeight > 0,
-    //   `The width(%s) and height(%s) of chart should be greater than 0,
-    //    please check the style of container, or the props width(%s) and height(%s),
-    //    or add a minWidth(%s) or minHeight(%s) or use aspect(%s) to control the
-    //    height and width.`,
-    //   calculatedWidth,
-    //   calculatedHeight,
-    //   width,
-    //   height,
-    //   minWidth,
-    //   minHeight,
-    //   aspect,
-    // );
-
-    // console.log('calculated width', calculatedWidth);
-
-    // return React.cloneElement(children, {
-    //   width: calculatedWidth,
-    //   height: calculatedHeight,
-    // });
-    // plotData.layout.width = calculatedWidth;
-    // plotData.layout.height = calculatedHeight;
-    //   <Placeholder>
-    //   <Placeholder.Image rectangular />
-    // </Placeholder>
-    // return <div>alalalalalala =>>>>>>>>>.{JSON.stringify(data)}</div>
-    // console.log('plot data', data);
-    // console.log('layout', layout);
     return __CLIENT__ ? (
       <LoadablePlot
         {...chartConfig}

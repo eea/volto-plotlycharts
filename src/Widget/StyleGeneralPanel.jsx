@@ -19,28 +19,32 @@ import {
 } from 'react-chart-editor/lib/components';
 import { HoverColor } from 'react-chart-editor/lib/components/fields/derived';
 import DataSelector from 'react-chart-editor/lib/components/fields/DataSelector';
-import { Colorscale } from 'react-colorscales'
+import { Colorscale } from 'react-colorscales';
 import Select from 'react-select';
 
-import { settings } from '~/config'
+import { settings } from '~/config';
 import { useEffect } from 'react';
 
-const customColors = settings.plotlyCustomColors || []
-
+const customColors = settings.plotlyCustomColors || [];
 
 const StyleGeneralPanel = (props, { localize: _ }) => {
-
   const [tickFormat, setTickFormat] = useState({
-    "xaxis": { label: _('Default'), value: '' },
-    'yaxis': { label: _('Default'), value: '' },
-    'all': { label: _('Default'), value: '' },
-  })
+    xaxis: { label: _('Default'), value: '' },
+    yaxis: { label: _('Default'), value: '' },
+    all: { label: _('Default'), value: '' },
+  });
 
-  const [hoverFormatAll, setHoverFormatAll] = useState({ label: _('Default'), value: '' })
+  const [hoverFormatAll, setHoverFormatAll] = useState({
+    label: _('Default'),
+    value: '',
+  });
 
-  const [textFormat, setTextFormat] = useState({ label: _('Default'), value: '' })
+  const [textFormat, setTextFormat] = useState({
+    label: _('Default'),
+    value: '',
+  });
 
-  const [precisionAxis, setPrecisionAxis] = useState("all")
+  const [precisionAxis, setPrecisionAxis] = useState('all');
 
   const numbersFormat = [
     { label: _('Default'), value: '' },
@@ -52,7 +56,7 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
     { label: _('5 Digits'), value: ',.7s' },
     { label: _('6 Digits'), value: ',.8s' },
     { label: _('7 Digits'), value: ',.9s' },
-  ]
+  ];
   const textFormats = [
     { label: _('Default'), value: '%{text}' },
     { label: _('No Digit'), value: '%{text:,f}' },
@@ -63,88 +67,103 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
     { label: _('5 Digits'), value: '%{text:,.5f}' },
     { label: _('6 Digits'), value: '%{text:,.6f}' },
     { label: _('7 Digits'), value: '%{text:,.7f}' },
-  ]
+  ];
 
   useEffect(() => {
-    const data = props.value.data
-    const cleanFormats = numbersFormat.slice(1, numbersFormat.length)
+    const data = props.value.data;
+    const cleanFormats = numbersFormat.slice(1, numbersFormat.length);
 
-    //state persistence of precision dropdowns 
+    //state persistence of precision dropdowns
     if (data.length !== 0) {
       if (data[0].texttemplate) {
-        const existingTextFormat = textFormats.find(format => data[0].texttemplate.includes(format.value))
-        setTextFormat(existingTextFormat)
+        const existingTextFormat = textFormats.find(format =>
+          data[0].texttemplate.includes(format.value),
+        );
+        setTextFormat(existingTextFormat);
       }
     }
-    const layoutx = props.value.layout.xaxis
-    const layouty = props.value.layout.yaxis
+    const layoutx = props.value.layout.xaxis;
+    const layouty = props.value.layout.yaxis;
 
-    if (layoutx.hoverformat && layouty.hoverformat && layoutx.hoverformat === layouty.hoverformat) {
-      const existingHoverFormat = cleanFormats.find(format => format.value === layoutx.hoverformat)
-      setHoverFormatAll(existingHoverFormat)
-    } else setHoverFormatAll(numbersFormat[0])
+    if (
+      layoutx.hoverformat &&
+      layouty.hoverformat &&
+      layoutx.hoverformat === layouty.hoverformat
+    ) {
+      const existingHoverFormat = cleanFormats.find(
+        format => format.value === layoutx.hoverformat,
+      );
+      setHoverFormatAll(existingHoverFormat);
+    } else setHoverFormatAll(numbersFormat[0]);
 
-    if (layoutx.tickformat && layouty.tickformat && layoutx.tickformat === layouty.tickformat) {
-      const existingTickFormat = cleanFormats.find(format => format.value === layoutx.tickformat)
+    if (
+      layoutx.tickformat &&
+      layouty.tickformat &&
+      layoutx.tickformat === layouty.tickformat
+    ) {
+      const existingTickFormat = cleanFormats.find(
+        format => format.value === layoutx.tickformat,
+      );
       setTickFormat({
         ...tickFormat,
-        all: existingTickFormat
-      })
-    } else setTickFormat({ ...tickFormat, all: numbersFormat[0] })
+        all: existingTickFormat,
+      });
+    } else setTickFormat({ ...tickFormat, all: numbersFormat[0] });
 
     if (layoutx.tickformat) {
-      const xtickFormat = cleanFormats.find(format => format.value === layoutx.tickformat)
+      const xtickFormat = cleanFormats.find(
+        format => format.value === layoutx.tickformat,
+      );
       setTickFormat({
         ...tickFormat,
-        xaxis: xtickFormat
-      })
+        xaxis: xtickFormat,
+      });
     }
 
     if (layouty.tickformat) {
-      const ytickFormat = cleanFormats.find(format => format.value === layouty.tickformat)
+      const ytickFormat = cleanFormats.find(
+        format => format.value === layouty.tickformat,
+      );
       setTickFormat({
         ...tickFormat,
-        yaxis: ytickFormat
-      })
+        yaxis: ytickFormat,
+      });
     }
-  }, [props.value])
+  }, [numbersFormat, props.value, textFormats, tickFormat]);
 
-
-
-
-  const onChangeColor = (customColor) => {
+  const onChangeColor = customColor => {
     props.onChangeValue({
       ...props.value,
       layout: {
         ...props.value.layout,
-        colorway: customColor
+        colorway: customColor,
       },
     });
+  };
 
-  }
-
-  const handleTextFormat = (e) => {
-    setTextFormat(e)
+  const handleTextFormat = e => {
+    setTextFormat(e);
 
     const newData = props.value.data.map(trace => {
       if (trace.text && !isNaN(parseFloat(trace.text[0]))) {
         return {
-          ...trace, texttemplate: e.value
-        }
-      } else return trace
-    })
+          ...trace,
+          texttemplate: e.value,
+        };
+      } else return trace;
+    });
 
     props.onChangeValue({
       ...props.value,
-      data: newData
-    })
-  }
+      data: newData,
+    });
+  };
 
-  const handleTickFormatX = (format) => {
+  const handleTickFormatX = format => {
     setTickFormat({
       ...tickFormat,
-      xaxis: format
-    })
+      xaxis: format,
+    });
 
     props.onChangeValue({
       ...props.value,
@@ -154,15 +173,15 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
           ...props.value.layout.xaxis,
           tickformat: format.value,
         },
-      }
-    })
-  }
+      },
+    });
+  };
 
-  const handleTickFormatY = (format) => {
+  const handleTickFormatY = format => {
     setTickFormat({
       ...tickFormat,
-      yaxis: format
-    })
+      yaxis: format,
+    });
     props.onChangeValue({
       ...props.value,
       layout: {
@@ -171,14 +190,14 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
           ...props.value.layout.yaxis,
           tickformat: format.value,
         },
-      }
-    })
-  }
-  const handleTickFormatAll = (format) => {
+      },
+    });
+  };
+  const handleTickFormatAll = format => {
     setTickFormat({
       ...tickFormat,
-      all: format
-    })
+      all: format,
+    });
     props.onChangeValue({
       ...props.value,
       layout: {
@@ -191,12 +210,12 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
           ...props.value.layout.yaxis,
           tickformat: format.value,
         },
-      }
-    })
-  }
+      },
+    });
+  };
 
-  const handleHoverFormatAll = (format) => {
-    setHoverFormatAll(format)
+  const handleHoverFormatAll = format => {
+    setHoverFormatAll(format);
     props.onChangeValue({
       ...props.value,
       layout: {
@@ -209,9 +228,9 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
           ...props.value.layout.yaxis,
           hoverformat: format.value,
         },
-      }
-    })
-  }
+      },
+    });
+  };
 
   return (
     <LayoutPanel>
@@ -247,26 +266,37 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
           />
         </PlotlySection>
         <PlotlySection name={_('Custom Colorscales')} attr="colorway">
-          {
-            customColors && customColors.length ?
-              customColors.map(customColorscale => (
-                <div style={styles.scaleContainer} className="field field__colorscale">
-                  <p style={{ width: '70px', fontSize: "12px" }}>{customColorscale.title}</p>
-                  <div style={{ width: "180px", "margin-left": "12px", width: "180px" }}>
+          {customColors && customColors.length
+            ? customColors.map(customColorscale => (
+                <div
+                  style={styles.scaleContainer}
+                  className="field field__colorscale"
+                >
+                  <p style={{ width: '70px', fontSize: '12px' }}>
+                    {customColorscale.title}
+                  </p>
+                  <div
+                    style={{
+                      width: '180px',
+                      'margin-left': '12px',
+                      width: '180px',
+                    }}
+                  >
                     <Colorscale
                       colorscale={customColorscale.colorscale}
-                      onClick={(colorscale) => onChangeColor(colorscale)}
+                      onClick={colorscale => onChangeColor(colorscale)}
                     />
                   </div>
                 </div>
               ))
-              :
-              ""
-          }
-
+            : ''}
         </PlotlySection>
         <PlotlySection name={_('Text')} attr="font.family">
-          <FontSelector label={_('Typeface')} attr="font.family" clearable={false} />
+          <FontSelector
+            label={_('Typeface')}
+            attr="font.family"
+            clearable={false}
+          />
           <Numeric label={_('Base Font Size')} attr="font.size" units="px" />
           <ColorPicker label={_('Font Color')} attr="font.color" />
           <Dropdown
@@ -279,21 +309,42 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
             ]}
             clearable={false}
           />
-          <Numeric label={_('Uniform Text Size Minimum')} attr="uniformtext.minsize" units="px" />
+          <Numeric
+            label={_('Uniform Text Size Minimum')}
+            attr="uniformtext.minsize"
+            units="px"
+          />
         </PlotlySection>
       </PlotlyFold>
 
       <div style={{ position: 'relative', zIndex: '2' }}>
         <PlotlyFold name={_('Precision Format')}>
-
-          <div style={styles.precisionRadio} className="radio-block radio-block__group">
-            <div onClick={() => setPrecisionAxis("all")} className={`radio-block__option ${precisionAxis === "all" ? "radio-block__option--active" : ""}`}>
+          <div
+            style={styles.precisionRadio}
+            className="radio-block radio-block__group"
+          >
+            <div
+              onClick={() => setPrecisionAxis('all')}
+              className={`radio-block__option ${
+                precisionAxis === 'all' ? 'radio-block__option--active' : ''
+              }`}
+            >
               <span>All</span>
             </div>
-            <div onClick={() => setPrecisionAxis("x")} className={`radio-block__option ${precisionAxis === "x" ? "radio-block__option--active" : ""}`}>
+            <div
+              onClick={() => setPrecisionAxis('x')}
+              className={`radio-block__option ${
+                precisionAxis === 'x' ? 'radio-block__option--active' : ''
+              }`}
+            >
               <span>X</span>
             </div>
-            <div onClick={() => setPrecisionAxis("y")} className={`radio-block__option ${precisionAxis === "y" ? "radio-block__option--active" : ""}`}>
+            <div
+              onClick={() => setPrecisionAxis('y')}
+              className={`radio-block__option ${
+                precisionAxis === 'y' ? 'radio-block__option--active' : ''
+              }`}
+            >
               <span>Y</span>
             </div>
           </div>
@@ -309,106 +360,129 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
             ]}
             clearable={false}
           />
-          {precisionAxis === "all" &&
+          {precisionAxis === 'all' && (
             <div style={styles.scaleContainer} className="field field__widget">
-              <p style={{ width: '70px', fontSize: "12px", color: "#506784" }}>Hover</p>
+              <p style={{ width: '70px', fontSize: '12px', color: '#506784' }}>
+                Hover
+              </p>
               <div style={styles.customDropdown}>
                 <Select
                   value={hoverFormatAll}
-                  onChange={(e) => handleHoverFormatAll(e)}
+                  onChange={e => handleHoverFormatAll(e)}
                   styles={selectStyles}
                   components={{
-                    IndicatorSeparator: () => null
+                    IndicatorSeparator: () => null,
                   }}
                   options={numbersFormat}
                 />
               </div>
             </div>
-          }
-          {precisionAxis === "x" && <Dropdown
-            attr="xaxis.hoverformat"
-            label={_('Hover X')}
-            options={numbersFormat}
-            clearable={false}
-          />}
-          {precisionAxis === "y" &&
+          )}
+          {precisionAxis === 'x' && (
+            <Dropdown
+              attr="xaxis.hoverformat"
+              label={_('Hover X')}
+              options={numbersFormat}
+              clearable={false}
+            />
+          )}
+          {precisionAxis === 'y' && (
             <Dropdown
               attr="yaxis.hoverformat"
               label={_('Hover Y')}
               options={numbersFormat}
               clearable={false}
-            />}
-          {precisionAxis === "all" &&
+            />
+          )}
+          {precisionAxis === 'all' && (
             <div style={styles.scaleContainer} className="field field__widget">
-              <p style={{ width: '70px', fontSize: "12px", color: "#506784" }}>Tick</p>
+              <p style={{ width: '70px', fontSize: '12px', color: '#506784' }}>
+                Tick
+              </p>
               <div style={styles.customDropdown}>
                 <Select
                   value={tickFormat.all}
-                  onChange={(e) => handleTickFormatAll(e)}
+                  onChange={e => handleTickFormatAll(e)}
                   styles={selectStyles}
                   components={{
-                    IndicatorSeparator: () => null
+                    IndicatorSeparator: () => null,
                   }}
                   options={numbersFormat}
                 />
               </div>
             </div>
-          }
-          {precisionAxis === "x" &&
+          )}
+          {precisionAxis === 'x' && (
             <div style={styles.scaleContainer} className="field field__widget">
-              <p style={{ width: '70px', fontSize: "12px", color: "#506784" }}>Tick X</p>
+              <p style={{ width: '70px', fontSize: '12px', color: '#506784' }}>
+                Tick X
+              </p>
               <div style={styles.customDropdown}>
                 <Select
                   value={tickFormat.xaxis}
-                  onChange={(e) => handleTickFormatX(e)}
+                  onChange={e => handleTickFormatX(e)}
                   styles={selectStyles}
                   components={{
-                    IndicatorSeparator: () => null
+                    IndicatorSeparator: () => null,
                   }}
                   options={numbersFormat}
                 />
               </div>
             </div>
-          }
-          {precisionAxis === "y" &&
+          )}
+          {precisionAxis === 'y' && (
             <div style={styles.scaleContainer} className="field field__widget">
-              <p style={{ width: '70px', fontSize: "12px", color: "#506784" }}>Tick Y</p>
+              <p style={{ width: '70px', fontSize: '12px', color: '#506784' }}>
+                Tick Y
+              </p>
               <div style={styles.customDropdown}>
                 <Select
                   value={tickFormat.yaxis}
-                  onChange={(e) => handleTickFormatY(e)}
+                  onChange={e => handleTickFormatY(e)}
                   styles={selectStyles}
                   components={{
-                    IndicatorSeparator: () => null
+                    IndicatorSeparator: () => null,
                   }}
                   options={numbersFormat}
                 />
               </div>
-            </div>}
-          {precisionAxis === "all" &&
+            </div>
+          )}
+          {precisionAxis === 'all' && (
             <div style={styles.scaleContainer} className="field field__widget">
-              <p style={{ width: '70px', fontSize: "12px", color: "#506784" }}>Text</p>
+              <p style={{ width: '70px', fontSize: '12px', color: '#506784' }}>
+                Text
+              </p>
               <div style={styles.customDropdown}>
                 <Select
                   value={textFormat}
-                  onChange={(e) => handleTextFormat(e)}
+                  onChange={e => handleTextFormat(e)}
                   styles={selectStyles}
                   components={{
-                    IndicatorSeparator: () => null
+                    IndicatorSeparator: () => null,
                   }}
                   options={textFormats}
                 />
               </div>
             </div>
-          }
+          )}
         </PlotlyFold>
       </div>
       <PlotlyFold name={_('Title')}>
         <TextEditor attr="title.text" />
-        <FontSelector label={_('Typeface')} attr="title.font.family" clearable={false} />
+        <FontSelector
+          label={_('Typeface')}
+          attr="title.font.family"
+          clearable={false}
+        />
         <Numeric label={_('Font Size')} attr="title.font.size" units="px" />
         <ColorPicker label={_('Font Color')} attr="title.font.color" />
-        <Numeric label={_('Horizontal Position')} showSlider step={0.02} attr="title.x" />
+        <Numeric
+          label={_('Horizontal Position')}
+          showSlider
+          step={0.02}
+          attr="title.x"
+        />
       </PlotlyFold>
 
       <PlotlyFold name={_('Modebar')}>
@@ -421,7 +495,10 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
           ]}
         />
         <ColorPicker label={_('Icon Color')} attr="modebar.color" />
-        <ColorPicker label={_('Active Icon Color')} attr="modebar.activecolor" />
+        <ColorPicker
+          label={_('Active Icon Color')}
+          attr="modebar.activecolor"
+        />
         <ColorPicker label={_('Background Color')} attr="modebar.bgcolor" />
       </PlotlyFold>
       <PlotlyFold name={_('Size and Margins')}>
@@ -505,7 +582,11 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
               defaultColor="#000"
               handleEmpty
             />
-            <FontSelector label={_('Typeface')} attr="hoverlabel.font.family" clearable />
+            <FontSelector
+              label={_('Typeface')}
+              attr="hoverlabel.font.family"
+              clearable
+            />
             <Numeric label={_('Font Size')} attr="hoverlabel.font.size" />
             <HoverColor
               label={_('Font Color')}
@@ -521,12 +602,18 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
         <Info>
           <p>
             {_(
-              'You can refer to the items in this column in any text fields of the editor like so: '
+              'You can refer to the items in this column in any text fields of the editor like so: ',
             )}
           </p>
           <p>
             {_('Ex: ')}
-            <span style={{ letterSpacing: '1px', fontStyle: 'italic', userSelect: 'text' }}>
+            <span
+              style={{
+                letterSpacing: '1px',
+                fontStyle: 'italic',
+                userSelect: 'text',
+              }}
+            >
               {_('My custom title %{meta[1]}')}
             </span>
           </p>
@@ -534,7 +621,7 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
       </PlotlyFold>
     </LayoutPanel>
   );
-}
+};
 
 StyleGeneralPanel.contextTypes = {
   localize: PropTypes.func,
@@ -544,26 +631,28 @@ export default StyleGeneralPanel;
 
 const styles = {
   scaleContainer: {
-    padding: '10px', fontWeight: "400 !important", color: "black !important"
+    padding: '10px',
+    fontWeight: '400 !important',
+    color: 'black !important',
   },
   customDropdown: {
-    backgroundColor: "var(--color-background-inputs) !important",
-    borderRadius: "5px",
-    backgroundColor: "white",
-    color: "var(--color-text-active)",
-    marginLeft: "10px",
-    webkitAppearance: "none",
-    flex: '1'
+    backgroundColor: 'var(--color-background-inputs) !important',
+    borderRadius: '5px',
+    backgroundColor: 'white',
+    color: 'var(--color-text-active)',
+    marginLeft: '10px',
+    webkitAppearance: 'none',
+    flex: '1',
   },
   precisionRadio: {
-    padding: "10px"
-  }
-}
+    padding: '10px',
+  },
+};
 
 const selectStyles = {
   control: base => ({
     ...base,
-    borderColor: "#C9D4E2",
-    boxShadow: 'none'
-  })
-}
+    borderColor: '#C9D4E2',
+    boxShadow: 'none',
+  }),
+};

@@ -16,7 +16,7 @@ import {
   StyleUpdateMenusPanel,
   //StyleAxesPanel,
 } from 'react-chart-editor';
-import StyleGeneralPanel from './StyleGeneralPanel'
+import StyleGeneralPanel from './StyleGeneralPanel';
 // import { traceHasColorbar } from './default_panels/StyleColorbarsPanel';
 import { Logo } from 'react-chart-editor';
 import { PanelMenuWrapper } from 'react-chart-editor';
@@ -39,8 +39,13 @@ class CustomEditor extends DefaultEditor {
         <GraphSubplotsPanel group={_('Structure')} name={_('Subplots')} />
         {this.hasTransforms() && (
           <GraphTransformsPanel group={_('Structure')} name={_('Transforms')} />
-          )}
-        <StyleGeneralPanel value={this.props.value} onChangeValue={this.props.onChangeValue} group={_('Style')} name={_('General')} />
+        )}
+        <StyleGeneralPanel
+          value={this.props.value}
+          onChangeValue={this.props.onChangeValue}
+          group={_('Style')}
+          name={_('General')}
+        />
         <StyleTracesPanel group={_('Style')} name={_('Traces')} />
         {this.hasAxes() && (
           <StyleAxesPanel group={_('Style')} name={_('Axes')} />

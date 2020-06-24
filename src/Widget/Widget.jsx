@@ -111,15 +111,11 @@ class ChartWidget extends Component {
 
     if (__SERVER__) return '';
 
-    // console.log('widget provider data', this.props.providerData);
-
     const layout = {
       ...this.props.value?.layout,
       width: this.props.value?.layout?.width || 320,
       height: this.props.value?.layout?.height || 240,
     };
-    // const data = this.props.value?.data;
-    // console.log('ChartWidget layout, data', layout, data); // this.props
     return (
       <Form.Field
         inline

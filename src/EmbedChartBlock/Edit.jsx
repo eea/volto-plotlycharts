@@ -60,12 +60,7 @@ class EmbedChartBlockEdit extends Component {
   nop = () => {};
 
   textEditorSegmentNode = React.createRef();
-  // <ChartEmbedSidebar
-  //   {...this.props}
-  //   onChangeBlock={(id, value) => {
-  //     this.props.onChangeBlock(id, value);
-  //   }}
-  // />
+
 
   render() {
     const { block } = this.props; // , data, onChangeBlock, selected, title

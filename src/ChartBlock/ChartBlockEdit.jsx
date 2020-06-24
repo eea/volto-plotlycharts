@@ -42,8 +42,6 @@ class Edit extends Component {
       data: [],
     };
 
-    // console.log('chartBlockEdit.jsx', this.props);
-
     return (
       <div className="block selected">
         <div className="block-inner-wrapper" />
@@ -77,8 +75,3 @@ export default connect(
   { changeSidebarState },
 )(Edit);
 
-// // I think this should always be true
-// if (this.props.url && this.props.url !== prevProps.url) {
-//   this.props.changeSidebarState(true);
-//   // this.props.getDataFromProvider(this.props.url);
-// }

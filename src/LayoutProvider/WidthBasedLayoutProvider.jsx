@@ -23,31 +23,12 @@ const connectedWidthProvider = compose(
             widescreen: 1600,
           };
 
-          // console.log('props in queries', width, mosaic_width);
           const windowWidth = __CLIENT__ && window.innerWidth;
           const margins = windowWidth - mosaic_width;
           const breakpoint = screentype =>
             windowWidth
               ? mosaic_breakpoints[screentype] - margins
               : mosaic_breakpoints[screentype];
-
-          console.debug(
-            'breakpoints',
-            width,
-            '====>',
-            'widescreen =>',
-            breakpoint('widescreen'),
-            'desktop =>',
-            breakpoint('desktop'),
-            'tablet =>',
-            breakpoint('tablet'),
-            'Window =>',
-            windowWidth,
-            'mosaic =>',
-            mosaic_width,
-            'margins =>',
-            margins,
-          );
 
           if (__SERVER__) {
             return 'widescreen';

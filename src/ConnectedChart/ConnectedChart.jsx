@@ -14,8 +14,6 @@ import ResponsiveContainer from '../ResponsiveContainer';
 import { getDataFromProvider } from 'volto-datablocks/actions';
 import { getChartDataFromVisualization } from 'volto-plotlycharts/actions';
 
-// import VisibilitySensor from 'react-visibility-sensor';
-// import { getContent } from '@plone/volto/actions';
 
 function mixProviderData(chartData, providerData, parameters) {
   const providerDataColumns = Object.keys(providerData);
@@ -30,8 +28,6 @@ function mixProviderData(chartData, providerData, parameters) {
         providerDataColumns.includes(trace[tk])
       ) {
         let values = providerData[trace[tk]];
-
-        // if (originalColumn === 'labels') values = values.map(l => l + 'LLL');
 
         trace[originalColumn] = values;
 
@@ -48,7 +44,6 @@ function mixProviderData(chartData, providerData, parameters) {
           if (transform.targetsrc === filterName && filterValue) {
             transform.value = filterValue;
             transform.target = providerData[transform.targetsrc];
-            // console.log('trace', transform, filterValue);
           }
         });
       }
@@ -124,7 +119,6 @@ function ConnectedChart(props) {
     ...layout,
     autosize: true,
     dragmode: false,
-    // hovertemplate: '%{x:.0%}',
     font: {
       ...layout.font,
       family: settings.chartLayoutFontFamily || "'Roboto', sans-serif",
@@ -144,7 +138,6 @@ function ConnectedChart(props) {
       fixedrange: true,
     };
 
-  // console.debug('chart props', props);
   // TODO: only use fallback data if chartData.data.url doesn't exist
   // or the connected_data_parameters don't exist
 
