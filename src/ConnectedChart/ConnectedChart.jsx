@@ -14,7 +14,6 @@ import ResponsiveContainer from '../ResponsiveContainer';
 import { getDataFromProvider } from 'volto-datablocks/actions';
 import { getChartDataFromVisualization } from 'volto-plotlycharts/actions';
 
-
 function mixProviderData(chartData, providerData, parameters) {
   const providerDataColumns = Object.keys(providerData);
 
@@ -211,10 +210,13 @@ export default connect(
     const url = state.router?.location?.pathname || null;
 
     const byProvider = getConnectedDataParametersForProvider(
-      state,
+      state.connected_data_parameters,
       providerUrl,
     );
-    const byContext = getConnectedDataParametersForContext(state, url);
+    const byContext = getConnectedDataParametersForContext(
+      state.connected_data_parameters,
+      url,
+    );
 
     return {
       providerData,
