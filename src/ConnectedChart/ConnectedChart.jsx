@@ -103,7 +103,7 @@ function ConnectedChart(props) {
 
   const propsLayout = props.data && props.data.layout ? props.data.layout : {};
 
-  let layout = chartData.layout ? chartData.layout : propsLayout;
+  let layout = chartData?.layout ? chartData.layout : propsLayout;
 
   let autosize;
   if (typeof props.autosize !== 'undefined') {
