@@ -42,7 +42,7 @@ const ChartEmbedSchema = {
     {
       id: 'sources',
       title: 'Sources',
-      fields: ['chartSources'],
+      fields: ['chartSources', 'download_button'],
     },
     {
       id: 'source',
@@ -82,6 +82,10 @@ const ChartEmbedSchema = {
     chart_source: {
       type: 'string',
       title: 'Source',
+    },
+    download_button: {
+      title: 'Download button',
+      type: 'boolean',
     },
     chart_source_link: {
       type: 'string',
