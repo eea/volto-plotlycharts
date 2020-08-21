@@ -140,6 +140,7 @@ function ConnectedChart(props) {
   // TODO: only use fallback data if chartData.data.url doesn't exist
   // or the connected_data_parameters don't exist
 
+  // debugger;
   let data =
     props.providerData && useLiveData
       ? mixProviderData(
@@ -175,7 +176,11 @@ function ConnectedChart(props) {
 
 function getProviderData(state, props, providerForVis) {
   let path =
-    providerForVis || props?.data?.provider_url || props?.data?.url || null;
+    providerForVis ||
+    props?.data?.provider_url ||
+    props?.data?.url ||
+    props?.url ||
+    null;
 
   if (!path) return;
 
