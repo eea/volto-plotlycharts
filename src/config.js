@@ -14,7 +14,7 @@ import * as addonReducers from './reducers';
 
 function addCustomGroup(config) {
   const hasCustomGroup = config.blocks.groupBlocksOrder.filter(
-    el => el.id === 'custom_addons',
+    (el) => el.id === 'custom_addons',
   );
   if (hasCustomGroup.length === 0) {
     config.blocks.groupBlocksOrder.push({

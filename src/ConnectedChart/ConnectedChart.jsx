@@ -17,8 +17,8 @@ import { getChartDataFromVisualization } from 'volto-plotlycharts/actions';
 function mixProviderData(chartData, providerData, parameters) {
   const providerDataColumns = Object.keys(providerData);
 
-  const res = chartData.map(trace => {
-    Object.keys(trace).forEach(tk => {
+  const res = chartData.map((trace) => {
+    Object.keys(trace).forEach((tk) => {
       const originalColumn = tk.replace(/src$/, '');
       if (
         tk.endsWith('src') &&
@@ -39,7 +39,7 @@ function mixProviderData(chartData, providerData, parameters) {
         } = parameters[0];
 
         // tweak transformation filters using data parameters
-        (trace.transforms || []).forEach(transform => {
+        (trace.transforms || []).forEach((transform) => {
           if (transform.targetsrc === filterName && filterValue) {
             transform.value = filterValue;
             transform.target = providerData[transform.targetsrc];
@@ -105,14 +105,14 @@ function ConnectedChart(props) {
 
   let layout = chartData?.layout ? chartData.layout : propsLayout;
 
-  let autosize;
-  if (typeof props.autosize !== 'undefined') {
-    autosize = props.autosize;
-  } else if (typeof layout.autosize !== undefined) {
-    autosize = layout.autosize;
-  } else {
-    autosize = true;
-  }
+  // let autosize;
+  // if (typeof props.autosize !== 'undefined') {
+  //   autosize = props.autosize;
+  // } else if (typeof layout.autosize !== undefined) {
+  //   autosize = layout.autosize;
+  // } else {
+  //   autosize = true;
+  // }
 
   layout = {
     ...layout,
@@ -143,12 +143,12 @@ function ConnectedChart(props) {
   let data =
     props.providerData && useLiveData
       ? mixProviderData(
-          chartData.data,
+          (chartData || {}).data,
           props.providerData,
           props.connected_data_parameters,
         )
-      : chartData.data || [];
-  data = data.map(trace => ({
+      : (chartData || {}).data || [];
+  data = data.map((trace) => ({
     ...trace,
     textfont: {
       ...trace.textfont,
