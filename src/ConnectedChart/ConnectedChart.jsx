@@ -17,7 +17,7 @@ import { getChartDataFromVisualization } from 'volto-plotlycharts/actions';
 function mixProviderData(chartData, providerData, parameters) {
   const providerDataColumns = Object.keys(providerData);
 
-  const res = chartData.map((trace) => {
+  const res = (chartData || []).map((trace) => {
     Object.keys(trace).forEach((tk) => {
       const originalColumn = tk.replace(/src$/, '');
       if (
