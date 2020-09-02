@@ -18,7 +18,7 @@ class Edit extends Component {
     this.props.changeSidebarState(true);
   }
 
-  onChangeEditorValue = value => {
+  onChangeEditorValue = (value) => {
     const chartData = {
       data: value.data,
       layout: value.layout,
@@ -48,7 +48,7 @@ class Edit extends Component {
         <ChartEditor
           value={chartData}
           provider_url={this.props.data?.url}
-          onChangeValue={value => {
+          onChangeValue={(value) => {
             this.onChangeEditorValue(value);
           }}
         />
@@ -70,8 +70,4 @@ class Edit extends Component {
   }
 }
 
-export default connect(
-  null,
-  { changeSidebarState },
-)(Edit);
-
+export default connect(null, { changeSidebarState })(Edit);
