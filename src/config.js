@@ -40,6 +40,7 @@ export function applyConfig(config) {
     icon: chartIcon,
     group: 'custom_addons',
     sidebarTab: 1,
+    blockHasOwnFocusManagement: true,
   };
 
   config.blocks.blocksConfig.embed_chart = {
@@ -50,6 +51,7 @@ export function applyConfig(config) {
     icon: chartIcon,
     group: 'custom_addons',
     sidebarTab: 1,
+    blockHasOwnFocusManagement: true,
   };
 
   return {
