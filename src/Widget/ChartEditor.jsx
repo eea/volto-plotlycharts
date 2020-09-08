@@ -47,6 +47,10 @@ function getDataSourceOptions(data) {
   }));
 }
 
+function updateDataFromColors(data, props) {
+  return data;
+}
+
 const chartHelp = {
   area: {
     helpDoc: 'https://help.plot.ly/make-an-area-graph/',
@@ -107,8 +111,8 @@ class Edit extends Component {
 
     const { plotly, PlotlyEditor, CustomEditor } = this.state;
     const { DefaultEditor, Panel } = PlotlyEditor || {};
-    const DefaultPlotlyEditor = PlotlyEditor.default;
-    const DefaultCustomEditor = CustomEditor.default;
+    const DefaultPlotlyEditor = PlotlyEditor?.default;
+    const DefaultCustomEditor = CustomEditor?.default;
     // https://www.eea.europa.eu/++resource++eea.translations.images/pdflogo-web.png
     return (
       <div>
