@@ -48,9 +48,11 @@ const ColorPicker = ({ selectedColorscale, color, onChange, ...rest }) => {
         </button>
       }
     >
+      {/* TODO: the color picker, when opened and visible, is shown partially under the actual chart although it should be visible always */}
       <Dropdown.Menu>
         {__CLIENT__ && (
           <CirclePicker
+            // style={{ position: 'relative', right: '10rem' }}
             color={color}
             onChange={onChange}
             colors={selectedColorscale}
