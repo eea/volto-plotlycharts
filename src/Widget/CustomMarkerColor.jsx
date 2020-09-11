@@ -12,9 +12,54 @@ import DataSelector from 'react-chart-editor/lib/components/fields/DataSelector'
 import VisibilitySelect from 'react-chart-editor/lib/components/fields/VisibilitySelect';
 import { MULTI_VALUED, COLORS } from 'react-chart-editor/lib/lib/constants';
 import ColorscalePickerWidget from 'react-chart-editor/lib/components/widgets/ColorscalePicker';
+import { CirclePicker } from 'react-color';
 
-// import { biseColorscale } from './config';
-// import _ from 'lodash';
+// TODO: use this
+import { biseColorscale } from './config';
+
+import l from 'lodash';
+import { Dropdown, Button } from 'semantic-ui-react';
+
+const ColorPicker = ({ selectedColorscale, color, onChange, ...rest }) => {
+  const [dropdownOpen, setDropdownOpen] = React.useState(false);
+
+  console.log('COLOR PROP', color);
+  return (
+    <Dropdown
+      {...rest}
+      open={dropdownOpen}
+      onClose={() => {
+        setDropdownOpen(false);
+      }}
+      // onMouseDown={(ev) => {
+      //   ev.preventDefault();
+      //   ev.stopPropagation();
+      // }}
+      trigger={
+        <button
+          onClick={() => {
+            setDropdownOpen(!dropdownOpen);
+          }}
+          style={{
+            backgroundColor: `${color}`,
+          }}
+        >
+          {color}
+        </button>
+      }
+    >
+      <Dropdown.Menu>
+        {__CLIENT__ && (
+          <CirclePicker
+            color={color}
+            onChange={onChange}
+            colors={selectedColorscale}
+          />
+        )}
+      </Dropdown.Menu>
+    </Dropdown>
+  );
+};
 
 class UnconnectedMarkerColor extends Component {
   constructor(props, context) {
@@ -43,8 +88,9 @@ class UnconnectedMarkerColor extends Component {
       },
       selectedConstantColorOption:
         type === 'constant' && props.multiValued ? 'multiple' : 'single',
-      chosenAxis: null,
+      categoricalAxis: null,
       categoricalColorscale: null,
+      categoricalColors: {},
     };
 
     this.setType = this.setType.bind(this);
@@ -58,8 +104,10 @@ class UnconnectedMarkerColor extends Component {
   setType(type) {
     if (this.state.type !== type) {
       this.setState({ type: type });
-      if (type === 'manual' && !this.state.chosenAxis) {
-        this.setState({ chosenAxis: 'x' });
+      if (type === 'manual' && !this.state.categoricalAxis) {
+        this.setState({ categoricalAxis: 'x' }, () => {
+          this.rebuildColorPickers();
+        });
       }
       this.props.updatePlot(this.state.value[type]);
       if (type === 'constant') {
@@ -141,7 +189,43 @@ class UnconnectedMarkerColor extends Component {
   }
 
   handleAxisChange = (opt) => {
-    this.setState({ chosenAxis: opt });
+    this.setState({ categoricalAxis: opt });
+  };
+
+  // TODO: also run this when this.props.container changes
+  rebuildColorPickers = () => {
+    if (this.props.container.type !== 'bar') {
+      this.setState({
+        categoricalColors: null, // if we put {} here it merges the empty object in, so nothing changes
+        categoricalAxis: null,
+        categoricalColorscale: null,
+      });
+      return;
+    }
+
+    const categoricalColors = {};
+
+    l.uniq(this.props.container[this.state.categoricalAxis]).forEach((x, i) => {
+      // if the current unique value from the axis has a color
+      if (this.state.categoricalColors[x - 1]) {
+        categoricalColors[x] = this.state.categoricalColorscale[x];
+      }
+
+      if (!this.state.categoricalColorscale) {
+        return;
+      }
+
+      if (i <= this.state.categoricalColorscale.length) {
+        categoricalColors[x] = i;
+      }
+
+      const rnd =
+        Math.floor(Math.random() * this.state.categoricalColorscale.length) + 1;
+
+      categoricalColors[x] = rnd;
+    });
+
+    this.setState({ categoricalColors });
   };
 
   renderManualControls() {
@@ -156,32 +240,61 @@ class UnconnectedMarkerColor extends Component {
       <>
         <RadioBlocks
           options={options}
-          activeOption={this.state.chosenAxis}
+          activeOption={this.state.categoricalAxis}
           onOptionChange={this.handleAxisChange}
         />
-        {this.state.chosenAxis && (
+        {this.state.categoricalAxis && (
           <>
             <ColorscalePickerWidget
               selected={this.state.categoricalColorscale}
               onColorscaleChange={(cs) => {
-                this.setState({ categoricalColorscale: cs });
+                this.setState({ categoricalColorscale: cs }, () => {
+                  this.rebuildColorPickers();
+                });
               }}
             ></ColorscalePickerWidget>
-            <MultiColorPicker
-              attr="marker.color"
-              multiColorMessage={_(
-                'Each trace will be colored according to the selected colorscale.',
-              )}
-              singleColorMessage={_(
-                'All traces will be colored in the the same color.',
-              )}
-              setColor={this.setColor}
-              setColorScale={this.setColorScale}
-              onConstantColorOptionChange={this.onConstantColorOptionChange}
-              parentSelectedConstantColorOption={
-                this.state.selectedConstantColorOption
-              }
-            />
+            {/* {console.log('STATE & PROPS', this.state, this.props)} */}
+            {Object.entries(this.state.categoricalColors).map(
+              ([val, color], i) => (
+                <div
+                  style={{
+                    display: 'flex',
+                    width: '100%',
+                  }}
+                >
+                  <label
+                    style={{
+                      flexGrow: 1,
+                      flexShrink: 0,
+                      alignSelf: 'center',
+                    }}
+                  >
+                    {val}
+                  </label>
+                  <ColorPicker
+                    style={{
+                      flexGrow: 1,
+                      width: '100%',
+                      textAlign: 'right',
+                      marginRight: '1rem',
+                    }}
+                    key={i}
+                    color={this.state.categoricalColorscale[color]}
+                    selectedColorscale={this.state.categoricalColorscale}
+                    onChange={(newColor) => {
+                      this.setState({
+                        categoricalColors: {
+                          ...this.state.categoricalColors,
+                          [val]: this.state.categoricalColorscale.indexOf(
+                            newColor,
+                          ),
+                        },
+                      });
+                    }}
+                  />
+                </div>
+              ),
+            )}
           </>
         )}
       </>
