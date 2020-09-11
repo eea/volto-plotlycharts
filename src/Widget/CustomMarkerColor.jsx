@@ -207,24 +207,30 @@ class UnconnectedMarkerColor extends Component {
 
     const categoricalColors = {};
 
-    l.uniq(this.props.container[this.state.categoricalAxis]).forEach((x, i) => {
+    const data = this.props.container[this.state.categoricalAxis];
+
+    // console.log('DATA', data);
+    // console.log('SCALE', this.state.categoricalColorscale);
+
+    l.uniq(data).forEach((x, i) => {
       // if the current unique value from the axis has a color
       if (this.state.categoricalColors[x]) {
         categoricalColors[x] = this.state.categoricalColorscale[x];
+        return;
       }
 
       if (!this.state.categoricalColorscale) {
         return;
       }
 
-      if (i <= this.state.categoricalColorscale.length) {
+      if (i < this.state.categoricalColorscale.length) {
         categoricalColors[x] = i;
+        return;
       }
 
       const rnd = Math.floor(
         Math.random() * this.state.categoricalColorscale.length,
       );
-
       categoricalColors[x] = rnd;
     });
 
