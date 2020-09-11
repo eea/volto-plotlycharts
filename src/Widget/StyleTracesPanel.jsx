@@ -31,7 +31,6 @@ import {
   FontSelector,
   TextPosition,
   MarkerSize,
-  MarkerColor,
   MultiColorPicker,
   ErrorBars,
   DataSelector,
@@ -53,13 +52,11 @@ import { traceTypes } from 'react-chart-editor/lib/lib/traceTypes';
 import { localize } from 'react-chart-editor';
 import HoverFormatString from './HoverFormatString';
 import Select from 'react-select';
+import CustomMarkerColor from './CustomMarkerColor';
 
 const allTraceTypes = traceTypes(localize).map(({ value }) => value);
 
 const StyleTracesPanel = (props, { localize: _ }) => {
-
-  
-
   return (
     <TraceAccordion canGroup>
       <TextEditor label={_('Name')} attr="name" richTextOnly />
@@ -441,7 +438,7 @@ const StyleTracesPanel = (props, { localize: _ }) => {
         />
         <NumericFraction label={_('Jitter')} attr="jitter" />
         <Numeric label={_('Position')} attr="pointpos" step={0.1} showSlider />
-        <MarkerColor
+        <CustomMarkerColor
           suppressMultiValuedMessage
           label={_('Color')}
           attr="marker.color"
@@ -726,7 +723,7 @@ const StyleTracesPanel = (props, { localize: _ }) => {
         <TextInfo attr="textinfo" label={_('Show')} />
         <HoverTemplateText attr="texttemplate" label={_('Template')} />
         <DataSelector label={_('Text')} attr="text" />
-       
+
         <FontSelector label={_('Typeface')} attr="textfont.family" />
         <Numeric label={_('Font Size')} attr="textfont.size" units="px" />
         <MultiColorPicker label={_('Font Color')} attr="textfont.color" />
