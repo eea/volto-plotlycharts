@@ -207,7 +207,7 @@ class UnconnectedMarkerColor extends Component {
 
     l.uniq(this.props.container[this.state.categoricalAxis]).forEach((x, i) => {
       // if the current unique value from the axis has a color
-      if (this.state.categoricalColors[x - 1]) {
+      if (this.state.categoricalColors[x]) {
         categoricalColors[x] = this.state.categoricalColorscale[x];
       }
 
@@ -219,8 +219,9 @@ class UnconnectedMarkerColor extends Component {
         categoricalColors[x] = i;
       }
 
-      const rnd =
-        Math.floor(Math.random() * this.state.categoricalColorscale.length) + 1;
+      const rnd = Math.floor(
+        Math.random() * this.state.categoricalColorscale.length,
+      );
 
       categoricalColors[x] = rnd;
     });
@@ -281,12 +282,13 @@ class UnconnectedMarkerColor extends Component {
                     key={i}
                     color={this.state.categoricalColorscale[color]}
                     selectedColorscale={this.state.categoricalColorscale}
-                    onChange={(newColor) => {
+                    onChange={(newColor, xyz) => {
+                      // console.log('ex', {newColor, xyz});
                       this.setState({
                         categoricalColors: {
                           ...this.state.categoricalColors,
                           [val]: this.state.categoricalColorscale.indexOf(
-                            newColor,
+                            newColor.hex,
                           ),
                         },
                       });
