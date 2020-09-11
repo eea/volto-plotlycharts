@@ -11,6 +11,10 @@ import Info from 'react-chart-editor/lib/components/fields/Info';
 import DataSelector from 'react-chart-editor/lib/components/fields/DataSelector';
 import VisibilitySelect from 'react-chart-editor/lib/components/fields/VisibilitySelect';
 import { MULTI_VALUED, COLORS } from 'react-chart-editor/lib/lib/constants';
+import ColorscalePickerWidget from 'react-chart-editor/lib/components/widgets/ColorscalePicker';
+
+// import { biseColorscale } from './config';
+// import _ from 'lodash';
 
 class UnconnectedMarkerColor extends Component {
   constructor(props, context) {
@@ -39,6 +43,8 @@ class UnconnectedMarkerColor extends Component {
       },
       selectedConstantColorOption:
         type === 'constant' && props.multiValued ? 'multiple' : 'single',
+      chosenAxis: null,
+      categoricalColorscale: null,
     };
 
     this.setType = this.setType.bind(this);
@@ -52,6 +58,9 @@ class UnconnectedMarkerColor extends Component {
   setType(type) {
     if (this.state.type !== type) {
       this.setState({ type: type });
+      if (type === 'manual' && !this.state.chosenAxis) {
+        this.setState({ chosenAxis: 'x' });
+      }
       this.props.updatePlot(this.state.value[type]);
       if (type === 'constant') {
         this.context.updateContainer({
@@ -131,24 +140,51 @@ class UnconnectedMarkerColor extends Component {
     );
   }
 
+  handleAxisChange = (opt) => {
+    this.setState({ chosenAxis: opt });
+  };
+
   renderManualControls() {
     const _ = this.context.localize;
+
+    const options = [
+      { label: _('X Axis'), value: 'x' },
+      { label: _('Y axis'), value: 'y' },
+    ];
+
     return (
-      <MultiColorPicker
-        attr="marker.color"
-        multiColorMessage={_(
-          'Each trace will be colored according to the selected colorscale.',
+      <>
+        <RadioBlocks
+          options={options}
+          activeOption={this.state.chosenAxis}
+          onOptionChange={this.handleAxisChange}
+        />
+        {this.state.chosenAxis && (
+          <>
+            <ColorscalePickerWidget
+              selected={this.state.categoricalColorscale}
+              onColorscaleChange={(cs) => {
+                this.setState({ categoricalColorscale: cs });
+              }}
+            ></ColorscalePickerWidget>
+            <MultiColorPicker
+              attr="marker.color"
+              multiColorMessage={_(
+                'Each trace will be colored according to the selected colorscale.',
+              )}
+              singleColorMessage={_(
+                'All traces will be colored in the the same color.',
+              )}
+              setColor={this.setColor}
+              setColorScale={this.setColorScale}
+              onConstantColorOptionChange={this.onConstantColorOptionChange}
+              parentSelectedConstantColorOption={
+                this.state.selectedConstantColorOption
+              }
+            />
+          </>
         )}
-        singleColorMessage={_(
-          'All traces will be colored in the the same color.',
-        )}
-        setColor={this.setColor}
-        setColorScale={this.setColorScale}
-        onConstantColorOptionChange={this.onConstantColorOptionChange}
-        parentSelectedConstantColorOption={
-          this.state.selectedConstantColorOption
-        }
-      />
+      </>
     );
   }
 
