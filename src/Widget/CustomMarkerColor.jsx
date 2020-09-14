@@ -87,6 +87,41 @@ const ColorPicker = ({ selectedColorscale, color, onChange, ...rest }) => {
   );
 };
 
+const ColorPickerField = ({ name, color, colorscale, onChange }) => {
+  return (
+    <div
+      style={{
+        display: 'flex',
+        width: '100%',
+        marginTop: '0.1rem',
+      }}
+    >
+      <label
+        style={{
+          alignSelf: 'center',
+        }}
+      >
+        {name}
+      </label>
+      <div style={{ flexGrow: 1 }}></div>
+      <ColorPicker
+        style={{
+          textAlign: 'right',
+          marginRight: '1rem',
+          flexShrink: 0,
+        }}
+        color={
+          color < colorscale.length
+            ? colorscale[color]
+            : colorscale[Math.floor(Math.random() * colorscale.length)]
+        }
+        selectedColorscale={colorscale}
+        onChange={onChange}
+      />
+    </div>
+  );
+};
+
 /**
  * The three container property paths relevant to bar charts with categorical coloured axis are:
  *  - `marker.colorscale` - the color scale, an array of colors (currently only #
@@ -150,6 +185,7 @@ class UnconnectedMarkerColor extends Component {
           'meta.manualcolor': {},
           'marker.categoricalaxis': 'x',
         });
+        // debugger;
         this.rebuildColorPickers();
       } else {
         this.context.updateContainer({
@@ -228,20 +264,43 @@ class UnconnectedMarkerColor extends Component {
   handleAxisChange = (opt) => {
     this.context.updateContainer({
       'marker.colorscale': defaultColorscale,
-      // 'meta.manualcolor': {},
+      // 'meta.manualcolor': ,
       'marker.categoricalaxis': opt,
     });
     this.rebuildColorPickers();
   };
 
-  factoryHandleColorPickerChange = (val, cs) => (newColor) => {
-    this.context.updateContainer({
-      'meta.manualcolor': {
+  factoryHandleColorPickerChange = (val, cs) => {
+    let val2 = val;
+    console.log('val2', val2);
+    console.log('guess: lazy loading');
+    return (newColor) => {
+      // console.log('container 1.5', this.props.container.meta.manualcolor);
+
+      // let idx = -1;
+      // for (let i = 0; i < cs.length; ++i) {
+      //   if (cs[i] === newColor.hex) {
+      //     idx = i;
+      //     break;
+      //   }
+      // }
+
+      // console.log('idx', idx);
+
+      console.log('obj', {
         ...(this.props.container?.meta?.manualcolor || {}),
-        [val]: cs.indexOf(newColor.hex),
-      },
-    });
-    this.rebuildColorPickers();
+        [val2]: cs.indexOf(newColor.hex),
+      });
+
+      this.context.updateContainer({
+        'meta.manualcolor': {
+          ...(this.props.container?.meta?.manualcolor || {}),
+          [val2]: cs.indexOf(newColor.hex),
+        },
+      });
+      console.log('container 2', this.props.container.meta.manualcolor);
+      this.rebuildColorPickers();
+    };
   };
 
   handleColorscaleChange = (cs) => {
@@ -261,7 +320,8 @@ class UnconnectedMarkerColor extends Component {
    * @todo also run this when this.props.container changes
    */
   rebuildColorPickers = () => {
-    if (this.props.container?.type !== 'bar') {
+    console.log('rebuildColorPickers', this.props.container.type);
+    if (this.props.container.type !== 'bar') {
       this.context.updateContainer({
         'marker.colorscale': null,
         'meta.manualcolor': null,
@@ -277,10 +337,10 @@ class UnconnectedMarkerColor extends Component {
     ];
 
     l.uniq(data).forEach((x, i) => {
-      const cs = this.props.meta?.colorscale;
+      const cs = this.props.container.marker?.colorscale;
 
       // if the current unique value from the axis has a color
-      if (this.props.container.marker.manualcolor[x]) {
+      if (this.props.container.meta.manualcolor[x]) {
         colors[x] = cs[x];
         return;
       }
@@ -299,9 +359,12 @@ class UnconnectedMarkerColor extends Component {
       colors[x] = rnd;
     });
 
+    // console.log('colors', colors);
+
     this.context.updateContainer({
       'meta.manualcolor': colors,
     });
+    console.log('manualcolor', colors);
   };
 
   renderManualControls() {
@@ -327,47 +390,23 @@ class UnconnectedMarkerColor extends Component {
               selected={categoricalColorscale}
               onColorscaleChange={this.handleColorscaleChange.bind(this)}
             />
-            {Object.entries(this.props.container?.marker?.colorscale || {}).map(
-              ([val, color], i) => (
-                <div
-                  style={{
-                    display: 'flex',
-                    width: '100%',
-                    marginTop: '0.1rem',
-                  }}
-                >
-                  <label
-                    style={{
-                      alignSelf: 'center',
-                    }}
-                  >
-                    {val}
-                  </label>
-                  <div style={{ flexGrow: 1 }}></div>
-                  <ColorPicker
-                    style={{
-                      textAlign: 'right',
-                      marginRight: '1rem',
-                      flexShrink: 0,
-                    }}
+            {Object.entries(this.props.container?.meta?.manualcolor || {}).map(
+              ([val, color], i) => {
+                return (
+                  <ColorPickerField
                     key={i}
-                    color={
-                      color < categoricalColorscale.length
-                        ? categoricalColorscale[color]
-                        : categoricalColorscale[
-                            Math.floor(
-                              Math.random() * categoricalColorscale.length,
-                            )
-                          ]
-                    }
-                    selectedColorscale={categoricalColorscale}
-                    onChange={this.factoryHandleColorPickerChange(
-                      val,
-                      categoricalColorscale,
-                    ).bind(this)}
+                    name={val}
+                    color={color}
+                    colorscale={categoricalColorscale}
+                    onChange={(newColor) => {
+                      this.factoryHandleColorPickerChange(
+                        val,
+                        categoricalColorscale,
+                      ).bind(this)(newColor);
+                    }}
                   />
-                </div>
-              ),
+                );
+              },
             )}
           </>
         )}
@@ -403,6 +442,8 @@ class UnconnectedMarkerColor extends Component {
     const { attr } = this.props;
     const { localize: _, container } = this.context;
 
+    console.log('marker.colorscale', container);
+    // debugger;
     // TO DO: https://github.com/plotly/react-chart-editor/issues/654
     const noSplitsPresent =
       container &&
