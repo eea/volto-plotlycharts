@@ -20,6 +20,19 @@ import { biseColorscale } from './config';
 import l from 'lodash';
 import { Dropdown, Button } from 'semantic-ui-react';
 
+const defaultColorscale = [
+  '#1f77b4',
+  '#ff7f0e',
+  '#2ca02c',
+  '#d62728',
+  '#9467bd',
+  '#8c564b',
+  '#e377c2',
+  '#7f7f7f',
+  '#bcbd22',
+  '#17becf',
+]; // TODO: use biseColorscale reformatted in hex numbers
+
 const ColorPicker = ({ selectedColorscale, color, onChange, ...rest }) => {
   const [dropdownOpen, setDropdownOpen] = React.useState(false);
 
@@ -75,7 +88,6 @@ const ColorPicker = ({ selectedColorscale, color, onChange, ...rest }) => {
         </button>
       }
     >
-      {/* TODO: the color picker, when opened and visible, is shown partially under the actual chart although it should be visible always */}
       <Dropdown.Menu>
         {__CLIENT__ && (
           <CirclePicker
@@ -133,10 +145,20 @@ class UnconnectedMarkerColor extends Component {
     if (this.state.type !== type) {
       this.setState({ type: type });
       if (type === 'manual' && !this.state.categoricalAxis) {
-        this.setState({ categoricalAxis: 'x' }, () => {
+        this.setState(
+          {
+            categoricalAxis: 'x',
+            categoricalColorscale: defaultColorscale,
+          },
+          () => {
+            this.rebuildColorPickers();
+          },
+        );
+      } /* else if (type === 'manual' && this.state.categoricalAxis) {
+        // this.setState({ categoricalColorscale: cs }, () => {
           this.rebuildColorPickers();
-        });
-      }
+        // });
+      } */
       this.props.updatePlot(this.state.value[type]);
       if (type === 'constant') {
         this.context.updateContainer({
@@ -216,11 +238,25 @@ class UnconnectedMarkerColor extends Component {
     );
   }
 
+  // when the selected categorical axis is changed
   handleAxisChange = (opt) => {
-    this.setState({ categoricalAxis: opt });
+    this.setState(
+      (state) => {
+        return {
+          categoricalAxis: opt,
+          categoricalColorscale: state.categoricalColors || defaultColorscale,
+        };
+      },
+      () => {
+        this.rebuildColorPickers();
+      },
+    );
   };
 
   // TODO: also run this when this.props.container changes
+  /**
+   * Requires this.state.categoricalAxis and this.state.categoricalColorscale defined.
+   */
   rebuildColorPickers = () => {
     if (this.props.container.type !== 'bar') {
       this.setState({
@@ -271,6 +307,10 @@ class UnconnectedMarkerColor extends Component {
       { label: _('Y axis'), value: 'y' },
     ];
 
+    const { categoricalColorscale } = this.state;
+
+    console.log(categoricalColorscale);
+
     return (
       <>
         <RadioBlocks
@@ -281,7 +321,7 @@ class UnconnectedMarkerColor extends Component {
         {this.state.categoricalAxis && (
           <>
             <ColorscalePickerWidget
-              selected={this.state.categoricalColorscale}
+              selected={categoricalColorscale}
               onColorscaleChange={(cs) => {
                 this.setState({ categoricalColorscale: cs }, () => {
                   this.rebuildColorPickers();
@@ -317,17 +357,25 @@ class UnconnectedMarkerColor extends Component {
                       flexShrink: 0,
                     }}
                     key={i}
-                    color={this.state.categoricalColorscale[color]}
-                    selectedColorscale={this.state.categoricalColorscale}
+                    color={
+                      color < categoricalColorscale.length
+                        ? categoricalColorscale[color]
+                        : categoricalColorscale[
+                            Math.floor(
+                              Math.random() * categoricalColorscale.length,
+                            )
+                          ]
+                    }
+                    selectedColorscale={categoricalColorscale}
                     onChange={(newColor, xyz) => {
                       // console.log('ex', {newColor, xyz});
-                      this.setState({
-                        categoricalColors: {
-                          ...this.state.categoricalColors,
-                          [val]: this.state.categoricalColorscale.indexOf(
-                            newColor.hex,
-                          ),
-                        },
+                      this.setState((state) => {
+                        return {
+                          categoricalColors: {
+                            ...state.categoricalColors,
+                            [val]: categoricalColorscale.indexOf(newColor.hex),
+                          },
+                        };
                       });
                     }}
                   />
