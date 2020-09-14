@@ -87,6 +87,13 @@ const ColorPicker = ({ selectedColorscale, color, onChange, ...rest }) => {
   );
 };
 
+/**
+ * The three container property paths relevant to bar charts with categorical coloured axis are:
+ *  - `marker.colorscale` - the color scale, an array of colors (currently only #
+ * followed by 6 hex digits are supported)
+ *  - `meta.manualcolor`: association between every unique value in the categoricalaxis and a color index representing a color in the marker.colorscale,
+ *  - `marker.categoricalaxis`: can be x or y or null (initially it is null)
+ */
 class UnconnectedMarkerColor extends Component {
   constructor(props, context) {
     super(props, context);
@@ -114,9 +121,6 @@ class UnconnectedMarkerColor extends Component {
       },
       selectedConstantColorOption:
         type === 'constant' && props.multiValued ? 'multiple' : 'single',
-      categoricalAxis: null,
-      categoricalColorscale: null,
-      categoricalColors: {},
     };
 
     this.setType = this.setType.bind(this);
@@ -130,36 +134,30 @@ class UnconnectedMarkerColor extends Component {
   setType(type) {
     if (this.state.type !== type) {
       this.setState({ type });
-      if (type === 'manual' && !this.state.categoricalAxis) {
-        this.setState(
-          {
-            categoricalAxis: 'x',
-            categoricalColorscale: defaultColorscale,
-          },
-          () => {
-            this.rebuildColorPickers();
-          },
-        );
-      }
       this.props.updatePlot(this.state.value[type]);
       if (type === 'constant') {
         this.context.updateContainer({
           'marker.colorsrc': null,
           'marker.colorscale': null,
           'marker.showscale': null,
+          'marker.categoricalaxis': null,
+          'meta.manualcolor': null,
         });
         this.setState({ colorscale: null });
       } else if (type === 'manual') {
-        // this.context.updateContainer({
-        //   'marker.color': null,
-        //   'marker.colorsrc': null,
-        //   'marker.colorscale': null,
-        // });
+        this.context.updateContainer({
+          'marker.colorscale': defaultColorscale,
+          'meta.manualcolor': {},
+          'marker.categoricalaxis': 'x',
+        });
+        this.rebuildColorPickers();
       } else {
         this.context.updateContainer({
           'marker.color': null,
           'marker.colorsrc': null,
           'marker.colorscale': null,
+          'marker.categoricalaxis': null,
+          'meta.manualcolor': null,
         });
       }
     }
@@ -228,84 +226,82 @@ class UnconnectedMarkerColor extends Component {
 
   // when the selected categorical axis is changed
   handleAxisChange = (opt) => {
-    this.setState(
-      (state) => {
-        return {
-          categoricalAxis: opt,
-          categoricalColorscale: state.categoricalColors || defaultColorscale,
-        };
-      },
-      () => {
-        this.rebuildColorPickers();
-      },
-    );
+    this.context.updateContainer({
+      'marker.colorscale': defaultColorscale,
+      // 'meta.manualcolor': {},
+      'marker.categoricalaxis': opt,
+    });
+    this.rebuildColorPickers();
   };
 
-  factoryHandleColorPickerChange = (val, categoricalColorscale) => (
-    newColor,
-  ) => {
-    this.setState((state) => {
-      return {
-        categoricalColors: {
-          ...state.categoricalColors,
-          [val]: categoricalColorscale.indexOf(newColor.hex),
-        },
-      };
+  factoryHandleColorPickerChange = (val, cs) => (newColor) => {
+    this.context.updateContainer({
+      'meta.manualcolor': {
+        ...(this.props.container?.meta?.manualcolor || {}),
+        [val]: cs.indexOf(newColor.hex),
+      },
     });
+    this.rebuildColorPickers();
   };
 
   handleColorscaleChange = (cs) => {
-    this.setState({ categoricalColorscale: cs }, () => {
-      this.rebuildColorPickers();
+    this.context.updateContainer({
+      'marker.colorscale': cs,
+      // 'meta.manualcolor': {
+      //   ...(this.props.container?.meta?.manualcolor || {}),
+      //   [val]: cs.indexOf(newColor.hex),
+      // },
     });
-  };
 
-  resetCategoricalStates = () => {
-    this.setState({
-      categoricalColors: null, // if we put {} here it merges the empty object in, so nothing changes
-      categoricalAxis: null,
-      categoricalColorscale: null,
-    });
+    this.rebuildColorPickers();
   };
 
   /**
-   * Requires this.state.categoricalAxis and this.state.categoricalColorscale defined.
+   * Requires categorical axis and categorical colorscale defined.
    * @todo also run this when this.props.container changes
    */
   rebuildColorPickers = () => {
-    if (this.props.container.type !== 'bar') {
-      this.resetCategoricalStates();
+    if (this.props.container?.type !== 'bar') {
+      this.context.updateContainer({
+        'marker.colorscale': null,
+        'meta.manualcolor': null,
+        'marker.categoricalaxis': null,
+      });
       return;
     }
 
-    const categoricalColors = {};
+    const colors = {};
 
-    const data = this.props.container[this.state.categoricalAxis];
+    const data = this.props.container[
+      this.props.container.marker.categoricalaxis
+    ];
 
     l.uniq(data).forEach((x, i) => {
-      const { categoricalColorscale } = this.state;
+      const cs = this.props.meta?.colorscale;
 
       // if the current unique value from the axis has a color
-      if (this.state.categoricalColors[x]) {
-        categoricalColors[x] = categoricalColorscale[x];
+      if (this.props.container.marker.manualcolor[x]) {
+        colors[x] = cs[x];
         return;
       }
 
       // is this case taking place or this code is dead?
-      if (!categoricalColorscale) {
+      if (!cs) {
         return;
       }
 
-      if (i < categoricalColorscale.length) {
-        categoricalColors[x] = i;
+      if (i < cs.length) {
+        colors[x] = i;
         return;
       }
 
-      const rnd = Math.floor(Math.random() * categoricalColorscale.length);
-      categoricalColors[x] = rnd;
+      const rnd = Math.floor(Math.random() * cs.length);
+      colors[x] = rnd;
     });
 
-    this.setState({ categoricalColors });
+    this.context.updateContainer({
+      'meta.manualcolor': colors,
+    });
   };
 
   renderManualControls() {
@@ -316,22 +312,22 @@ class UnconnectedMarkerColor extends Component {
       { label: _('Y axis'), value: 'y' },
     ];
 
-    const { categoricalColorscale } = this.state;
+    const categoricalColorscale = this.props.container?.marker?.colorscale;
 
     return (
       <>
         <RadioBlocks
           options={options}
-          activeOption={this.state.categoricalAxis}
+          activeOption={this.props.container?.marker?.categoricalaxis || null}
           onOptionChange={this.handleAxisChange}
         />
-        {this.state.categoricalAxis && (
+        {this.props.container.marker.categoricalaxis && (
           <>
             <ColorscalePickerWidget
               selected={categoricalColorscale}
               onColorscaleChange={this.handleColorscaleChange.bind(this)}
             />
-            {Object.entries(this.state.categoricalColors).map(
+            {Object.entries(this.props.container?.marker?.colorscale || {}).map(
               ([val, color], i) => (
                 <div
                   style={{
