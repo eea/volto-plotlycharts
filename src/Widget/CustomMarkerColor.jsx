@@ -83,6 +83,8 @@ const ColorPicker = ({ selectedColorscale, color, onChange, ...rest }) => {
   );
 };
 
+// TODO: handle indices using special functions that transform e.g. 0 in 1 and 8 in 7.
+
 // -1 invalid array index, 0 valid array index
 // so 0 means invalid color index in colorscale array
 const ColorPickerField = ({ name, color, colorscale, onChange }) => {
@@ -164,12 +166,40 @@ class UnconnectedMarkerColor extends Component {
     );
   }
 
+  /**
+   * Also accepts usual fields, not just the custom ones.
+   */
+  updateCategoricalsInData = (obj) => {
+    this.context.updateContainer(obj);
+    this.updateCategoricalsInVisual();
+  };
+
+  /**
+   * Based on data of the current trace which contains custom fields.
+   */
+  updateCategoricalsInVisual = () => {
+    if (!this.props.container.marker.categoricalaxis) {
+      this.props.container.marker.color = [];
+      return;
+    }
+
+    const data = this.props.container[
+      this.props.container.marker.categoricalaxis
+    ].map(
+      (item) =>
+        this.props.container.marker.colorscale[
+          this.props.container.meta.manualcolor[item] - 1
+        ],
+    );
+    this.props.container.marker.color = data;
+  };
+
   setType(type) {
     if (this.state.type !== type) {
       this.setState({ type });
       this.props.updatePlot(this.state.value[type]);
       if (type === 'constant') {
-        this.context.updateContainer({
+        this.updateCategoricalsInData({
           'marker.colorsrc': null,
           'marker.colorscale': null,
           'marker.showscale': null,
@@ -177,22 +207,23 @@ class UnconnectedMarkerColor extends Component {
           'meta.manualcolor': null,
         });
         this.setState({ colorscale: null });
+        this.updateCategoricalsInVisual();
       } else if (type === 'manual') {
-        this.context.updateContainer({
+        this.updateCategoricalsInData({
           'marker.colorscale': defaultColorscale,
           'meta.manualcolor': {},
           'marker.categoricalaxis': 'x',
         });
-        // debugger;
         this.rebuildColorPickers();
       } else {
-        this.context.updateContainer({
+        this.updateCategoricalsInData({
           'marker.color': null,
           'marker.colorsrc': null,
           'marker.colorscale': null,
           'marker.categoricalaxis': null,
           'meta.manualcolor': null,
         });
+        this.updateCategoricalsInVisual();
       }
     }
   }
@@ -260,67 +291,47 @@ class UnconnectedMarkerColor extends Component {
 
   // when the selected categorical axis is changed
   handleAxisChange = (opt) => {
-    this.context.updateContainer({
+    this.updateCategoricalsInData({
       'marker.colorscale': defaultColorscale,
       // 'meta.manualcolor': ,
       'marker.categoricalaxis': opt,
     });
+    this.updateCategoricalsInVisual();
     this.rebuildColorPickers();
   };
 
   factoryHandleColorPickerChange = (val, cs) => {
     let val2 = val;
-    console.log('val2', val2);
-    console.log('guess: lazy loading');
+
     return (newColor) => {
-      // console.log('container 1.5', this.props.container.meta.manualcolor);
-
-      // let idx = -1;
-      // for (let i = 0; i < cs.length; ++i) {
-      //   if (cs[i] === newColor.hex) {
-      //     idx = i;
-      //     break;
-      //   }
-      // }
-
-      // console.log('idx', idx);
-
-      console.log('obj', {
-        ...(this.props.container?.meta?.manualcolor || {}),
-        [val2]: cs.indexOf(newColor.hex) + 1,
-      });
-
-      this.context.updateContainer({
+      this.updateCategoricalsInData({
         'meta.manualcolor': {
           ...(this.props.container?.meta?.manualcolor || {}),
           [val2]: cs.indexOf(newColor.hex) + 1,
         },
       });
-      console.log('container 2', this.props.container.meta.manualcolor);
+      this.updateCategoricalsInVisual();
+
       this.rebuildColorPickers();
     };
   };
 
   handleColorscaleChange = (cs) => {
-    this.context.updateContainer({
+    this.updateCategoricalsInData({
       'marker.colorscale': cs,
-      // 'meta.manualcolor': {
-      //   ...(this.props.container?.meta?.manualcolor || {}),
-      //   [val]: cs.indexOf(newColor.hex),
-      // },
     });
+    this.updateCategoricalsInVisual();
 
     this.rebuildColorPickers();
   };
 
   /**
    * Requires categorical axis and categorical colorscale defined.
-   * @todo also run this when this.props.container changes
    */
   rebuildColorPickers = () => {
     // console.log('rebuildColorPickers', this.props.container.type);
     if (this.props.container.type !== 'bar') {
-      this.context.updateContainer({
+      this.updateCategoricalsInData({
         'marker.colorscale': null,
         'meta.manualcolor': null,
         'marker.categoricalaxis': null,
@@ -364,7 +375,7 @@ class UnconnectedMarkerColor extends Component {
       colors[x] = rnd;
     });
 
-    this.context.updateContainer({
+    this.updateCategoricalsInData({
       'meta.manualcolor': colors,
     });
   };
