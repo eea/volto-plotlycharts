@@ -23,7 +23,31 @@ import { Dropdown, Button } from 'semantic-ui-react';
 const ColorPicker = ({ selectedColorscale, color, onChange, ...rest }) => {
   const [dropdownOpen, setDropdownOpen] = React.useState(false);
 
-  console.log('COLOR PROP', color);
+  // inspired from https://stackoverflow.com/a/1855903/258462
+  const contrastColor = React.useCallback((color) => {
+    // color = color.replace(/ /g, '').replace('#', '').split(',').map(Number);
+    color = color.replace('#', '').split('');
+
+    let rr = color[0] + color[1];
+    let gg = color[2] + color[3];
+    let bb = color[4] + color[5];
+
+    rr = parseInt(rr, 16);
+    gg = parseInt(gg, 16);
+    bb = parseInt(bb, 16);
+
+    const l = (0.299 * rr + 0.587 * gg + 0.114 * bb) / 255;
+
+    let d;
+    if (l > 0.5) {
+      d = 0; // bright colors - black font
+    } else {
+      d = 255; // dark colors - white font
+    }
+    return `rgb(${d}, ${d}, ${d})`;
+  }, []);
+
+  // console.log('COLOR PROP', color);
   return (
     <Dropdown
       {...rest}
@@ -31,6 +55,7 @@ const ColorPicker = ({ selectedColorscale, color, onChange, ...rest }) => {
       onClose={() => {
         setDropdownOpen(false);
       }}
+      direction="left"
       // onMouseDown={(ev) => {
       //   ev.preventDefault();
       //   ev.stopPropagation();
@@ -42,6 +67,8 @@ const ColorPicker = ({ selectedColorscale, color, onChange, ...rest }) => {
           }}
           style={{
             backgroundColor: `${color}`,
+            color: contrastColor(color),
+            fontFamily: 'monospace',
           }}
         >
           {color}
@@ -52,7 +79,6 @@ const ColorPicker = ({ selectedColorscale, color, onChange, ...rest }) => {
       <Dropdown.Menu>
         {__CLIENT__ && (
           <CirclePicker
-            // style={{ position: 'relative', right: '10rem' }}
             color={color}
             onChange={onChange}
             colors={selectedColorscale}
@@ -269,23 +295,26 @@ class UnconnectedMarkerColor extends Component {
                   style={{
                     display: 'flex',
                     width: '100%',
+                    marginTop: '0.1rem',
                   }}
                 >
                   <label
                     style={{
-                      flexGrow: 1,
-                      flexShrink: 0,
+                      // flexGrow: 1,
+                      // flexShrink: 0,
                       alignSelf: 'center',
                     }}
                   >
                     {val}
                   </label>
+                  <div style={{ flexGrow: 1 }}></div>
                   <ColorPicker
                     style={{
-                      flexGrow: 1,
-                      width: '100%',
+                      // flexGrow: 1,
+                      // width: '5rem',
                       textAlign: 'right',
                       marginRight: '1rem',
+                      flexShrink: 0,
                     }}
                     key={i}
                     color={this.state.categoricalColorscale[color]}

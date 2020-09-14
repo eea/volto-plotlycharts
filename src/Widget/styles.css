@@ -1,3 +1,7 @@
 .sidebar-container-enter-done {
   z-index: 10000 !important;
 }
+
+.circle-picker {
+  padding: 1rem;
+}
