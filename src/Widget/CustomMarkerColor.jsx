@@ -55,10 +55,6 @@ const ColorPicker = ({ selectedColorscale, color, onChange, ...rest }) => {
         setDropdownOpen(false);
       }}
       direction="left"
-      // onMouseDown={(ev) => {
-      //   ev.preventDefault();
-      //   ev.stopPropagation();
-      // }}
       trigger={
         <button
           onClick={() => {
@@ -87,6 +83,8 @@ const ColorPicker = ({ selectedColorscale, color, onChange, ...rest }) => {
   );
 };
 
+// -1 invalid array index, 0 valid array index
+// so 0 means invalid color index in colorscale array
 const ColorPickerField = ({ name, color, colorscale, onChange }) => {
   return (
     <div
@@ -111,8 +109,8 @@ const ColorPickerField = ({ name, color, colorscale, onChange }) => {
           flexShrink: 0,
         }}
         color={
-          color < colorscale.length
-            ? colorscale[color]
+          1 <= color && color <= colorscale.length
+            ? colorscale[color - 1]
             : colorscale[Math.floor(Math.random() * colorscale.length)]
         }
         selectedColorscale={colorscale}
@@ -289,13 +287,13 @@ class UnconnectedMarkerColor extends Component {
 
       console.log('obj', {
         ...(this.props.container?.meta?.manualcolor || {}),
-        [val2]: cs.indexOf(newColor.hex),
+        [val2]: cs.indexOf(newColor.hex) + 1,
       });
 
       this.context.updateContainer({
         'meta.manualcolor': {
           ...(this.props.container?.meta?.manualcolor || {}),
-          [val2]: cs.indexOf(newColor.hex),
+          [val2]: cs.indexOf(newColor.hex) + 1,
         },
       });
       console.log('container 2', this.props.container.meta.manualcolor);
@@ -320,7 +318,7 @@ class UnconnectedMarkerColor extends Component {
    * @todo also run this when this.props.container changes
    */
   rebuildColorPickers = () => {
-    console.log('rebuildColorPickers', this.props.container.type);
+    // console.log('rebuildColorPickers', this.props.container.type);
     if (this.props.container.type !== 'bar') {
       this.context.updateContainer({
         'marker.colorscale': null,
@@ -336,35 +334,39 @@ class UnconnectedMarkerColor extends Component {
       this.props.container.marker.categoricalaxis
     ];
 
+    // the colorscale array
+    const cs = this.props.container.marker?.colorscale;
+
+    // if a color scale is not yet set
+    if (!cs) {
+      return;
+    }
+
+    // for each unique value
     l.uniq(data).forEach((x, i) => {
-      const cs = this.props.container.marker?.colorscale;
-
       // if the current unique value from the axis has a color
-      if (this.props.container.meta.manualcolor[x]) {
-        colors[x] = cs[x];
+      if (
+        this.props.container.meta.manualcolor[x] &&
+        this.props.container.meta.manualcolor[x] > 0
+      ) {
+        colors[x] = this.props.container.meta.manualcolor[x];
         return;
       }
 
-      // is this case taking place or this code is dead?
-      if (!cs) {
-        return;
-      }
-
-      if (i < cs.length) {
+      // if not, use an increasing integer
+      if (i <= cs.length) {
         colors[x] = i;
         return;
       }
 
-      const rnd = Math.floor(Math.random() * cs.length);
+      // if the increasing integer is not valid, set a random valid index
+      const rnd = Math.floor(Math.random() * cs.length) + 1;
       colors[x] = rnd;
     });
-
-    // console.log('colors', colors);
 
     this.context.updateContainer({
       'meta.manualcolor': colors,
     });
-    console.log('manualcolor', colors);
   };
 
   renderManualControls() {
