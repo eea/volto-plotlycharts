@@ -134,7 +134,9 @@ class UnconnectedMarkerColor extends Component {
     super(props, context);
 
     let type = null;
-    if (
+    if (props.container.marker.categoricalaxis) {
+      type = 'manual';
+    } else if (
       !props.container.marker ||
       (props.container.marker && !props.container.marker.colorsrc)
     ) {
@@ -153,6 +155,7 @@ class UnconnectedMarkerColor extends Component {
       value: {
         constant: type === 'constant' ? props.fullValue : COLORS.mutedBlue,
         variable: type === 'variable' ? props.fullValue : null,
+        manual: type === 'manual' ? props.fullValue : null,
       },
       selectedConstantColorOption:
         type === 'constant' && props.multiValued ? 'multiple' : 'single',
@@ -164,6 +167,8 @@ class UnconnectedMarkerColor extends Component {
     this.onConstantColorOptionChange = this.onConstantColorOptionChange.bind(
       this,
     );
+
+    this.applyType(type);
   }
 
   /**
@@ -178,10 +183,16 @@ class UnconnectedMarkerColor extends Component {
    * Based on data of the current trace which contains custom fields.
    */
   updateCategoricalsInVisual = () => {
-    if (!this.props.container.marker.categoricalaxis) {
-      this.props.container.marker.color = [];
+    const isManual = this.props.container.marker.categoricalaxis;
+    if (!isManual) {
+      delete this.props.container.marker.color;
       return;
-    }
+    } /* else if (this.state.type === 'variable') {
+      delete this.props.container.marker.color;
+      return;
+    } */
+
+    // this.state.type === 'manual', for sure
 
     const data = this.props.container[
       this.props.container.marker.categoricalaxis
@@ -201,7 +212,13 @@ class UnconnectedMarkerColor extends Component {
     if (this.state.type !== type) {
       this.setState({ type });
       this.props.updatePlot(this.state.value[type]);
-      if (type === 'constant') {
+      this.applyType(type);
+    }
+  }
+
+  applyType(type) {
+    switch (type) {
+      case 'constant':
         this.updateCategoricalsInData({
           'marker.colorsrc': null,
           'marker.colorscale': null,
@@ -210,15 +227,20 @@ class UnconnectedMarkerColor extends Component {
           'meta.manualcolor': null,
         });
         this.setState({ colorscale: null });
-        this.updateCategoricalsInVisual();
-      } else if (type === 'manual') {
+        break;
+
+      case 'manual':
         this.updateCategoricalsInData({
-          'marker.colorscale': defaultColorscale,
-          'meta.manualcolor': {},
-          'marker.categoricalaxis': 'x',
+          'marker.colorscale':
+            this.props.container?.marker?.colorscale || defaultColorscale,
+          'meta.manualcolor': this.props.container?.meta?.manualcolor || {},
+          'marker.categoricalaxis':
+            this.props.container?.marker?.categoricalaxis || 'x',
         });
         this.rebuildColorPickers();
-      } else {
+        break;
+
+      case 'variable':
         this.updateCategoricalsInData({
           'marker.color': null,
           'marker.colorsrc': null,
@@ -226,8 +248,10 @@ class UnconnectedMarkerColor extends Component {
           'marker.categoricalaxis': null,
           'meta.manualcolor': null,
         });
-        this.updateCategoricalsInVisual();
-      }
+        break;
+
+      default:
+        console.error('Unknown marker color type', type);
     }
   }
 
@@ -236,7 +260,7 @@ class UnconnectedMarkerColor extends Component {
 
     if (type === 'manual') {
       console.error(
-        'When type is set to "manual" setColor should not be called.',
+        'When type is set to "manual", setColor should not be called.',
       );
       return;
     }
