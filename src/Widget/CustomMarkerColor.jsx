@@ -169,22 +169,8 @@ class UnconnectedMarkerColor extends Component {
   constructor(props, context) {
     super(props, context);
 
-    let type = null;
-    if (props.container.marker.categoricalaxis) {
-      type = 'manual';
-    } else if (
-      !props.container.marker ||
-      (props.container.marker && !props.container.marker.colorsrc)
-    ) {
-      type = 'constant';
-    } else if (
-      props.container.marker &&
-      Array.isArray(props.container.marker.color) &&
-      props.fullContainer.marker &&
-      Array.isArray(props.fullContainer.marker.color)
-    ) {
-      type = 'variable';
-    }
+    // load the initial type of the marker color from the data in the chart
+    const type = this.propsToType(props);
 
     this.state = {
       type,
@@ -205,6 +191,33 @@ class UnconnectedMarkerColor extends Component {
     );
 
     this.applyType(type);
+  }
+
+  /**
+   * Takes the props of the component as an argument and returns the type of
+   * data that the user can select using the component.
+   * @param {object} props
+   */
+  propsToType(props) {
+    let type = null;
+
+    if (props.container.marker.categoricalaxis) {
+      type = 'manual';
+    } else if (
+      !props.container.marker ||
+      (props.container.marker && !props.container.marker.colorsrc)
+    ) {
+      type = 'constant';
+    } else if (
+      props.container.marker &&
+      Array.isArray(props.container.marker.color) &&
+      props.fullContainer.marker &&
+      Array.isArray(props.fullContainer.marker.color)
+    ) {
+      type = 'variable';
+    }
+
+    return type;
   }
 
   /**
@@ -239,6 +252,10 @@ class UnconnectedMarkerColor extends Component {
     });
   };
 
+  /**
+   * An event handler for when the user selects Manual, Constant or Variable.
+   * @param {string} type
+   */
   setType(type) {
     if (this.state.type !== type) {
       this.setState({ type });
@@ -247,6 +264,11 @@ class UnconnectedMarkerColor extends Component {
     }
   }
 
+  /**
+   * Applies the change of the type (manual, constant or variable) to the chart
+   * data. In the next render this component will show a different section.
+   * @param {string} type
+   */
   applyType(type) {
     switch (type) {
       case 'constant':
@@ -264,9 +286,9 @@ class UnconnectedMarkerColor extends Component {
         this.updateCategoricalsInData({
           'marker.colorscale':
             this.props.container?.marker?.colorscale || defaultColorscale,
-          'meta.manualcolor': this.props.container?.meta?.manualcolor || {},
           'marker.categoricalaxis':
             this.props.container?.marker?.categoricalaxis || 'x',
+          'meta.manualcolor': this.props.container?.meta?.manualcolor || {},
         });
         this.rebuildColorPickers();
         break;
@@ -283,6 +305,7 @@ class UnconnectedMarkerColor extends Component {
 
       default:
         console.error('Unknown marker color type', type);
+        return;
     }
   }
 
