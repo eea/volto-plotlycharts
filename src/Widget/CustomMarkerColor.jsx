@@ -23,17 +23,20 @@ const defaultColorscale = biseColorscale;
  * React color picker component.
  *
  * @param {object} props
- * @param {string[]} props.selectedColorscale The color set from which the user can choose.
+ * @param {string[]} props.selectedColorscale The color set from which the user
+ * can choose.
  * @param {string} props.color Currently selected color.
- * @param {function} props.onChange Handler function for when the selected color changes.
+ * @param {function} props.onChange Handler function for when the selected color
+ * changes.
  */
 const ColorPicker = ({ selectedColorscale, color, onChange, ...rest }) => {
   const [dropdownOpen, setDropdownOpen] = React.useState(false);
 
   /**
-   * Returns black or white according to the given background color.
-   * Inspired from https://stackoverflow.com/a/1855903/258462.
-   * @returns {string} The color that should be used as foreground on the given background.
+   * Returns black or white according to the given background color. Inspired
+   * from https://stackoverflow.com/a/1855903/258462.
+   * @returns {string} The color that should be used as foreground on the given
+   * background.
    * @todo Make this work with colors other than the format #RRGGBB.
    */
   const contrastColor = React.useCallback((color) => {
@@ -99,10 +102,18 @@ const ColorPicker = ({ selectedColorscale, color, onChange, ...rest }) => {
   );
 };
 
-// TODO: handle indices using special functions that transform e.g. 0 in 1 and 8 in 7.
-
-// -1 invalid array index, 0 valid array index
-// so 0 means invalid color index in colorscale array
+/**
+ * React color picker field component. Just an enhanced ColorPicker with a label
+ * before it.
+ *
+ * @param {bject} props
+ * @param {string} props.name The string to put in the label.
+ * @param {string} props.color Currently selected color.
+ * @param {function} props.onChange Handler function for when the selected color
+ * changes.
+ * @param {string[]} props.colorscale The color set from which the user can
+ * choose.
+ */
 const ColorPickerField = ({ name, color, colorscale, onChange }) => {
   return (
     <div
@@ -139,11 +150,20 @@ const ColorPickerField = ({ name, color, colorscale, onChange }) => {
 };
 
 /**
- * The three container property paths relevant to bar charts with categorical coloured axis are:
- *  - `marker.colorscale` - the color scale, an array of colors (currently only #
- * followed by 6 hex digits are supported)
- *  - `meta.manualcolor`: association between every unique value in the categoricalaxis and a color index representing a color in the marker.colorscale,
- *  - `marker.categoricalaxis`: can be x or y or null (initially it is null)
+ * @description The three container property paths relevant to bar charts with
+ * categorical coloured axis are:
+ *  - `marker.colorscale` - the color scale, an array of colors (currently only
+ *    \# followed by 6 hex digits are supported)
+ *  - `meta.manualcolor`: association between every unique value in the
+ *    categoricalaxis and a color index representing a color in the
+ *    marker.colorscale,
+ *  - `marker.categoricalaxis`: can be `'x'` or `'y'` or `null` (initially it is
+ *    `null`)
+ *
+ * *Related to color indices:* `-1` invalid array index, `0` valid array index,
+ * so `0` means invalid color index in any given colorscale.
+ * @todo handle indices using special functions that transform e.g. `0` in `1`
+ * and `8` in `7`.
  */
 class UnconnectedMarkerColor extends Component {
   constructor(props, context) {
@@ -203,12 +223,7 @@ class UnconnectedMarkerColor extends Component {
     if (!isManual) {
       delete this.props.container.marker.color;
       return;
-    } /* else if (this.state.type === 'variable') {
-      delete this.props.container.marker.color;
-      return;
-    } */
-
-    // this.state.type === 'manual', for sure
+    }
 
     const data = this.props.container[
       this.props.container.marker.categoricalaxis
