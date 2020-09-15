@@ -191,7 +191,10 @@ class UnconnectedMarkerColor extends Component {
           this.props.container.meta.manualcolor[item] - 1
         ],
     );
-    this.props.container.marker.color = data;
+
+    this.context.updateContainer({
+      'marker.color': data,
+    });
   };
 
   setType(type) {
@@ -231,6 +234,13 @@ class UnconnectedMarkerColor extends Component {
   setColor(inputValue) {
     const { type } = this.state;
 
+    if (type === 'manual') {
+      console.error(
+        'When type is set to "manual" setColor should not be called.',
+      );
+      return;
+    }
+
     this.setState(
       type === 'constant'
         ? { value: { constant: inputValue } }
@@ -240,6 +250,7 @@ class UnconnectedMarkerColor extends Component {
   }
 
   setColorScale(inputValue) {
+    console.log('setColorScale called for type', this.state.type);
     this.setState({ colorscale: inputValue });
     this.context.updateContainer({ 'marker.colorscale': inputValue });
   }
@@ -289,14 +300,15 @@ class UnconnectedMarkerColor extends Component {
     );
   }
 
-  // when the selected categorical axis is changed
+  /**
+   *  When the selected categorical axis is changed.
+   */
   handleAxisChange = (opt) => {
     this.updateCategoricalsInData({
+      'marker.categoricalaxis': opt,
       'marker.colorscale': defaultColorscale,
       // 'meta.manualcolor': ,
-      'marker.categoricalaxis': opt,
     });
-    this.updateCategoricalsInVisual();
     this.rebuildColorPickers();
   };
 
@@ -310,8 +322,6 @@ class UnconnectedMarkerColor extends Component {
           [val2]: cs.indexOf(newColor.hex) + 1,
         },
       });
-      this.updateCategoricalsInVisual();
-
       this.rebuildColorPickers();
     };
   };
@@ -320,8 +330,6 @@ class UnconnectedMarkerColor extends Component {
     this.updateCategoricalsInData({
       'marker.colorscale': cs,
     });
-    this.updateCategoricalsInVisual();
-
     this.rebuildColorPickers();
   };
 
@@ -365,8 +373,8 @@ class UnconnectedMarkerColor extends Component {
       }
 
       // if not, use an increasing integer
-      if (i <= cs.length) {
-        colors[x] = i;
+      if (i < cs.length) {
+        colors[x] = i + 1;
         return;
       }
 
@@ -397,7 +405,7 @@ class UnconnectedMarkerColor extends Component {
           activeOption={this.props.container?.marker?.categoricalaxis || null}
           onOptionChange={this.handleAxisChange}
         />
-        {this.props.container.marker.categoricalaxis && (
+        {this.props.container?.marker?.categoricalaxis && (
           <>
             <ColorscalePickerWidget
               selected={categoricalColorscale}
