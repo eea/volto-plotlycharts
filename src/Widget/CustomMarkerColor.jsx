@@ -14,15 +14,28 @@ import { MULTI_VALUED, COLORS } from 'react-chart-editor/lib/lib/constants';
 import ColorscalePickerWidget from 'react-chart-editor/lib/components/widgets/ColorscalePicker';
 import { CirclePicker } from 'react-color';
 import l from 'lodash';
-import { Dropdown, Button } from 'semantic-ui-react';
+import { Dropdown } from 'semantic-ui-react';
 
 import { biseColorscale } from './config';
 const defaultColorscale = biseColorscale;
 
+/**
+ * React color picker component.
+ *
+ * @param {object} props
+ * @param {string[]} props.selectedColorscale The color set from which the user can choose.
+ * @param {string} props.color Currently selected color.
+ * @param {function} props.onChange Handler function for when the selected color changes.
+ */
 const ColorPicker = ({ selectedColorscale, color, onChange, ...rest }) => {
   const [dropdownOpen, setDropdownOpen] = React.useState(false);
 
-  // inspired from https://stackoverflow.com/a/1855903/258462
+  /**
+   * Returns black or white according to the given background color.
+   * Inspired from https://stackoverflow.com/a/1855903/258462.
+   * @returns {string} The color that should be used as foreground on the given background.
+   * @todo Make this work with colors other than the format #RRGGBB.
+   */
   const contrastColor = React.useCallback((color) => {
     // color = color.replace(/ /g, '').replace('#', '').split(',').map(Number);
     color = color.replace('#', '').split('');
@@ -46,7 +59,10 @@ const ColorPicker = ({ selectedColorscale, color, onChange, ...rest }) => {
     return `rgb(${d}, ${d}, ${d})`;
   }, []);
 
-  // console.log('COLOR PROP', color);
+  const cc = React.useMemo(() => {
+    return contrastColor(color);
+  }, [color, contrastColor]);
+
   return (
     <Dropdown
       {...rest}
@@ -62,7 +78,7 @@ const ColorPicker = ({ selectedColorscale, color, onChange, ...rest }) => {
           }}
           style={{
             backgroundColor: `${color}`,
-            color: contrastColor(color),
+            color: cc,
             fontFamily: 'monospace',
           }}
         >

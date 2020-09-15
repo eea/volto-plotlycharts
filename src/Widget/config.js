@@ -11,6 +11,7 @@
 //   'rgb(227,120,180)',
 // ];
 
+// The colorscale above translated into hex colors:
 export let biseColorscale = [
   '#a6cee3',
   '#1f78b4',
