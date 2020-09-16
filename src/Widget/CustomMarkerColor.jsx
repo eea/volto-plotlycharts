@@ -190,7 +190,7 @@ class UnconnectedMarkerColor extends Component {
       this,
     );
 
-    this.applyType(type);
+    this.applyType(type, true);
   }
 
   /**
@@ -201,7 +201,7 @@ class UnconnectedMarkerColor extends Component {
   propsToType(props) {
     let type = null;
 
-    if (props.container.marker.categoricalaxis) {
+    if (props.container?.marker?.categoricalaxis) {
       type = 'manual';
     } else if (
       !props.container.marker ||
@@ -232,9 +232,11 @@ class UnconnectedMarkerColor extends Component {
    * Based on data of the current trace which contains custom fields.
    */
   updateCategoricalsInVisual = () => {
-    const isManual = this.props.container.marker.categoricalaxis;
+    const isManual = this.props.container?.marker?.categoricalaxis;
     if (!isManual) {
-      delete this.props.container.marker.color;
+      this.context.updateContainer({
+        'marker.color': undefined,
+      });
       return;
     }
 
@@ -260,7 +262,7 @@ class UnconnectedMarkerColor extends Component {
     if (this.state.type !== type) {
       this.setState({ type });
       this.props.updatePlot(this.state.value[type]);
-      this.applyType(type);
+      this.applyType(type, false);
     }
   }
 
@@ -268,8 +270,12 @@ class UnconnectedMarkerColor extends Component {
    * Applies the change of the type (manual, constant or variable) to the chart
    * data. In the next render this component will show a different section.
    * @param {string} type
+   * @param {boolean} initial Whether the method can write state through
+   * this.state, if not, then uses this.setState. React throws an error in the
+   * browser console when using this.setState inside a component constructor,
+   * even indirectly.
    */
-  applyType(type) {
+  applyType(type, initial) {
     switch (type) {
       case 'constant':
         this.updateCategoricalsInData({
@@ -279,7 +285,14 @@ class UnconnectedMarkerColor extends Component {
           'marker.categoricalaxis': null,
           'meta.manualcolor': null,
         });
-        this.setState({ colorscale: null });
+        if (initial) {
+          if (typeof this.state !== 'object') {
+            this.state = {};
+          }
+          this.state.colorscale = null;
+        } else {
+          this.setState({ colorscale: null });
+        }
         break;
 
       case 'manual':
@@ -541,8 +554,6 @@ class UnconnectedMarkerColor extends Component {
     const { attr } = this.props;
     const { localize: _, container } = this.context;
 
-    console.log('marker.colorscale', container);
-    // debugger;
     // TO DO: https://github.com/plotly/react-chart-editor/issues/654
     const noSplitsPresent =
       container &&
