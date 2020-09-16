@@ -53,10 +53,10 @@ function mixProviderData(chartData, providerData, parameters) {
   return res;
 }
 
-/*
- * @param { object } data The chart data, layout,  extra config, etc.
- * @param { boolean } useLiveData Will update the chart with the data from the provider
- * @param { boolean } filterWithDataParameters Will filter live data with parameters from context
+/**
+ * @param {object} data The chart data, layout,  extra config, etc.
+ * @param {boolean} useLiveData Will update the chart with the data from the provider
+ * @param {boolean} filterWithDataParameters Will filter live data with parameters from context
  *
  */
 function ConnectedChart(props) {
@@ -71,8 +71,10 @@ function ConnectedChart(props) {
 
   const visData = props.chartDataFromVis;
 
+  console.log('ConnectedChart used !');
   // NOTE: this is a candidate for a HOC, withProviderData
   useEffect(() => {
+    console.log('OPTIONS IN EFFECT:', { source_url, visData, provider_url });
     if (source_url && !visData) {
       getChartDataFromVisualization(source_url);
     }

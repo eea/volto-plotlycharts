@@ -1,7 +1,6 @@
 import React from 'react';
 import { DefaultEditor } from 'react-chart-editor';
 import {
-  GraphCreatePanel,
   GraphTransformsPanel,
   GraphSubplotsPanel,
   StyleLayoutPanel,
@@ -16,6 +15,7 @@ import {
   StyleUpdateMenusPanel,
   //StyleAxesPanel,
 } from 'react-chart-editor';
+import GraphCreatePanel from './GraphCreatePanel';
 import StyleGeneralPanel from './StyleGeneralPanel';
 // import { traceHasColorbar } from './default_panels/StyleColorbarsPanel';
 import { Logo } from 'react-chart-editor';

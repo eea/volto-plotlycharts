@@ -109,6 +109,11 @@ class Edit extends Component {
       this.props,
     );
 
+    console.log('DATA SOURCE ON RENDER', {
+      xsrc: this.props.value.data[0].xsrc,
+      ysrc: this.props.value.data[0].ysrc,
+    });
+
     const { plotly, PlotlyEditor, CustomEditor } = this.state;
     const { DefaultEditor, Panel } = PlotlyEditor || {};
     const DefaultPlotlyEditor = PlotlyEditor?.default;
