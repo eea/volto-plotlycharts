@@ -83,6 +83,8 @@ const ColorPicker = ({ selectedColorscale, color, onChange, ...rest }) => {
             backgroundColor: `${color}`,
             color: cc,
             fontFamily: 'monospace',
+            // without this it is 'capitalize', because of other CSS applied to <button>:
+            textTransform: 'uppercase',
           }}
         >
           {color}
@@ -506,7 +508,7 @@ class UnconnectedMarkerColor extends Component {
               ([val, color], i) => {
                 return (
                   <ColorPickerField
-                    key={i}
+                    key={val}
                     name={val}
                     color={color}
                     colorscale={categoricalColorscale}
