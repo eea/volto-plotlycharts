@@ -6,7 +6,8 @@
 import React, { Component } from 'react';
 import { updateChartDataFromProvider } from 'volto-datablocks/helpers';
 
-import { connect } from 'react-redux';
+// import { connect } from 'react-redux';
+import { connectAnythingToProviderData } from 'volto-datablocks/hocs';
 import 'react-chart-editor/lib/react-chart-editor.css';
 import Inspector from 'react-inspector';
 
@@ -97,11 +98,12 @@ class Edit extends Component {
       this.setState({ ...modules });
     }
   }
+
   render() {
     if (__SERVER__) return '';
 
     const dataSourceOptions = getDataSourceOptions(
-      this.props.providerData || dataSources,
+      this.props.provider_data || dataSources,
     );
 
     const updatedData = updateDataFromColors(
@@ -113,7 +115,10 @@ class Edit extends Component {
     const { DefaultEditor, Panel } = PlotlyEditor || {};
     const DefaultPlotlyEditor = PlotlyEditor?.default;
     const DefaultCustomEditor = CustomEditor?.default;
+
     // https://www.eea.europa.eu/++resource++eea.translations.images/pdflogo-web.png
+    // console.log('data sources', this.props.provider_data);
+
     return (
       <div>
         {plotly && PlotlyEditor && DefaultEditor && (
@@ -125,7 +130,7 @@ class Edit extends Component {
                 layout={this.props.value?.layout || {}}
                 frames={this.props.value?.frames || []}
                 dataSourceOptions={dataSourceOptions}
-                dataSources={this.props.providerData || dataSources}
+                dataSources={this.props.provider_data || dataSources}
                 plotly={this.state.plotly.default}
                 divId="gd"
                 onUpdate={(data, layout, frames) => {
@@ -180,12 +185,6 @@ class Edit extends Component {
   }
 }
 
-export default connect((state, props) => {
-  const base = props.provider_url || props.value?.provider_url;
-  const provider_url = base ? `${base}/@connector-data` : null;
-  return {
-    providerData: provider_url
-      ? state.data_providers.data?.[provider_url]
-      : null,
-  };
-}, null)(Edit);
+export default connectAnythingToProviderData(
+  (props) => props.provider_url || props.value?.provider_url,
+)(Edit);
