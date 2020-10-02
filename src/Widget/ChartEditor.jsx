@@ -23,10 +23,10 @@ const imports = {
     __CLIENT__ && import(/* webpackChunkName: 'plotlydist' */ './CustomEditor'),
 };
 
-const resolveImports = async imports => {
+const resolveImports = async (imports) => {
   const res = {};
   for (const name in imports) {
-    await imports[name].then(module => (res[name] = module)); // .default
+    await imports[name].then((module) => (res[name] = module)); // .default
   }
   return res;
 };
@@ -41,10 +41,14 @@ const dataSources = {
 const config = { editable: true };
 
 function getDataSourceOptions(data) {
-  return Object.keys(data).map(name => ({
+  return Object.keys(data).map((name) => ({
     value: name,
     label: name,
   }));
+}
+
+function updateDataFromColors(data, props) {
+  return data;
 }
 
 const chartHelp = {
@@ -100,20 +104,22 @@ class Edit extends Component {
       this.props.providerData || dataSources,
     );
 
-    const updatedData = updateChartDataFromProvider(
-      this.props.value?.data || [],
-      [],
+    const updatedData = updateDataFromColors(
+      updateChartDataFromProvider(this.props.value?.data || [], []),
+      this.props,
     );
 
     const { plotly, PlotlyEditor, CustomEditor } = this.state;
     const { DefaultEditor, Panel } = PlotlyEditor || {};
+    const DefaultPlotlyEditor = PlotlyEditor?.default;
+    const DefaultCustomEditor = CustomEditor?.default;
     // https://www.eea.europa.eu/++resource++eea.translations.images/pdflogo-web.png
     return (
       <div>
         {plotly && PlotlyEditor && DefaultEditor && (
           <div className="block selected">
             <div className="block-inner-wrapper">
-              <PlotlyEditor.default
+              <DefaultPlotlyEditor
                 config={config}
                 data={updatedData}
                 layout={this.props.value?.layout || {}}
@@ -136,7 +142,7 @@ class Edit extends Component {
                 debug
                 advancedTraceTypeSelector
               >
-                <CustomEditor.default
+                <DefaultCustomEditor
                   onChangeValue={this.props.onChangeValue}
                   value={this.props.value}
                   logoSrc=""
@@ -164,8 +170,8 @@ class Edit extends Component {
                       />
                     </div>
                   </Panel>
-                </CustomEditor.default>
-              </PlotlyEditor.default>
+                </DefaultCustomEditor>
+              </DefaultPlotlyEditor>
             </div>
           </div>
         )}
@@ -174,15 +180,12 @@ class Edit extends Component {
   }
 }
 
-export default connect(
-  (state, props) => {
-    const base = props.provider_url || props.value?.provider_url;
-    const provider_url = base ? `${base}/@connector-data` : null;
-    return {
-      providerData: provider_url
-        ? state.data_providers.data?.[provider_url]
-        : null,
-    };
-  },
-  null,
-)(Edit);
+export default connect((state, props) => {
+  const base = props.provider_url || props.value?.provider_url;
+  const provider_url = base ? `${base}/@connector-data` : null;
+  return {
+    providerData: provider_url
+      ? state.data_providers.data?.[provider_url]
+      : null,
+  };
+}, null)(Edit);

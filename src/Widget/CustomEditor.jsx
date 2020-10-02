@@ -11,7 +11,7 @@ import {
   StyleShapesPanel,
   StyleSlidersPanel,
   StyleImagesPanel,
-  StyleTracesPanel,
+  // StyleTracesPanel,
   StyleColorbarsPanel,
   StyleUpdateMenusPanel,
   //StyleAxesPanel,
@@ -22,7 +22,7 @@ import { Logo } from 'react-chart-editor';
 import { PanelMenuWrapper } from 'react-chart-editor';
 
 import StyleAxesPanel from './StyleAxesPanel';
-//import StyleTracesPanel from './StyleTracesPanel';
+import StyleTracesPanel from './StyleTracesPanel';
 
 class CustomEditor extends DefaultEditor {
   render() {
@@ -47,6 +47,7 @@ class CustomEditor extends DefaultEditor {
           name={_('General')}
         />
         <StyleTracesPanel group={_('Style')} name={_('Traces')} />
+
         {this.hasAxes() && (
           <StyleAxesPanel group={_('Style')} name={_('Axes')} />
         )}
