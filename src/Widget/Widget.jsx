@@ -1,12 +1,14 @@
 import { connect } from 'react-redux';
 import ChartEditor from './ChartEditor';
 import React, { Component } from 'react';
-import { Button, Modal, Form, Grid, Label } from 'semantic-ui-react';
+import { Button, Modal, Grid, Label } from 'semantic-ui-react';
 import { map } from 'lodash';
 
 import { getDataFromProvider } from 'volto-datablocks/actions';
+// import { connectAnythingToProviderData } from 'volto-datablocks/hocs';
 import ConnectedChart from 'volto-plotlycharts/ConnectedChart';
 import PickProvider from 'volto-datablocks/PickProvider';
+import { FormFieldWrapper } from '@plone/volto/components';
 
 import './styles.css';
 
@@ -26,7 +28,7 @@ class ModalChartEditor extends Component {
           <ChartEditor
             value={this.state.value}
             providerData={this.state.providerData}
-            onChangeValue={value => {
+            onChangeValue={(value) => {
               this.setState({ value });
             }}
           />
@@ -41,10 +43,10 @@ class ModalChartEditor extends Component {
                       value: { ...this.state.value, provider_url },
                     });
                   }}
-                  onLoadProviderData={providerData =>
+                  onLoadProviderData={(providerData) =>
                     this.setState({ providerData })
                   }
-                  value={this.state.value?.provider_url || ''}
+                  value={this.state.value?.provider_url}
                   showReload={true}
                 />
               </Grid.Column>
@@ -101,12 +103,12 @@ class ChartWidget extends Component {
     const {
       id,
       title,
-      required,
+      // required,
       description,
       error,
       value, // like: { data || [], layout || {}, frames || [], provider_url }
-      onChange,
-      fieldSet,
+      // onChange,
+      // fieldSet,
     } = this.props;
 
     if (__SERVER__) return '';
@@ -117,54 +119,26 @@ class ChartWidget extends Component {
       height: this.props.value?.layout?.height || 240,
     };
     return (
-      <Form.Field
-        inline
-        required={required}
-        error={error && error.length > 0}
-        className={description ? 'help' : ''}
-        id={`${fieldSet || 'field'}-${id}`}
-      >
+      <FormFieldWrapper {...this.props} columns={1}>
         <Grid>
           <Grid.Row stretched>
             <Grid.Column width="4">
               <div className="wrapper">
                 <label htmlFor={`field-${id}`}>{title}</label>
+
+                <Button
+                  onClick={(ev) => {
+                    ev.stopPropagation();
+                    ev.preventDefault();
+                    this.setState({ showChartEditor: true });
+                  }}
+                >
+                  Open Chart Editor
+                </Button>
               </div>
             </Grid.Column>
             <Grid.Column width="8">
-              <Button
-                onClick={ev => {
-                  ev.stopPropagation();
-                  ev.preventDefault();
-                  this.setState({ showChartEditor: true });
-                }}
-              >
-                Open Chart Editor
-              </Button>
-              {this.state.showChartEditor ? (
-                <ModalChartEditor
-                  value={value}
-                  onChange={changedValue =>
-                    this.handleModalChange(changedValue)
-                  }
-                  onClose={() =>
-                    this.setState({
-                      showChartEditor: false,
-                    })
-                  }
-                />
-              ) : (
-                <ConnectedChart
-                  data={{ chartData: this.props.value }}
-                  frames={this.props.value?.frames || []}
-                  layout={layout}
-                />
-              )}
-              {map(error, message => (
-                <Label key={message} basic color="red" pointing>
-                  {message}
-                </Label>
-              ))}
+              <div></div>
             </Grid.Column>
           </Grid.Row>
           {description && (
@@ -175,7 +149,30 @@ class ChartWidget extends Component {
             </Grid.Row>
           )}
         </Grid>
-      </Form.Field>
+
+        {this.state.showChartEditor ? (
+          <ModalChartEditor
+            value={value}
+            onChange={(changedValue) => this.handleModalChange(changedValue)}
+            onClose={() =>
+              this.setState({
+                showChartEditor: false,
+              })
+            }
+          />
+        ) : (
+          <ConnectedChart
+            data={{ chartData: this.props.value }}
+            frames={this.props.value?.frames || []}
+            layout={layout}
+          />
+        )}
+        {map(error, (message) => (
+          <Label key={message} basic color="red" pointing>
+            {message}
+          </Label>
+        ))}
+      </FormFieldWrapper>
     );
   }
 }
@@ -193,3 +190,7 @@ export default connect(
   },
   { getDataFromProvider },
 )(ChartWidget);
+
+// export default connectAnythingToProviderData(
+//   (props) => props.provider_url || props.value?.provider_url,
+// )(ChartWidget);
