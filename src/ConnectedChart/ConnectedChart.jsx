@@ -76,7 +76,7 @@ function ConnectedChart(props) {
     if (source_url && !visData) {
       getChartDataFromVisualization(source_url);
     }
-    if (provider_url && !visData) getDataFromProvider(provider_url || url);
+    if (provider_url) getDataFromProvider(provider_url || url);
   }, [
     provider_url,
     visData,
@@ -139,15 +139,15 @@ function ConnectedChart(props) {
 
   // TODO: only use fallback data if chartData.data.url doesn't exist
   // or the connected_data_parameters don't exist
-  console.log('chartdata', chartData);
+
   let data =
-    props.providerData && useLiveData && chartData.data
+    props.providerData && useLiveData
       ? mixProviderData(
           chartData.data,
           props.providerData,
           props.connected_data_parameters,
         )
-      : chartData?.data || [];
+      : chartData.data || [];
   data = data.map(trace => ({
     ...trace,
     textfont: {
