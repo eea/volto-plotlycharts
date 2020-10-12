@@ -122,11 +122,12 @@ class ChartWidget extends Component {
       <FormFieldWrapper {...this.props} columns={1}>
         <Grid>
           <Grid.Row stretched>
-            <Grid.Column width="4">
+            <Grid.Column width="12">
               <div className="wrapper">
                 <label htmlFor={`field-${id}`}>{title}</label>
 
                 <Button
+                  floated="right"
                   onClick={(ev) => {
                     ev.stopPropagation();
                     ev.preventDefault();
