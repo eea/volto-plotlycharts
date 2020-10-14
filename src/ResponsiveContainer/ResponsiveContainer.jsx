@@ -18,7 +18,7 @@ const LoadablePlot = Loadable({
   },
 });
 
-const isPercent = value =>
+const isPercent = (value) =>
   isString(value) && value.indexOf('%') === value.length - 1;
 
 function asNumber(value) {
@@ -166,7 +166,7 @@ class ResponsiveContainer extends Component {
       <div
         id={`${id}`}
         className={classNames('recharts-responsive-container', className)}
-        ref={node => {
+        ref={(node) => {
           this.container = node;
         }}
         style={{

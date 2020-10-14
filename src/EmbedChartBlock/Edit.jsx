@@ -8,6 +8,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Segment, Form as UiForm } from 'semantic-ui-react';
 
+// TODO: use volto-slate
 import Editor from '@plone/volto/components/manage/Blocks/Text/Edit';
 import { SidebarPortal } from '@plone/volto/components'; // EditBlock
 
@@ -40,7 +41,7 @@ class EmbedChartBlockEdit extends Component {
       document.removeEventListener('mousedown', this.handleClickOutside, false);
   }
 
-  handleClickOutside = e => {
+  handleClickOutside = (e) => {
     let toolbar = __CLIENT__ && document && document.getElementById(toolbarId);
 
     let active =
@@ -128,7 +129,4 @@ class EmbedChartBlockEdit extends Component {
   }
 }
 
-export default connect(
-  null,
-  { changeSidebarState },
-)(EmbedChartBlockEdit);
+export default connect(null, { changeSidebarState })(EmbedChartBlockEdit);

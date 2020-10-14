@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import ConnectedChart from '../ConnectedChart';
 import ViewText from '@plone/volto/components/manage/Blocks/Text/View';
@@ -90,15 +90,12 @@ EmbedChartView.propTypes = {
   data: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
-export default connect(
-  (state, props) => {
-    const visUrl = props.data?.vis_url;
-    const providerUrl = visUrl
-      ? state.chart_data_visualization?.[visUrl]?.item?.provider_url
-      : null;
-    return {
-      providerUrl,
-    };
-  },
-  {},
-)(WidthBasedLayoutProvider(EmbedChartView));
+export default connect((state, props) => {
+  const visUrl = props.data?.vis_url;
+  const providerUrl = visUrl
+    ? state.chart_data_visualization?.[visUrl]?.item?.provider_url
+    : null;
+  return {
+    providerUrl,
+  };
+}, {})(WidthBasedLayoutProvider(EmbedChartView));

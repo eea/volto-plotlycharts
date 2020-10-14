@@ -3,12 +3,12 @@ import componentQueries from 'react-component-queries';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 
-const WidthBasedLayoutProvider = WrappedComponent => props => {
+const WidthBasedLayoutProvider = (WrappedComponent) => (props) => {
   return <WrappedComponent {...props} />;
 };
 
 const connectedWidthProvider = compose(
-  connect(state => ({
+  connect((state) => ({
     mosaic_width: state.mosaic_width.items,
   })),
   componentQueries({
@@ -25,7 +25,7 @@ const connectedWidthProvider = compose(
 
           const windowWidth = __CLIENT__ && window.innerWidth;
           const margins = windowWidth - mosaic_width;
-          const breakpoint = screentype =>
+          const breakpoint = (screentype) =>
             windowWidth
               ? mosaic_breakpoints[screentype] - margins
               : mosaic_breakpoints[screentype];
