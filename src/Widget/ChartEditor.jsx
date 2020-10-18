@@ -13,18 +13,19 @@ import Inspector from 'react-inspector';
 
 import './fixes.css';
 
-const imports = {
-  PlotlyEditor:
-    __CLIENT__ &&
-    import(/* webpackChunkName: 'plotlyeditor' */ 'react-chart-editor'),
-  plotly:
-    __CLIENT__ &&
-    import(/* webpackChunkName: 'plotlydist' */ 'plotly.js/dist/plotly'),
-  CustomEditor:
-    __CLIENT__ && import(/* webpackChunkName: 'plotlydist' */ './CustomEditor'),
-};
+const resolveImports = async () => {
+  const imports = {
+    PlotlyEditor:
+      __CLIENT__ &&
+      import(/* webpackChunkName: 'plotlyeditor' */ 'react-chart-editor'),
+    plotly:
+      __CLIENT__ &&
+      import(/* webpackChunkName: 'plotlydist' */ 'plotly.js/dist/plotly'),
+    CustomEditor:
+      __CLIENT__ &&
+      import(/* webpackChunkName: 'plotlydist' */ './CustomEditor'),
+  };
 
-const resolveImports = async (imports) => {
   const res = {};
   for (const name in imports) {
     await imports[name].then((module) => (res[name] = module)); // .default
@@ -94,7 +95,7 @@ class Edit extends Component {
 
   async componentDidMount() {
     if (__CLIENT__) {
-      const modules = await resolveImports(imports);
+      const modules = await resolveImports();
       this.setState({ ...modules });
     }
   }

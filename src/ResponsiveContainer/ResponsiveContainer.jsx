@@ -12,7 +12,11 @@ import { Placeholder } from 'semantic-ui-react';
 
 import Loadable from 'react-loadable';
 const LoadablePlot = Loadable({
-  loader: () => import('react-plotly.js'),
+  loader: () =>
+    import(
+      /* webpackChunkName: "volto-plotlycharts-react-plotly" */
+      'react-plotly.js'
+    ),
   loading() {
     return <div>Loading chart...</div>;
   },
