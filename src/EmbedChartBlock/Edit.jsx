@@ -13,7 +13,8 @@ import Editor from '@plone/volto/components/manage/Blocks/Text/Edit';
 import { SidebarPortal } from '@plone/volto/components'; // EditBlock
 
 import { changeSidebarState } from 'volto-plotlycharts/actions';
-import { BlockEditForm } from 'volto-addons/BlockForm';
+// import { BlockEditForm } from 'volto-addons/BlockForm';
+import InlineForm from '@plone/volto/components/manage/Form/InlineForm';
 import ConnectedChart from 'volto-plotlycharts/ConnectedChart';
 
 import schema from './schema';
@@ -68,7 +69,7 @@ class EmbedChartBlockEdit extends Component {
       <div className="block selected">
         <div className="block-inner-wrapper">
           <SidebarPortal selected={this.props.selected}>
-            <BlockEditForm
+            <InlineForm
               schema={schema}
               title={schema.title}
               onChangeField={(id, value) => {
