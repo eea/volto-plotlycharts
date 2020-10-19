@@ -27,6 +27,20 @@ function addCustomGroup(config) {
 export function applyConfig(config) {
   addCustomGroup(config);
 
+  config.settings.plotlyChartsColorScale = [
+    ...(config.settings.plotlyChartsColorScale || []),
+    '#a6cee3',
+    '#1f78b4',
+    '#b2df8a',
+    '#33a02c',
+    '#fb9a99',
+    '#e31a1c',
+    '#a01a33',
+    '#e3b2df',
+    '#1fe31c',
+    '#e378b4',
+  ];
+
   config.views.contentTypesViews.visualization = VisualizationView;
 
   config.widgets.id.visualization = ChartWidget;
