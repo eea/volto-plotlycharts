@@ -5,18 +5,17 @@
 import React, { Component } from 'react';
 import { updateChartDataFromProvider } from 'volto-datablocks/helpers';
 
-// import { connect } from 'react-redux';
 import { connectAnythingToProviderData } from 'volto-datablocks/hocs';
 import 'react-chart-editor/lib/react-chart-editor.css';
-import Inspector from 'react-inspector';
 
 import loadable from '@loadable/component';
 
 import './fixes.css';
 
-const LoadablePlotlyEditor = loadable.lib(() => __CLIENT__ ? import('react-chart-editor') : Promise.resolve());
-const LoadablePlotly = loadable.lib(() => __CLIENT__ ? import('plotly.js/dist/plotly') : Promise.resolve());
-const LoadableCustomEditor = loadable.lib(() => __CLIENT__ ? import('./CustomEditor') : Promise.resolve());
+const LoadablePlotly = loadable.lib(() => import('plotly.js/dist/plotly'));
+const LoadablePlotlyEditor = loadable.lib(() => import('react-chart-editor'));
+const LoadableCustomEditor = loadable.lib(() => import('./CustomEditor'));
+const LoadableInspector = loadable(() => import('react-inspector'));
 
 // TODO: remove these fallbacks;
 const dataSources = {
@@ -105,10 +104,12 @@ class Edit extends Component {
                 const Panel = props2.Panel;
                 const DefaultPlotlyEditor = props2.default;
 
+                console.log('p2', props2);
+
                 return (
                   <LoadablePlotly>
                     {(props3) => {
-                      const DefaultPlotly = props3.default;
+                      const DefaultPlotly = props3;
 
                       return (
                         <LoadableCustomEditor>
@@ -160,7 +161,7 @@ class Edit extends Component {
                                       Refresh
                                     </button>
                                     <div style={{ height: '80vh' }}>
-                                      <Inspector
+                                      <LoadableInspector
                                         data={{ _full: this.state.full }}
                                         expandLevel={2}
                                         sortObjectKeys={true}
@@ -172,7 +173,6 @@ class Edit extends Component {
                             );
                           }}
                         </LoadableCustomEditor>
-
                       );
                     }}
                   </LoadablePlotly>

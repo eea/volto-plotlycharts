@@ -18,8 +18,7 @@ import {
 } from 'react-chart-editor';
 import StyleGeneralPanel from './StyleGeneralPanel';
 // import { traceHasColorbar } from './default_panels/StyleColorbarsPanel';
-import { Logo } from 'react-chart-editor';
-import { PanelMenuWrapper } from 'react-chart-editor';
+import { Logo, PanelMenuWrapper } from 'react-chart-editor';
 
 import StyleAxesPanel from './StyleAxesPanel';
 import StyleTracesPanel from './StyleTracesPanel';
