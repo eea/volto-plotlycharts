@@ -15,9 +15,11 @@ import ColorscalePickerWidget from 'react-chart-editor/lib/components/widgets/Co
 import { CirclePicker } from 'react-color';
 import l from 'lodash';
 import { Dropdown } from 'semantic-ui-react';
+import { settings } from '~/config';
 
 import { biseColorscale } from './config';
-const defaultColorscale = biseColorscale;
+
+const defaultColorscale = settings.biseColorscale || biseColorscale;
 
 /**
  * React color picker component.
