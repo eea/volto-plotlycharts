@@ -48,7 +48,7 @@ export function installBlocks(config) {
     view: ChartBlockView,
     edit: ChartBlockEdit,
     icon: chartIcon,
-    group: 'custom_addons',
+    group: 'bise_specific',
     sidebarTab: 1,
     blockHasOwnFocusManagement: true,
   };
