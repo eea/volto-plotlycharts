@@ -32,6 +32,16 @@ export function applyConfig(config) {
   config.widgets.id.visualization = ChartWidget;
   config.widgets.widget.pick_visualization = PickVisualization;
 
+  return {
+    ...config,
+    addonReducers: {
+      ...config.addonReducers,
+      ...addonReducers,
+    },
+  };
+}
+
+export function installBlocks(config) {
   config.blocks.blocksConfig.plotly_chart = {
     id: 'plotly_chart',
     title: 'Plotly Chart',
@@ -54,11 +64,5 @@ export function applyConfig(config) {
     blockHasOwnFocusManagement: true,
   };
 
-  return {
-    ...config,
-    addonReducers: {
-      ...config.addonReducers,
-      ...addonReducers,
-    },
-  };
+  return config;
 }

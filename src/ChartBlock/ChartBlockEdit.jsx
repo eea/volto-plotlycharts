@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import { SidebarPortal } from '@plone/volto/components'; // EditBlock
 
 import { changeSidebarState } from 'volto-plotlycharts/actions';
-import { BlockEditForm } from 'volto-addons/BlockForm';
+// import { BlockEditForm } from 'volto-addons/BlockForm';
+import InlineForm from '@plone/volto/components/manage/Form/InlineForm';
 import ChartEditor from 'volto-plotlycharts/Widget/ChartEditor';
 
 import schema from './schema';
@@ -53,7 +54,7 @@ class Edit extends Component {
           }}
         />
         <SidebarPortal selected={this.props.selected}>
-          <BlockEditForm
+          <InlineForm
             schema={schema}
             title={schema.title}
             onChangeField={(id, value) => {
