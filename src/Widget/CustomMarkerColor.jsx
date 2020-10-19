@@ -17,10 +17,6 @@ import l from 'lodash';
 import { Dropdown } from 'semantic-ui-react';
 import { settings } from '~/config';
 
-import { biseColorscale } from './config';
-
-const defaultColorscale = settings.biseColorscale || biseColorscale;
-
 /**
  * React color picker component.
  *
@@ -302,7 +298,8 @@ class UnconnectedMarkerColor extends Component {
       case 'manual':
         this.updateCategoricalsInData({
           'marker.colorscale':
-            this.props.container?.marker?.colorscale || defaultColorscale,
+            this.props.container?.marker?.colorscale ||
+            settings.plotlyChartsColorScale,
           'marker.categoricalaxis':
             this.props.container?.marker?.categoricalaxis || 'x',
           'meta.manualcolor': this.props.container?.meta?.manualcolor || {},
