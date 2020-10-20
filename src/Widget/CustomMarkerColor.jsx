@@ -12,12 +12,14 @@ import DataSelector from 'react-chart-editor/lib/components/fields/DataSelector'
 import VisibilitySelect from 'react-chart-editor/lib/components/fields/VisibilitySelect';
 import { MULTI_VALUED, COLORS } from 'react-chart-editor/lib/lib/constants';
 import ColorscalePickerWidget from 'react-chart-editor/lib/components/widgets/ColorscalePicker';
-import { CirclePicker } from 'react-color';
 import l from 'lodash';
 import { Dropdown } from 'semantic-ui-react';
 
 import { biseColorscale } from './config';
 const defaultColorscale = biseColorscale;
+
+import loadable from '@loadable/component';
+const ReactColor = loadable.lib(() => import('react-color'));
 
 /**
  * React color picker component.
@@ -93,11 +95,15 @@ const ColorPicker = ({ selectedColorscale, color, onChange, ...rest }) => {
     >
       <Dropdown.Menu>
         {__CLIENT__ && (
-          <CirclePicker
-            color={color}
-            onChange={onChange}
-            colors={selectedColorscale}
-          />
+          <ReactColor>
+            {({ CirclePicker }) => {
+              return <CirclePicker
+                color={color}
+                onChange={onChange}
+                colors={selectedColorscale}
+              />;
+            }}
+          </ReactColor>
         )}
       </Dropdown.Menu>
     </Dropdown>
@@ -108,7 +114,7 @@ const ColorPicker = ({ selectedColorscale, color, onChange, ...rest }) => {
  * React color picker field component. Just an enhanced ColorPicker with a label
  * before it.
  *
- * @param {bject} props
+ * @param {object} props
  * @param {string} props.name The string to put in the label.
  * @param {string} props.color Currently selected color.
  * @param {function} props.onChange Handler function for when the selected color
