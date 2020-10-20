@@ -1,37 +1,21 @@
 /*
  * A wrapper around the react-chart-editor component.
- *
  */
 
 import React, { Component } from 'react';
 import { updateChartDataFromProvider } from 'volto-datablocks/helpers';
 
-// import { connect } from 'react-redux';
 import { connectAnythingToProviderData } from 'volto-datablocks/hocs';
 import 'react-chart-editor/lib/react-chart-editor.css';
-import Inspector from 'react-inspector';
+
+import loadable from '@loadable/component';
 
 import './fixes.css';
 
-const resolveImports = async () => {
-  const imports = {
-    PlotlyEditor:
-      __CLIENT__ &&
-      import(/* webpackChunkName: 'plotlyeditor' */ 'react-chart-editor'),
-    plotly:
-      __CLIENT__ &&
-      import(/* webpackChunkName: 'plotlydist' */ 'plotly.js/dist/plotly'),
-    CustomEditor:
-      __CLIENT__ &&
-      import(/* webpackChunkName: 'plotlydist' */ './CustomEditor'),
-  };
-
-  const res = {};
-  for (const name in imports) {
-    await imports[name].then((module) => (res[name] = module)); // .default
-  }
-  return res;
-};
+const LoadablePlotly = loadable.lib(() => import('plotly.js/dist/plotly'));
+const LoadablePlotlyEditor = loadable.lib(() => import('react-chart-editor'));
+const LoadableCustomEditor = loadable.lib(() => import('./CustomEditor'));
+const LoadableInspector = loadable(() => import('react-inspector'));
 
 // TODO: remove these fallbacks;
 const dataSources = {
@@ -56,11 +40,11 @@ function updateDataFromColors(data, props) {
 const chartHelp = {
   area: {
     helpDoc: 'https://help.plot.ly/make-an-area-graph/',
-    examplePlot: () => {},
+    examplePlot: () => { },
   },
   bar: {
     helpDoc: 'https://help.plot.ly/stacked-bar-chart/',
-    examplePlot: () => {},
+    examplePlot: () => { },
   },
   box: { helpDoc: 'https://help.plot.ly/make-a-box-plot/' },
   candlestick: { helpDoc: 'https://help.plot.ly/make-a-candlestick/' },
@@ -88,16 +72,12 @@ class Edit extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      plotly: null,
-      PlotlyEditor: null,
+      full: null,
     };
-  }
 
-  async componentDidMount() {
-    if (__CLIENT__) {
-      const modules = await resolveImports();
-      this.setState({ ...modules });
-    }
+    LoadablePlotlyEditor.preload();
+    LoadablePlotly.preload();
+    LoadableCustomEditor.preload();
   }
 
   render() {
@@ -112,75 +92,95 @@ class Edit extends Component {
       this.props,
     );
 
-    const { plotly, PlotlyEditor, CustomEditor } = this.state;
-    const { DefaultEditor, Panel } = PlotlyEditor || {};
-    const DefaultPlotlyEditor = PlotlyEditor?.default;
-    const DefaultCustomEditor = CustomEditor?.default;
-
     // https://www.eea.europa.eu/++resource++eea.translations.images/pdflogo-web.png
     // console.log('data sources', this.props.provider_data);
 
     return (
       <div>
-        {plotly && PlotlyEditor && DefaultEditor && (
-          <div className="block selected">
-            <div className="block-inner-wrapper">
-              <DefaultPlotlyEditor
-                config={config}
-                data={updatedData}
-                layout={this.props.value?.layout || {}}
-                frames={this.props.value?.frames || []}
-                dataSourceOptions={dataSourceOptions}
-                dataSources={this.props.provider_data || dataSources}
-                plotly={this.state.plotly.default}
-                divId="gd"
-                onUpdate={(data, layout, frames) => {
-                  this.props.onChangeValue({
-                    ...this.props.value,
-                    data,
-                    layout,
-                    frames,
-                  });
-                }}
-                chartHelp={chartHelp}
-                showFieldTooltips
-                useResizeHandler
-                debug
-                advancedTraceTypeSelector
-              >
-                <DefaultCustomEditor
-                  onChangeValue={this.props.onChangeValue}
-                  value={this.props.value}
-                  logoSrc=""
-                >
-                  <Panel group="Dev" name="Inspector">
-                    <button
-                      className="devbtn"
-                      onClick={() => {
-                        const gd = document.getElementById('gd') || {};
-                        this.setState({
-                          full: {
-                            _fullData: gd._fullData || [],
-                            _fullLayout: gd._fullLayout || {},
-                          },
-                        });
-                      }}
-                    >
-                      Refresh
-                    </button>
-                    <div style={{ height: '80vh' }}>
-                      <Inspector
-                        data={{ _full: this.state.full }}
-                        expandLevel={2}
-                        sortObjectKeys={true}
-                      />
-                    </div>
-                  </Panel>
-                </DefaultCustomEditor>
-              </DefaultPlotlyEditor>
-            </div>
+        <div className="block selected">
+          <div className="block-inner-wrapper">
+            <LoadablePlotlyEditor>
+              {(props2) => {
+                const Panel = props2.Panel;
+                const DefaultPlotlyEditor = props2.default;
+
+                console.log('p2', props2);
+
+                return (
+                  <LoadablePlotly>
+                    {(props3) => {
+                      const DefaultPlotly = props3;
+
+                      return (
+                        <LoadableCustomEditor>
+                          {(props4) => {
+                            const DefaultCustomEditor = props4.default;
+
+                            return (
+                              <DefaultPlotlyEditor
+                                config={config}
+                                data={updatedData}
+                                layout={this.props.value?.layout || {}}
+                                frames={this.props.value?.frames || []}
+                                dataSourceOptions={dataSourceOptions}
+                                dataSources={this.props.provider_data || dataSources}
+                                plotly={DefaultPlotly}
+                                divId="gd"
+                                onUpdate={(data, layout, frames) => {
+                                  this.props.onChangeValue({
+                                    ...this.props.value,
+                                    data,
+                                    layout,
+                                    frames,
+                                  });
+                                }}
+                                chartHelp={chartHelp}
+                                showFieldTooltips
+                                useResizeHandler
+                                debug
+                                advancedTraceTypeSelector
+                              >
+                                <DefaultCustomEditor
+                                  onChangeValue={this.props.onChangeValue}
+                                  value={this.props.value}
+                                  logoSrc=""
+                                >
+                                  <Panel group="Dev" name="Inspector">
+                                    <button
+                                      className="devbtn"
+                                      onClick={() => {
+                                        const gd = document.getElementById('gd') || {};
+                                        this.setState({
+                                          full: {
+                                            _fullData: gd._fullData || [],
+                                            _fullLayout: gd._fullLayout || {},
+                                          },
+                                        });
+                                      }}
+                                    >
+                                      Refresh
+                                    </button>
+                                    <div style={{ height: '80vh' }}>
+                                      <LoadableInspector
+                                        data={{ _full: this.state.full }}
+                                        expandLevel={2}
+                                        sortObjectKeys={true}
+                                      />
+                                    </div>
+                                  </Panel>
+                                </DefaultCustomEditor>
+                              </DefaultPlotlyEditor>
+                            );
+                          }}
+                        </LoadableCustomEditor>
+                      );
+                    }}
+                  </LoadablePlotly>
+                );
+              }}
+            </LoadablePlotlyEditor>
           </div>
-        )}
+        </div>
       </div>
     );
   }
