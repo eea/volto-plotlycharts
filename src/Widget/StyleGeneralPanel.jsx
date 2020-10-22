@@ -20,10 +20,13 @@ import {
 import { HoverColor } from 'react-chart-editor/lib/components/fields/derived';
 import DataSelector from 'react-chart-editor/lib/components/fields/DataSelector';
 import { Colorscale } from 'react-colorscales';
-import Select from 'react-select';
+
+import loadable from '@loadable/component';
 
 import { settings } from '~/config';
 import { useEffect } from 'react';
+
+const Select = loadable(() => import('react-select'));
 
 const customColors = settings.plotlyCustomColors || [];
 
