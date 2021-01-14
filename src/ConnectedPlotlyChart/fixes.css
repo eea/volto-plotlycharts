@@ -1,0 +1,12 @@
+/* .fold__top { */
+/*   height: 2.3em !important; */
+/* } */
+/*  */
+/* .editor_controls__wrapper { */
+/*   overflow: auto; */
+/*   max-height: 80vh; */
+/* } */
+
+.connected-chart-wrapper {
+  overflow-x: auto;
+}

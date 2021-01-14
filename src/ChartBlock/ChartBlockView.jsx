@@ -1,5 +1,5 @@
 import ConnectedChart from '../ConnectedChart';
-import { ViewSourcesBlock } from 'volto-datablocks/components';
+import { SourcesBlockView } from 'volto-datablocks/components';
 import cx from 'classnames';
 import useMarginCalculator from '../MarginCalculator';
 import React from 'react';
@@ -41,7 +41,7 @@ const ChartView = ({ data, ...props }) => {
               hoverFormatXY={data.hover_format_xy}
             />
             <div>
-              <ViewSourcesBlock
+              <SourcesBlockView
                 initialSource={data.chart_source}
                 initialSourceLink={data.chart_source_link}
                 multipleSources={data.chartSources}

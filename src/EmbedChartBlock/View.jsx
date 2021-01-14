@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ConnectedChart from '../ConnectedChart';
 import ViewText from '@plone/volto/components/manage/Blocks/Text/View';
-import { ViewSourcesBlock } from 'volto-datablocks/components';
+import { SourcesBlockView } from 'volto-datablocks/components';
 import { connect } from 'react-redux';
 
 import WidthBasedLayoutProvider from '../LayoutProvider/WidthBasedLayoutProvider';
@@ -72,7 +72,7 @@ const EmbedChartView = ({
             )}
           </div>
           <div>
-            <ViewSourcesBlock
+            <SourcesBlockView
               initialSource={data.chart_source}
               initialSourceLink={data.chart_source_link}
               multipleSources={data.chartSources}
