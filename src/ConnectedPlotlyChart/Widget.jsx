@@ -1,14 +1,15 @@
 import { connect } from 'react-redux';
-import ChartEditor from './ChartEditor';
 import React, { Component } from 'react';
 import { Button, Modal, Grid, Label } from 'semantic-ui-react';
-import { map } from 'lodash';
+import { map, omit } from 'lodash';
+
+import { FormFieldWrapper } from '@plone/volto/components';
 
 import { getDataFromProvider } from 'volto-datablocks/actions';
-// import { connectAnythingToProviderData } from 'volto-datablocks/hocs';
-import ConnectedChart from 'volto-plotlycharts/ConnectedChart';
 import { PickProviderWidget } from 'volto-datablocks/components';
-import { FormFieldWrapper } from '@plone/volto/components';
+import ChartEditor from 'volto-plotlycharts/Widget/ChartEditor';
+
+import ConnectedChart from './ConnectedChart';
 
 import './styles.css';
 
@@ -36,8 +37,9 @@ class ModalChartEditor extends Component {
         <Modal.Actions>
           <Grid>
             <Grid.Row>
-              <Grid.Column width="8">
+              <Grid.Column computer={8} tablet={12}>
                 <PickProviderWidget
+                  title="Select data source"
                   onChange={(id, provider_url) => {
                     this.setState({
                       value: { ...this.state.value, provider_url },
@@ -50,8 +52,9 @@ class ModalChartEditor extends Component {
                   showReload={true}
                 />
               </Grid.Column>
-              <Grid.Column width="4">
+              <Grid.Column computer={4} tablet={12}>
                 <Button
+                  primary
                   floated="right"
                   onClick={() => this.props.onChange(this.state.value)}
                 >
@@ -80,18 +83,21 @@ class ChartWidget extends Component {
   }
 
   handleModalChange(value) {
-    const chartData = {
-      data: value.data,
-      frames: value.frames,
-      layout: value.layout,
-      provider_url: value.provider_url,
-    };
+    // value is like: {
+    //   data: value.data,
+    //   frames: value.frames,
+    //   layout: value.layout,
+    //   provider_url: value.provider_url,
+    // };
     this.props.onChange(this.props.id, {
-      ...this.props.value,
-      chartData,
-      data: value.data,
-      frames: value.frames,
-      layout: value.layout,
+      ...omit(
+        // Fix BBB
+        {
+          ...this.props.value,
+          ...value,
+        },
+        ['chartData'],
+      ),
       provider_url: value.provider_url,
     });
     this.setState({
@@ -103,10 +109,10 @@ class ChartWidget extends Component {
     const {
       id,
       title,
-      // required,
       description,
       error,
       value, // like: { data || [], layout || {}, frames || [], provider_url }
+      // required,
       // onChange,
       // fieldSet,
     } = this.props;
@@ -195,3 +201,5 @@ export default connect(
 // export default connectAnythingToProviderData(
 //   (props) => props.provider_url || props.value?.provider_url,
 // )(ChartWidget);
+//
+// import { connectAnythingToProviderData } from 'volto-datablocks/hocs';

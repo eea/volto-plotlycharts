@@ -12,21 +12,7 @@ import EmbedChartBlockView from './EmbedChartBlock/View';
 import chartIcon from '@plone/volto/icons/world.svg';
 import * as addonReducers from './reducers';
 
-function addCustomGroup(config) {
-  const hasCustomGroup = config.blocks.groupBlocksOrder.filter(
-    (el) => el.id === 'custom_addons',
-  );
-  if (hasCustomGroup.length === 0) {
-    config.blocks.groupBlocksOrder.push({
-      id: 'custom_addons',
-      title: 'Custom addons',
-    });
-  }
-}
-
 export function applyConfig(config) {
-  addCustomGroup(config);
-
   config.settings.plotlyChartsColorScale = [
     ...(config.settings.plotlyChartsColorScale || []),
     '#a6cee3',
