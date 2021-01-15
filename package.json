@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/eea/volto-plotlycharts#readme",
   "dependencies": {
-    "plotly.js": "1.57.0",
+    "plotly.js": "github:plotly/plotly.js#master",
     "react-chart-editor": "0.41.0",
     "react-inspector": "^5.0.1",
     "react-plotly.js": "~2.5.0",
