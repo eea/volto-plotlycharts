@@ -10,17 +10,14 @@ import ReactResizeDetector from 'react-resize-detector';
 import { isString, debounce } from 'lodash';
 import { Placeholder } from 'semantic-ui-react';
 
-import Loadable from 'react-loadable';
-const LoadablePlot = Loadable({
-  loader: () =>
-    import(
-      /* webpackChunkName: "volto-plotlycharts-react-plotly" */
-      'react-plotly.js'
-    ),
-  loading() {
-    return <div>Loading chart...</div>;
-  },
-});
+import loadable from '@loadable/component';
+
+const LoadablePlot = loadable(() =>
+  import(
+    /* webpackChunkName: "volto-plotlycharts-react-plotly" */
+    'react-plotly.js'
+  ),
+);
 
 const isPercent = (value) =>
   isString(value) && value.indexOf('%') === value.length - 1;
