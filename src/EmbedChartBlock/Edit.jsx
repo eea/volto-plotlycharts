@@ -13,7 +13,6 @@ import Editor from '@plone/volto/components/manage/Blocks/Text/Edit';
 import { SidebarPortal } from '@plone/volto/components'; // EditBlock
 
 import { changeSidebarState } from 'volto-plotlycharts/actions';
-// import { BlockEditForm } from 'volto-addons/BlockForm';
 import InlineForm from '@plone/volto/components/manage/Form/InlineForm';
 import ConnectedChart from 'volto-plotlycharts/ConnectedChart';
 
