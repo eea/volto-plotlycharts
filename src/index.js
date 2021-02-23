@@ -1,5 +1,6 @@
 import { applyConfig } from './config';
 import installConnectedPlotlyChart from 'volto-plotlycharts/ConnectedPlotlyChart';
+import installCustomConnectedChart from 'volto-plotlycharts/CustomConnectedChart';
 export * from './config';
 
 function addCustomGroup(config) {
@@ -17,8 +18,9 @@ function addCustomGroup(config) {
 export default (config) => {
   addCustomGroup(config);
 
-  return [installConnectedPlotlyChart, applyConfig].reduce(
-    (acc, apply) => apply(acc),
-    config,
-  );
+  return [
+    installConnectedPlotlyChart,
+    installCustomConnectedChart,
+    applyConfig,
+  ].reduce((acc, apply) => apply(acc), config);
 };
