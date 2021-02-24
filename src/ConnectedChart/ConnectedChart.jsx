@@ -72,20 +72,20 @@ function ConnectedChart(props) {
   const visData = props.chartDataFromVis;
 
   // NOTE: this is a candidate for a HOC, withProviderData
-  useEffect(() => {
-    if (source_url && !visData) {
-      getChartDataFromVisualization(source_url);
-    }
-    if (provider_url) getDataFromProvider(provider_url || url);
-  }, [
-    provider_url,
-    visData,
-    url,
-    source_url,
-    props.data,
-    getDataFromProvider,
-    getChartDataFromVisualization,
-  ]);
+  // useEffect(() => {
+  //   if (source_url && !visData) {
+  //     getChartDataFromVisualization(source_url);
+  //   }
+  //   if (provider_url) getDataFromProvider(provider_url || url);
+  // }, [
+  //   provider_url,
+  //   visData,
+  //   url,
+  //   source_url,
+  //   props.data,
+  //   getDataFromProvider,
+  //   getChartDataFromVisualization,
+  // ]);
 
   // const [visible, setVisible] = useState(false);
 

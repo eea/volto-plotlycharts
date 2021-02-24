@@ -40,11 +40,11 @@ function updateDataFromColors(data, props) {
 const chartHelp = {
   area: {
     helpDoc: 'https://help.plot.ly/make-an-area-graph/',
-    examplePlot: () => { },
+    examplePlot: () => {},
   },
   bar: {
     helpDoc: 'https://help.plot.ly/stacked-bar-chart/',
-    examplePlot: () => { },
+    examplePlot: () => {},
   },
   box: { helpDoc: 'https://help.plot.ly/make-a-box-plot/' },
   candlestick: { helpDoc: 'https://help.plot.ly/make-a-candlestick/' },
@@ -123,7 +123,9 @@ class Edit extends Component {
                                 layout={this.props.value?.layout || {}}
                                 frames={this.props.value?.frames || []}
                                 dataSourceOptions={dataSourceOptions}
-                                dataSources={this.props.provider_data || dataSources}
+                                dataSources={
+                                  this.props.provider_data || dataSources
+                                }
                                 plotly={DefaultPlotly}
                                 divId="gd"
                                 onUpdate={(data, layout, frames) => {
@@ -149,7 +151,8 @@ class Edit extends Component {
                                     <button
                                       className="devbtn"
                                       onClick={() => {
-                                        const gd = document.getElementById('gd') || {};
+                                        const gd =
+                                          document.getElementById('gd') || {};
                                         this.setState({
                                           full: {
                                             _fullData: gd._fullData || [],

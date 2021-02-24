@@ -1,11 +1,9 @@
-import { connect } from 'react-redux';
 import React, { Component } from 'react';
 import { Button, Modal, Grid, Label } from 'semantic-ui-react';
 import { map, omit } from 'lodash';
 
 import { FormFieldWrapper } from '@plone/volto/components';
 
-import { getDataFromProvider } from 'volto-datablocks/actions';
 import { PickProviderWidget } from 'volto-datablocks/components';
 import ChartEditor from 'volto-plotlycharts/Widget/ChartEditor';
 
@@ -18,7 +16,6 @@ class ModalChartEditor extends Component {
     super(props);
     this.state = {
       value: props.value,
-      providerData: null,
     };
   }
 
@@ -28,7 +25,6 @@ class ModalChartEditor extends Component {
         <Modal.Content scrolling>
           <ChartEditor
             value={this.state.value}
-            providerData={this.state.providerData}
             onChangeValue={(value) => {
               this.setState({ value });
             }}
@@ -45,9 +41,6 @@ class ModalChartEditor extends Component {
                       value: { ...this.state.value, provider_url },
                     });
                   }}
-                  onLoadProviderData={(providerData) =>
-                    this.setState({ providerData })
-                  }
                   value={this.state.value?.provider_url}
                   showReload={true}
                 />
@@ -78,7 +71,6 @@ class ChartWidget extends Component {
 
     this.state = {
       showChartEditor: false,
-      // providerData: null,
     };
   }
 
@@ -184,19 +176,7 @@ class ChartWidget extends Component {
   }
 }
 
-export default connect(
-  (state, props) => {
-    const provider_url = props.value?.provider_url
-      ? `${props.value?.provider_url}/@connector-data`
-      : null;
-    return {
-      providerData: provider_url
-        ? state.data_providers.data?.[provider_url]
-        : null,
-    };
-  },
-  { getDataFromProvider },
-)(ChartWidget);
+export default ChartWidget;
 
 // export default connectAnythingToProviderData(
 //   (props) => props.provider_url || props.value?.provider_url,
