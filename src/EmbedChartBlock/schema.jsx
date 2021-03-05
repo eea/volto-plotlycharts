@@ -44,11 +44,7 @@ const ChartEmbedSchema = {
       title: 'Sources',
       fields: ['chartSources', 'download_button'],
     },
-    {
-      id: 'source',
-      title: 'Source (obsolete)',
-      fields: ['chart_source', 'chart_source_link'],
-    },
+
   ],
 
   properties: {
@@ -79,18 +75,18 @@ const ChartEmbedSchema = {
       // this is an invention, should confront with dexterity serializer
       schema: SourceSchema,
     },
-    chart_source: {
-      type: 'string',
-      title: 'Source',
-    },
+    // chart_source: {
+    //   type: 'string',
+    //   title: 'Source',
+    // },
     download_button: {
       title: 'Download button',
       type: 'boolean',
     },
-    chart_source_link: {
-      type: 'string',
-      title: 'Source link',
-    },
+    // chart_source_link: {
+    //   type: 'string',
+    //   title: 'Source link',
+    // },
     min_width: {
       title: 'Minimum width',
       type: 'string',
