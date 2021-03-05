@@ -16,11 +16,131 @@ import { settings } from '~/config';
 
 import './fixes.css';
 
-const LoadablePlot = loadable(() =>
-  import(
-    /* webpackChunkName: "bise-react-plotly" */
-    'react-plotly.js'
-  ),
+const LoadableBasicPlotly = loadable.lib(() =>
+  import('plotly.js/lib/index-basic'),
+);
+const LoadableCartesianPlotly = loadable.lib(() =>
+  import('plotly.js/lib/index-cartesian'),
+);
+const LoadableGeoPlotly = loadable.lib(() => import('plotly.js/lib/index-geo'));
+const LoadableGl3dPlotly = loadable.lib(() =>
+  import('plotly.js/lib/index-gl3d'),
+);
+const LoadableGl2dPlotly = loadable.lib(() =>
+  import('plotly.js/lib/index-gl2d'),
+);
+const LoadableMapboxPlotly = loadable.lib(() =>
+  import('plotly.js/lib/index-mapbox'),
+);
+const LoadableFinancePlotly = loadable.lib(() =>
+  import('plotly.js/lib/index-finance'),
+);
+// const LoadablePlot = loadable(() =>
+//   import(
+//     /* webpackChunkName: "bise-react-plotly" */
+//     'react-plotly.js'
+//   ),
+// );
+
+const plotlyMappings = {
+  basic: LoadableBasicPlotly,
+  cartesian: LoadableCartesianPlotly,
+  geo: LoadableGeoPlotly,
+  gl3d: LoadableGl3dPlotly,
+  gl2d: LoadableGl2dPlotly,
+  mapbox: LoadableMapboxPlotly,
+  finance: LoadableFinancePlotly,
+};
+
+/**
+ * basic:       scatter, bar and pie
+ * cartesian:   scatter, bar, box, heatmap, histogram, histogram2d, histogram2dcontour, image, pie, contour, scatterternary and violin
+ * geo:         scatter, scattergeo and choropleth
+ * gl3d:        scatter, scatter3d, surface, mesh3d, isosurface, volume, cone and streamtube
+ * gl2d:        scatter, scattergl, splom, pointcloud, heatmapgl, contourgl and parcoords
+ * mapbox:      scatter, scattermapbox, choroplethmapbox and densitymapbox
+ * finance:     scatter, bar, histogram, pie, funnelarea, ohlc, candlestick, funnel, waterfall and indicator
+ */
+
+// TODO: make sure the partials here are in order of bundle size, ascending
+const partials = [
+  { name: 'basic', traces: ['scatter', 'bar', 'pie'] },
+  {
+    name: 'cartesian',
+    traces: [
+      'scatter',
+      'bar',
+      'box',
+      'heatmap',
+      'histogram',
+      'histogram2d',
+      'histogram2dcontour',
+      'image',
+      'pie',
+      'contour',
+      'scatterternary',
+      'violin',
+    ],
+  },
+  { name: 'geo', traces: ['scatter', 'scattergeo', 'choropleth'] },
+  {
+    name: 'gl3d',
+    traces: [
+      'scatter',
+      'scatter3d',
+      'surface',
+      'mesh3d',
+      'isosurface',
+      'volume',
+      'cone',
+      'streamtube',
+    ],
+  },
+  {
+    name: 'gl2d',
+    traces: [
+      'scatter',
+      'scattergl',
+      'splom',
+      'pointcloud',
+      'heatmapgl',
+      'contourgl',
+      'parcoords',
+    ],
+  },
+  {
+    name: 'mapbox',
+    traces: ['scatter', 'scattermapbox', 'choroplethmapbox', 'densitymapbox'],
+  },
+  {
+    name: 'finance',
+    traces: [
+      'scatter',
+      'bar',
+      'histogram',
+      'pie',
+      'funnelarea',
+      'ohlc',
+      'candlestick',
+      'funnel',
+      'waterfall',
+      'indicator',
+    ],
+  },
+];
+
+const getPartialNameForTraceType = (tt) => {
+  const findings = partials.filter((x) => {
+    return x.traces.includes(tt);
+  });
+  if (findings.length === 0) {
+    return partials[partials.length - 1].name;
+  }
+  return findings[0].name;
+};
+
+const LoadableReactPlotly = loadable.lib(() =>
+  import('react-plotly.js/factory'),
 );
 
 /*
@@ -92,6 +212,14 @@ function ConnectedChart(props) {
     },
   }));
 
+  // console.log('DATA', getPartialNameForTraceType(data[0].type));
+
+  // TODO: load all above, in the file header, they are lazy loaded actually anyway
+  const LoadablePlotly =
+    plotlyMappings[/* 'cartesian' */ getPartialNameForTraceType(data[0]?.type)]; // loadable.lib(() =>
+  // import(`plotly.js/lib/index-${getPartialNameForTraceType(data[0].type)}`),
+  // );
+
   return (
     <div>
       {/* {JSON.stringify(data)} */}
@@ -106,22 +234,35 @@ function ConnectedChart(props) {
       >
         {({ nodeRef }) => (
           <div className="connected-chart-wrapper">
-            <LoadablePlot
-              ref={nodeRef}
-              data={data}
-              layout={layout}
-              frames={[]}
-              config={{
-                displayModeBar: false,
-                editable: false,
-                responsive: true,
-                useResizeHandler: true,
+            <LoadablePlotly>
+              {(Plotly) => {
+                return (
+                  <LoadableReactPlotly>
+                    {({ default: createPlotlyComponent }) => {
+                      const Plot = createPlotlyComponent(Plotly);
+                      return (
+                        <Plot
+                          ref={nodeRef}
+                          data={data}
+                          layout={layout}
+                          frames={[]}
+                          config={{
+                            displayModeBar: false,
+                            editable: false,
+                            responsive: true,
+                            useResizeHandler: true,
+                          }}
+                          style={{
+                            maxWidth: '100%',
+                            margin: 'auto',
+                          }}
+                        />
+                      );
+                    }}
+                  </LoadableReactPlotly>
+                );
               }}
-              style={{
-                maxWidth: '100%',
-                margin: 'auto',
-              }}
-            />
+            </LoadablePlotly>
           </div>
         )}
       </Placeholder>
