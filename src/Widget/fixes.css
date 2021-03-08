@@ -3,6 +3,6 @@
 }
 
 .editor_controls__wrapper {
-  max-height: 80vh;
   overflow: auto;
+  max-height: 80vh;
 }

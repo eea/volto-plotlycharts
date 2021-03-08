@@ -1,7 +1,7 @@
 import React from 'react';
 import { Helmet } from '@plone/volto/helpers';
 import { Container, Image } from 'semantic-ui-react';
-import { settings } from '~/config';
+import config from '@plone/volto/registry';
 import ConnectedChart from '../ConnectedChart';
 
 const View = ({ content }) => {
@@ -31,7 +31,7 @@ const View = ({ content }) => {
           dangerouslySetInnerHTML={{
             __html: content.text.data.replace(
               /a href="([^"]*\.[^"]*)"/g,
-              `a href="${settings.apiPath}$1/download/file"`,
+              `a href="${config.settings.apiPath}$1/download/file"`,
             ),
           }}
         />

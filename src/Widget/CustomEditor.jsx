@@ -4,7 +4,6 @@ import {
   GraphCreatePanel,
   GraphTransformsPanel,
   GraphSubplotsPanel,
-  StyleLayoutPanel,
   StyleMapsPanel,
   StyleLegendPanel,
   StyleNotesPanel,

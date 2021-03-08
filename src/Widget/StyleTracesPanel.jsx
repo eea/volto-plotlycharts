@@ -1,7 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-// import Field from 'react-chart-editor/components/fields/Field';
-import { TextInput } from 'react-chart-editor';
 
 import {
   Flaglist,
@@ -50,8 +48,6 @@ import {
 } from 'react-chart-editor';
 import { traceTypes } from 'react-chart-editor/lib/lib/traceTypes';
 import { localize } from 'react-chart-editor';
-import HoverFormatString from './HoverFormatString';
-import Select from 'react-select';
 import CustomMarkerColor from './CustomMarkerColor';
 
 const allTraceTypes = traceTypes(localize).map(({ value }) => value);
@@ -491,7 +487,10 @@ const StyleTracesPanel = (props, { localize: _ }) => {
       <PlotlySection name={_('Increasing Marker Styles')}>
         <TextEditor label={_('Name')} attr="increasing.name" richTextOnly />
         <Numeric label={_('Width')} attr="increasing.line.width" />
-        <MultiColorPicker label={_('Line Color')} attr="increasing.line.color" />
+        <MultiColorPicker
+          label={_('Line Color')}
+          attr="increasing.line.color"
+        />
         <MultiColorPicker
           label={_('Marker Color')}
           attr="increasing.marker.color"
@@ -515,7 +514,10 @@ const StyleTracesPanel = (props, { localize: _ }) => {
       <PlotlySection name={_('Decreasing Marker Styles')}>
         <TextEditor label={_('Name')} attr="decreasing.name" richTextOnly />
         <Numeric label={_('Width')} attr="decreasing.line.width" />
-        <MultiColorPicker label={_('Line Color')} attr="decreasing.line.color" />
+        <MultiColorPicker
+          label={_('Line Color')}
+          attr="decreasing.line.color"
+        />
         <MultiColorPicker
           label={_('Marker Color')}
           attr="decreasing.marker.color"
@@ -537,7 +539,10 @@ const StyleTracesPanel = (props, { localize: _ }) => {
         />
       </PlotlySection>
       <PlotlySection name={_('Total Marker Styles')}>
-        <MultiColorPicker label={_('Marker Color')} attr="totals.marker.color" />
+        <MultiColorPicker
+          label={_('Marker Color')}
+          attr="totals.marker.color"
+        />
         <MultiColorPicker
           label={_('Line Color')}
           attr="totals.marker.line.color"
@@ -602,7 +607,11 @@ const StyleTracesPanel = (props, { localize: _ }) => {
         traceTypes={['scatter']}
         mode="trace"
       >
-        <GroupCreator label={_('Group')} prefix={_('Stack')} attr="stackgroup" />
+        <GroupCreator
+          label={_('Group')}
+          prefix={_('Stack')}
+          attr="stackgroup"
+        />
         <Radio
           label={_('Gaps')}
           attr="stackgaps"
@@ -704,7 +713,7 @@ const StyleTracesPanel = (props, { localize: _ }) => {
       <TraceTypeSection
         name={_('Text')}
         traceTypes={allTraceTypes.filter(
-          t =>
+          (t) =>
             ![
               'histogram2d',
               'histogram2dcontour',
@@ -1066,33 +1075,10 @@ const StyleTracesPanel = (props, { localize: _ }) => {
       </TraceTypeSection>
     </TraceAccordion>
   );
-}
+};
 
 StyleTracesPanel.contextTypes = {
   localize: PropTypes.func,
 };
 
 export default StyleTracesPanel;
-
-const styles = {
-  scaleContainer: {
-    padding: '10px', fontWeight: "400 !important", color: "black !important"
-  },
-  customDropdown: {
-    backgroundColor: "var(--color-background-inputs) !important",
-    borderRadius: "5px",
-    backgroundColor: "white",
-    color: "var(--color-text-active)",
-    marginLeft: "10px",
-    webkitAppearance: "none",
-    flex: '1'
-  },
-}
-
-const selectStyles = {
-  control: base => ({
-    ...base,
-    borderColor: "#C9D4E2",
-    boxShadow: 'none'
-  })
-}

@@ -23,18 +23,18 @@ import { Colorscale } from 'react-colorscales';
 
 import loadable from '@loadable/component';
 
-import { settings } from '~/config';
+import config from '@plone/volto/registry';
 import { useEffect } from 'react';
 
 const Select = loadable(() => import('react-select'));
 
-const customColors = settings.plotlyCustomColors || [];
+const customColors = config.settings.plotlyCustomColors || [];
 
 const StyleGeneralPanel = (props, { localize: _ }) => {
   const [tickFormat, setTickFormat] = useState({
-    "xaxis": { label: _('Default'), value: '' },
-    "yaxis": { label: _('Default'), value: '' },
-    "all": { label: _('Default'), value: '' },
+    xaxis: { label: _('Default'), value: '' },
+    yaxis: { label: _('Default'), value: '' },
+    all: { label: _('Default'), value: '' },
   });
 
   const [hoverFormatAll, setHoverFormatAll] = useState({
@@ -79,7 +79,7 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
     //state persistence of precision dropdowns
     if (data.length !== 0) {
       if (data[0].texttemplate) {
-        const existingTextFormat = textFormats.find(format =>
+        const existingTextFormat = textFormats.find((format) =>
           data[0].texttemplate.includes(format.value),
         );
         setTextFormat(existingTextFormat);
@@ -94,7 +94,7 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
       layoutx.hoverformat === layouty.hoverformat
     ) {
       const existingHoverFormat = cleanFormats.find(
-        format => format.value === layoutx.hoverformat,
+        (format) => format.value === layoutx.hoverformat,
       );
       setHoverFormatAll(existingHoverFormat);
     } else setHoverFormatAll(numbersFormat[0]);
@@ -105,7 +105,7 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
       layoutx.tickformat === layouty.tickformat
     ) {
       const existingTickFormat = cleanFormats.find(
-        format => format.value === layoutx.tickformat,
+        (format) => format.value === layoutx.tickformat,
       );
       setTickFormat({
         ...tickFormat,
@@ -115,7 +115,7 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
 
     if (layoutx.tickformat) {
       const xtickFormat = cleanFormats.find(
-        format => format.value === layoutx.tickformat,
+        (format) => format.value === layoutx.tickformat,
       );
       setTickFormat({
         ...tickFormat,
@@ -125,16 +125,17 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
 
     if (layouty.tickformat) {
       const ytickFormat = cleanFormats.find(
-        format => format.value === layouty.tickformat,
+        (format) => format.value === layouty.tickformat,
       );
       setTickFormat({
         ...tickFormat,
         yaxis: ytickFormat,
       });
     }
+    /* eslint-disable-next-line */
   }, [props.value]);
 
-  const onChangeColor = customColor => {
+  const onChangeColor = (customColor) => {
     props.onChangeValue({
       ...props.value,
       layout: {
@@ -144,10 +145,10 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
     });
   };
 
-  const handleTextFormat = e => {
+  const handleTextFormat = (e) => {
     setTextFormat(e);
 
-    const newData = props.value.data.map(trace => {
+    const newData = props.value.data.map((trace) => {
       if (trace.text && !isNaN(parseFloat(trace.text[0]))) {
         return {
           ...trace,
@@ -162,7 +163,7 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
     });
   };
 
-  const handleTickFormatX = format => {
+  const handleTickFormatX = (format) => {
     setTickFormat({
       ...tickFormat,
       xaxis: format,
@@ -180,7 +181,7 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
     });
   };
 
-  const handleTickFormatY = format => {
+  const handleTickFormatY = (format) => {
     setTickFormat({
       ...tickFormat,
       yaxis: format,
@@ -196,7 +197,7 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
       },
     });
   };
-  const handleTickFormatAll = format => {
+  const handleTickFormatAll = (format) => {
     setTickFormat({
       ...tickFormat,
       all: format,
@@ -217,7 +218,7 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
     });
   };
 
-  const handleHoverFormatAll = format => {
+  const handleHoverFormatAll = (format) => {
     setHoverFormatAll(format);
     props.onChangeValue({
       ...props.value,
@@ -270,7 +271,7 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
         </PlotlySection>
         <PlotlySection name={_('Custom Colorscales')} attr="colorway">
           {customColors && customColors.length
-            ? customColors.map(customColorscale => (
+            ? customColors.map((customColorscale) => (
                 <div
                   style={styles.scaleContainer}
                   className="field field__colorscale"
@@ -282,12 +283,11 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
                     style={{
                       width: '180px',
                       'margin-left': '12px',
-                      width: '180px',
                     }}
                   >
                     <Colorscale
                       colorscale={customColorscale.colorscale}
-                      onClick={colorscale => onChangeColor(colorscale)}
+                      onClick={(colorscale) => onChangeColor(colorscale)}
                     />
                   </div>
                 </div>
@@ -327,6 +327,7 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
             className="radio-block radio-block__group"
           >
             <div
+              role="presentation"
               onClick={() => setPrecisionAxis('all')}
               className={`radio-block__option ${
                 precisionAxis === 'all' ? 'radio-block__option--active' : ''
@@ -335,6 +336,7 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
               <span>All</span>
             </div>
             <div
+              role="presentation"
               onClick={() => setPrecisionAxis('x')}
               className={`radio-block__option ${
                 precisionAxis === 'x' ? 'radio-block__option--active' : ''
@@ -343,6 +345,7 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
               <span>X</span>
             </div>
             <div
+              role="presentation"
               onClick={() => setPrecisionAxis('y')}
               className={`radio-block__option ${
                 precisionAxis === 'y' ? 'radio-block__option--active' : ''
@@ -371,7 +374,7 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
               <div style={styles.customDropdown}>
                 <Select
                   value={hoverFormatAll}
-                  onChange={e => handleHoverFormatAll(e)}
+                  onChange={(e) => handleHoverFormatAll(e)}
                   styles={selectStyles}
                   components={{
                     IndicatorSeparator: () => null,
@@ -405,7 +408,7 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
               <div style={styles.customDropdown}>
                 <Select
                   value={tickFormat.all}
-                  onChange={e => handleTickFormatAll(e)}
+                  onChange={(e) => handleTickFormatAll(e)}
                   styles={selectStyles}
                   components={{
                     IndicatorSeparator: () => null,
@@ -423,7 +426,7 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
               <div style={styles.customDropdown}>
                 <Select
                   value={tickFormat.xaxis}
-                  onChange={e => handleTickFormatX(e)}
+                  onChange={(e) => handleTickFormatX(e)}
                   styles={selectStyles}
                   components={{
                     IndicatorSeparator: () => null,
@@ -441,7 +444,7 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
               <div style={styles.customDropdown}>
                 <Select
                   value={tickFormat.yaxis}
-                  onChange={e => handleTickFormatY(e)}
+                  onChange={(e) => handleTickFormatY(e)}
                   styles={selectStyles}
                   components={{
                     IndicatorSeparator: () => null,
@@ -459,7 +462,7 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
               <div style={styles.customDropdown}>
                 <Select
                   value={textFormat}
-                  onChange={e => handleTextFormat(e)}
+                  onChange={(e) => handleTextFormat(e)}
                   styles={selectStyles}
                   components={{
                     IndicatorSeparator: () => null,
@@ -641,7 +644,7 @@ const styles = {
   customDropdown: {
     backgroundColor: 'var(--color-background-inputs) !important',
     borderRadius: '5px',
-    backgroundColor: 'white',
+    // backgroundColor: 'white',
     color: 'var(--color-text-active)',
     marginLeft: '10px',
     webkitAppearance: 'none',
@@ -653,7 +656,7 @@ const styles = {
 };
 
 const selectStyles = {
-  control: base => ({
+  control: (base) => ({
     ...base,
     borderColor: '#C9D4E2',
     boxShadow: 'none',

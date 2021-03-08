@@ -12,7 +12,7 @@ import {
 } from 'volto-datablocks/helpers';
 import { Placeholder } from 'volto-datablocks/components';
 
-import { settings } from '~/config';
+import config from '@plone/volto/registry';
 
 import './fixes.css';
 
@@ -46,7 +46,7 @@ function ConnectedChart(props) {
     dragmode: false,
     font: {
       ...layout.font,
-      family: settings.chartLayoutFontFamily || "'Roboto', sans-serif",
+      family: config.settings.chartLayoutFontFamily || "'Roboto', sans-serif",
     },
     margin: {
       l: 40, // default: 80
@@ -88,7 +88,7 @@ function ConnectedChart(props) {
     ...trace,
     textfont: {
       ...trace.textfont,
-      family: settings.chartDataFontFamily || "'Roboto', sans-serif",
+      family: config.settings.chartDataFontFamily || "'Roboto', sans-serif",
     },
   }));
 

@@ -19,7 +19,6 @@ const EmbedChartView = ({
   const hasText =
     (data.text?.blocks?.length > 1 && data.text?.blocks) ||
     (data.text?.blocks?.length === 1 && data.text?.blocks?.[0].text);
-console.log("data", data)
   const grid = {
     text_column: {
       phone: 'twelve',

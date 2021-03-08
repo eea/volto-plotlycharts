@@ -8,8 +8,8 @@ import {
   getConnectedDataParametersForProvider,
 } from 'volto-datablocks/helpers';
 import { connect } from 'react-redux';
-import { settings } from '~/config';
-import React, { useEffect } from 'react'; // , useState
+import config from '@plone/volto/registry';
+import React from 'react'; // , useState
 import ResponsiveContainer from '../ResponsiveContainer';
 import { getDataFromProvider } from 'volto-datablocks/actions';
 import { getChartDataFromVisualization } from 'volto-plotlycharts/actions';
@@ -61,13 +61,13 @@ function mixProviderData(chartData, providerData, parameters) {
  */
 function ConnectedChart(props) {
   // need to bind them in this closure, useEffect depends on them;
-  const provider_url =
-    props.data.provider_url || props.chartDataFromVis?.provider_url;
-  const url = props.data.url;
-  const getDataFromProvider = props.getDataFromProvider;
-  const getChartDataFromVisualization = props.getChartDataFromVisualization;
+  // const provider_url =
+  //   props.data.provider_url || props.chartDataFromVis?.provider_url;
+  // const url = props.data.url;
+  // const getDataFromProvider = props.getDataFromProvider;
+  // const getChartDataFromVisualization = props.getChartDataFromVisualization;
 
-  const source_url = props.source;
+  // const source_url = props.source;
 
   const visData = props.chartDataFromVis;
 
@@ -120,7 +120,7 @@ function ConnectedChart(props) {
     dragmode: false,
     font: {
       ...layout.font,
-      family: settings.chartLayoutFontFamily || "'Roboto', sans-serif",
+      family: config.settings.chartLayoutFontFamily || "'Roboto', sans-serif",
     },
   };
 
@@ -153,7 +153,7 @@ function ConnectedChart(props) {
     ...trace,
     textfont: {
       ...trace.textfont,
-      family: settings.chartDataFontFamily || "'Roboto', sans-serif",
+      family: config.settings.chartDataFontFamily || "'Roboto', sans-serif",
     },
   }));
 

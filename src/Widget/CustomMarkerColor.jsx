@@ -14,7 +14,7 @@ import { MULTI_VALUED, COLORS } from 'react-chart-editor/lib/lib/constants';
 import ColorscalePickerWidget from 'react-chart-editor/lib/components/widgets/ColorscalePicker';
 import l from 'lodash';
 import { Dropdown } from 'semantic-ui-react';
-import { settings } from '~/config';
+import config from '@plone/volto/registry';
 
 import loadable from '@loadable/component';
 const ReactColor = loadable.lib(() => import('react-color'));
@@ -95,11 +95,13 @@ const ColorPicker = ({ selectedColorscale, color, onChange, ...rest }) => {
         {__CLIENT__ && (
           <ReactColor>
             {({ CirclePicker }) => {
-              return <CirclePicker
-                color={color}
-                onChange={onChange}
-                colors={selectedColorscale}
-              />;
+              return (
+                <CirclePicker
+                  color={color}
+                  onChange={onChange}
+                  colors={selectedColorscale}
+                />
+              );
             }}
           </ReactColor>
         )}
@@ -293,9 +295,9 @@ class UnconnectedMarkerColor extends Component {
         });
         if (initial) {
           if (typeof this.state !== 'object') {
-            this.state = {};
+            this.setState({});
           }
-          this.state.colorscale = null;
+          this.setState({ colorScale: null });
         } else {
           this.setState({ colorscale: null });
         }
@@ -305,7 +307,7 @@ class UnconnectedMarkerColor extends Component {
         this.updateCategoricalsInData({
           'marker.colorscale':
             this.props.container?.marker?.colorscale ||
-            settings.plotlyChartsColorScale,
+            config.settings.plotlyChartsColorScale,
           'marker.categoricalaxis':
             this.props.container?.marker?.categoricalaxis || 'x',
           'meta.manualcolor': this.props.container?.meta?.manualcolor || {},
@@ -324,7 +326,7 @@ class UnconnectedMarkerColor extends Component {
         break;
 
       default:
-        console.error('Unknown marker color type', type);
+        // console.error('Unknown marker color type', type);
         return;
     }
   }
@@ -333,9 +335,9 @@ class UnconnectedMarkerColor extends Component {
     const { type } = this.state;
 
     if (type === 'manual') {
-      console.error(
-        'When type is set to "manual", setColor should not be called.',
-      );
+      // console.error(
+      //   'When type is set to "manual", setColor should not be called.',
+      // );
       return;
     }
 
@@ -348,7 +350,6 @@ class UnconnectedMarkerColor extends Component {
   }
 
   setColorScale(inputValue) {
-    console.log('setColorScale called for type', this.state.type);
     this.setState({ colorscale: inputValue });
     this.context.updateContainer({ 'marker.colorscale': inputValue });
   }
@@ -404,7 +405,7 @@ class UnconnectedMarkerColor extends Component {
   handleAxisChange = (opt) => {
     this.updateCategoricalsInData({
       'marker.categoricalaxis': opt,
-      'marker.colorscale': defaultColorscale,
+      // 'marker.colorscale': defaultColorscale,
       // 'meta.manualcolor': ,
     });
     this.rebuildColorPickers();

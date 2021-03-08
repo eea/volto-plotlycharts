@@ -104,8 +104,6 @@ class Edit extends Component {
                 const Panel = props2.Panel;
                 const DefaultPlotlyEditor = props2.default;
 
-                console.log('p2', props2);
-
                 return (
                   <LoadablePlotly>
                     {(props3) => {

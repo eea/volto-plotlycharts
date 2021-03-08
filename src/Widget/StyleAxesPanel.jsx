@@ -30,7 +30,7 @@ class StyleAxesPanel extends Component {
       <LayoutPanel>
         <AxesFold
           name={_('Titles')}
-          axisFilter={axis =>
+          axisFilter={(axis) =>
             !(axis._name.includes('angular') || axis._subplot.includes('geo'))
           }
         >
@@ -172,7 +172,7 @@ class StyleAxesPanel extends Component {
 
         <AxesFold
           name={_('Tick Labels')}
-          axisFilter={axis => !axis._subplot.includes('geo')}
+          axisFilter={(axis) => !axis._subplot.includes('geo')}
         >
           <PlotlySection name={_('Tick Labels')} attr="showticklabels">
             <VisibilitySelect
@@ -323,7 +323,7 @@ class StyleAxesPanel extends Component {
         </AxesFold>
         <AxesFold
           name={_('Tick Markers')}
-          axisFilter={axis => !axis._subplot.includes('geo')}
+          axisFilter={(axis) => !axis._subplot.includes('geo')}
         >
           <PlotlySection name={_('Tick Markers')} attr="ticks">
             <VisibilitySelect
@@ -379,7 +379,7 @@ class StyleAxesPanel extends Component {
 
         <AxesFold
           name={_('Range Slider')}
-          axisFilter={axis => axis._subplot.includes('xaxis')}
+          axisFilter={(axis) => axis._subplot.includes('xaxis')}
         >
           <RangesliderVisible
             attr="rangeslider.visible"
@@ -406,7 +406,7 @@ class StyleAxesPanel extends Component {
 
         <AxesFold
           name={_('Timescale Buttons')}
-          axisFilter={axis =>
+          axisFilter={(axis) =>
             axis._subplot.includes('xaxis') && axis.type === 'date'
           }
         >
@@ -511,7 +511,7 @@ class StyleAxesPanel extends Component {
 
         <AxesFold
           name={_('Spike Lines')}
-          axisFilter={axis =>
+          axisFilter={(axis) =>
             !(
               axis._subplot.includes('ternary') ||
               axis._subplot.includes('polar') ||

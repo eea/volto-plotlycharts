@@ -1,35 +1,52 @@
 {
   "name": "volto-plotlycharts",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Plotly Charts and Editor integration for Volto",
   "main": "src/index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "author": "European Environment Agency: IDM2 A-Team",
+  "license": "MIT",
+  "homepage": "https://github.com/eea/volto-plotlycharts",
+  "keywords": [
+    "volto-addon",
+    "volto-block",
+    "volto-plotlychart",
+    "volto",
+    "plone",
+    "react",
+    "plotly"
+  ],
+  "addons": [
+    "volto-datablocks"
+  ],
+  "dependencies": {
+    "plotly.js": "^1.51.2",
+    "react-chart-editor": "^0.41.0",
+    "react-component-queries": "2.3.0",
+    "react-inspector": "^5.0.1",
+    "react-plotly.js": "^2.3.0",
+    "react-resize-detector": "^4.2.1",
+    "react-sizeme": "3.0.1",
+    "react-visibility-sensor": "^5.1.1",
+    "volto-datablocks": "github:eea/volto-datablocks#2.0.0"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/eea/volto-plotlycharts.git"
   },
-  "keywords": [
-    "Volto",
-    "Plone",
-    "Plotly"
-  ],
-  "author": "Tiberiu Ichim",
-  "license": "ISC",
   "bugs": {
     "url": "https://github.com/eea/volto-plotlycharts/issues"
   },
-  "homepage": "https://github.com/eea/volto-plotlycharts#readme",
-  "dependencies": {
-    "plotly.js": "^1.51.2",
-    "react-chart-editor": "^0.41.0",
-    "react-inspector": "^5.0.1",
-    "react-plotly.js": "^2.3.0",
-    "react-resize-detector": "^4.2.1",
-    "react-visibility-sensor": "^5.1.1"
-  },
-  "peerDependencies": {
-    "react-component-queries": "^0.0.0"
+  "scripts": {
+    "release": "release-it",
+    "bootstrap": "node bootstrap",
+    "stylelint": "../../../node_modules/stylelint/bin/stylelint.js --allow-empty-input 'src/**/*.{css,less}'",
+    "stylelint:overrides": "../../../node_modules/.bin/stylelint --syntax less --allow-empty-input 'theme/**/*.overrides' 'src/**/*.overrides'",
+    "stylelint:fix": "yarn stylelint --fix && yarn stylelint:overrides --fix",
+    "prettier": "../../../node_modules/.bin/prettier --single-quote --check 'src/**/*.{js,jsx,json,css,less,md}'",
+    "prettier:fix": "../../../node_modules/.bin/prettier --single-quote --write 'src/**/*.{js,jsx,json,css,less,md}'",
+    "lint": "../../../node_modules/eslint/bin/eslint.js --max-warnings=0 'src/**/*.{js,jsx}'",
+    "lint:fix": "../../../node_modules/eslint/bin/eslint.js --fix 'src/**/*.{js,jsx}'",
+    "cypress:run": "../../../node_modules/cypress/bin/cypress run",
+    "cypress:open": "../../../node_modules/cypress/bin/cypress open"
   }
 }

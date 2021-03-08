@@ -44,7 +44,6 @@ const ChartEmbedSchema = {
       title: 'Sources',
       fields: ['chartSources', 'download_button'],
     },
-
   ],
 
   properties: {
