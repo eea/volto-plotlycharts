@@ -27,7 +27,7 @@
     "react-resize-detector": "^4.2.1",
     "react-sizeme": "3.0.1",
     "react-visibility-sensor": "^5.1.1",
-    "volto-datablocks": "github:eea/volto-datablocks#2.0.0"
+    "volto-datablocks": "eea/volto-datablocks#master"
   },
   "repository": {
     "type": "git",
