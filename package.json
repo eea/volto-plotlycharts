@@ -1,5 +1,5 @@
 {
-  "name": "volto-plotlycharts",
+  "name": "@eeacms/volto-plotlycharts",
   "version": "2.0.0",
   "description": "Plotly Charts and Editor integration for Volto",
   "main": "src/index.js",
