@@ -1,5 +1,5 @@
 import { applyConfig } from './config';
-import installConnectedPlotlyChart from 'volto-plotlycharts/ConnectedPlotlyChart';
+import installConnectedPlotlyChart from '@eeacms/volto-plotlycharts/ConnectedPlotlyChart';
 export * from './config';
 
 function addCustomGroup(config) {
