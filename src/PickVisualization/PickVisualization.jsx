@@ -8,7 +8,7 @@
 import { connect } from 'react-redux';
 import React, { Component } from 'react';
 import PickObject from '../Widget/PickObject';
-import { getChartDataFromVisualization } from '@eeacms/volto-plotlycharts/actions';
+import { getChartDataFromVisualization } from '../actions';
 
 class PickVisualization extends Component {
   componentDidMount() {

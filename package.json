@@ -16,9 +16,10 @@
     "plotly"
   ],
   "addons": [
-    "volto-datablocks"
+    "@eeacms/volto-datablocks"
   ],
   "dependencies": {
+    "@eeacms/volto-datablocks": "^2.0.1",
     "plotly.js": "^1.51.2",
     "react-chart-editor": "^0.41.0",
     "react-component-queries": "2.3.0",
@@ -26,8 +27,7 @@
     "react-plotly.js": "^2.3.0",
     "react-resize-detector": "^4.2.1",
     "react-sizeme": "3.0.1",
-    "react-visibility-sensor": "^5.1.1",
-    "volto-datablocks": "eea/volto-datablocks#master"
+    "react-visibility-sensor": "^5.1.1"
   },
   "repository": {
     "type": "git",
@@ -39,7 +39,7 @@
   "devDependencies": {
     "@cypress/code-coverage": "^3.9.5",
     "babel-plugin-transform-class-properties": "^6.24.1"
-   },
+  },
   "scripts": {
     "release": "release-it",
     "bootstrap": "npm install -g ejs; npm link ejs; node bootstrap",

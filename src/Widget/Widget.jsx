@@ -6,7 +6,7 @@ import { map } from 'lodash';
 
 import { getDataFromProvider } from 'volto-datablocks/actions';
 // import { connectAnythingToProviderData } from 'volto-datablocks/hocs';
-import ConnectedChart from '@eeacms/volto-plotlycharts/ConnectedChart';
+import ConnectedChart from '../ConnectedChart';
 import { PickProviderWidget } from 'volto-datablocks/components';
 import { FormFieldWrapper } from '@plone/volto/components';
 

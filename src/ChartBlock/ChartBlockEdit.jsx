@@ -3,9 +3,9 @@ import { connect } from 'react-redux';
 
 import { SidebarPortal } from '@plone/volto/components'; // EditBlock
 
-import { changeSidebarState } from '@eeacms/volto-plotlycharts/actions';
 import InlineForm from '@plone/volto/components/manage/Form/InlineForm';
-import ChartEditor from '@eeacms/volto-plotlycharts/Widget/ChartEditor';
+import { changeSidebarState } from '../actions';
+import ChartEditor from '../Widget/ChartEditor';
 
 import schema from './schema';
 

@@ -5,7 +5,7 @@ import { map, omit } from 'lodash';
 import { FormFieldWrapper } from '@plone/volto/components';
 
 import { PickProviderWidget } from 'volto-datablocks/components';
-import ChartEditor from '@eeacms/volto-plotlycharts/Widget/ChartEditor';
+import ChartEditor from '../Widget/ChartEditor';
 
 import ConnectedChart from './ConnectedChart';
 
