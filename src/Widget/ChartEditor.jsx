@@ -3,9 +3,9 @@
  */
 
 import React, { Component } from 'react';
-import { updateChartDataFromProvider } from 'volto-datablocks/helpers';
+import { updateChartDataFromProvider } from '@eeacms/volto-datablocks/helpers';
 
-import { connectAnythingToProviderData } from 'volto-datablocks/hocs';
+import { connectAnythingToProviderData } from '@eeacms/volto-datablocks/hocs';
 import 'react-chart-editor/lib/react-chart-editor.css';
 
 import loadable from '@loadable/component';

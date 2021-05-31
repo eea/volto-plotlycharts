@@ -4,10 +4,10 @@ import React, { Component } from 'react';
 import { Button, Modal, Grid, Label } from 'semantic-ui-react';
 import { map } from 'lodash';
 
-import { getDataFromProvider } from 'volto-datablocks/actions';
-// import { connectAnythingToProviderData } from 'volto-datablocks/hocs';
+import { getDataFromProvider } from '@eeacms/volto-datablocks/actions';
+// import { connectAnythingToProviderData } from '@eeacms/volto-datablocks/hocs';
 import ConnectedChart from '../ConnectedChart';
-import { PickProviderWidget } from 'volto-datablocks/components';
+import { PickProviderWidget } from '@eeacms/volto-datablocks/components';
 import { FormFieldWrapper } from '@plone/volto/components';
 
 import './styles.css';
