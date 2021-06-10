@@ -1,6 +1,6 @@
 import React from 'react';
 import ConnectedChart from './ConnectedChart';
-import { withBlockData } from 'volto-datablocks/hocs';
+import { withBlockData } from '@eeacms/volto-datablocks/hocs';
 
 const ConnectedChartBlockView = (props) => {
   const { data = {} } = props;

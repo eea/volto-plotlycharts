@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ConnectedChart from '../ConnectedChart';
 import ViewText from '@plone/volto/components/manage/Blocks/Text/View';
-import { SourcesBlockView } from 'volto-datablocks/components';
+import { SourcesBlockView } from '@eeacms/volto-datablocks/components';
 import { connect } from 'react-redux';
 
 import WidthBasedLayoutProvider from '../LayoutProvider/WidthBasedLayoutProvider';

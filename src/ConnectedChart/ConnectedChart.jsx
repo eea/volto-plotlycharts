@@ -6,13 +6,13 @@ import { addAppURL } from '@plone/volto/helpers';
 import {
   getConnectedDataParametersForContext,
   getConnectedDataParametersForProvider,
-} from 'volto-datablocks/helpers';
+} from '@eeacms/volto-datablocks/helpers';
 import { connect } from 'react-redux';
 import config from '@plone/volto/registry';
 import React from 'react'; // , useState
 import ResponsiveContainer from '../ResponsiveContainer';
-import { getDataFromProvider } from 'volto-datablocks/actions';
-import { getChartDataFromVisualization } from 'volto-plotlycharts/actions';
+import { getDataFromProvider } from '@eeacms/volto-datablocks/actions';
+import { getChartDataFromVisualization } from '../actions';
 
 function mixProviderData(chartData, providerData, parameters) {
   const providerDataColumns = Object.keys(providerData);

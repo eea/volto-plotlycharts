@@ -4,8 +4,8 @@ import { map, omit } from 'lodash';
 
 import { FormFieldWrapper } from '@plone/volto/components';
 
-import { PickProviderWidget } from 'volto-datablocks/components';
-import ChartEditor from 'volto-plotlycharts/Widget/ChartEditor';
+import { PickProviderWidget } from '@eeacms/volto-datablocks/components';
+import ChartEditor from '../Widget/ChartEditor';
 
 import ConnectedChart from './ConnectedChart';
 
@@ -182,4 +182,4 @@ export default ChartWidget;
 //   (props) => props.provider_url || props.value?.provider_url,
 // )(ChartWidget);
 //
-// import { connectAnythingToProviderData } from 'volto-datablocks/hocs';
+// import { connectAnythingToProviderData } from '@eeacms/volto-datablocks/hocs';

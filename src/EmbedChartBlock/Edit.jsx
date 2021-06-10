@@ -12,9 +12,9 @@ import { Segment, Form as UiForm } from 'semantic-ui-react';
 import Editor from '@plone/volto/components/manage/Blocks/Text/Edit';
 import { SidebarPortal } from '@plone/volto/components'; // EditBlock
 
-import { changeSidebarState } from 'volto-plotlycharts/actions';
 import InlineForm from '@plone/volto/components/manage/Form/InlineForm';
-import ConnectedChart from 'volto-plotlycharts/ConnectedChart';
+import { changeSidebarState } from '../actions';
+import ConnectedChart from '../ConnectedChart';
 
 import schema from './schema';
 

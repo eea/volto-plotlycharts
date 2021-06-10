@@ -1,5 +1,5 @@
 import ConnectedChart from '../ConnectedChart';
-import { SourcesBlockView } from 'volto-datablocks/components';
+import { SourcesBlockView } from '@eeacms/volto-datablocks/components';
 import cx from 'classnames';
 import useMarginCalculator from '../MarginCalculator';
 import React from 'react';
