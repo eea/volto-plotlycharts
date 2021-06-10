@@ -9,7 +9,7 @@ const WidthBasedLayoutProvider = (WrappedComponent) => (props) => {
 
 const connectedWidthProvider = compose(
   connect((state) => ({
-    mosaic_width: state.mosaic_width.items,
+    mosaic_width: state.mosaic_width?.items,
   })),
   componentQueries({
     queries: [
