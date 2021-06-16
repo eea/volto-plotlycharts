@@ -75,7 +75,7 @@ const EmbedChartView = ({
               initialSource={data.chart_source}
               initialSourceLink={data.chart_source_link}
               multipleSources={data.chartSources}
-              providerUrl={providerUrl}
+              providerUrl={providerUrl || data.chartData?.provider_url}
               download_button={data.download_button}
             />
           </div>
