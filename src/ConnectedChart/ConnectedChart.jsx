@@ -9,7 +9,7 @@ import {
 } from '@eeacms/volto-datablocks/helpers';
 import { connect } from 'react-redux';
 import config from '@plone/volto/registry';
-import React from 'react'; // , useState
+import React, { useEffect } from 'react'; // , useState
 import ResponsiveContainer from '../ResponsiveContainer';
 import { getDataFromProvider } from '@eeacms/volto-datablocks/actions';
 import { getChartDataFromVisualization } from '../actions';
@@ -61,31 +61,31 @@ function mixProviderData(chartData, providerData, parameters) {
  */
 function ConnectedChart(props) {
   // need to bind them in this closure, useEffect depends on them;
-  // const provider_url =
-  //   props.data.provider_url || props.chartDataFromVis?.provider_url;
-  // const url = props.data.url;
-  // const getDataFromProvider = props.getDataFromProvider;
-  // const getChartDataFromVisualization = props.getChartDataFromVisualization;
+  const provider_url =
+    props.data.provider_url || props.chartDataFromVis?.provider_url;
+  const url = props.data.url;
+  const getDataFromProvider = props.getDataFromProvider;
+  const getChartDataFromVisualization = props.getChartDataFromVisualization;
 
-  // const source_url = props.source;
+  const source_url = props.source;
 
   const visData = props.chartDataFromVis;
 
-  // NOTE: this is a candidate for a HOC, withProviderData
-  // useEffect(() => {
-  //   if (source_url && !visData) {
-  //     getChartDataFromVisualization(source_url);
-  //   }
-  //   if (provider_url) getDataFromProvider(provider_url || url);
-  // }, [
-  //   provider_url,
-  //   visData,
-  //   url,
-  //   source_url,
-  //   props.data,
-  //   getDataFromProvider,
-  //   getChartDataFromVisualization,
-  // ]);
+  //NOTE: this is a candidate for a HOC, withProviderData
+  useEffect(() => {
+    if (source_url && !visData) {
+      getChartDataFromVisualization(source_url);
+    }
+    if (provider_url) getDataFromProvider(provider_url || url);
+  }, [
+    provider_url,
+    visData,
+    url,
+    source_url,
+    props.data,
+    getDataFromProvider,
+    getChartDataFromVisualization,
+  ]);
 
   // const [visible, setVisible] = useState(false);
 
