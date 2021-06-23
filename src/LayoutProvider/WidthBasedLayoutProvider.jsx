@@ -43,7 +43,7 @@ const connectedWidthProvider = compose(
           if (width > breakpoint('tablet')) {
             return 'tablet';
           }
-          return 'phone';
+          return 'desktop';
         })(),
       }),
     ],

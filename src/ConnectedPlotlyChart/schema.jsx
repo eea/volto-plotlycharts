@@ -51,7 +51,7 @@ const ChartSchema = {
       title: 'Data provider',
     },
     chartSources: {
-      widget: 'objectlist',
+      widget: 'object_list',
       title: 'Sources',
       // this is an invention, should confront with dexterity serializer
       schema: SourceSchema,
