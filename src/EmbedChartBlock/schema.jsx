@@ -81,6 +81,7 @@ const ChartEmbedSchema = {
     download_button: {
       title: 'Download button',
       type: 'boolean',
+      defaultValue: true,
     },
     // chart_source_link: {
     //   type: 'string',
