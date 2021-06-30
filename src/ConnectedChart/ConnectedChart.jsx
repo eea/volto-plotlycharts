@@ -36,7 +36,7 @@ function mixProviderData(chartData, providerData, parameters) {
         const {
           i: filterName,
           v: [filterValue],
-        } = parameters[0];
+        } = parameters[0]?.query?.[0];
 
         // tweak transformation filters using data parameters
         (trace.transforms || []).forEach((transform) => {
