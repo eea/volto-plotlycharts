@@ -8,8 +8,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Segment, Form as UiForm } from 'semantic-ui-react';
 
-// TODO: use volto-slate
-import Editor from '@plone/volto/components/manage/Blocks/Text/Edit';
+import SlateRichTextWidget from 'volto-slate/widgets/RichTextWidget';
 import { SidebarPortal } from '@plone/volto/components'; // EditBlock
 
 import InlineForm from '@plone/volto/components/manage/Form/InlineForm';
@@ -61,7 +60,6 @@ class EmbedChartBlockEdit extends Component {
   nop = () => {};
 
   textEditorSegmentNode = React.createRef();
-
   render() {
     const { block } = this.props; // , data, onChangeBlock, selected, title
     return (
@@ -88,26 +86,33 @@ class EmbedChartBlockEdit extends Component {
                   style={{ minWidth: '73px' }}
                   ref={this.textEditorSegmentNode}
                 >
-                  <Editor
-                    index={this.props.index}
-                    detached={true}
+                  <SlateRichTextWidget
+                    id={this.props.id}
+                    title="slate-editor"
                     selected={this.state.textEditorIsActive}
-                    block={this.props.block}
+                    description={this.props.formDescription}
+                    detached={true}
                     onAddBlock={this.nop}
-                    onChangeBlock={(id, { text }) => {
-                      this.props.onChangeBlock(block, {
-                        ...this.props.data,
-                        text,
-                      });
-                    }}
                     onDeleteBlock={this.nop}
                     onFocusPreviousBlock={this.nop}
                     onFocusNextBlock={this.nop}
                     onSelectBlock={this.nop}
                     onMutateBlock={this.nop}
-                    data={this.props.data}
-                    blockNode={this.textEditorSegmentNode}
-                    toolbarId={toolbarId}
+                    onChange={(name, value) => {
+                      this.props.onChangeBlock(block, {
+                        ...this.props.data,
+                        text: value,
+                      });
+                    }}
+                    block={block}
+                    columns={1}
+                    properties={this.props.data}
+                    value={
+                      this.props.data && this.props.data.text
+                        ? this.props.data.text
+                        : ''
+                    }
+                    placeholder="Type text..."
                   />
                 </div>
               </Segment>

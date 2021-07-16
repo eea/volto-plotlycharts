@@ -5,6 +5,8 @@ import ViewText from '@plone/volto/components/manage/Blocks/Text/View';
 import { SourcesBlockView } from '@eeacms/volto-datablocks/components';
 import { connect } from 'react-redux';
 
+import { serializeNodes } from 'volto-slate/editor/render';
+
 import WidthBasedLayoutProvider from '../LayoutProvider/WidthBasedLayoutProvider';
 
 const EmbedChartView = ({
@@ -17,8 +19,8 @@ const EmbedChartView = ({
   if (!data) return '';
 
   const hasText =
-    (data.text?.blocks?.length > 1 && data.text?.blocks) ||
-    (data.text?.blocks?.length === 1 && data.text?.blocks?.[0].text);
+    (data.text?.length > 1 && data.text) ||
+    (data.text?.length === 1 && data.text?.[0].text);
   const grid = {
     text_column: {
       phone: 'twelve',
@@ -45,7 +47,7 @@ const EmbedChartView = ({
                 className="block-text-content"
                 style={{ padding: '1rem', marginTop: '.5rem' }}
               >
-                <ViewText data={data} {...props} />
+                {serializeNodes(data.text || [])}
               </div>
             </div>
           ) : (
