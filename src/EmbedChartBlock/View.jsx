@@ -7,6 +7,8 @@ import { connect } from 'react-redux';
 
 import { serializeNodes } from 'volto-slate/editor/render';
 
+import './styles.css';
+
 import WidthBasedLayoutProvider from '../LayoutProvider/WidthBasedLayoutProvider';
 
 const EmbedChartView = ({
