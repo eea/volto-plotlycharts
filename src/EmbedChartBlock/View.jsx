@@ -5,7 +5,7 @@ import ViewText from '@plone/volto/components/manage/Blocks/Text/View';
 import { SourcesBlockView } from '@eeacms/volto-datablocks/components';
 import { connect } from 'react-redux';
 
-import { serializeNodes } from 'volto-slate/editor/render';
+import { serializeNodes } from '@eeacms/volto-slate/editor/render';
 
 import './styles.css';
 
