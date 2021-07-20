@@ -8,7 +8,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Segment, Form as UiForm } from 'semantic-ui-react';
 
-import SlateRichTextWidget from '@eeacms/volto-slate/widgets/RichTextWidget';
+import SlateRichTextWidget from 'volto-slate/widgets/RichTextWidget';
 import Editor from '@plone/volto/components/manage/Blocks/Text/Edit';
 import { SidebarPortal } from '@plone/volto/components'; // EditBlock
 
