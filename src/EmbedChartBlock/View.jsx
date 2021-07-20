@@ -19,8 +19,8 @@ const EmbedChartView = ({
   if (!data) return '';
 
   const hasText =
-    (data.text?.length > 1 && data.text) ||
-    (data.text?.length === 1 && data.text?.[0].text);
+    (data.text?.length > 0 && data.text) ||
+    (data.text?.length === 0 && data.text?.[0].text);
 
   const hasOldText =
     (data.text?.blocks?.length > 1 && data.text?.blocks) ||
