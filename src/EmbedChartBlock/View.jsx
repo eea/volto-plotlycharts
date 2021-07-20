@@ -22,6 +22,10 @@ const EmbedChartView = ({
     (data.text?.length > 1 && data.text) ||
     (data.text?.length === 1 && data.text?.[0].text);
 
+  const hasOldText =
+    (data.text?.blocks?.length > 1 && data.text?.blocks) ||
+    (data.text?.blocks?.length === 1 && data.text?.blocks?.[0].text);
+
   const hasValidData =
     props.data && props.data.text ? Array.isArray(props.data.text) : false;
 
@@ -47,21 +51,24 @@ const EmbedChartView = ({
         <div className="element-grid">
           {hasText ? (
             <div className={`${layout_type}-${grid.text_column[layout_type]}`}>
-              {hasValidData ? (
-                <div
-                  className="block-text-content"
-                  style={{ padding: '1rem', marginTop: '.5rem' }}
-                >
-                  {serializeNodes(data.text || [])}
-                </div>
-              ) : (
-                <p>
-                  Invalid Editor Data. Delete this block and make a new one.
-                </p>
-              )}
+              <div
+                className="block-text-content"
+                style={{ padding: '1rem', marginTop: '.5rem' }}
+              >
+                {serializeNodes(data.text || [])}
+              </div>
             </div>
           ) : (
             ''
+          )}
+          {hasOldText && (
+            <div>
+              <p className="info-text">
+                Invalid Editor Data. This block uses the old editor data. Delete
+                this block and make a new one.
+              </p>
+              <ViewText data={data} {...props} />
+            </div>
           )}
           <div className={`${layout_type}-${grid.chart_column[layout_type]}`}>
             {data.chartData ? (

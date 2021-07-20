@@ -9,12 +9,14 @@ import { connect } from 'react-redux';
 import { Segment, Form as UiForm } from 'semantic-ui-react';
 
 import SlateRichTextWidget from 'volto-slate/widgets/RichTextWidget';
+import Editor from '@plone/volto/components/manage/Blocks/Text/Edit';
 import { SidebarPortal } from '@plone/volto/components'; // EditBlock
 
 import InlineForm from '@plone/volto/components/manage/Form/InlineForm';
 import { changeSidebarState } from '../actions';
 import ConnectedChart from '../ConnectedChart';
 
+import './styles.css';
 import schema from './schema';
 
 const toolbarId = uuid();
@@ -123,9 +125,33 @@ class EmbedChartBlockEdit extends Component {
                     />
                   )}
                   {!hasValidData && (
-                    <p>
-                      Invalid Editor Data. Delete this block and make a new one.
-                    </p>
+                    <React.Fragment>
+                      <p className="info-text">
+                        Invalid Editor Data. This uses the old editor data.
+                        Delete this block and make a new one.
+                      </p>
+                      <Editor
+                        index={this.props.index}
+                        detached={true}
+                        selected={this.state.textEditorIsActive}
+                        block={this.props.block}
+                        onAddBlock={this.nop}
+                        onChangeBlock={(id, { text }) => {
+                          this.props.onChangeBlock(block, {
+                            ...this.props.data,
+                            text,
+                          });
+                        }}
+                        onDeleteBlock={this.nop}
+                        onFocusPreviousBlock={this.nop}
+                        onFocusNextBlock={this.nop}
+                        onSelectBlock={this.nop}
+                        onMutateBlock={this.nop}
+                        data={this.props.data}
+                        blockNode={this.textEditorSegmentNode}
+                        toolbarId={toolbarId}
+                      />
+                    </React.Fragment>
                   )}
                 </div>
               </Segment>
