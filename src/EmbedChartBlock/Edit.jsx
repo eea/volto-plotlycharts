@@ -16,7 +16,6 @@ import InlineForm from '@plone/volto/components/manage/Form/InlineForm';
 import { changeSidebarState } from '../actions';
 import ConnectedChart from '../ConnectedChart';
 
-import './styles.css';
 import schema from './schema';
 
 const toolbarId = uuid();
@@ -65,10 +64,10 @@ class EmbedChartBlockEdit extends Component {
   render() {
     const { block } = this.props; // , data, onChangeBlock, selected, title
 
-    const hasValidData =
+    const hasNewEditorData =
       this.props.data && this.props.data.text
         ? Array.isArray(this.props.data.text)
-        : false;
+        : true;
 
     return (
       <div className="block selected">
@@ -94,7 +93,7 @@ class EmbedChartBlockEdit extends Component {
                   style={{ minWidth: '73px' }}
                   ref={this.textEditorSegmentNode}
                 >
-                  {hasValidData && (
+                  {hasNewEditorData && (
                     <SlateRichTextWidget
                       id={this.props.id}
                       title="slate-editor"
@@ -124,34 +123,28 @@ class EmbedChartBlockEdit extends Component {
                       placeholder="Type text..."
                     />
                   )}
-                  {!hasValidData && (
-                    <React.Fragment>
-                      <p className="info-text">
-                        Invalid Editor Data. This uses the old editor data.
-                        Delete this block and make a new one.
-                      </p>
-                      <Editor
-                        index={this.props.index}
-                        detached={true}
-                        selected={this.state.textEditorIsActive}
-                        block={this.props.block}
-                        onAddBlock={this.nop}
-                        onChangeBlock={(id, { text }) => {
-                          this.props.onChangeBlock(block, {
-                            ...this.props.data,
-                            text,
-                          });
-                        }}
-                        onDeleteBlock={this.nop}
-                        onFocusPreviousBlock={this.nop}
-                        onFocusNextBlock={this.nop}
-                        onSelectBlock={this.nop}
-                        onMutateBlock={this.nop}
-                        data={this.props.data}
-                        blockNode={this.textEditorSegmentNode}
-                        toolbarId={toolbarId}
-                      />
-                    </React.Fragment>
+                  {!hasNewEditorData && (
+                    <Editor
+                      index={this.props.index}
+                      detached={true}
+                      selected={this.state.textEditorIsActive}
+                      block={this.props.block}
+                      onAddBlock={this.nop}
+                      onChangeBlock={(id, { text }) => {
+                        this.props.onChangeBlock(block, {
+                          ...this.props.data,
+                          text,
+                        });
+                      }}
+                      onDeleteBlock={this.nop}
+                      onFocusPreviousBlock={this.nop}
+                      onFocusNextBlock={this.nop}
+                      onSelectBlock={this.nop}
+                      onMutateBlock={this.nop}
+                      data={this.props.data}
+                      blockNode={this.textEditorSegmentNode}
+                      toolbarId={toolbarId}
+                    />
                   )}
                 </div>
               </Segment>

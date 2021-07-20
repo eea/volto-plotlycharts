@@ -7,8 +7,6 @@ import { connect } from 'react-redux';
 
 import { serializeNodes } from '@eeacms/volto-slate/editor/render';
 
-import './styles.css';
-
 import WidthBasedLayoutProvider from '../LayoutProvider/WidthBasedLayoutProvider';
 
 const EmbedChartView = ({
@@ -60,15 +58,7 @@ const EmbedChartView = ({
           ) : (
             ''
           )}
-          {hasOldText && (
-            <div>
-              <p className="info-text">
-                Invalid Editor Data. This block uses the old editor data. Delete
-                this block and make a new one.
-              </p>
-              <ViewText data={data} {...props} />
-            </div>
-          )}
+          {hasOldText && <ViewText data={data} {...props} />}
           <div className={`${layout_type}-${grid.chart_column[layout_type]}`}>
             {data.chartData ? (
               <div

@@ -16,10 +16,12 @@
     "plotly"
   ],
   "addons": [
-    "@eeacms/volto-datablocks"
+    "@eeacms/volto-datablocks",
+    "@eeacms/volto-slate"
   ],
   "dependencies": {
     "@eeacms/volto-datablocks": "^2.0.2",
+    "@eeacms/volto-slate": "^2.8.3",
     "plotly.js": "^1.51.2",
     "react-chart-editor": "^0.41.0",
     "react-component-queries": "2.3.0",
