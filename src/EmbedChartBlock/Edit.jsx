@@ -62,6 +62,12 @@ class EmbedChartBlockEdit extends Component {
   textEditorSegmentNode = React.createRef();
   render() {
     const { block } = this.props; // , data, onChangeBlock, selected, title
+
+    const hasValidData =
+      this.props.data && this.props.data.text
+        ? Array.isArray(this.props.data.text)
+        : false;
+
     return (
       <div className="block selected">
         <div className="block-inner-wrapper">
@@ -86,34 +92,41 @@ class EmbedChartBlockEdit extends Component {
                   style={{ minWidth: '73px' }}
                   ref={this.textEditorSegmentNode}
                 >
-                  <SlateRichTextWidget
-                    id={this.props.id}
-                    title="slate-editor"
-                    selected={this.state.textEditorIsActive}
-                    description={this.props.formDescription}
-                    detached={true}
-                    onAddBlock={this.nop}
-                    onDeleteBlock={this.nop}
-                    onFocusPreviousBlock={this.nop}
-                    onFocusNextBlock={this.nop}
-                    onSelectBlock={this.nop}
-                    onMutateBlock={this.nop}
-                    onChange={(name, value) => {
-                      this.props.onChangeBlock(block, {
-                        ...this.props.data,
-                        text: value,
-                      });
-                    }}
-                    block={block}
-                    columns={1}
-                    properties={this.props.data}
-                    value={
-                      this.props.data && this.props.data.text
-                        ? this.props.data.text
-                        : ''
-                    }
-                    placeholder="Type text..."
-                  />
+                  {hasValidData && (
+                    <SlateRichTextWidget
+                      id={this.props.id}
+                      title="slate-editor"
+                      selected={this.state.textEditorIsActive}
+                      description={this.props.formDescription}
+                      detached={true}
+                      onAddBlock={this.nop}
+                      onDeleteBlock={this.nop}
+                      onFocusPreviousBlock={this.nop}
+                      onFocusNextBlock={this.nop}
+                      onSelectBlock={this.nop}
+                      onMutateBlock={this.nop}
+                      onChange={(name, value) => {
+                        this.props.onChangeBlock(block, {
+                          ...this.props.data,
+                          text: value,
+                        });
+                      }}
+                      block={block}
+                      columns={1}
+                      properties={this.props.data}
+                      value={
+                        this.props.data && this.props.data.text
+                          ? this.props.data.text
+                          : ''
+                      }
+                      placeholder="Type text..."
+                    />
+                  )}
+                  {!hasValidData && (
+                    <p>
+                      Invalid Editor Data. Delete this block and make a new one.
+                    </p>
+                  )}
                 </div>
               </Segment>
               <Segment secondary={this.state.activeEditorSegment === 0}>

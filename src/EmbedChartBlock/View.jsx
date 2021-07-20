@@ -21,6 +21,10 @@ const EmbedChartView = ({
   const hasText =
     (data.text?.length > 1 && data.text) ||
     (data.text?.length === 1 && data.text?.[0].text);
+
+  const hasValidData =
+    props.data && props.data.text ? Array.isArray(props.data.text) : false;
+
   const grid = {
     text_column: {
       phone: 'twelve',
@@ -43,12 +47,18 @@ const EmbedChartView = ({
         <div className="element-grid">
           {hasText ? (
             <div className={`${layout_type}-${grid.text_column[layout_type]}`}>
-              <div
-                className="block-text-content"
-                style={{ padding: '1rem', marginTop: '.5rem' }}
-              >
-                {serializeNodes(data.text || [])}
-              </div>
+              {hasValidData ? (
+                <div
+                  className="block-text-content"
+                  style={{ padding: '1rem', marginTop: '.5rem' }}
+                >
+                  {serializeNodes(data.text || [])}
+                </div>
+              ) : (
+                <p>
+                  Invalid Editor Data. Delete this block and make a new one.
+                </p>
+              )}
             </div>
           ) : (
             ''
