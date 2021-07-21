@@ -57,12 +57,7 @@ const EmbedChartView = ({
           ) : (
             ''
           )}
-          {hasOldText && !isNewEditor && (
-            <React.Fragment>
-              <p>is the old text</p>
-              <ViewText data={data} {...props} />
-            </React.Fragment>
-          )}
+          {hasOldText && !isNewEditor && <ViewText data={data} {...props} />}
           <div className={`${layout_type}-${grid.chart_column[layout_type]}`}>
             {data.chartData ? (
               <div
