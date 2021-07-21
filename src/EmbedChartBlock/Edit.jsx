@@ -75,8 +75,8 @@ class EmbedChartBlockEdit extends Component {
     const { block } = this.props; // , data, onChangeBlock, selected, title
 
     const hasNewEditorData =
-      this.props.data && this.props.data.text && this.props.data.text.blocks
-        ? this.props.data.text.editor && this.props.data.text.editor === 'slate'
+      this.props.data?.text?.blocks && this.props.data.text.editor
+        ? this.props.data.text.editor === 'slate'
         : true;
 
     return (
@@ -124,9 +124,7 @@ class EmbedChartBlockEdit extends Component {
                       columns={1}
                       properties={this.props.data}
                       value={
-                        this.props.data.text && this.props.data.text.blocks
-                          ? this.props.data.text.blocks
-                          : this.getDefaultValue()
+                        this.props.data?.text?.blocks || this.getDefaultValue()
                       }
                       placeholder="Type text..."
                     />
