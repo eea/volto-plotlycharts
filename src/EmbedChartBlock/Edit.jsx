@@ -58,6 +58,15 @@ class EmbedChartBlockEdit extends Component {
     }));
   };
 
+  getDefaultValue = () => {
+    return [
+      {
+        type: 'p',
+        children: [{ text: '' }],
+      },
+    ];
+  };
+
   nop = () => {};
 
   textEditorSegmentNode = React.createRef();
@@ -65,8 +74,11 @@ class EmbedChartBlockEdit extends Component {
     const { block } = this.props; // , data, onChangeBlock, selected, title
 
     const hasNewEditorData =
-      this.props.data && this.props.data.text
-        ? Array.isArray(this.props.data.text)
+      this.props.data &&
+      this.props.data.text &&
+      this.props.data.text.blocks &&
+      this.props.data.text.editor
+        ? this.props.data.text.editor === 'slate'
         : true;
 
     return (
@@ -93,37 +105,34 @@ class EmbedChartBlockEdit extends Component {
                   style={{ minWidth: '73px' }}
                   ref={this.textEditorSegmentNode}
                 >
-                  {hasNewEditorData && (
+                  {hasNewEditorData ? (
                     <SlateRichTextWidget
                       id={this.props.id}
+                      index={this.props.index}
                       title="slate-editor"
                       selected={this.state.textEditorIsActive}
-                      description={this.props.formDescription}
                       detached={true}
-                      onAddBlock={this.nop}
-                      onDeleteBlock={this.nop}
-                      onFocusPreviousBlock={this.nop}
-                      onFocusNextBlock={this.nop}
-                      onSelectBlock={this.nop}
-                      onMutateBlock={this.nop}
                       onChange={(name, value) => {
                         this.props.onChangeBlock(block, {
                           ...this.props.data,
-                          text: value,
+                          text: {
+                            ...this.props.data.text,
+                            editor: 'slate',
+                            blocks: value,
+                          },
                         });
                       }}
                       block={block}
                       columns={1}
                       properties={this.props.data}
                       value={
-                        this.props.data && this.props.data.text
-                          ? this.props.data.text
-                          : ''
+                        this.props.data.text && this.props.data.text.blocks
+                          ? this.props.data.text.blocks
+                          : this.getDefaultValue()
                       }
                       placeholder="Type text..."
                     />
-                  )}
-                  {!hasNewEditorData && (
+                  ) : (
                     <Editor
                       index={this.props.index}
                       detached={true}

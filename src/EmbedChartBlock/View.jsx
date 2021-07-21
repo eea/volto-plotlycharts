@@ -18,7 +18,9 @@ const EmbedChartView = ({
 }) => {
   if (!data) return '';
 
-  const hasText = data.text?.length > 0 && data.text;
+  const isNewEditor = data.text?.editor === 'slate';
+
+  const hasText = data.text?.blocks?.length > 0 && data.text?.blocks;
 
   const hasOldText =
     (data.text?.blocks?.length > 1 && data.text?.blocks) ||
@@ -38,25 +40,29 @@ const EmbedChartView = ({
       widescreen: hasText ? 'eight' : 'twelve',
     },
   };
-
   return (
     <div className="chartWrapperView">
       {data.block_title ? <h5>{data.block_title}</h5> : ''}
       <div className="block-inner-wrapper">
         <div className="element-grid">
-          {hasText ? (
+          {hasText && isNewEditor ? (
             <div className={`${layout_type}-${grid.text_column[layout_type]}`}>
               <div
                 className="block-text-content"
                 style={{ padding: '1rem', marginTop: '.5rem' }}
               >
-                {serializeNodes(data.text || [])}
+                {serializeNodes(data.text.blocks || [])}
               </div>
             </div>
           ) : (
             ''
           )}
-          {hasOldText && <ViewText data={data} {...props} />}
+          {hasOldText && !isNewEditor && (
+            <React.Fragment>
+              <p>is the old text</p>
+              <ViewText data={data} {...props} />
+            </React.Fragment>
+          )}
           <div className={`${layout_type}-${grid.chart_column[layout_type]}`}>
             {data.chartData ? (
               <div
