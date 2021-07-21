@@ -21,7 +21,7 @@ const SourceSchema = {
       title: 'Source',
     },
     chart_source_link: {
-      type: 'string',
+      widget: 'url',
       title: 'Link',
     },
   },
