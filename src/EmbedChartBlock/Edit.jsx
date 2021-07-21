@@ -8,7 +8,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Segment, Form as UiForm } from 'semantic-ui-react';
 
-// TODO: use volto-slate
+import SlateRichTextWidget from 'volto-slate/widgets/RichTextWidget';
 import Editor from '@plone/volto/components/manage/Blocks/Text/Edit';
 import { SidebarPortal } from '@plone/volto/components'; // EditBlock
 
@@ -58,12 +58,26 @@ class EmbedChartBlockEdit extends Component {
     }));
   };
 
+  getDefaultValue = () => {
+    return [
+      {
+        type: 'p',
+        children: [{ text: '' }],
+      },
+    ];
+  };
+
   nop = () => {};
 
   textEditorSegmentNode = React.createRef();
-
   render() {
     const { block } = this.props; // , data, onChangeBlock, selected, title
+
+    const hasNewEditorData =
+      this.props.data && this.props.data.text && this.props.data.text.blocks
+        ? this.props.data.text.editor && this.props.data.text.editor === 'slate'
+        : true;
+
     return (
       <div className="block selected">
         <div className="block-inner-wrapper">
@@ -88,27 +102,56 @@ class EmbedChartBlockEdit extends Component {
                   style={{ minWidth: '73px' }}
                   ref={this.textEditorSegmentNode}
                 >
-                  <Editor
-                    index={this.props.index}
-                    detached={true}
-                    selected={this.state.textEditorIsActive}
-                    block={this.props.block}
-                    onAddBlock={this.nop}
-                    onChangeBlock={(id, { text }) => {
-                      this.props.onChangeBlock(block, {
-                        ...this.props.data,
-                        text,
-                      });
-                    }}
-                    onDeleteBlock={this.nop}
-                    onFocusPreviousBlock={this.nop}
-                    onFocusNextBlock={this.nop}
-                    onSelectBlock={this.nop}
-                    onMutateBlock={this.nop}
-                    data={this.props.data}
-                    blockNode={this.textEditorSegmentNode}
-                    toolbarId={toolbarId}
-                  />
+                  {hasNewEditorData ? (
+                    <SlateRichTextWidget
+                      id={this.props.id}
+                      index={this.props.index}
+                      title="slate-editor"
+                      selected={this.state.textEditorIsActive}
+                      detached={true}
+                      onChange={(name, value) => {
+                        this.props.onChangeBlock(block, {
+                          ...this.props.data,
+                          text: {
+                            ...this.props.data.text,
+                            editor: 'slate',
+                            blocks: value,
+                          },
+                        });
+                      }}
+                      block={block}
+                      columns={1}
+                      properties={this.props.data}
+                      value={
+                        this.props.data.text && this.props.data.text.blocks
+                          ? this.props.data.text.blocks
+                          : this.getDefaultValue()
+                      }
+                      placeholder="Type text..."
+                    />
+                  ) : (
+                    <Editor
+                      index={this.props.index}
+                      detached={true}
+                      selected={this.state.textEditorIsActive}
+                      block={this.props.block}
+                      onAddBlock={this.nop}
+                      onChangeBlock={(id, { text }) => {
+                        this.props.onChangeBlock(block, {
+                          ...this.props.data,
+                          text,
+                        });
+                      }}
+                      onDeleteBlock={this.nop}
+                      onFocusPreviousBlock={this.nop}
+                      onFocusNextBlock={this.nop}
+                      onSelectBlock={this.nop}
+                      onMutateBlock={this.nop}
+                      data={this.props.data}
+                      blockNode={this.textEditorSegmentNode}
+                      toolbarId={toolbarId}
+                    />
+                  )}
                 </div>
               </Segment>
               <Segment secondary={this.state.activeEditorSegment === 0}>

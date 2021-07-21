@@ -5,6 +5,8 @@ import ViewText from '@plone/volto/components/manage/Blocks/Text/View';
 import { SourcesBlockView } from '@eeacms/volto-datablocks/components';
 import { connect } from 'react-redux';
 
+import { serializeNodes } from 'volto-slate/editor/render';
+
 import WidthBasedLayoutProvider from '../LayoutProvider/WidthBasedLayoutProvider';
 
 const EmbedChartView = ({
@@ -16,9 +18,14 @@ const EmbedChartView = ({
 }) => {
   if (!data) return '';
 
-  const hasText =
+  const isNewEditor = data.text?.editor === 'slate';
+
+  const hasText = data.text?.blocks?.length > 0 && data.text?.blocks;
+
+  const hasOldText =
     (data.text?.blocks?.length > 1 && data.text?.blocks) ||
     (data.text?.blocks?.length === 1 && data.text?.blocks?.[0].text);
+
   const grid = {
     text_column: {
       phone: 'twelve',
@@ -33,24 +40,24 @@ const EmbedChartView = ({
       widescreen: hasText ? 'eight' : 'twelve',
     },
   };
-
   return (
     <div className="chartWrapperView">
       {data.block_title ? <h5>{data.block_title}</h5> : ''}
       <div className="block-inner-wrapper">
         <div className="element-grid">
-          {hasText ? (
+          {hasText && isNewEditor ? (
             <div className={`${layout_type}-${grid.text_column[layout_type]}`}>
               <div
                 className="block-text-content"
                 style={{ padding: '1rem', marginTop: '.5rem' }}
               >
-                <ViewText data={data} {...props} />
+                {serializeNodes(data.text.blocks || [])}
               </div>
             </div>
           ) : (
             ''
           )}
+          {hasOldText && !isNewEditor && <ViewText data={data} {...props} />}
           <div className={`${layout_type}-${grid.chart_column[layout_type]}`}>
             {data.chartData ? (
               <div
