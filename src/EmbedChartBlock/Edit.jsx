@@ -74,11 +74,8 @@ class EmbedChartBlockEdit extends Component {
     const { block } = this.props; // , data, onChangeBlock, selected, title
 
     const hasNewEditorData =
-      this.props.data &&
-      this.props.data.text &&
-      this.props.data.text.blocks &&
-      this.props.data.text.editor
-        ? this.props.data.text.editor === 'slate'
+      this.props.data && this.props.data.text && this.props.data.text.blocks
+        ? this.props.data.text.editor && this.props.data.text.editor === 'slate'
         : true;
 
     return (
