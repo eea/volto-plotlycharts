@@ -44,13 +44,13 @@ const EmbedChartView = ({
     <div className="chartWrapperView">
       {data.block_title ? <h5>{data.block_title}</h5> : ''}
       <div className="block-inner-wrapper">
-        <div className="element-grid">
+        <div className="element-grid mobile-col">
           {hasText && isNewEditor ? (
             <div
-              className={`${layout_type}-${grid.text_column[layout_type]} text-segment`}
+              className={`${layout_type}-${grid.text_column[layout_type]} text-segment mobile-full`}
             >
               <div
-                className="block-text-content"
+                className="block-text-content mobile-full"
                 style={{ padding: '1rem', marginTop: '.5rem' }}
               >
                 {serializeNodes(data.text.blocks || [])}

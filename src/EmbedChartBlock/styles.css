@@ -2,3 +2,13 @@
   max-width: 40%;
   word-break: break-word;
 }
+
+@media screen and (max-width: 600px) {
+  .mobile-col {
+    flex-direction: column !important;
+  }
+
+  .mobile-full {
+    min-width: 100% !important;
+  }
+}

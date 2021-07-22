@@ -97,8 +97,8 @@ class EmbedChartBlockEdit extends Component {
           </SidebarPortal>
 
           <UiForm>
-            <Segment.Group horizontal>
-              <Segment className="text-segment">
+            <Segment.Group horizontal className="mobile-col">
+              <Segment className="text-segment mobile-full">
                 <div
                   style={{ minWidth: '73px' }}
                   ref={this.textEditorSegmentNode}
