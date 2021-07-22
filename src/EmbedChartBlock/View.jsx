@@ -46,7 +46,9 @@ const EmbedChartView = ({
       <div className="block-inner-wrapper">
         <div className="element-grid">
           {hasText && isNewEditor ? (
-            <div className={`${layout_type}-${grid.text_column[layout_type]}`}>
+            <div
+              className={`${layout_type}-${grid.text_column[layout_type]} text-segment`}
+            >
               <div
                 className="block-text-content"
                 style={{ padding: '1rem', marginTop: '.5rem' }}

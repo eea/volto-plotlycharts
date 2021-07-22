@@ -15,6 +15,7 @@ import { SidebarPortal } from '@plone/volto/components'; // EditBlock
 import InlineForm from '@plone/volto/components/manage/Form/InlineForm';
 import { changeSidebarState } from '../actions';
 import ConnectedChart from '../ConnectedChart';
+import './styles.css';
 
 import schema from './schema';
 
@@ -97,7 +98,7 @@ class EmbedChartBlockEdit extends Component {
 
           <UiForm>
             <Segment.Group horizontal>
-              <Segment style={{ maxWidth: '40%' }}>
+              <Segment className="text-segment">
                 <div
                   style={{ minWidth: '73px' }}
                   ref={this.textEditorSegmentNode}
