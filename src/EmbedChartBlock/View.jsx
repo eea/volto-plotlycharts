@@ -20,7 +20,12 @@ const EmbedChartView = ({
 
   const isNewEditor = data.text?.editor === 'slate';
 
-  const hasText = data.text?.blocks?.length > 0 && data.text?.blocks;
+  const isDefaultText =
+    data.text?.blocks?.length === 1 &&
+    data.text?.blocks?.[0]?.children?.[0].text === '';
+
+  const hasText =
+    data.text?.blocks?.length > 0 && data.text?.blocks && !isDefaultText;
 
   const hasOldText =
     (data.text?.blocks?.length > 1 && data.text?.blocks) ||
