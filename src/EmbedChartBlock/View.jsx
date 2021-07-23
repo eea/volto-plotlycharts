@@ -22,6 +22,7 @@ const EmbedChartView = ({
 
   const isDefaultText =
     data.text?.blocks?.length === 1 &&
+    data.text?.blocks?.[0]?.children?.length === 1 &&
     data.text?.blocks?.[0]?.children?.[0].text === '';
 
   const hasText =
