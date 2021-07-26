@@ -109,7 +109,6 @@ class EmbedChartBlockEdit extends Component {
                       index={this.props.index}
                       title="slate-editor"
                       selected={this.state.textEditorIsActive}
-                      detached={true}
                       onChange={(name, value) => {
                         this.props.onChangeBlock(block, {
                           ...this.props.data,
@@ -121,6 +120,7 @@ class EmbedChartBlockEdit extends Component {
                         });
                       }}
                       block={block}
+                      focus={true}
                       columns={1}
                       properties={this.props.data}
                       value={
