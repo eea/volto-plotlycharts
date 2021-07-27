@@ -3,7 +3,6 @@
  */
 
 import { v4 as uuid } from 'uuid';
-import { doesNodeContainClick } from 'semantic-ui-react/dist/commonjs/lib';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Segment, Form as UiForm } from 'semantic-ui-react';
@@ -28,36 +27,10 @@ class EmbedChartBlockEdit extends Component {
       textEditorIsActive: false,
     };
   }
+
   componentDidMount() {
     this.props.changeSidebarState(true);
-
-    __CLIENT__ &&
-      document &&
-      document.addEventListener('mousedown', this.handleClickOutside, false);
   }
-
-  componentWillUnmount() {
-    __CLIENT__ &&
-      document &&
-      document.removeEventListener('mousedown', this.handleClickOutside, false);
-  }
-
-  handleClickOutside = (e) => {
-    let toolbar = __CLIENT__ && document && document.getElementById(toolbarId);
-
-    let active =
-      (this.textEditorSegmentNode.current &&
-        doesNodeContainClick(this.textEditorSegmentNode.current, e)) ||
-      (this.textEditorSegmentNode.current &&
-        toolbar &&
-        doesNodeContainClick(toolbar, e))
-        ? true
-        : false;
-
-    this.setState(() => ({
-      textEditorIsActive: active,
-    }));
-  };
 
   getDefaultValue = () => {
     return [
@@ -108,7 +81,6 @@ class EmbedChartBlockEdit extends Component {
                       id={this.props.id}
                       index={this.props.index}
                       title="slate-editor"
-                      selected={this.state.textEditorIsActive}
                       onChange={(name, value) => {
                         this.props.onChangeBlock(block, {
                           ...this.props.data,
