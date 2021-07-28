@@ -6,6 +6,7 @@ import { SourcesBlockView } from '@eeacms/volto-datablocks/components';
 import { connect } from 'react-redux';
 
 import { serializeNodes } from 'volto-slate/editor/render';
+import { Node } from 'slate';
 
 import WidthBasedLayoutProvider from '../LayoutProvider/WidthBasedLayoutProvider';
 
@@ -20,13 +21,13 @@ const EmbedChartView = ({
 
   const isNewEditor = data.text?.editor === 'slate';
 
-  const isDefaultText =
-    data.text?.blocks?.length === 1 &&
-    data.text?.blocks?.[0]?.children?.length === 1 &&
-    data.text?.blocks?.[0]?.children?.[0].text === '';
+  const serialize = (nodes) => {
+    return nodes.map((n) => Node.string(n)).join('\n');
+  };
+  const isDefaultText = serialize(data.text?.blocks || []); //better check if slate value is empty
 
   const hasText =
-    data.text?.blocks?.length > 0 && data.text?.blocks && !isDefaultText;
+    data.text?.blocks && data.text?.blocks?.length > 0 && !!isDefaultText;
 
   const hasOldText =
     (data.text?.blocks?.length > 1 && data.text?.blocks) ||
