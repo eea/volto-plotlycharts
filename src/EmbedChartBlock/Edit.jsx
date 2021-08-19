@@ -63,12 +63,6 @@ class EmbedChartBlockEdit extends Component {
   textEditorSegmentNode = React.createRef();
 
   render() {
-    const wrongDataSet =
-      this.props.data &&
-      this.props.data.text &&
-      this.props.data.text.editor &&
-      this.props.data.text.editor === 'slate';
-
     const { block } = this.props; // , data, onChangeBlock, selected, title
     return (
       <div className="block selected">
@@ -94,31 +88,27 @@ class EmbedChartBlockEdit extends Component {
                   style={{ minWidth: '73px' }}
                   ref={this.textEditorSegmentNode}
                 >
-                  {wrongDataSet ? (
-                    <p>Editor using wrong data set</p>
-                  ) : (
-                    <Editor
-                      index={this.props.index}
-                      detached={true}
-                      selected={this.state.textEditorIsActive}
-                      block={this.props.block}
-                      onAddBlock={this.nop}
-                      onChangeBlock={(id, { text }) => {
-                        this.props.onChangeBlock(block, {
-                          ...this.props.data,
-                          text,
-                        });
-                      }}
-                      onDeleteBlock={this.nop}
-                      onFocusPreviousBlock={this.nop}
-                      onFocusNextBlock={this.nop}
-                      onSelectBlock={this.nop}
-                      onMutateBlock={this.nop}
-                      data={this.props.data}
-                      blockNode={this.textEditorSegmentNode}
-                      toolbarId={toolbarId}
-                    />
-                  )}
+                  <Editor
+                    index={this.props.index}
+                    detached={true}
+                    selected={this.state.textEditorIsActive}
+                    block={this.props.block}
+                    onAddBlock={this.nop}
+                    onChangeBlock={(id, { text }) => {
+                      this.props.onChangeBlock(block, {
+                        ...this.props.data,
+                        text,
+                      });
+                    }}
+                    onDeleteBlock={this.nop}
+                    onFocusPreviousBlock={this.nop}
+                    onFocusNextBlock={this.nop}
+                    onSelectBlock={this.nop}
+                    onMutateBlock={this.nop}
+                    data={this.props.data}
+                    blockNode={this.textEditorSegmentNode}
+                    toolbarId={toolbarId}
+                  />
                 </div>
               </Segment>
               <Segment secondary={this.state.activeEditorSegment === 0}>
