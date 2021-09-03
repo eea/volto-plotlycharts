@@ -46,56 +46,20 @@ import {
   HoveronDropdown,
   LevelRendered,
 } from 'react-chart-editor';
-import { Icon } from '@plone/volto/components';
 import { traceTypes } from 'react-chart-editor/lib/lib/traceTypes';
 import { localize } from 'react-chart-editor';
 import CustomMarkerColor from './CustomMarkerColor';
-import { Colorscale } from 'react-colorscales';
-import CustomColorPicker from './CustomColorPicker';
-import deleteSVG from '@plone/volto/icons/delete.svg';
+import CustomColorscaleSegments from './CustomColorscaleSegments';
 
 const allTraceTypes = traceTypes(localize).map(({ value }) => value);
 
 const StyleTracesPanel = (props, { localize: _ }) => {
-  const onChangeColor = (customColor, index) => {
-    const newColorScale = [
-      ...props.value.layout.piecolorway.slice(0, index),
-      customColor,
-      ...props.value.layout.piecolorway.slice(index + 1),
-    ];
-
+  const handleSetColorscale = (colorscale) => {
     props.onChangeValue({
       ...props.value,
       layout: {
         ...props.value.layout,
-        piecolorway: newColorScale,
-      },
-    });
-  };
-
-  const handleDeleteColor = (index) => {
-    const newColorScale = [
-      ...props.value.layout.piecolorway.slice(0, index),
-      ...props.value.layout.piecolorway.slice(index + 1),
-    ];
-
-    props.onChangeValue({
-      ...props.value,
-      layout: {
-        ...props.value.layout,
-        piecolorway: newColorScale,
-      },
-    });
-  };
-
-  const handleAddColor = (index) => {
-    const newColorScale = [...props.value.layout.piecolorway, 'black'];
-
-    props.onChangeValue({
-      ...props.value,
-      layout: {
-        ...props.value.layout,
-        piecolorway: newColorScale,
+        piecolorway: colorscale,
       },
     });
   };
@@ -198,54 +162,11 @@ const StyleTracesPanel = (props, { localize: _ }) => {
         </LayoutSection>
       </TraceTypeSection>
       {props.value.layout.piecolorway && (
-        <PlotlySection name={_('Custom Colorscale Segments')}>
-          <div
-            style={styles.scaleContainer}
-            className="field field__colorscale"
-          >
-            <p style={{ width: '70px', fontSize: '12px' }}>Active</p>
-            <div
-              style={{
-                width: '180px',
-                'margin-left': '12px',
-              }}
-            >
-              <Colorscale colorscale={props.value.layout.piecolorway} />
-            </div>
-          </div>
-          {props.value.layout.piecolorway.length > 0 &&
-            props.value.layout.piecolorway.map((c, i) => (
-              <div
-                style={styles.scaleContainer}
-                className="field field__colorscale"
-              >
-                <p style={{ width: '70px', fontSize: '12px' }}>Color #{i}</p>
-                <div style={{ marginLeft: '10px', position: 'relative' }}>
-                  <CustomColorPicker
-                    key={i}
-                    selectedColor={c}
-                    onColorChange={(selectedColor) =>
-                      onChangeColor(selectedColor, i)
-                    }
-                  />
-                  {props.value.layout.piecolorway.length > 1 && (
-                    <Icon
-                      onClick={() => handleDeleteColor(i)}
-                      className="delete-icon"
-                      name={deleteSVG}
-                      size="24px"
-                    />
-                  )}
-                </div>
-              </div>
-            ))}
-
-          <div style={{ display: 'flex', justifyContent: 'center' }}>
-            <button className="button-add-color" onClick={handleAddColor}>
-              Add new color
-            </button>
-          </div>
-        </PlotlySection>
+        <CustomColorscaleSegments
+          colorscale={props.value.layout.piecolorway}
+          handleChange={(colorscale) => handleSetColorscale(colorscale)}
+          _={_}
+        />
       )}
       <PlotlySection
         name={_('Funnel Dimensions')}
@@ -1179,11 +1100,3 @@ StyleTracesPanel.contextTypes = {
 };
 
 export default StyleTracesPanel;
-
-const styles = {
-  scaleContainer: {
-    padding: '10px 12px',
-    fontWeight: '400 !important',
-    color: 'black !important',
-  },
-};
