@@ -6,6 +6,14 @@
   padding: 1rem;
 }
 
+.undo-icon {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  cursor: pointer;
+  fill: grey !important;
+}
+
 .delete-icon {
   position: absolute;
   top: 0;
@@ -25,21 +33,21 @@
 }
 
 .colorscale-container {
-  color: black !important;
   padding: 10px 12px !important;
+  color: black !important;
   font-weight: 400 !important;
 }
 
 .expand-icon {
   position: absolute;
-  right: 5px;
   top: 15px;
+  right: 5px;
   cursor: pointer;
 }
 
 .collapse-icon {
   position: absolute;
-  right: 5px;
   top: 15px;
+  right: 5px;
   cursor: pointer;
 }

@@ -8,6 +8,55 @@ import CustomColorPicker from './CustomColorPicker';
 import deleteSVG from '@plone/volto/icons/delete.svg';
 import listArrowsSVG from '@plone/volto/icons/list-arrows.svg';
 import circleDismissSVG from '@plone/volto/icons/circle-dismiss.svg';
+import undoSVG from '@plone/volto/icons/undo.svg';
+
+const ColorPicker = ({
+  index,
+  color,
+  onChangeColor,
+  handleDeleteColor,
+  colorscale,
+}) => {
+  const [storedColors, setStoredColors] = useState([color]);
+
+  const handleColorChange = (c, index) => {
+    setStoredColors([...storedColors, c]);
+    onChangeColor(c, index);
+  };
+
+  const handleUndo = () => {
+    const indexBefore = storedColors.indexOf(color) - 1;
+    const colorBefore = storedColors[indexBefore];
+    onChangeColor(colorBefore, index);
+  };
+  return (
+    <div style={{ marginLeft: '10px', position: 'relative' }}>
+      <CustomColorPicker
+        key={index}
+        selectedColor={color}
+        onColorChange={(selectedColor) =>
+          handleColorChange(selectedColor, index)
+        }
+      />
+      {storedColors.indexOf(color) > 0 && storedColors.length > 1 && (
+        <Icon
+          onClick={() => handleUndo()}
+          className="undo-icon"
+          name={undoSVG}
+          size="24px"
+        />
+      )}
+      {colorscale.length > 1 && (
+        <Icon
+          onClick={() => handleDeleteColor(index)}
+          className="delete-icon"
+          name={deleteSVG}
+          size="24px"
+        />
+      )}
+    </div>
+  );
+};
 
 const CustomColorscaleSegments = ({ colorscale, handleChange, _ }) => {
   const [expand, setExpand] = useState(false);
@@ -77,23 +126,13 @@ const CustomColorscaleSegments = ({ colorscale, handleChange, _ }) => {
           {colorscale.map((c, i) => (
             <div className="field field__colorscale colorscale-container">
               <p style={{ width: '70px', fontSize: '12px' }}>Color #{i}</p>
-              <div style={{ marginLeft: '10px', position: 'relative' }}>
-                <CustomColorPicker
-                  key={i}
-                  selectedColor={c}
-                  onColorChange={(selectedColor) =>
-                    onChangeColor(selectedColor, i)
-                  }
-                />
-                {colorscale.length > 1 && (
-                  <Icon
-                    onClick={() => handleDeleteColor(i)}
-                    className="delete-icon"
-                    name={deleteSVG}
-                    size="24px"
-                  />
-                )}
-              </div>
+              <ColorPicker
+                colorscale={colorscale}
+                color={c}
+                onChangeColor={onChangeColor}
+                handleDeleteColor={handleDeleteColor}
+                index={i}
+              />
             </div>
           ))}
           <div style={{ display: 'flex', justifyContent: 'center' }}>
