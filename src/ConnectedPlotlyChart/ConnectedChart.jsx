@@ -72,13 +72,13 @@ function ConnectedChart(props) {
   // TODO: only use fallback data if chartData.data.url doesn't exist
   // or the connected_data_parameters don't exist
   // console.log('connected chart', props);
-
   let data =
     props.provider_data && useLiveData
       ? mixProviderData(
           (chartData || {}).data,
           props.provider_data,
           props.connected_data_parameters,
+          props.data.filterReplaceString || ''
         )
       : (chartData || {}).data || [];
   //
