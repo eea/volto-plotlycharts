@@ -74,7 +74,6 @@ const EmbedChartView = ({
             <SourcesBlockView
               initialSource={data.chart_source}
               initialSourceLink={data.chart_source_link}
-              className={'source_format'} //use this from project
               multipleSources={data.chartSources}
               providerUrl={providerUrl || data.chartData?.provider_url}
               download_button={data.download_button}
