@@ -3,7 +3,6 @@
  */
 
 import { v4 as uuid } from 'uuid';
-import { doesNodeContainClick } from 'semantic-ui-react/dist/commonjs/lib';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Segment, Form as UiForm } from 'semantic-ui-react';
@@ -21,53 +20,15 @@ import schema from './schema';
 const toolbarId = uuid();
 
 class EmbedChartBlockEdit extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      textEditorIsActive: false,
-    };
-  }
-  componentDidMount() {
-    this.props.changeSidebarState(true);
-
-    __CLIENT__ &&
-      document &&
-      document.addEventListener('mousedown', this.handleClickOutside, false);
-  }
-
-  componentWillUnmount() {
-    __CLIENT__ &&
-      document &&
-      document.removeEventListener('mousedown', this.handleClickOutside, false);
-  }
-
-  handleClickOutside = (e) => {
-    let toolbar = __CLIENT__ && document && document.getElementById(toolbarId);
-
-    let active =
-      (this.textEditorSegmentNode.current &&
-        doesNodeContainClick(this.textEditorSegmentNode.current, e)) ||
-      (this.textEditorSegmentNode.current &&
-        toolbar &&
-        doesNodeContainClick(toolbar, e))
-        ? true
-        : false;
-
-    this.setState(() => ({
-      textEditorIsActive: active,
-    }));
-  };
-
   nop = () => {};
 
-  textEditorSegmentNode = React.createRef();
-
   render() {
-    const { block } = this.props; // , data, onChangeBlock, selected, title
+    const { block, selected } = this.props;
+
     return (
-      <div className="block selected">
+      <div className="block">
         <div className="block-inner-wrapper">
-          <SidebarPortal selected={this.props.selected}>
+          <SidebarPortal selected={selected}>
             <InlineForm
               schema={schema}
               title={schema.title}
@@ -84,14 +45,11 @@ class EmbedChartBlockEdit extends Component {
           <UiForm>
             <Segment.Group horizontal>
               <Segment style={{ maxWidth: '40%' }}>
-                <div
-                  style={{ minWidth: '73px' }}
-                  ref={this.textEditorSegmentNode}
-                >
+                <div style={{ minWidth: '73px' }}>
                   <Editor
                     index={this.props.index}
                     detached={true}
-                    selected={this.state.textEditorIsActive}
+                    selected={selected}
                     block={this.props.block}
                     onAddBlock={this.nop}
                     onChangeBlock={(id, { text }) => {
@@ -111,7 +69,7 @@ class EmbedChartBlockEdit extends Component {
                   />
                 </div>
               </Segment>
-              <Segment secondary={this.state.activeEditorSegment === 0}>
+              <Segment secondary={!selected}>
                 {this.props.data?.chartData && (
                   <ConnectedChart
                     className="embedded-block-chart"
