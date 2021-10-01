@@ -97,7 +97,7 @@ class Edit extends Component {
 
     return (
       <div>
-        <div className="block selected">
+        <div className="block">
           <div className="block-inner-wrapper">
             <LoadablePlotlyEditor>
               {(props2) => {

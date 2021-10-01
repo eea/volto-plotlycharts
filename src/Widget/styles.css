@@ -5,3 +5,49 @@
 .circle-picker {
   padding: 1rem;
 }
+
+.undo-icon {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  cursor: pointer;
+  fill: grey !important;
+}
+
+.delete-icon {
+  position: absolute;
+  top: 0;
+  right: 0;
+  cursor: pointer;
+  fill: #e40265 !important;
+}
+
+.button-add-color {
+  border-width: 0.2px !important;
+  border-color: #0f76be !important;
+  margin: 10px 0;
+  background-color: #109eff;
+  color: white;
+  font-size: 12px !important;
+  text-shadow: 0px 1px 1px darkgrey;
+}
+
+.colorscale-container {
+  padding: 10px 12px !important;
+  color: black !important;
+  font-weight: 400 !important;
+}
+
+.expand-icon {
+  position: absolute;
+  top: 15px;
+  right: 5px;
+  cursor: pointer;
+}
+
+.collapse-icon {
+  position: absolute;
+  top: 15px;
+  right: 5px;
+  cursor: pointer;
+}
