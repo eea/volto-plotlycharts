@@ -44,7 +44,12 @@ class CustomEditor extends DefaultEditor {
           group={_('Style')}
           name={_('General')}
         />
-        <StyleTracesPanel group={_('Style')} name={_('Traces')} />
+        <StyleTracesPanel
+          value={this.props.value}
+          onChangeValue={this.props.onChangeValue}
+          group={_('Style')}
+          name={_('Traces')}
+        />
 
         {this.hasAxes() && (
           <StyleAxesPanel group={_('Style')} name={_('Axes')} />

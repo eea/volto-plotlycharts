@@ -49,10 +49,21 @@ import {
 import { traceTypes } from 'react-chart-editor/lib/lib/traceTypes';
 import { localize } from 'react-chart-editor';
 import CustomMarkerColor from './CustomMarkerColor';
+import CustomColorscaleSegments from './CustomColorscaleSegments';
 
 const allTraceTypes = traceTypes(localize).map(({ value }) => value);
 
 const StyleTracesPanel = (props, { localize: _ }) => {
+  const handleSetColorscale = (colorscale) => {
+    props.onChangeValue({
+      ...props.value,
+      layout: {
+        ...props.value.layout,
+        piecolorway: colorscale,
+      },
+    });
+  };
+
   return (
     <TraceAccordion canGroup>
       <TextEditor label={_('Name')} attr="name" richTextOnly />
@@ -150,6 +161,13 @@ const StyleTracesPanel = (props, { localize: _ }) => {
           />
         </LayoutSection>
       </TraceTypeSection>
+      {props.value.layout.piecolorway && (
+        <CustomColorscaleSegments
+          colorscale={props.value.layout.piecolorway}
+          handleChange={(colorscale) => handleSetColorscale(colorscale)}
+          _={_}
+        />
+      )}
       <PlotlySection
         name={_('Funnel Dimensions')}
         traceTypes={['funnelarea']}
