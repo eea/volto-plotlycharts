@@ -78,7 +78,7 @@ function ConnectedChart(props) {
           (chartData || {}).data,
           props.provider_data,
           props.connected_data_parameters,
-          props.data.filterReplaceString || ''
+          props.data.filterReplaceString || '',
         )
       : (chartData || {}).data || [];
   //

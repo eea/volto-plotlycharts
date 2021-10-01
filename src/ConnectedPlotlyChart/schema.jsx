@@ -36,7 +36,13 @@ const ChartSchema = {
     {
       id: 'default',
       title: 'Default',
-      fields: ['url', 'filterReplaceString', 'hover_format_xy', 'align', 'min_width'],
+      fields: [
+        'url',
+        'filterReplaceString',
+        'hover_format_xy',
+        'align',
+        'min_width',
+      ],
     },
     {
       id: 'sources',
@@ -59,8 +65,9 @@ const ChartSchema = {
     filterReplaceString: {
       type: 'string',
       title: 'Filter replace string',
-      description: 'If given, replace only this string in the transforms/filter section'
-    },    
+      description:
+        'If given, replace only this string in the transforms/filter section',
+    },
     hover_format_xy: {
       type: 'string',
       title: 'Hover format',
