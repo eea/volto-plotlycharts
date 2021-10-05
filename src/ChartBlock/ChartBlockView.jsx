@@ -8,8 +8,7 @@ const parseRawJSON = (data) => {
   var parsed = '';
   try {
     parsed = JSON.parse(data);
-  } catch (e) {
-  }
+  } catch (e) {}
   return parsed;
 };
 
