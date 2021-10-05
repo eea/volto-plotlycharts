@@ -9,6 +9,16 @@ import ChartEditor from '../Widget/ChartEditor';
 
 import schema from './schema';
 
+const parseRawJSON = (data) => {
+  var parsed = '';
+  try {
+    parsed = JSON.parse(data);
+  } catch (e) {
+    console.log(e.message);
+  }
+  return parsed;
+};
+
 class Edit extends Component {
   componentDidMount() {
     this.props.changeSidebarState(true);
@@ -19,6 +29,7 @@ class Edit extends Component {
   }
 
   onChangeEditorValue = (value) => {
+    console.log('editorval', value);
     const chartData = {
       data: value.data,
       layout: value.layout,
@@ -36,6 +47,15 @@ class Edit extends Component {
   };
 
   render() {
+    const hasCustomData = this.props.data.custom_chart_toggle
+      ? this.props.data.custom_chart_toggle
+      : false;
+
+    const customData =
+      hasCustomData && this.props.data.custom_chart_data
+        ? parseRawJSON(this.props.data.custom_chart_data)
+        : '';
+
     const chartData = this.props.data.chartData || {
       layout: {},
       frames: [],
@@ -46,7 +66,11 @@ class Edit extends Component {
       <div className="block">
         <div className="block-inner-wrapper" />
         <ChartEditor
-          value={chartData}
+          value={
+            hasCustomData && customData
+              ? { ...chartData, data: customData }
+              : chartData
+          }
           provider_url={this.props.data?.url}
           onChangeValue={(value) => {
             this.onChangeEditorValue(value);
