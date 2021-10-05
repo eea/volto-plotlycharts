@@ -13,9 +13,7 @@ const parseRawJSON = (data) => {
   var parsed = '';
   try {
     parsed = JSON.parse(data);
-  } catch (e) {
-    console.log(e.message);
-  }
+  } catch (e) {}
   return parsed;
 };
 
@@ -29,7 +27,6 @@ class Edit extends Component {
   }
 
   onChangeEditorValue = (value) => {
-    console.log('editorval', value);
     const chartData = {
       data: value.data,
       layout: value.layout,
