@@ -4,8 +4,25 @@ import cx from 'classnames';
 import useMarginCalculator from '../MarginCalculator';
 import React from 'react';
 
+const parseRawJSON = (data) => {
+  var parsed = '';
+  try {
+    parsed = JSON.parse(data);
+  } catch (e) {}
+  return parsed;
+};
+
 const ChartView = ({ data, ...props }) => {
   const margins = useMarginCalculator();
+
+  const hasCustomData = data.custom_chart_toggle
+    ? data.custom_chart_toggle
+    : false;
+
+  const customData =
+    hasCustomData && data.custom_chart_data
+      ? parseRawJSON(data.custom_chart_data)
+      : '';
 
   return (
     <div
@@ -36,7 +53,17 @@ const ChartView = ({ data, ...props }) => {
           >
             <ConnectedChart
               {...props}
-              data={data}
+              data={
+                hasCustomData && customData
+                  ? {
+                      ...data,
+                      chartData: {
+                        ...data.chartData,
+                        data: customData,
+                      },
+                    }
+                  : data
+              }
               className="chart-block-chart"
               hoverFormatXY={data.hover_format_xy}
             />
