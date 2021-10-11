@@ -8,9 +8,13 @@ import { updateChartDataFromProvider } from '@eeacms/volto-datablocks/helpers';
 import { connectAnythingToProviderData } from '@eeacms/volto-datablocks/hocs';
 import 'react-chart-editor/lib/react-chart-editor.css';
 
+import JSONInput from 'react-json-editor-ajrm';
+import locale from 'react-json-editor-ajrm/locale/en';
+
 import loadable from '@loadable/component';
 
 import './fixes.css';
+import { Tab, Button } from 'semantic-ui-react';
 
 const LoadablePlotly = loadable.lib(() => import('plotly.js/dist/plotly'));
 const LoadablePlotlyEditor = loadable.lib(() => import('react-chart-editor'));
@@ -68,6 +72,73 @@ const chartHelp = {
   timeseries: { helpDoc: 'https://help.plot.ly/range-slider/' },
 };
 
+const RawDataEditor = ({
+  locale,
+  dataPlaceholder,
+  layoutPlaceholder,
+  handleDataChange,
+  handleLayoutChange,
+}) => {
+  const [dataObject, setDataObject] = React.useState(dataPlaceholder);
+  const [layoutObject, setLayoutObject] = React.useState(layoutPlaceholder);
+
+  const panes = [
+    {
+      menuItem: 'Data',
+      render: () => (
+        <Tab.Pane>
+          <Button
+            style={{ padding: '10px 20px', margin: '10px 0' }}
+            primary
+            disabled={dataObject.error ? true : false}
+            onClick={() => handleDataChange(dataObject)}
+          >
+            Save
+          </Button>
+          <JSONInput
+            id="raw_data_edit"
+            theme="light_mitsuketa_tribute"
+            locale={locale}
+            height="550px"
+            width="100%"
+            placeholder={dataPlaceholder}
+            onChange={(e) => setDataObject(e)}
+          />
+        </Tab.Pane>
+      ),
+    },
+    {
+      menuItem: 'Layout',
+      render: () => (
+        <Tab.Pane>
+          <Button
+            style={{ padding: '10px 20px', margin: '10px 0' }}
+            primary
+            disabled={layoutObject.error ? true : false}
+            onClick={() => handleLayoutChange(layoutObject)}
+          >
+            Save
+          </Button>
+          <JSONInput
+            id="raw_layout_edit"
+            theme="light_mitsuketa_tribute"
+            locale={locale}
+            height="550px"
+            width="100%"
+            placeholder={layoutPlaceholder}
+            onChange={(e) => setLayoutObject(e)}
+          />
+        </Tab.Pane>
+      ),
+    },
+  ];
+  return (
+    <div style={{ width: '100%' }}>
+      <Tab menu={{ secondary: true, pointing: true }} panes={panes} />
+    </div>
+  );
+};
+
 class Edit extends Component {
   constructor(props) {
     super(props);
@@ -79,6 +150,20 @@ class Edit extends Component {
     LoadablePlotly.preload();
     LoadableCustomEditor.preload();
   }
+
+  handleRawDataChange = (val) => {
+    this.props.onChangeValue({
+      ...this.props.value,
+      data: val.jsObject,
+    });
+  };
+
+  handleRawLayoutChange = (val) => {
+    this.props.onChangeValue({
+      ...this.props.value,
+      layout: val.jsObject,
+    });
+  };
 
   render() {
     if (__SERVER__) return '';
@@ -140,36 +225,50 @@ class Edit extends Component {
                                 debug
                                 advancedTraceTypeSelector
                               >
-                                <DefaultCustomEditor
-                                  onChangeValue={this.props.onChangeValue}
-                                  value={this.props.value}
-                                  logoSrc=""
-                                >
-                                  <Panel group="Dev" name="Inspector">
-                                    <button
-                                      className="devbtn"
-                                      onClick={() => {
-                                        const gd =
-                                          document.getElementById('gd') || {};
-                                        this.setState({
-                                          full: {
-                                            _fullData: gd._fullData || [],
-                                            _fullLayout: gd._fullLayout || {},
-                                          },
-                                        });
-                                      }}
-                                    >
-                                      Refresh
-                                    </button>
-                                    <div style={{ height: '80vh' }}>
-                                      <LoadableInspector
-                                        data={{ _full: this.state.full }}
-                                        expandLevel={2}
-                                        sortObjectKeys={true}
-                                      />
-                                    </div>
-                                  </Panel>
-                                </DefaultCustomEditor>
+                                {this.props.hasCustomData ? (
+                                  <RawDataEditor
+                                    locale={locale}
+                                    dataPlaceholder={this.props.value?.data}
+                                    layoutPlaceholder={this.props.value?.layout}
+                                    handleDataChange={(e) =>
+                                      this.handleRawDataChange(e)
+                                    }
+                                    handleLayoutChange={(e) =>
+                                      this.handleRawLayoutChange(e)
+                                    }
+                                  />
+                                ) : (
+                                  <DefaultCustomEditor
+                                    onChangeValue={this.props.onChangeValue}
+                                    value={this.props.value}
+                                    logoSrc=""
+                                  >
+                                    <Panel group="Dev" name="Inspector">
+                                      <button
+                                        className="devbtn"
+                                        onClick={() => {
+                                          const gd =
+                                            document.getElementById('gd') || {};
+                                          this.setState({
+                                            full: {
+                                              _fullData: gd._fullData || [],
+                                              _fullLayout: gd._fullLayout || {},
+                                            },
+                                          });
+                                        }}
+                                      >
+                                        Refresh
+                                      </button>
+                                      <div style={{ height: '80vh' }}>
+                                        <LoadableInspector
+                                          data={{ _full: this.state.full }}
+                                          expandLevel={2}
+                                          sortObjectKeys={true}
+                                        />
+                                      </div>
+                                    </Panel>
+                                  </DefaultCustomEditor>
+                                )}
                               </DefaultPlotlyEditor>
                             );
                           }}
