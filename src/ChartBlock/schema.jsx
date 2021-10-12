@@ -36,7 +36,13 @@ const ChartSchema = {
     {
       id: 'default',
       title: 'Default',
-      fields: ['url', 'hover_format_xy', 'align', 'min_width'],
+      fields: [
+        'url',
+        'hover_format_xy',
+        'align',
+        'min_width',
+        'raw_data_toggle',
+      ],
     },
     {
       id: 'sources',
@@ -48,30 +54,26 @@ const ChartSchema = {
       title: 'Source (obsolete)',
       fields: ['chart_source', 'chart_source_link'],
     },
-    {
-      id: 'custom',
-      title: 'Custom Raw Data',
-      fields: [
-        'custom_chart_toggle',
-        'custom_chart_data',
-        'custom_chart_layout',
-      ],
-    },
   ],
 
   properties: {
-    custom_chart_toggle: {
-      title: 'Use Custom Data',
+    raw_data_toggle: {
+      title: 'Use Raw Data',
       type: 'boolean',
       defaultValue: false,
-    },
-    custom_chart_data: {
-      widget: 'text',
-      title: 'Data Raw',
-    },
-    custom_chart_layout: {
-      widget: 'text',
-      title: 'Layout Raw',
+      description: (
+        <>
+          Expects JSON data for data & layout object (See{' '}
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            href="https://plotly.com/javascript/basic-charts/"
+          >
+            Plotly charts examples
+          </a>
+          ). This will override all other settings.
+        </>
+      ),
     },
     url: {
       widget: 'pick_provider',

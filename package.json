@@ -1,6 +1,6 @@
 {
   "name": "@eeacms/volto-plotlycharts",
-  "version": "2.0.7",
+  "version": "2.0.8",
   "description": "Plotly Charts and Editor integration for Volto",
   "main": "src/index.js",
   "author": "European Environment Agency: IDM2 A-Team",
@@ -24,6 +24,7 @@
     "react-chart-editor": "^0.45.0",
     "react-component-queries": "2.3.0",
     "react-inspector": "^5.1.1",
+    "react-json-editor-ajrm": "2.5.13",
     "react-plotly.js": "^2.5.1",
     "react-resize-detector": "^6.7.6",
     "react-sizeme": "^3.0.2",
