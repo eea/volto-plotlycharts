@@ -33,6 +33,14 @@ function ConnectedChart(props) {
   // console.log('connectedchart', props);
   const chartData = props.data.chartData;
 
+  // if (props.hover_format_xy) {
+  //   console.log('hover_format_xy: ', props.hover_format_xy);
+  // }
+
+  // if (props.hoverFormatXY) {
+  //   console.log('hoverFormatXY: ', props.hoverFormatXY);
+  // }
+
   const useLiveData =
     typeof props.useLiveData !== 'undefined' ? props.useLiveData : true;
 
@@ -60,12 +68,12 @@ function ConnectedChart(props) {
     layout.xaxis = {
       ...layout.xaxis,
       fixedrange: true,
-      hoverformat: props.hoverFormatXY || '.3s',
+      hoverformat: props.hoverFormatXY || '.2f',
     };
   if (layout.yaxis)
     layout.yaxis = {
       ...layout.yaxis,
-      hoverformat: props.hoverFormatXY || '.3s',
+      hoverformat: props.hoverFormatXY || '.2f',
       fixedrange: true,
     };
 
