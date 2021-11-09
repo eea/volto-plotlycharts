@@ -8,11 +8,27 @@ import {
   getConnectedDataParametersForProvider,
 } from '@eeacms/volto-datablocks/helpers';
 import { connect } from 'react-redux';
+import { isEmpty } from 'lodash';
 import config from '@plone/volto/registry';
 import React, { useEffect } from 'react'; // , useState
 import ResponsiveContainer from '../ResponsiveContainer';
 import { getDataFromProvider } from '@eeacms/volto-datablocks/actions';
 import { getChartDataFromVisualization } from '../actions';
+
+function createFilter(filterName, filterValue, providerData) {
+  return {
+    enabled: true,
+    meta: {
+      columnNames: {
+        target: filterName,
+      },
+    },
+    target: providerData[filterName],
+    targetsrc: filterName,
+    type: 'filter',
+    value: filterValue,
+  };
+}
 
 function mixProviderData(chartData, providerData, parameters) {
   const providerDataColumns = Object.keys(providerData);
@@ -46,6 +62,12 @@ function mixProviderData(chartData, providerData, parameters) {
             transform.target = providerData[transform.targetsrc];
           }
         });
+
+        if (!trace.transforms || isEmpty(trace.transforms)) {
+          trace.transforms = [
+            createFilter(filterName, filterValue, providerData),
+          ];
+        }
       }
     });
 
