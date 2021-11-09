@@ -8,7 +8,6 @@ import { changeSidebarState } from '../actions';
 import ChartEditor from '../Widget/ChartEditor';
 
 import schema from './schema';
-
 class Edit extends Component {
   componentDidMount() {
     this.props.changeSidebarState(true);
@@ -36,6 +35,10 @@ class Edit extends Component {
   };
 
   render() {
+    const hasCustomData = this.props.data.raw_data_toggle
+      ? this.props.data.raw_data_toggle
+      : false;
+
     const chartData = this.props.data.chartData || {
       layout: {},
       frames: [],
@@ -46,6 +49,7 @@ class Edit extends Component {
       <div className="block">
         <div className="block-inner-wrapper" />
         <ChartEditor
+          hasCustomData={hasCustomData}
           value={chartData}
           provider_url={this.props.data?.url}
           onChangeValue={(value) => {

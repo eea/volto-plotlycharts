@@ -42,6 +42,7 @@ const ChartSchema = {
         'hover_format_xy',
         'align',
         'min_width',
+        'raw_data_toggle',
       ],
     },
     {
@@ -57,6 +58,24 @@ const ChartSchema = {
   ],
 
   properties: {
+    raw_data_toggle: {
+      title: 'Use Raw Data',
+      type: 'boolean',
+      defaultValue: false,
+      description: (
+        <>
+          Expects JSON data for data & layout object (See{' '}
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            href="https://plotly.com/javascript/basic-charts/"
+          >
+            Plotly charts examples
+          </a>
+          ). This will override all other settings.
+        </>
+      ),
+    },
     url: {
       widget: 'pick_provider',
       title: 'Data provider',
