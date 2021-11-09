@@ -36,7 +36,13 @@ const ChartSchema = {
     {
       id: 'default',
       title: 'Default',
-      fields: ['url', 'hover_format_xy', 'align', 'min_width'],
+      fields: [
+        'url',
+        'filterReplaceString',
+        'hover_format_xy',
+        'align',
+        'min_width',
+      ],
     },
     {
       id: 'sources',
@@ -56,10 +62,16 @@ const ChartSchema = {
       // this is an invention, should confront with dexterity serializer
       schema: SourceSchema,
     },
+    filterReplaceString: {
+      type: 'string',
+      title: 'Filter replace string',
+      description:
+        'If given, replace only this string in the transforms/filter section',
+    },
     hover_format_xy: {
       type: 'string',
       title: 'Hover format',
-      placeholder: '.3s',
+      placeholder: '.2f',
       description: (
         <>
           See{' '}
