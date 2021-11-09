@@ -33,6 +33,14 @@ function ConnectedChart(props) {
   // console.log('connectedchart', props);
   const chartData = props.data.chartData;
 
+  // if (props.hover_format_xy) {
+  //   console.log('hover_format_xy: ', props.hover_format_xy);
+  // }
+
+  // if (props.hoverFormatXY) {
+  //   console.log('hoverFormatXY: ', props.hoverFormatXY);
+  // }
+
   const useLiveData =
     typeof props.useLiveData !== 'undefined' ? props.useLiveData : true;
 
@@ -60,25 +68,25 @@ function ConnectedChart(props) {
     layout.xaxis = {
       ...layout.xaxis,
       fixedrange: true,
-      hoverformat: props.hoverFormatXY || '.3s',
+      hoverformat: props.hoverFormatXY || '.2f',
     };
   if (layout.yaxis)
     layout.yaxis = {
       ...layout.yaxis,
-      hoverformat: props.hoverFormatXY || '.3s',
+      hoverformat: props.hoverFormatXY || '.2f',
       fixedrange: true,
     };
 
   // TODO: only use fallback data if chartData.data.url doesn't exist
   // or the connected_data_parameters don't exist
   // console.log('connected chart', props);
-
   let data =
     props.provider_data && useLiveData
       ? mixProviderData(
           (chartData || {}).data,
           props.provider_data,
           props.connected_data_parameters,
+          props.data.filterReplaceString || '',
         )
       : (chartData || {}).data || [];
   //
