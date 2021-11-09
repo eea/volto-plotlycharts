@@ -8,6 +8,7 @@ import {
   getConnectedDataParametersForProvider,
 } from '@eeacms/volto-datablocks/helpers';
 import { connect } from 'react-redux';
+import { isEmpty } from 'lodash';
 import config from '@plone/volto/registry';
 import React, { useEffect } from 'react'; // , useState
 import ResponsiveContainer from '../ResponsiveContainer';
@@ -62,7 +63,7 @@ function mixProviderData(chartData, providerData, parameters) {
           }
         });
 
-        if (!trace.transforms) {
+        if (!trace.transforms || isEmpty(trace.transforms)) {
           trace.transforms = [
             createFilter(filterName, filterValue, providerData),
           ];
