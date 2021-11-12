@@ -62,7 +62,7 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
   ];
   const textFormats = [
     { label: _('Default'), value: '%{text}' },
-    { label: _('No Digit'), value: '%{text:,f}' },
+    { label: _('No Digit'), value: '%{text:,.1s}' },
     { label: _('1 Digit'), value: '%{text:,.1f}' },
     { label: _('2 Digits'), value: '%{text:,.2f}' },
     { label: _('3 Digits'), value: '%{text:,.3f}' },
@@ -75,7 +75,6 @@ const StyleGeneralPanel = (props, { localize: _ }) => {
   useEffect(() => {
     const data = props.value.data;
     const cleanFormats = numbersFormat.slice(1, numbersFormat.length);
-
     //state persistence of precision dropdowns
     if (data.length !== 0) {
       if (data[0].texttemplate) {
