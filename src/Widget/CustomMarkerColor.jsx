@@ -232,7 +232,9 @@ class UnconnectedMarkerColor extends Component {
    * Also accepts usual fields, not just the custom ones.
    */
   updateCategoricalsInData = (obj) => {
-    this.context.updateContainer(obj);
+    //TODO: this updateContainer is resetting layout to some defaults when loading component
+    //TODO: need to go around that
+    //this.context.updateContainer(obj);
     this.updateCategoricalsInVisual();
   };
 
