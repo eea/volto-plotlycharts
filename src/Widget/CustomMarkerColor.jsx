@@ -557,7 +557,10 @@ class UnconnectedMarkerColor extends Component {
               colorscale={
                 this.state.colorscale
                   ? this.state.colorscale
-                  : this.props.container.marker.colorscale
+                  : this.props.container & this.props.container.marker &&
+                    this.props.container.marker.colorscale
+                  ? this.props.container.marker.colorscale
+                  : ''
               }
             />
           </React.Fragment>

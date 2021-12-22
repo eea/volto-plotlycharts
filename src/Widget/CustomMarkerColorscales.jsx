@@ -27,11 +27,13 @@ const ColorscaleEditor = ({ colorscale, _, handleChange }) => {
 const CustomMarkerColorscales = ({ _, colorscale, handleChange }) => {
   return (
     <div>
-      <ColorscaleEditor
-        handleChange={handleChange}
-        colorscale={colorscale}
-        _={_}
-      />
+      {colorscale && colorscale.length > 0 && (
+        <ColorscaleEditor
+          handleChange={handleChange}
+          colorscale={colorscale}
+          _={_}
+        />
+      )}
       <ColorscalePicker
         suppressMultiValuedMessage
         attr="marker.colorscale"
