@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 import { PlotlySection } from 'react-chart-editor';
+import { connectToContainer } from 'react-chart-editor/lib';
 
 import { Icon } from '@plone/volto/components';
 import { Colorscale } from 'react-colorscales';
@@ -58,7 +59,12 @@ const ColorPicker = ({
   );
 };
 
-const CustomColorscaleSegments = ({ colorscale, handleChange, _ }) => {
+const CustomColorscaleSegments = ({
+  noSectionLabel,
+  colorscale,
+  handleChange,
+  _,
+}) => {
   const [expand, setExpand] = useState(false);
 
   const onChangeColor = (customColor, index) => {
@@ -91,58 +97,110 @@ const CustomColorscaleSegments = ({ colorscale, handleChange, _ }) => {
   };
 
   return (
-    <PlotlySection name={_('Custom Colorscale Segments')}>
-      <div className="field field__colorscale colorscale-container">
-        <p style={{ width: '70px', fontSize: '12px', color: '#506784' }}>
-          Active
-        </p>
-        <div
-          style={{
-            width: '180px',
-            'margin-left': '12px',
-          }}
-        >
-          <Colorscale onClick={onToggleList} colorscale={colorscale} />
-          {!expand && (
-            <Icon
-              onClick={onToggleList}
-              className="expand-icon"
-              name={listArrowsSVG}
-              size="30px"
-            />
-          )}
-          {expand && (
-            <Icon
-              onClick={onToggleList}
-              className="collapse-icon"
-              name={circleDismissSVG}
-              size="30px"
-            />
+    <React.Fragment>
+      {noSectionLabel ? (
+        <div>
+          <div
+            style={{
+              width: '180px',
+              'margin-left': '12px',
+            }}
+          >
+            <Colorscale onClick={onToggleList} colorscale={colorscale} />
+            {!expand && (
+              <Icon
+                onClick={onToggleList}
+                className="expand-icon"
+                name={listArrowsSVG}
+                size="30px"
+              />
+            )}
+            {expand && (
+              <Icon
+                onClick={onToggleList}
+                className="collapse-icon"
+                name={circleDismissSVG}
+                size="30px"
+              />
+            )}
+          </div>
+          {expand && colorscale.length > 0 && (
+            <React.Fragment>
+              {colorscale.map((c, i) => (
+                <div className="field field__colorscale colorscale-container">
+                  <p style={{ width: '70px', fontSize: '12px' }}>Color #{i}</p>
+                  <ColorPicker
+                    colorscale={colorscale}
+                    color={c}
+                    onChangeColor={onChangeColor}
+                    handleDeleteColor={handleDeleteColor}
+                    index={i}
+                  />
+                </div>
+              ))}
+              <div style={{ display: 'flex', justifyContent: 'center' }}>
+                <button className="button-add-color" onClick={handleAddColor}>
+                  Add new color
+                </button>
+              </div>
+            </React.Fragment>
           )}
         </div>
-      </div>
-      {expand && colorscale.length > 0 && (
-        <React.Fragment>
-          {colorscale.map((c, i) => (
-            <div className="field field__colorscale colorscale-container">
-              <p style={{ width: '70px', fontSize: '12px' }}>Color #{i}</p>
-              <ColorPicker
-                colorscale={colorscale}
-                color={c}
-                onChangeColor={onChangeColor}
-                handleDeleteColor={handleDeleteColor}
-                index={i}
-              />
+      ) : (
+        <PlotlySection name={_('Custom Colorscale Segments')}>
+          <div className="field field__colorscale colorscale-container">
+            <p style={{ width: '70px', fontSize: '12px', color: '#506784' }}>
+              Active
+            </p>
+            <div
+              style={{
+                width: '180px',
+                'margin-left': '12px',
+              }}
+            >
+              <Colorscale onClick={onToggleList} colorscale={colorscale} />
+              {!expand && (
+                <Icon
+                  onClick={onToggleList}
+                  className="expand-icon"
+                  name={listArrowsSVG}
+                  size="30px"
+                />
+              )}
+              {expand && (
+                <Icon
+                  onClick={onToggleList}
+                  className="collapse-icon"
+                  name={circleDismissSVG}
+                  size="30px"
+                />
+              )}
             </div>
-          ))}
-          <div style={{ display: 'flex', justifyContent: 'center' }}>
-            <button className="button-add-color" onClick={handleAddColor}>
-              Add new color
-            </button>
           </div>
-        </React.Fragment>
+          {expand && colorscale.length > 0 && (
+            <React.Fragment>
+              {colorscale.map((c, i) => (
+                <div className="field field__colorscale colorscale-container">
+                  <p style={{ width: '70px', fontSize: '12px' }}>Color #{i}</p>
+                  <ColorPicker
+                    colorscale={colorscale}
+                    color={c}
+                    onChangeColor={onChangeColor}
+                    handleDeleteColor={handleDeleteColor}
+                    index={i}
+                  />
+                </div>
+              ))}
+              <div style={{ display: 'flex', justifyContent: 'center' }}>
+                <button className="button-add-color" onClick={handleAddColor}>
+                  Add new color
+                </button>
+              </div>
+            </React.Fragment>
+          )}
+        </PlotlySection>
       )}
-    </PlotlySection>
+    </React.Fragment>
   );
 };
 

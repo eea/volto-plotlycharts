@@ -151,6 +151,23 @@ class Edit extends Component {
     LoadableCustomEditor.preload();
   }
 
+  componentDidUpdate() {
+    const el = document.getElementById('gd');
+    if (
+      el !== null &&
+      this.props.value &&
+      this.props.value.data &&
+      this.props.value.layout
+    ) {
+      LoadablePlotly.newPlot(
+        'gd',
+        this.props.value.data,
+        this.props.value.layout,
+      );
+      LoadablePlotly.redraw('gd');
+    }
+  }
+
   handleRawDataChange = (val) => {
     this.props.onChangeValue({
       ...this.props.value,
@@ -212,12 +229,17 @@ class Edit extends Component {
                                 plotly={DefaultPlotly}
                                 divId="gd"
                                 onUpdate={(data, layout, frames) => {
-                                  this.props.onChangeValue({
+                                  const newVal = {
                                     ...this.props.value,
+                                    chartData: {
+                                      ...this.props.value.chartData,
+                                      data,
+                                    },
                                     data,
                                     layout,
                                     frames,
-                                  });
+                                  };
+                                  this.props.onChangeValue(newVal);
                                 }}
                                 chartHelp={chartHelp}
                                 showFieldTooltips
