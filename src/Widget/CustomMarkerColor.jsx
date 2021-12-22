@@ -355,7 +355,6 @@ class UnconnectedMarkerColor extends Component {
   setColorScale(inputValue) {
     this.setState({ colorscale: inputValue });
     this.context.updateContainer({ 'marker.colorscale': inputValue });
-    const traceIndex = this.context.traceIndexes[0];
   }
 
   isMultiValued() {
@@ -538,11 +537,6 @@ class UnconnectedMarkerColor extends Component {
   }
 
   renderVariableControls() {
-    const customColorscale =
-      this.props.container.marker.colorscale &&
-      this.props.container.marker.colorscale.length > 0
-        ? this.props.container.marker.colorscale.map((item) => item[1])
-        : '';
     const multiValued =
       this.props.container &&
       this.props.container.marker &&

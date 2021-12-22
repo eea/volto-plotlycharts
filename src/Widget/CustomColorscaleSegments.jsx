@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 
 import { PlotlySection } from 'react-chart-editor';
-import { connectToContainer } from 'react-chart-editor/lib';
 
 import { Icon } from '@plone/volto/components';
 import { Colorscale } from 'react-colorscales';
