@@ -30,10 +30,10 @@
   justify-content: center;
   padding: 10px 15px;
 
-  border-radius: 5px;
   background-color: #109eff;
-  font-size: 12px !important;
+  border-radius: 5px;
   color: white;
+  font-size: 12px !important;
 }
 
 .color-auto-button:hover {
@@ -44,11 +44,11 @@
   display: flex !important;
   align-items: center;
   padding: 8px 12px;
+  background-color: #accdec;
   border-radius: 5px;
 
-  background-color: #accdec;
-  font-size: 12px !important;
   color: white;
+  font-size: 12px !important;
 }
 
 .color-add-button:hover {
@@ -62,11 +62,10 @@
   padding: 8px 12px;
   margin-right: 5px;
 
-  border-radius: 5px;
   background-color: #bdd494;
-  font-size: 12px !important;
-
+  border-radius: 5px;
   color: white;
+  font-size: 12px !important;
 }
 
 .color-delete-icon:hover {
