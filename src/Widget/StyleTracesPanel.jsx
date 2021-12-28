@@ -54,7 +54,7 @@ import CustomColorscaleSegments from './CustomColorscaleSegments';
 const allTraceTypes = traceTypes(localize).map(({ value }) => value);
 
 const StyleTracesPanel = (props, { localize: _ }) => {
-  const handleSetColorscale = (colorscale) => {
+  const handleSetPiecolorway = (colorscale) => {
     props.onChangeValue({
       ...props.value,
       layout: {
@@ -164,7 +164,7 @@ const StyleTracesPanel = (props, { localize: _ }) => {
       {props.value.layout.piecolorway && (
         <CustomColorscaleSegments
           colorscale={props.value.layout.piecolorway}
-          handleChange={(colorscale) => handleSetColorscale(colorscale)}
+          handleChange={(colorscale) => handleSetPiecolorway(colorscale)}
           _={_}
         />
       )}
@@ -457,6 +457,9 @@ const StyleTracesPanel = (props, { localize: _ }) => {
           label={_('Color')}
           attr="marker.color"
           labelWidth={80}
+          onChangeValue={props.onChangeValue}
+          value={props.value}
+          _={_}
         />
         <NumericFraction label={_('Point Opacity')} attr="marker.opacity" />
         <MarkerSize label={_('Size')} attr="marker.size" />
