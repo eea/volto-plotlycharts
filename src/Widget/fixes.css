@@ -31,9 +31,8 @@
   padding: 10px 15px;
 
   border-radius: 5px;
-  font-size: 12px !important;
-
   background-color: #109eff;
+  font-size: 12px !important;
   color: white;
 }
 
@@ -47,8 +46,8 @@
   padding: 8px 12px;
   border-radius: 5px;
 
-  font-size: 12px !important;
   background-color: #accdec;
+  font-size: 12px !important;
   color: white;
 }
 
@@ -64,9 +63,9 @@
   margin-right: 5px;
 
   border-radius: 5px;
+  background-color: #bdd494;
   font-size: 12px !important;
 
-  background-color: #bdd494;
   color: white;
 }
 
@@ -79,8 +78,8 @@
 
   top: -3px;
   left: -30px;
-  fill: #8e1206 !important;
   cursor: pointer;
+  fill: #8e1206 !important;
 }
 
 .colors-edit-container {
