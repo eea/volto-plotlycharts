@@ -153,6 +153,7 @@ class Edit extends Component {
 
   componentDidUpdate() {
     const el = document.getElementById('gd');
+
     if (
       el !== null &&
       this.props.value &&

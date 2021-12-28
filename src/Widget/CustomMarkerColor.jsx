@@ -545,6 +545,13 @@ class UnconnectedMarkerColor extends Component {
         (this.props.container.marker.colorsrc &&
           this.props.container.marker.colorsrc === MULTI_VALUED));
 
+    const colorscaleState = this.state.colorscale;
+    const colorscaleProps = this.props.container?.marker?.colorscale;
+
+    const activeColorscale = colorscaleState
+      ? colorscaleState
+      : colorscaleProps;
+
     return (
       <Field multiValued={multiValued}>
         <DataSelector suppressMultiValuedMessage attr="marker.color" />
@@ -554,14 +561,7 @@ class UnconnectedMarkerColor extends Component {
             <CustomMarkerColorscales
               _={this.props._}
               handleChange={this.setColorScale}
-              colorscale={
-                this.state.colorscale
-                  ? this.state.colorscale
-                  : this.props.container & this.props.container.marker &&
-                    this.props.container.marker.colorscale
-                  ? this.props.container.marker.colorscale
-                  : ''
-              }
+              colorscale={activeColorscale}
             />
           </React.Fragment>
         )}

@@ -6,3 +6,97 @@
   overflow: auto;
   max-height: 80vh;
 }
+
+.color-edit {
+  margin: 10px 0;
+  position: relative;
+}
+
+.color-value {
+  min-width: 170px;
+  margin-bottom: 5px;
+  border: 1px solid #cdd8e4;
+  padding: 5px;
+  border-radius: 3px;
+}
+
+.color-value:hover {
+  border: 1px solid #979ba0;
+}
+
+.color-expand-button {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px !important;
+
+  border-radius: 5px;
+  padding: 10px 15px;
+  background-color: #109eff;
+  color: white;
+}
+
+.color-auto-button:hover {
+  background-color: #109eff;
+}
+
+.color-auto-button {
+  display: flex !important;
+  align-items: center;
+  font-size: 12px !important;
+  border-radius: 5px;
+  padding: 8px 12px;
+  background-color: #accdec;
+  color: white;
+}
+
+.color-add-button:hover {
+  background-color: #1e8339;
+}
+
+.color-add-button {
+  display: flex !important;
+  align-items: center;
+  font-size: 12px !important;
+  margin-right: 5px;
+  border-radius: 5px;
+  padding: 8px 12px;
+  background-color: #bdd494;
+  color: white;
+}
+
+.color-delete-icon:hover {
+  fill: #b92f47 !important;
+}
+
+.color-delete-icon {
+  fill: #8e1206 !important;
+  position: absolute;
+  left: -30px;
+  top: -3px;
+  cursor: pointer;
+}
+
+.colors-edit-container {
+  padding: 15px 10px;
+  border: 1px solid lightgray;
+  border-left: none;
+  border-right: none;
+}
+
+.color-buttons-container {
+  display: flex;
+  margin-top: 20px;
+}
+
+.color-open-icon {
+  fill: white;
+}
+
+.color-close-icon {
+  fill: white;
+}
+
+.color-add-icon {
+  fill: white;
+}
