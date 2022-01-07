@@ -151,7 +151,7 @@ class Edit extends Component {
     LoadableCustomEditor.preload();
   }
 
-  componentDidUpdate() {
+  handleUpdatePlot() {
     const el = document.getElementById('gd');
 
     if (
@@ -241,6 +241,7 @@ class Edit extends Component {
                                     frames,
                                   };
                                   this.props.onChangeValue(newVal);
+                                  this.handleUpdatePlot();
                                 }}
                                 chartHelp={chartHelp}
                                 showFieldTooltips
