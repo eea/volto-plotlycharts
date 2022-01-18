@@ -4,7 +4,6 @@ import React, { Component } from 'react';
 import { connectToContainer } from 'react-chart-editor/lib';
 import RadioBlocks from 'react-chart-editor/lib/components/widgets/RadioBlocks';
 import MultiColorPicker from 'react-chart-editor/lib/components/fields/MultiColorPicker';
-import ColorscalePicker from 'react-chart-editor/lib/components/fields/ColorscalePicker';
 import Numeric from 'react-chart-editor/lib/components/fields/Numeric';
 import Radio from 'react-chart-editor/lib/components/fields/Radio';
 import Info from 'react-chart-editor/lib/components/fields/Info';
@@ -17,6 +16,8 @@ import { Dropdown } from 'semantic-ui-react';
 import config from '@plone/volto/registry';
 
 import loadable from '@loadable/component';
+import CustomMarkerColorscales from './CustomMarkerColorscales';
+
 const ReactColor = loadable.lib(() => import('react-color'));
 
 /**
@@ -426,7 +427,6 @@ class UnconnectedMarkerColor extends Component {
    * Requires categorical axis and categorical colorscale defined.
    */
   rebuildColorPickers = () => {
-    // console.log('rebuildColorPickers', this.props.container.type);
     if (this.props.container.type !== 'bar') {
       this.updateCategoricalsInData({
         'marker.colorscale': null,
@@ -532,17 +532,26 @@ class UnconnectedMarkerColor extends Component {
         this.props.container.marker.colorscale === MULTI_VALUED) ||
         (this.props.container.marker.colorsrc &&
           this.props.container.marker.colorsrc === MULTI_VALUED));
+
+    const colorscaleState = this.state.colorscale;
+    const colorscaleProps = this.props.container?.marker?.colorscale;
+
+    const activeColorscale = colorscaleState
+      ? colorscaleState
+      : colorscaleProps;
+
     return (
       <Field multiValued={multiValued}>
         <DataSelector suppressMultiValuedMessage attr="marker.color" />
         {this.props.container.marker &&
         this.props.container.marker.colorscale === MULTI_VALUED ? null : (
-          <ColorscalePicker
-            suppressMultiValuedMessage
-            attr="marker.colorscale"
-            updatePlot={this.setColorScale}
-            colorscale={this.state.colorscale}
-          />
+          <React.Fragment>
+            <CustomMarkerColorscales
+              _={this.props._}
+              handleChange={this.setColorScale}
+              colorscale={activeColorscale}
+            />
+          </React.Fragment>
         )}
       </Field>
     );

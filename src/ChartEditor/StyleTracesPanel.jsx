@@ -463,6 +463,9 @@ const StyleTracesPanel = (props, { localize: _ }) => {
           label={_('Color')}
           attr="marker.color"
           labelWidth={80}
+          onChangeValue={props.onChangeValue}
+          value={props.value}
+          _={_}
         />
         <NumericFraction label={_('Point Opacity')} attr="marker.opacity" />
         <MarkerSize label={_('Size')} attr="marker.size" />
