@@ -1,0 +1,43 @@
+@import (multiple, reference, optional) '../../theme.config';
+
+/* Enables customization of addons */
+.loadAddonOverrides() {
+  @import (optional)
+    '@{siteFolder}/../addons/@{addon}/@{addontype}s/@{addonelement}.overrides';
+}
+
+/* Helper to load variables */
+.loadAddonVariables() {
+  @import (optional) '@{addonelement}.variables';
+  @import (optional)
+    '@{siteFolder}/../addons/@{addon}/@{addontype}s/@{addonelement}.variables';
+}
+
+@import './variables.less';
+
+.blocks-chooser {
+  .button.embed_chart,
+  .button.connected_plotly_chart {
+    display: none !important;
+    z-index: -1 !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+}
+
+.connected-chart-wrapper {
+  overflow: auto;
+}
+
+.chart-editor-modal {
+  z-index: 100 !important;
+}
+
+body.has-sidebar .ui.modal.chart-editor-modal {
+  width: 95% !important;
+}
+
+.embed-visualization,
+.plotly-chart {
+  position: relative;
+}
