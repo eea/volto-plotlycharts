@@ -148,7 +148,6 @@ class ChartWidget extends Component {
             </Grid.Row>
           )}
         </Grid>
-
         {this.state.showChartEditor ? (
           <ModalChartEditor
             value={value}

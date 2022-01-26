@@ -11,16 +11,20 @@ import {
   connectToDataParameters,
 } from '@eeacms/volto-datablocks/helpers';
 import { Placeholder } from '@eeacms/volto-datablocks/components';
+import { Placeholder as ImagePlaceholder } from 'semantic-ui-react';
 
 import config from '@plone/volto/registry';
 
 import './fixes.css';
 
-const LoadablePlot = loadable(() =>
+const LoadableCartesianPlotly = loadable.lib(() =>
   import(
-    /* webpackChunkName: "bise-react-plotly" */
-    'react-plotly.js'
+    /* webpackChunkName: "plotly-cartesian" */ 'plotly.js/dist/plotly-cartesian'
   ),
+);
+
+const LoadableReactPlotly = loadable.lib(() =>
+  import('react-plotly.js/factory'),
 );
 
 /*
@@ -32,15 +36,6 @@ const LoadablePlot = loadable(() =>
 function ConnectedChart(props) {
   // console.log('connectedchart', props);
   const chartData = props.data.chartData;
-
-  // if (props.hover_format_xy) {
-  //   console.log('hover_format_xy: ', props.hover_format_xy);
-  // }
-
-  // if (props.hoverFormatXY) {
-  //   console.log('hoverFormatXY: ', props.hoverFormatXY);
-  // }
-
   const useLiveData =
     typeof props.useLiveData !== 'undefined' ? props.useLiveData : true;
 
@@ -80,13 +75,13 @@ function ConnectedChart(props) {
   // TODO: only use fallback data if chartData.data.url doesn't exist
   // or the connected_data_parameters don't exist
   // console.log('connected chart', props);
+
   let data =
     props.provider_data && useLiveData
       ? mixProviderData(
           (chartData || {}).data,
           props.provider_data,
           props.connected_data_parameters,
-          props.data.filterReplaceString || '',
         )
       : (chartData || {}).data || [];
   //
@@ -100,7 +95,7 @@ function ConnectedChart(props) {
     },
   }));
 
-  return (
+  return __CLIENT__ ? (
     <div>
       {/* {JSON.stringify(data)} */}
       <Placeholder
@@ -114,26 +109,43 @@ function ConnectedChart(props) {
       >
         {({ nodeRef }) => (
           <div className="connected-chart-wrapper">
-            <LoadablePlot
-              ref={nodeRef}
-              data={data}
-              layout={layout}
-              frames={[]}
-              config={{
-                displayModeBar: false,
-                editable: false,
-                responsive: true,
-                useResizeHandler: true,
+            <LoadableCartesianPlotly>
+              {(Plotly) => {
+                return (
+                  <LoadableReactPlotly>
+                    {({ default: createPlotlyComponent }) => {
+                      const Plot = createPlotlyComponent(Plotly);
+                      return (
+                        <Plot
+                          ref={nodeRef}
+                          data={data}
+                          layout={layout}
+                          frames={[]}
+                          config={{
+                            displayModeBar: false,
+                            editable: false,
+                            responsive: true,
+                            useResizeHandler: true,
+                          }}
+                          style={{
+                            maxWidth: '100%',
+                            margin: 'auto',
+                          }}
+                        />
+                      );
+                    }}
+                  </LoadableReactPlotly>
+                );
               }}
-              style={{
-                maxWidth: '100%',
-                margin: 'auto',
-              }}
-            />
+            </LoadableCartesianPlotly>
           </div>
         )}
       </Placeholder>
     </div>
+  ) : (
+    <ImagePlaceholder>
+      <ImagePlaceholder.Image rectangular />
+    </ImagePlaceholder>
   );
 }
 

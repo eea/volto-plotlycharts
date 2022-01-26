@@ -12,10 +12,16 @@ import { Placeholder } from 'semantic-ui-react';
 
 import loadable from '@loadable/component';
 
-const LoadablePlot = loadable(() =>
+const LoadablePlot = loadable.lib(() =>
   import(
     /* webpackChunkName: "volto-plotlycharts-react-plotly" */
-    'react-plotly.js'
+    'react-plotly.js/factory'
+  ),
+);
+
+const LoadableCartesianPlotly = loadable.lib(() =>
+  import(
+    /* webpackChunkName: "plotly-cartesian" */ 'plotly.js/dist/plotly-cartesian'
   ),
 );
 
@@ -134,17 +140,30 @@ class ResponsiveContainer extends Component {
     }
 
     return __CLIENT__ ? (
-      <LoadablePlot
-        {...chartConfig}
-        data={data}
-        layout={{
-          ...layout,
-          // height: calculatedHeight,
-          width: calculatedWidth,
+      <LoadableCartesianPlotly>
+        {(Plotly) => {
+          return (
+            <LoadablePlot>
+              {({ default: createPlotlyComponent }) => {
+                const Plot = createPlotlyComponent(Plotly);
+                return (
+                  <Plot
+                    {...chartConfig}
+                    data={data}
+                    layout={{
+                      ...layout,
+                      // height: calculatedHeight,
+                      width: calculatedWidth,
+                    }}
+                    frames={frames}
+                    config={{ displayModeBar: false }}
+                  />
+                );
+              }}
+            </LoadablePlot>
+          );
         }}
-        frames={frames}
-        config={{ displayModeBar: false }}
-      />
+      </LoadableCartesianPlotly>
     ) : (
       <Placeholder>
         <Placeholder.Image rectangular />

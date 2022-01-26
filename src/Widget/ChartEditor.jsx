@@ -16,7 +16,9 @@ import loadable from '@loadable/component';
 import './fixes.css';
 import { Tab, Button } from 'semantic-ui-react';
 
-const LoadablePlotly = loadable.lib(() => import('plotly.js/dist/plotly'));
+const LoadablePlotly = loadable.lib(() =>
+  import('plotly.js/dist/plotly-cartesian'),
+);
 const LoadablePlotlyEditor = loadable.lib(() => import('react-chart-editor'));
 const LoadableCustomEditor = loadable.lib(() => import('./CustomEditor'));
 const LoadableInspector = loadable(() => import('react-inspector'));
