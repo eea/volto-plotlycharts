@@ -15,10 +15,7 @@ import config from '@plone/volto/registry';
 const LoadablePlotly = loadable(() => import('react-plotly.js'));
 
 /*
- * @param { object } data The chart data, layout,  extra config, etc.
- * @param { boolean } useLiveData Will update the chart with the data from the provider
- * @param { boolean } filterWithDataParameters Will filter live data with parameters from context
- *
+ * ConnectedChart
  */
 function ConnectedChart(props) {
   const {
@@ -30,6 +27,9 @@ function ConnectedChart(props) {
     width,
     height = 450,
   } = props;
+
+  const use_live_data = props.data?.use_live_data ?? true;
+  const with_sources = props.data?.with_sources ?? true;
 
   const chartData =
     visualization?.chartData || visualization_data?.chartData || {};
@@ -66,11 +66,8 @@ function ConnectedChart(props) {
       hoverformat: hoverFormatXY || '.3s',
     };
 
-  const useLiveData =
-    typeof props.useLiveData !== 'undefined' ? props.useLiveData : true;
-
   let data =
-    provider_data && useLiveData
+    provider_data && use_live_data
       ? updateChartDataFromProvider(chartData.data, provider_data)
       : chartData.data || [];
 
@@ -82,7 +79,7 @@ function ConnectedChart(props) {
     },
   }));
 
-  if (loadingVisualizationData || props.isPending) {
+  if (loadingVisualizationData) {
     return <div>Loading chart...</div>;
   }
 
@@ -106,14 +103,14 @@ function ConnectedChart(props) {
           }}
         />
       </div>
-      {props.withSources ? (
+      {with_sources && props.data ? (
         <Sources
           data={{ data_query: props.data.data_query }}
           sources={props.data.chartSources}
           provider_url={
             props.visualization?.provider_url ||
             props.visualization_data?.provider_url ||
-            props.data?.provider_url
+            props.data.provider_url
           }
           download_button={props.data.download_button}
         />
@@ -126,10 +123,14 @@ function ConnectedChart(props) {
 
 export default compose(
   connectBlockToVisualization,
-  connectToProviderData((props) => ({
-    provider_url:
-      props.visualization?.provider_url ||
-      props.visualization_data?.provider_url ||
-      props.data?.provider_url,
-  })),
+  connectToProviderData((props) => {
+    const use_live_data = props.data?.use_live_data ?? true;
+    if (!use_live_data) return {};
+    return {
+      provider_url:
+        props.visualization?.provider_url ||
+        props.visualization_data?.provider_url ||
+        props.data?.provider_url,
+    };
+  }),
 )(ConnectedChart);

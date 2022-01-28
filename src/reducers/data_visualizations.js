@@ -3,7 +3,7 @@
  * @module reducers/data_providers
  */
 
-import { GET_CHART_DATA_FROM_VISUALIZATION } from '../constants';
+import { GET_VISUALIZATION, REMOVE_VISUALIZATION } from '../constants';
 import { without } from 'lodash';
 
 const initialState = {
@@ -17,14 +17,18 @@ const initialState = {
 };
 
 export default function data_providers(state = initialState, action = {}) {
+  const use_live_data = action.use_live_data;
   const path = action.path
-    ? action.path.replace('/@field?name=visualization', '')
+    ? action.path.replace(
+        `/@${use_live_data ? 'visualization-layout' : 'visualization'}`,
+        '',
+      )
     : undefined;
   const pendingVisualizations = { ...state.pendingVisualizations };
   const failedVisualizations = { ...state.failedVisualizations };
 
   switch (action.type) {
-    case `${GET_CHART_DATA_FROM_VISUALIZATION}_PENDING`:
+    case `${GET_VISUALIZATION}_PENDING`:
       pendingVisualizations[path] = true;
       delete failedVisualizations[path];
 
@@ -38,7 +42,7 @@ export default function data_providers(state = initialState, action = {}) {
         failedVisualizations,
       };
 
-    case `${GET_CHART_DATA_FROM_VISUALIZATION}_SUCCESS`:
+    case `${GET_VISUALIZATION}_SUCCESS`:
       delete pendingVisualizations[path];
       return {
         ...state,
@@ -54,7 +58,7 @@ export default function data_providers(state = initialState, action = {}) {
         failedVisualizations,
       };
 
-    case `${GET_CHART_DATA_FROM_VISUALIZATION}_FAIL`:
+    case `${GET_VISUALIZATION}_FAIL`:
       delete pendingVisualizations[path];
       failedVisualizations[path] = true;
 
@@ -68,6 +72,15 @@ export default function data_providers(state = initialState, action = {}) {
         requested: [...without(state.requested, path)],
         pendingVisualizations,
         failedVisualizations,
+      };
+
+    case REMOVE_VISUALIZATION:
+      const newData = { ...state.data };
+      delete newData[path];
+
+      return {
+        ...state,
+        data: { ...newData },
       };
 
     default:

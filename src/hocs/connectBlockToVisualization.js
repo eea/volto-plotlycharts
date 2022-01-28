@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { withRouter } from 'react-router';
 import { connect, useDispatch } from 'react-redux';
-import { getChartDataFromVisualization } from '../actions';
+import { getVisualization, removeVisualization } from '../actions';
 
 /**
  * connectBlockToVisualization.
@@ -15,7 +15,7 @@ export function connectBlockToVisualization(WrappedComponent, config = {}) {
     withRouter((props) => {
       const dispatch = useDispatch();
 
-      const { vis_url = null, chartData = null } = props.data || {};
+      const { vis_url = null, use_live_data = true } = props.data || {};
 
       const isPending = vis_url
         ? props.data_visualizations?.pendingVisualizations?.[vis_url]
@@ -33,8 +33,15 @@ export function connectBlockToVisualization(WrappedComponent, config = {}) {
         vis_url && !visualization_data && !isPending && !isFailed;
 
       useEffect(() => {
-        if (readyToDispatch && !chartData) {
-          dispatch(getChartDataFromVisualization(vis_url));
+        if (visualization_data) {
+          dispatch(removeVisualization(vis_url));
+        }
+        /* eslint-disable-next-line */
+      }, [use_live_data]);
+
+      useEffect(() => {
+        if (readyToDispatch) {
+          dispatch(getVisualization(vis_url, use_live_data));
         }
       });
 

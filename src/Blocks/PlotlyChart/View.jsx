@@ -11,10 +11,12 @@ const View = (props) => {
     <div className="plotly-chart">
       <ConnectedChart
         data={{
-          data_query: data.data_query,
           chartSources: data.chartSources,
+          data_query: data.data_query,
           download_button: data.download_button,
           provider_url: visualization.provider_url,
+          use_live_data: data.use_live_data,
+          with_sources: data.with_sources,
         }}
         hoverFormatXY={data.hover_format_xy}
         visualization={visualization}

@@ -1,12 +1,22 @@
-import { GET_CHART_DATA_FROM_VISUALIZATION } from './constants';
+import { GET_VISUALIZATION, REMOVE_VISUALIZATION } from './constants';
 
-export function getChartDataFromVisualization(path) {
+export function getVisualization(path, use_live_data) {
   return {
-    type: GET_CHART_DATA_FROM_VISUALIZATION,
+    type: GET_VISUALIZATION,
     path,
+    use_live_data,
     request: {
       op: 'get',
-      path: `${path}/@field?name=visualization`,
+      path: `${path}/@${
+        use_live_data ? 'visualization-layout' : 'visualization'
+      }`,
     },
+  };
+}
+
+export function removeVisualization(path) {
+  return {
+    type: REMOVE_VISUALIZATION,
+    path,
   };
 }

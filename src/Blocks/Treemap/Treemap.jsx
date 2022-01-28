@@ -54,9 +54,6 @@ function Treemap(props) {
   return (
     <div className="treemap-chart">
       <Placeholder
-        getDOMElement={(val) => {
-          return val?.el;
-        }}
         className="connected-chart"
         partialVisibility={true}
         offset={{ top: -100, bottom: -100 }}

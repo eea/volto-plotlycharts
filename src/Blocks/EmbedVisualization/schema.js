@@ -32,17 +32,21 @@ export default {
     {
       id: 'default',
       title: 'Default',
-      fields: ['vis_url', 'hover_format_xy', 'height'],
+      fields: ['vis_url', 'use_live_data', 'hover_format_xy', 'height'],
     },
     {
       id: 'sources',
       title: 'Sources',
-      fields: ['chartSources', 'download_button'],
+      fields: ['chartSources', 'with_sources', 'download_button'],
     },
     {
       id: 'data_query',
       title: 'Data query',
-      fields: ['data_query'],
+      fields: [
+        'has_data_query_by_context',
+        'has_data_query_by_provider',
+        'data_query',
+      ],
     },
   ],
 
@@ -50,6 +54,11 @@ export default {
     vis_url: {
       widget: 'object_by_path',
       title: 'Visualization',
+    },
+    use_live_data: {
+      type: 'boolean',
+      title: 'Use live data',
+      defaultValue: true,
     },
     hover_format_xy: {
       type: 'string',
@@ -80,6 +89,21 @@ export default {
     },
     download_button: {
       title: 'Download button',
+      type: 'boolean',
+      defaultValue: true,
+    },
+    with_sources: {
+      title: 'Sources visible',
+      type: 'boolean',
+      defaultValue: true,
+    },
+    has_data_query_by_context: {
+      title: 'Has data_query by context',
+      type: 'boolean',
+      defaultValue: true,
+    },
+    has_data_query_by_provider: {
+      title: 'Has data_query by provider',
       type: 'boolean',
       defaultValue: true,
     },
