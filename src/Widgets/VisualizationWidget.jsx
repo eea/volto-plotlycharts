@@ -102,8 +102,6 @@ class VisualizationWidget extends Component {
   render() {
     const { id, title, description, error, value } = this.props;
 
-    console.log('HERE', value);
-
     if (__SERVER__) return '';
 
     return (

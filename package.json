@@ -44,7 +44,7 @@
     "test": "make test",
     "test:fix": "make test-update",
     "pre-commit": "yarn stylelint:fix && yarn prettier:fix && yarn lint:fix",
-    "stylelint": "if [ -d ./project ]; then ./project/node_modules/stylelint/bin/stylelint.js --allow-empty-input 'src/**/*.{css,less}'; else ../../../node_modules/stylelint/bin/stylelint.js --allow-empty-input 'src/**/*.{css,less}'; fi",
+    "stylelint": "if [ -d ./project ]; then ./project/node_modules/stylelint/bin/stylelint.js --allow-empty-input 'theme/**/*.{css,less}' 'src/**/*.{css,less}'; else ../../../node_modules/stylelint/bin/stylelint.js --allow-empty-input 'theme/**/*.{css,less}' 'src/**/*.{css,less}'; fi",
     "stylelint:overrides": "if [ -d ./project ]; then ./project/node_modules/.bin/stylelint --syntax less --allow-empty-input 'theme/**/*.overrides' 'src/**/*.overrides'; else ../../../node_modules/.bin/stylelint --syntax less --allow-empty-input 'theme/**/*.overrides' 'src/**/*.overrides'; fi",
     "stylelint:fix": "yarn stylelint --fix && yarn stylelint:overrides --fix",
     "prettier": "if [ -d ./project ]; then ./project/node_modules/.bin/prettier --single-quote --check 'src/**/*.{js,jsx,json,css,less,md}'; else ../../../node_modules/.bin/prettier --single-quote --check 'src/**/*.{js,jsx,json,css,less,md}'; fi",
