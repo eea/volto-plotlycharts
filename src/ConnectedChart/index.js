@@ -1,2 +1,3 @@
-import ConnectedChart from './ConnectedChart';
+import ConnectedChart from './ConnectedChartWrapper';
+
 export default ConnectedChart;

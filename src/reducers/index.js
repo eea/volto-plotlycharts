@@ -1,1 +1,3 @@
-export chart_data_visualization from './chart_data_visualization';
+import data_visualizations from './data_visualizations';
+
+export { data_visualizations };
