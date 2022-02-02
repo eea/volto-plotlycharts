@@ -1,14 +1,17 @@
 import React, { useEffect } from 'react';
 import { withRouter } from 'react-router';
 import { connect, useDispatch } from 'react-redux';
-import { getVisualization, removeVisualization } from '../actions';
+import {
+  getVisualization,
+  removeVisualization,
+} from '@eeacms/volto-plotlycharts/actions';
 
 /**
  * connectBlockToVisualization.
  *
  * @param {} WrappedComponent
  */
-export function connectBlockToVisualization(WrappedComponent, config = {}) {
+function connectBlockToVisualization(WrappedComponent, config = {}) {
   return connect((state) => ({
     data_visualizations: state.data_visualizations,
   }))(
