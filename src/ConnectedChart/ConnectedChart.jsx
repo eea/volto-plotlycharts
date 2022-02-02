@@ -8,7 +8,7 @@ import loadable from '@loadable/component';
 import { connectToProviderData } from '@eeacms/volto-datablocks/hocs';
 import { updateChartDataFromProvider } from '@eeacms/volto-datablocks/helpers';
 import { Sources } from '@eeacms/volto-datablocks/Utils';
-import { connectBlockToVisualization } from '@eeacms/volto-datablocks/hocs';
+import { connectBlockToVisualization } from '@eeacms/volto-plotlycharts/hocs';
 
 import config from '@plone/volto/registry';
 
