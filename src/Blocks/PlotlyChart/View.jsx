@@ -1,7 +1,7 @@
 import React from 'react';
 import ConnectedChart from '@eeacms/volto-plotlycharts/ConnectedChart';
 
-import '@eeacms/volto-plotlycharts/less/visualization.less';
+import '@eeacms/volto-plotlycharts/less/plotly.less';
 
 const View = (props) => {
   const { data = {} } = props;

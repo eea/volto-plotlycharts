@@ -5,11 +5,10 @@ import InlineForm from '@plone/volto/components/manage/Form/InlineForm';
 import { PickObjectWidget } from '@eeacms/volto-datablocks/components';
 import ChartEditor from '@eeacms/volto-plotlycharts/ChartEditor';
 
-// import ConnectedChart from '@eeacms/volto-plotlycharts/ConnectedChart';
-
 import schema from './schema';
 import View from './View';
 
+import '@eeacms/volto-plotlycharts/less/plotly.less';
 class PlotlyEditorModal extends Component {
   constructor(props) {
     super(props);
