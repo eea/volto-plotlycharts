@@ -20,7 +20,6 @@ const LoadablePlotly = loadable(() => import('react-plotly.js'));
 function ConnectedChart(props) {
   const {
     hoverFormatXY,
-    loadingProviderData,
     loadingVisualizationData,
     provider_data,
     provider_metadata,
@@ -29,7 +28,6 @@ function ConnectedChart(props) {
     width,
     height = 450,
   } = props;
-
   const use_live_data = props.data?.use_live_data ?? true;
   const with_sources = props.data?.with_sources ?? true;
 
@@ -109,7 +107,9 @@ function ConnectedChart(props) {
         <Sources
           data={{ data_query: props.data.data_query }}
           sources={props.data.chartSources}
-          title={props.data?.vis_url}
+          title={
+            props.data?.vis_url || props.data?.provider_url || props.data?.title
+          }
           provider_data={provider_data}
           provider_metadata={provider_metadata}
           download_button={props.data.download_button}

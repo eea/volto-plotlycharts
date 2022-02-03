@@ -14,6 +14,8 @@ const View = (props) => {
           chartSources: data.chartSources,
           data_query: data.data_query,
           download_button: data.download_button,
+          has_data_query_by_context: data.has_data_query_by_context,
+          has_data_query_by_provider: data.has_data_query_by_provider,
           provider_url: visualization.provider_url,
           use_live_data: data.use_live_data,
           with_sources: data.with_sources,
