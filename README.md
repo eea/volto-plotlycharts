@@ -1,4 +1,4 @@
-# Volto plotlycharts 
+# volto-plotlycharts
 
 [![Releases](https://img.shields.io/github/v/release/eea/volto-plotlycharts)](https://github.com/eea/volto-plotlycharts/releases)
 
@@ -14,6 +14,11 @@
 [![Bugs](https://sonarqube.eea.europa.eu/api/project_badges/measure?project=volto-plotlycharts-develop&metric=bugs)](https://sonarqube.eea.europa.eu/dashboard?id=volto-plotlycharts-develop)
 [![Duplicated Lines (%)](https://sonarqube.eea.europa.eu/api/project_badges/measure?project=volto-plotlycharts-develop&metric=duplicated_lines_density)](https://sonarqube.eea.europa.eu/dashboard?id=volto-plotlycharts-develop)
 
+
+[Volto](https://github.com/plone/volto) add-on
+
+## Features
+
 Plotly Charts and Plotly Chart Editor integration with Volto
 
 - Exports a PlotlyChart Widget, can be used in regular volto edit forms
@@ -23,33 +28,59 @@ Plotly Charts and Plotly Chart Editor integration with Volto
 
 ## Getting started
 
-1. Create new volto project if you don't already have one:
+### Try volto-plotlycharts with Docker
+
+1. Get the latest Docker images
 
    ```
-   $ npm install -g yo @plone/generator-volto
-   $ yo @plone/volto my-volto-project --addon volto-plotlycharts
-
-   $ cd my-volto-project
-   $ yarn add -W volto-plotlycharts
+   docker pull plone
+   docker pull plone/volto
    ```
 
-1. If you already have a volto project, just update `package.json`:
+1. Start Plone backend
+   ```
+   docker run -d --name plone -p 8080:8080 -e SITE=Plone -e PROFILES="profile-plone.restapi:blocks" plone
+   ```
+
+1. Start Volto frontend
+
+   ```
+   docker run -it --rm -p 3000:3000 --link plone -e ADDONS="@eeacms/volto-plotlycharts" plone/volto
+   ```
+
+1. Go to http://localhost:3000
+
+### Add volto-plotlycharts to your Volto project
+
+1. Make sure you have a [Plone backend](https://plone.org/download) up-and-running at http://localhost:8080/Plone
+
+1. Start Volto frontend
+
+* If you already have a volto project, just update `package.json`:
 
    ```JSON
    "addons": [
-      "volto-plotlycharts"
+       "@eeacms/volto-plotlycharts"
    ],
 
    "dependencies": {
-      "volto-plotlycharts": "github:eea/volto-plotlycharts#2.0.0"
+       "@eeacms/volto-plotlycharts": "^1.0.0"
    }
+   ```
+
+* If not, create one:
+
+   ```
+   npm install -g yo @plone/generator-volto
+   yo @plone/volto my-volto-project --addon @eeacms/volto-plotlycharts
+   cd my-volto-project
    ```
 
 1. Install new add-ons and restart Volto:
 
    ```
-   $ yarn
-   $ yarn start
+   yarn
+   yarn start
    ```
 
 1. Go to http://localhost:3000
@@ -78,9 +109,9 @@ You need to first install the [release-it](https://github.com/release-it/release
    ```
    npm install -g release-it
    ```
-
+   
 Release-it uses the configuration written in the [`.release-it.json`](./.release-it.json) file located in the root of the repository.
-
+   
 Release-it is a tool that automates 4 important steps in the release process:
 
 1. Version increase in `package.json` ( increased from the current version in `package.json`)
@@ -88,45 +119,45 @@ Release-it is a tool that automates 4 important steps in the release process:
 3. GitHub release on the commit with the changelog and package.json modification on the develop branch
 4. NPM release ( by default it's disabled, but can be enabled in the configuration file )
 
-To configure the authentification, you need to export GITHUB_TOKEN for [GitHub](https://github.com/settings/tokens)
+To configure the authentification, you need to export GITHUB_TOKEN for [GitHub](https://github.com/settings/tokens) 
 
    ```
    export GITHUB_TOKEN=XXX-XXXXXXXXXXXXXXXXXXXXXX
    ```
-
+ 
  To configure npm, you can use the `npm login` command or use a configuration file with a TOKEN :
-
+ 
    ```
    echo "//registry.npmjs.org/:_authToken=YYYYYYYYYYYYYYYYYYYYYYYYYYYYYY" > .npmrc
    ```
 
 #### Using release-it tool
-
+  
 There are 3 yarn scripts that can be run to do the release
 
 ##### yarn release-beta
 
-Automatically calculates and presents 3 beta versions - patch, minor and major for you to choose ( or Other for manual input).
+Automatically calculates and presents 3 beta versions - patch, minor and major for you to choose ( or Other for manual input). 
 
 ```
-? Select increment (next version):
-❯ prepatch (0.1.1-beta.0)
-  preminor (0.2.0-beta.0)
-  premajor (1.0.0-beta.0)
-  Other, please specify...
+? Select increment (next version): 
+❯ prepatch (0.1.1-beta.0) 
+  preminor (0.2.0-beta.0) 
+  premajor (1.0.0-beta.0) 
+  Other, please specify... 
 ```
 
 ##### yarn release-major-beta
 
 Same as `yarn release-beta`, but with premajor version pre-selected.
-
+    
 ##### yarn release
 
 Generic command, does not automatically add the `beta` to version, but you can still manually write it if you choose Other.
 
 #### Important notes
 
-> Do not use release-it tool on master branch, the commit on CHANGELOG.md file and the version increase in the package.json file can't be done without a PULL REQUEST.
+> Do not use release-it tool on master branch, the commit on CHANGELOG.md file and the version increase in the package.json file can't be done without a PULL REQUEST.  
 
 > Do not keep Pull Requests from develop to master branches open when you are doing beta releases from the develop branch. As long as a PR to master is open, an automatic script will run on every commit and will update both the version and the changelog to a production-ready state - ( MAJOR.MINOR.PATCH mandatory format for version).
 
@@ -145,3 +176,4 @@ See [LICENSE.md](https://github.com/eea/volto-plotlycharts/blob/master/LICENSE.m
 ## Funding
 
 [European Environment Agency (EU)](http://eea.europa.eu)
+

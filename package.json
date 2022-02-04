@@ -1,6 +1,6 @@
 {
   "name": "@eeacms/volto-plotlycharts",
-  "version": "2.0.11",
+  "version": "3.0.0",
   "description": "Plotly Charts and Editor integration for Volto",
   "main": "src/index.js",
   "author": "European Environment Agency: IDM2 A-Team",
@@ -15,27 +15,22 @@
     "react",
     "plotly"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:eea/volto-plotlycharts.git"
+  },
   "addons": [
     "@eeacms/volto-datablocks"
   ],
   "dependencies": {
-    "@eeacms/volto-datablocks": "^2.0.13",
+    "@eeacms/volto-datablocks": "*",
+    "@plone/scripts": "*",
     "plotly.js": "^2.5.1",
-    "react-chart-editor": "^0.45.0",
-    "react-component-queries": "2.3.0",
-    "react-inspector": "^5.1.1",
+    "react-chart-editor": "0.45.0",
+    "react-colorscales": "0.7.3",
+    "react-inspector": "5.1.1",
     "react-json-editor-ajrm": "2.5.13",
-    "react-plotly.js": "^2.5.1",
-    "react-resize-detector": "^6.7.6",
-    "react-sizeme": "^3.0.2",
-    "react-visibility-sensor": "^5.1.1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/eea/volto-plotlycharts.git"
-  },
-  "bugs": {
-    "url": "https://github.com/eea/volto-plotlycharts/issues"
+    "react-plotly.js": "2.5.1"
   },
   "devDependencies": {
     "@cypress/code-coverage": "^3.9.5",
@@ -46,14 +41,18 @@
     "release-major-beta": "release-it major --preRelease=beta",
     "release-beta": "release-it --preRelease=beta",
     "bootstrap": "npm install -g ejs; npm link ejs; node bootstrap",
-    "stylelint": "../../../node_modules/stylelint/bin/stylelint.js --allow-empty-input 'src/**/*.{css,less}'",
-    "stylelint:overrides": "../../../node_modules/.bin/stylelint --syntax less --allow-empty-input 'theme/**/*.overrides' 'src/**/*.overrides'",
+    "test": "make test",
+    "test:fix": "make test-update",
+    "pre-commit": "yarn stylelint:fix && yarn prettier:fix && yarn lint:fix",
+    "stylelint": "if [ -d ./project ]; then ./project/node_modules/stylelint/bin/stylelint.js --allow-empty-input 'theme/**/*.{css,less}' 'src/**/*.{css,less}'; else ../../../node_modules/stylelint/bin/stylelint.js --allow-empty-input 'theme/**/*.{css,less}' 'src/**/*.{css,less}'; fi",
+    "stylelint:overrides": "if [ -d ./project ]; then ./project/node_modules/.bin/stylelint --syntax less --allow-empty-input 'theme/**/*.overrides' 'src/**/*.overrides'; else ../../../node_modules/.bin/stylelint --syntax less --allow-empty-input 'theme/**/*.overrides' 'src/**/*.overrides'; fi",
     "stylelint:fix": "yarn stylelint --fix && yarn stylelint:overrides --fix",
-    "prettier": "../../../node_modules/.bin/prettier --single-quote --check 'src/**/*.{js,jsx,json,css,less,md}'",
-    "prettier:fix": "../../../node_modules/.bin/prettier --single-quote --write 'src/**/*.{js,jsx,json,css,less,md}'",
-    "lint": "../../../node_modules/eslint/bin/eslint.js --max-warnings=0 'src/**/*.{js,jsx}'",
-    "lint:fix": "../../../node_modules/eslint/bin/eslint.js --fix 'src/**/*.{js,jsx}'",
-    "cypress:run": "../../../node_modules/cypress/bin/cypress run",
-    "cypress:open": "../../../node_modules/cypress/bin/cypress open"
+    "prettier": "if [ -d ./project ]; then ./project/node_modules/.bin/prettier --single-quote --check 'src/**/*.{js,jsx,json,css,less,md}'; else ../../../node_modules/.bin/prettier --single-quote --check 'src/**/*.{js,jsx,json,css,less,md}'; fi",
+    "prettier:fix": "if [ -d ./project ]; then ./project/node_modules/.bin/prettier --single-quote --write 'src/**/*.{js,jsx,json,css,less,md}'; else ../../../node_modules/.bin/prettier --single-quote --write 'src/**/*.{js,jsx,json,css,less,md}'; fi",
+    "lint": "if [ -d ./project ]; then ./project/node_modules/eslint/bin/eslint.js --max-warnings=0 'src/**/*.{js,jsx}'; else ../../../node_modules/eslint/bin/eslint.js --max-warnings=0 'src/**/*.{js,jsx}'; fi",
+    "lint:fix": "if [ -d ./project ]; then ./project/node_modules/eslint/bin/eslint.js --fix 'src/**/*.{js,jsx}'; else ../../../node_modules/eslint/bin/eslint.js --fix 'src/**/*.{js,jsx}'; fi",
+    "i18n": "rm -rf build/messages && NODE_ENV=production i18n --addon",
+    "cypress:run": "if [ -d ./project ]; then NODE_ENV=development ./project/node_modules/cypress/bin/cypress run; else NODE_ENV=development ../../../node_modules/cypress/bin/cypress run; fi",
+    "cypress:open": "if [ -d ./project ]; then NODE_ENV=development ./project/node_modules/cypress/bin/cypress open; else NODE_ENV=development ../../../node_modules/cypress/bin/cypress open; fi"
   }
 }

@@ -1,24 +1,39 @@
-import { applyConfig } from './config';
-import installConnectedPlotlyChart from './ConnectedPlotlyChart';
-export * from './config';
+import { VisualizationView } from './Views';
+import { VisualizationWidget } from './Widgets';
+import installEmbedVisualization from './Blocks/EmbedVisualization';
+import installPlotlyChart from './Blocks/PlotlyChart';
+import installTreemap from './Blocks/Treemap';
+import { data_visualizations } from './middlewares';
+import * as addonReducers from './reducers';
 
-function addCustomGroup(config) {
-  const hasCustomGroup = config.blocks.groupBlocksOrder.filter(
-    (el) => el.id === 'custom_addons',
-  );
-  if (hasCustomGroup.length === 0) {
-    config.blocks.groupBlocksOrder.push({
-      id: 'custom_addons',
-      title: 'Custom addons',
-    });
-  }
-}
+import './less/global.less';
 
-export default (config) => {
-  addCustomGroup(config);
+const applyConfig = (config) => {
+  config.views.contentTypesViews.visualization = VisualizationView;
+  config.widgets.id.visualization = VisualizationWidget;
 
-  return [installConnectedPlotlyChart, applyConfig].reduce(
+  config.blocks.groupBlocksOrder = [
+    ...config.blocks.groupBlocksOrder,
+    {
+      id: 'plotly',
+      title: 'Plotly blocks',
+    },
+  ];
+
+  config.settings.storeExtenders = [
+    ...(config.settings.storeExtenders || []),
+    data_visualizations,
+  ];
+
+  config.addonReducers = {
+    ...config.addonReducers,
+    ...addonReducers,
+  };
+
+  return [installEmbedVisualization, installPlotlyChart, installTreemap].reduce(
     (acc, apply) => apply(acc),
     config,
   );
 };
+
+export default applyConfig;

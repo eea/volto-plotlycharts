@@ -1,20 +1,22 @@
-import { GET_CHART_DATA_FROM_VISUALIZATION } from './constants';
-import { CHANGE_SIDEBAR_STATE } from './constants';
+import { GET_VISUALIZATION, REMOVE_VISUALIZATION } from './constants';
 
-export function changeSidebarState(open) {
+export function getVisualization(path, use_live_data) {
   return {
-    type: CHANGE_SIDEBAR_STATE,
-    open,
+    type: GET_VISUALIZATION,
+    path,
+    use_live_data,
+    request: {
+      op: 'get',
+      path: `${path}/@${
+        use_live_data ? 'visualization-layout' : 'visualization'
+      }`,
+    },
   };
 }
 
-export function getChartDataFromVisualization(path) {
+export function removeVisualization(path) {
   return {
-    type: GET_CHART_DATA_FROM_VISUALIZATION,
+    type: REMOVE_VISUALIZATION,
     path,
-    request: {
-      op: 'get',
-      path: `${path}/@field?name=visualization`,
-    },
   };
 }
