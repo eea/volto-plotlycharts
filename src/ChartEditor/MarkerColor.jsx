@@ -232,25 +232,28 @@ class UnconnectedMarkerColor extends Component {
    */
   updateCategoricalsInVisual = () => {
     const isManual = this.props.container?.marker?.categoricalaxis;
-    if (!isManual) {
+    if (!isManual && this.props.container && this.props.container.marker) {
       this.context.updateContainer({
         'marker.color': undefined,
       });
       return;
     }
 
-    const data = this.props.container[
-      this.props.container.marker.categoricalaxis
-    ].map(
-      (item) =>
-        this.props.container.marker.colorscale[
-          this.props.container.meta.manualcolor[item] - 1
-        ],
-    );
+    const data =
+      this.props.container && this.props.container.marker
+        ? this.props.container[this.props.container.marker.categoricalaxis].map(
+            (item) =>
+              this.props.container.marker.colorscale[
+                this.props.container.meta.manualcolor[item] - 1
+              ],
+          )
+        : [];
 
-    this.context.updateContainer({
-      'marker.color': data,
-    });
+    if (this.props.container && this.props.container.marker) {
+      this.context.updateContainer({
+        'marker.color': data,
+      });
+    }
   };
 
   /**
