@@ -23,6 +23,7 @@ import { Colorscale } from 'react-colorscales';
 
 import loadable from '@loadable/component';
 import config from '@plone/volto/registry';
+import ColorscaleColorsEditor from './ColorscaleColorsEditor';
 
 const Select = loadable(() => import('react-select'));
 
@@ -333,6 +334,16 @@ const StyleLayoutPanel = (props, { localize: _ }) => {
                 </div>
               ))
             : ''}
+          {props.value.chartData.layout &&
+            props.value.chartData.layout.colorway && (
+              <div>
+                <ColorscaleColorsEditor
+                  _={_}
+                  handleChange={(colorscale) => onChangeColor(colorscale)}
+                  colorscale={props.value.chartData.layout.colorway}
+                />
+              </div>
+            )}
         </PlotlySection>
         <PlotlySection name={_('Text')} attr="font.family">
           <FontSelector
