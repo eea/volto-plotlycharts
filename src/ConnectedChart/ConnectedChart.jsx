@@ -56,13 +56,13 @@ function ConnectedChart(props) {
   if (layout.xaxis)
     layout.xaxis = {
       ...layout.xaxis,
-      autorange: true,
+      autorange: !layout.xaxis?.autorange ? false : true,
       hoverformat: hoverFormatXY || '.3s',
     };
   if (layout.yaxis)
     layout.yaxis = {
       ...layout.yaxis,
-      autorange: true,
+      autorange: !layout.yaxis?.autorange ? false : true,
       hoverformat: hoverFormatXY || '.3s',
     };
 
