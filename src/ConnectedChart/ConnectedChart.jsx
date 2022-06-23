@@ -47,24 +47,33 @@ function ConnectedChart(props) {
       r: 80, // default: 80
       b: 80, // default: 80
       t: 100, // default: 100
+      ...(chartData.layout?.margin || {}),
     },
   };
 
   delete layout.width;
   delete layout.height;
 
-  if (layout.xaxis)
+  if (layout.xaxis) {
     layout.xaxis = {
       ...layout.xaxis,
-      autorange: !layout.xaxis?.autorange ? false : true,
-      hoverformat: hoverFormatXY || '.3s',
+      hoverformat:
+        layout.xaxis.hoverformat ||
+        hoverFormatXY ||
+        layout.xaxis.tickformat ||
+        '.3s',
     };
-  if (layout.yaxis)
+  }
+  if (layout.yaxis) {
     layout.yaxis = {
       ...layout.yaxis,
-      autorange: !layout.yaxis?.autorange ? false : true,
-      hoverformat: hoverFormatXY || '.3s',
+      hoverformat:
+        layout.xaxis.hoverformat ||
+        hoverFormatXY ||
+        layout.xaxis.tickformat ||
+        '.3s',
     };
+  }
 
   let data =
     provider_data && use_live_data
@@ -89,6 +98,7 @@ function ConnectedChart(props) {
     <>
       <div className="connected-chart-wrapper">
         <LoadablePlotly
+          useResizeHandler
           data={data}
           layout={layout}
           frames={[]}
