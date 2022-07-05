@@ -25,7 +25,7 @@ class Edit extends Component {
   render() {
     return (
       <>
-        <TreemapView data={this.props.data} />
+        <TreemapView {...this.props} />
 
         <SidebarPortal selected={this.props.selected}>
           <InlineForm

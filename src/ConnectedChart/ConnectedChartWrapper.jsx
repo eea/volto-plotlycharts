@@ -22,7 +22,7 @@ function ConnectedChartWrapper(props) {
         }}
         className="connected-chart"
         partialVisibility={true}
-        offset={{ top: -100, bottom: -100 }}
+        offset={{ top: -50, bottom: -50 }}
         delayedCall={true}
       >
         {() => <ConnectedChart {...props} />}
