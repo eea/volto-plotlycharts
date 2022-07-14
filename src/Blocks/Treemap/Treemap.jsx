@@ -7,7 +7,7 @@ import { compose } from 'redux';
 import loadable from '@loadable/component';
 import config from '@plone/volto/registry';
 import { connectToProviderData } from '@eeacms/volto-datablocks/hocs';
-import { Placeholder } from '@eeacms/volto-datablocks/components';
+import { VisibilitySensor } from '@eeacms/volto-datablocks/components';
 
 const LoadablePlotly = loadable(() =>
   import(
@@ -53,32 +53,25 @@ function Treemap(props) {
 
   return (
     <div className="treemap-chart">
-      <Placeholder
-        className="connected-chart"
-        partialVisibility={true}
-        offset={{ top: -100, bottom: -100 }}
-        delayedCall={true}
-      >
-        {() => (
-          <div className="connected-chart-wrapper">
-            <LoadablePlotly
-              data={traces}
-              layout={layout}
-              frames={[]}
-              config={{
-                displayModeBar: false,
-                editable: false,
-                responsive: true,
-                useResizeHandler: true,
-              }}
-              style={{
-                maxWidth: '100%',
-                margin: 'auto',
-              }}
-            />
-          </div>
-        )}
-      </Placeholder>
+      <VisibilitySensor className="connected-chart">
+        <div className="connected-chart-wrapper">
+          <LoadablePlotly
+            data={traces}
+            layout={layout}
+            frames={[]}
+            config={{
+              displayModeBar: false,
+              editable: false,
+              responsive: true,
+              useResizeHandler: true,
+            }}
+            style={{
+              maxWidth: '100%',
+              margin: 'auto',
+            }}
+          />
+        </div>
+      </VisibilitySensor>
     </div>
   );
 }
