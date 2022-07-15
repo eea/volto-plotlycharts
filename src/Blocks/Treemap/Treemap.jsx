@@ -53,7 +53,7 @@ function Treemap(props) {
 
   return (
     <div className="treemap-chart">
-      <VisibilitySensor className="connected-chart">
+      <VisibilitySensor>
         <div className="connected-chart-wrapper">
           <LoadablePlotly
             data={traces}
@@ -66,7 +66,8 @@ function Treemap(props) {
               useResizeHandler: true,
             }}
             style={{
-              maxWidth: '100%',
+              width: '100%',
+              height: '450px',
               margin: 'auto',
             }}
           />
