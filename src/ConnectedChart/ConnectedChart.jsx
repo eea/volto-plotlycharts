@@ -77,7 +77,7 @@ function ConnectedChart(props) {
 
   let data =
     provider_data && use_live_data
-      ? updateChartDataFromProvider(chartData.data, provider_data)
+      ? updateChartDataFromProvider(chartData.data || [], provider_data)
       : chartData.data || [];
 
   data = data.map((trace) => ({

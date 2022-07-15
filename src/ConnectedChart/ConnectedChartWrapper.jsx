@@ -5,7 +5,7 @@
 import React from 'react';
 import ConnectedChart from './ConnectedChart';
 
-import { Placeholder } from '@eeacms/volto-datablocks/components';
+import { VisibilitySensor } from '@eeacms/volto-datablocks/components';
 
 /*
  * @param { object } data The chart data, layout,  extra config, etc.
@@ -16,17 +16,9 @@ import { Placeholder } from '@eeacms/volto-datablocks/components';
 function ConnectedChartWrapper(props) {
   return (
     <>
-      <Placeholder
-        getDOMElement={(val) => {
-          return val?.el;
-        }}
-        className="connected-chart"
-        partialVisibility={true}
-        offset={{ top: -100, bottom: -100 }}
-        delayedCall={true}
-      >
-        {() => <ConnectedChart {...props} />}
-      </Placeholder>
+      <VisibilitySensor className="connected-chart">
+        <ConnectedChart {...props} />
+      </VisibilitySensor>
     </>
   );
 }

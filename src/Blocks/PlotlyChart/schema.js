@@ -47,6 +47,11 @@ export default {
   ],
 
   properties: {
+    use_live_data: {
+      type: 'boolean',
+      title: 'Use live data',
+      defaultValue: true,
+    },
     hover_format_xy: {
       type: 'string',
       title: 'Hover format',
