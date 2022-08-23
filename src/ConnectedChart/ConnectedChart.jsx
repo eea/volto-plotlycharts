@@ -58,20 +58,20 @@ function ConnectedChart(props) {
     layout.xaxis = {
       ...layout.xaxis,
       hoverformat:
-        layout.xaxis.hoverformat ||
         hoverFormatXY ||
+        layout.xaxis.hoverformat ||
         layout.xaxis.tickformat ||
-        '.3s',
+        '',
     };
   }
   if (layout.yaxis) {
     layout.yaxis = {
       ...layout.yaxis,
       hoverformat:
-        layout.xaxis.hoverformat ||
         hoverFormatXY ||
+        layout.xaxis.hoverformat ||
         layout.xaxis.tickformat ||
-        '.3s',
+        '',
     };
   }
 

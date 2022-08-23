@@ -81,13 +81,13 @@ const StyleLayoutPanel = (props, { localize: _ }) => {
   const numbersFormat = [
     { label: _('Default'), value: '' },
     { label: _('No Digit'), value: ',.1s' },
-    { label: _('1 Digit'), value: ',.3s' },
-    { label: _('2 Digits'), value: ',.4s' },
-    { label: _('3 Digits'), value: ',.5s' },
-    { label: _('4 Digits'), value: ',.6s' },
-    { label: _('5 Digits'), value: ',.7s' },
-    { label: _('6 Digits'), value: ',.8s' },
-    { label: _('7 Digits'), value: ',.9s' },
+    { label: _('1 Digit'), value: ',.1f' },
+    { label: _('2 Digits'), value: ',.2f' },
+    { label: _('3 Digits'), value: ',.3f' },
+    { label: _('4 Digits'), value: ',.4f' },
+    { label: _('5 Digits'), value: ',.5f' },
+    { label: _('6 Digits'), value: ',.6f' },
+    { label: _('7 Digits'), value: ',.7f' },
   ];
   const textFormats = [
     { label: _('Default'), value: '%{text}' },
@@ -358,7 +358,7 @@ const StyleLayoutPanel = (props, { localize: _ }) => {
             attr="separators"
             options={[
               { label: _('1,234.56'), value: '.,' },
-              { label: _('1 234.56'), value: ', ' },
+              { label: _('1 234.56'), value: '. ' },
               { label: _('1 234,56'), value: ', ' },
               { label: _('1.234,56'), value: ',.' },
             ]}
@@ -421,7 +421,7 @@ const StyleLayoutPanel = (props, { localize: _ }) => {
           attr="separators"
           options={[
             { label: _('1,234.56'), value: '.,' },
-            { label: _('1 234.56'), value: ', ' },
+            { label: _('1 234.56'), value: '. ' },
             { label: _('1 234,56'), value: ', ' },
             { label: _('1.234,56'), value: ',.' },
           ]}

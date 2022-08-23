@@ -55,7 +55,7 @@ export default {
     hover_format_xy: {
       type: 'string',
       title: 'Hover format',
-      placeholder: '.3s',
+      placeholder: '',
       description: (
         <>
           See{' '}
