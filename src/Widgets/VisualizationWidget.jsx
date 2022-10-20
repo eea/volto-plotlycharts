@@ -19,8 +19,6 @@ class PlotlyEditorModal extends Component {
   }
 
   render() {
-    console.log(this.state.value, 'value');
-
     return (
       <Modal open={true} size="fullscreen" className="chart-editor-modal">
         <Modal.Content scrolling>
