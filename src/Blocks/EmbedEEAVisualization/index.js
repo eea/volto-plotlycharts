@@ -18,14 +18,23 @@ export default (config) => {
       addPermission: [],
       view: [],
     },
+    variations: [
+      {
+        id: 'default',
+        title: 'Default',
+        isDefault: true,
+        view: View,
+      },
+      {
+        id: 'extra',
+        title: 'Extra (expand if needed)',
+        isDefault: false,
+        view: View,
+      },
+    ],
   };
 
   config.blocks.blocksConfig.embed_eea_visualization = visualizationBlockConfig;
-  // This is required for compatibility with previous version
-  // TODO: script for migration
-  // config.blocks.blocksConfig.embed_chart = {
-  //   ...visualizationBlockConfig,
-  //   id: 'embed_chart',
-  // };
+
   return config;
 };

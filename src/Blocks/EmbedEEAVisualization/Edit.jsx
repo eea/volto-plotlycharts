@@ -1,13 +1,13 @@
 import React from 'react';
 import { SidebarPortal } from '@plone/volto/components';
-import InlineForm from '@plone/volto/components/manage/Form/InlineForm';
+import BlockDataForm from '@plone/volto/components/manage/Form/BlockDataForm';
 import ConnectedChart from '@eeacms/volto-plotlycharts/ConnectedChart';
 import schema from './schema';
 
 import '@eeacms/volto-plotlycharts/less/visualization.less';
 
 const Edit = (props) => {
-  const { data } = props;
+  const { data, block } = props;
   return (
     <>
       <ConnectedChart
@@ -28,7 +28,7 @@ const Edit = (props) => {
       />
 
       <SidebarPortal selected={props.selected}>
-        <InlineForm
+        {/* <InlineForm
           schema={schema}
           title={schema.title}
           onChangeField={(id, value) => {
@@ -38,6 +38,18 @@ const Edit = (props) => {
             });
           }}
           formData={props.data}
+        /> */}
+        <BlockDataForm
+          block={block}
+          title={schema.title}
+          schema={schema}
+          onChangeField={(id, value) => {
+            props.onChangeBlock(block, {
+              ...data,
+              [id]: value,
+            });
+          }}
+          formData={data}
         />
       </SidebarPortal>
     </>
