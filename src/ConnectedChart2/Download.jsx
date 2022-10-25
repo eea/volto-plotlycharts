@@ -2,10 +2,10 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React from 'react';
 import downloadSVG from '../static/download-cloud-fill.svg';
-import { Icon } from '@plone/volto/components';
+// import { Icon } from '@plone/volto/components';
 
 import { trackLink } from '@eeacms/volto-matomo/utils';
-import { Button } from 'semantic-ui-react';
+// import { Button } from 'semantic-ui-react';
 
 function getHeaders(headers) {
   let str = '';
@@ -116,8 +116,8 @@ function exportCSVFile(csv, title = 'data') {
 
 const Download = (props) => {
   const {
-    sources,
-    className,
+    // sources,
+    // className,
     title,
     provider_data,
     provider_metadata,

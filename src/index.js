@@ -3,7 +3,7 @@ import { DataQueryWidget, VisualizationWidget } from './Widgets';
 import installEmbedVisualization from './Blocks/EmbedVisualization';
 
 //TODO: this will replace the current embed viz
-import installEmbedEEAVisualization from './Blocks/EmbedEEAVisualization';
+// import installEmbedEEAVisualization from './Blocks/EmbedEEAVisualization';
 
 import installPlotlyChart from './Blocks/PlotlyChart';
 import installTreemap from './Blocks/Treemap';
@@ -39,7 +39,7 @@ const applyConfig = (config) => {
   return [
     installEmbedVisualization,
     //first one here ^^ will get old and be removed in time TODO:
-    installEmbedEEAVisualization,
+    // installEmbedEEAVisualization,
     installPlotlyChart,
     installTreemap,
   ].reduce((acc, apply) => apply(acc), config);
