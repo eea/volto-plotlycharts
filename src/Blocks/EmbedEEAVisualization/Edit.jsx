@@ -1,23 +1,39 @@
 import React from 'react';
 import { SidebarPortal } from '@plone/volto/components';
 import BlockDataForm from '@plone/volto/components/manage/Form/BlockDataForm';
-import ConnectedChart from '@eeacms/volto-plotlycharts/ConnectedChart';
+import ConnectedChart2 from '@eeacms/volto-plotlycharts/ConnectedChart2';
 import schema from './schema';
 
 import '@eeacms/volto-plotlycharts/less/visualization.less';
 
 const Edit = (props) => {
-  const { data, block } = props;
+  const { data, block, onChangeBlock } = props;
+
+  React.useEffect(() => {
+    if (!Object.hasOwn(data, 'download_button')) {
+      onChangeBlock(block, {
+        ...data,
+        download_button: true,
+      });
+    }
+    if (!Object.hasOwn(data, 'show_sources')) {
+      onChangeBlock(block, {
+        ...data,
+        show_sources: true,
+      });
+    }
+  }, [block, data, onChangeBlock]);
+
   return (
     <>
-      <ConnectedChart
+      <ConnectedChart2
         data={{
           chartSources: data.chartSources,
           data_query: data.data_query,
           download_button: data.download_button,
           has_data_query_by_context: data.has_data_query_by_context,
           has_data_query_by_provider: data.has_data_query_by_provider,
-          use_live_data: data.use_live_data,
+          use_live_data: true,
           vis_url: data.vis_url,
           with_sources: data.with_sources,
         }}
@@ -28,17 +44,6 @@ const Edit = (props) => {
       />
 
       <SidebarPortal selected={props.selected}>
-        {/* <InlineForm
-          schema={schema}
-          title={schema.title}
-          onChangeField={(id, value) => {
-            props.onChangeBlock(props.block, {
-              ...props.data,
-              [id]: value,
-            });
-          }}
-          formData={props.data}
-        /> */}
         <BlockDataForm
           block={block}
           title={schema.title}

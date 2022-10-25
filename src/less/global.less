@@ -55,3 +55,25 @@ body.has-sidebar .ui.modal.chart-editor-modal {
 .plotly-chart {
   position: relative;
 }
+
+#page-edit .plotly-download-button {
+  display: none;
+}
+
+.plotly-download-button {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 30px !important;
+  cursor: pointer;
+}
+
+.plotly-download-button path {
+  fill: red;
+}
+
+@media print {
+  .plotly-download-button {
+    display: none;
+  }
+}

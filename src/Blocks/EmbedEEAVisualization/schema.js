@@ -87,12 +87,10 @@ export default {
     download_button: {
       title: 'Toggle download',
       type: 'boolean',
-      defaultValue: true,
     },
     show_sources: {
       title: 'Toggle sources',
       type: 'boolean',
-      defaultValue: true,
     },
 
     //do this as in volto-eea-map
