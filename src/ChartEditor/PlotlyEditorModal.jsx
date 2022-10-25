@@ -12,7 +12,6 @@ class PlotlyEditorModal extends Component {
       value: props.value,
     };
   }
-
   render() {
     return (
       <Modal open={true} size="fullscreen" className="chart-editor-modal">

@@ -24,6 +24,11 @@
   height: 100%;
 }
 
+.plotly_editor_plot {
+  position: sticky;
+  top: 10px;
+}
+
 .blocks-chooser {
   .button.embed_chart,
   .button.connected_plotly_chart {
@@ -49,4 +54,26 @@ body.has-sidebar .ui.modal.chart-editor-modal {
 .embed-visualization,
 .plotly-chart {
   position: relative;
+}
+
+#page-edit .plotly-download-button {
+  display: none;
+}
+
+.plotly-download-button {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 30px !important;
+  cursor: pointer;
+}
+
+.plotly-download-button path {
+  fill: red;
+}
+
+@media print {
+  .plotly-download-button {
+    display: none;
+  }
 }
