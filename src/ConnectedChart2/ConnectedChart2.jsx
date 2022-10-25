@@ -1,17 +1,16 @@
-/*
- * The most basic connected block chart
- */
-
 import React from 'react';
 import { compose } from 'redux';
 import loadable from '@loadable/component';
 import { connectToProviderData } from '@eeacms/volto-datablocks/hocs';
 import { updateChartDataFromProvider } from '@eeacms/volto-datablocks/helpers';
-import { Sources } from '@eeacms/volto-datablocks/Utils';
+import { connect } from 'react-redux';
 import { connectBlockToVisualization } from '@eeacms/volto-plotlycharts/hocs';
+
+import { getContent } from '@plone/volto/actions';
 
 import config from '@plone/volto/registry';
 import Download from './Download';
+import SourcesWidget from './Sources';
 
 const LoadablePlotly = loadable(() => import('react-plotly.js'));
 
@@ -27,12 +26,22 @@ function ConnectedChart2(props) {
     visualization,
     visualization_data,
     width,
+    data_provenance,
     height = 450,
+    id,
   } = props;
   const use_live_data = props.data?.use_live_data ?? true;
   const with_sources = props.data?.with_sources ?? true;
   const chartData =
     visualization?.chartData || visualization_data?.chartData || {};
+
+  React.useEffect(() => {
+    if (props.data?.vis_url) {
+      //consider using only getContent for all viz data (see volto-eea-map)
+      props.getContent(props.data?.vis_url, null, id);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.data.vis_url]);
 
   const layout = {
     ...(chartData.layout || {}),
@@ -91,7 +100,6 @@ function ConnectedChart2(props) {
   if (loadingVisualizationData) {
     return <div>Loading chart...</div>;
   }
-  console.log(with_sources, 'with_sources');
   return !Object.keys(chartData).length ? (
     <div>No valid data.</div>
   ) : (
@@ -123,25 +131,31 @@ function ConnectedChart2(props) {
           provider_metadata={provider_metadata}
         />
       )}
-      {/* {with_sources && props.data ? (
-        <Sources
-          data={{ data_query: props.data.data_query }}
-          sources={props.data.chartSources}
-          title={
-            props.data?.vis_url || props.data?.provider_url || props.data?.title
-          }
-          provider_data={provider_data}
-          provider_metadata={provider_metadata}
-          download_button={props.data.download_button}
-        />
-      ) : (
-        ''
-      )} */}
+      {with_sources && (
+        <>
+          {data_provenance &&
+          data_provenance.data &&
+          data_provenance.data.length > 0 ? (
+            <SourcesWidget data={data_provenance.data} />
+          ) : (
+            <p>Data provenance is not set for visualization used or page</p>
+          )}
+        </>
+      )}
     </>
   );
 }
 
 export default compose(
+  connect(
+    (state, props) => ({
+      data_provenance:
+        state.content.subrequests?.[props.id]?.data?.data_provenance,
+    }),
+    {
+      getContent,
+    },
+  ),
   connectBlockToVisualization((props) => ({
     vis_url: props.data?.vis_url || null,
     use_live_data: props.data?.use_live_data ?? true,

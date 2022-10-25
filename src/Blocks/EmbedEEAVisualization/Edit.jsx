@@ -2,12 +2,13 @@ import React from 'react';
 import { SidebarPortal } from '@plone/volto/components';
 import BlockDataForm from '@plone/volto/components/manage/Form/BlockDataForm';
 import ConnectedChart2 from '@eeacms/volto-plotlycharts/ConnectedChart2';
-import schema from './schema';
 
 import '@eeacms/volto-plotlycharts/less/visualization.less';
+import Schema from './schema';
 
 const Edit = (props) => {
   const { data, block, onChangeBlock } = props;
+  const schema = React.useMemo(() => Schema(props), [props]);
 
   React.useEffect(() => {
     if (!Object.hasOwn(data, 'download_button')) {
@@ -27,6 +28,7 @@ const Edit = (props) => {
   return (
     <>
       <ConnectedChart2
+        id={props.id}
         data={{
           chartSources: data.chartSources,
           data_query: data.data_query,

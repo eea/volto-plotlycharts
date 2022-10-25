@@ -1,114 +1,84 @@
 import React from 'react';
 
-const sourceSchema = {
-  title: 'Source',
+const Schema = (props) => {
+  return {
+    title: 'Embed EEA visualization',
 
-  fieldsets: [
-    {
-      id: 'default',
-      title: 'Default',
-      fields: ['chart_source', 'chart_source_link'],
-    },
-  ],
+    fieldsets: [
+      {
+        id: 'default',
+        title: 'Default',
+        fields: [
+          'vis_url',
+          'height',
+          'hover_format_xy',
+          'show_sources',
+          'download_button',
+        ],
+      },
 
-  properties: {
-    chart_source: {
-      title: 'Source',
-      widget: 'textarea',
-    },
-    chart_source_link: {
-      title: 'Link',
-      type: 'string',
-    },
-  },
+      {
+        id: 'data_query',
+        title: 'Data query',
+        fields: [
+          'enable_queries',
+          ...(props.data.enable_queries ? ['data_query_params'] : []),
+        ],
+      },
+    ],
 
-  required: ['source'],
+    properties: {
+      vis_url: {
+        widget: 'object_by_path',
+        title: 'Visualization',
+      },
+
+      hover_format_xy: {
+        type: 'string',
+        title: 'Hover format',
+        placeholder: '',
+        description: (
+          <>
+            See{' '}
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://github.com/d3/d3-3.x-api-reference/blob/master/Formatting.md#d3_format"
+            >
+              D3 format documentation
+            </a>
+          </>
+        ),
+      },
+      height: {
+        title: 'Height',
+        type: 'number',
+        default: 450,
+      },
+      download_button: {
+        title: 'Toggle download',
+        type: 'boolean',
+      },
+      show_sources: {
+        title: 'Toggle sources',
+        type: 'boolean',
+      },
+      enable_queries: {
+        title: 'Enable queries',
+        description:
+          'Will import Criteria from content-type and try to query chart fields.',
+        type: 'boolean',
+      },
+      data_query_params: {
+        title: 'Query parameters',
+        description:
+          'When using page level parameters to filter the chart, please map those to the corresponding field name from the chart service',
+        widget: 'data_query_widget',
+      },
+    },
+
+    required: ['vis_url'],
+  };
 };
 
-export default {
-  title: 'Embed EEA visualization',
-
-  fieldsets: [
-    {
-      id: 'default',
-      title: 'Default',
-      fields: [
-        'vis_url',
-        'height',
-        'hover_format_xy',
-        'show_sources',
-        'download_button',
-      ],
-    },
-
-    {
-      id: 'data_query',
-      title: 'Dynamic Chart',
-      fields: [
-        // 'has_data_query_by_context',
-        // 'has_data_query_by_provider',
-        // 'data_query',
-      ],
-    },
-  ],
-
-  properties: {
-    vis_url: {
-      widget: 'object_by_path',
-      title: 'Visualization',
-    },
-    // use_live_data: {
-    //   type: 'boolean',
-    //   title: 'Use live data',
-    //   defaultValue: true,
-    // },
-    hover_format_xy: {
-      type: 'string',
-      title: 'Hover format',
-      placeholder: '',
-      description: (
-        <>
-          See{' '}
-          <a
-            target="_blank"
-            rel="noopener noreferrer"
-            href="https://github.com/d3/d3-3.x-api-reference/blob/master/Formatting.md#d3_format"
-          >
-            D3 format documentation
-          </a>
-        </>
-      ),
-    },
-    height: {
-      title: 'Height',
-      type: 'number',
-      default: 450,
-    },
-    download_button: {
-      title: 'Toggle download',
-      type: 'boolean',
-    },
-    show_sources: {
-      title: 'Toggle sources',
-      type: 'boolean',
-    },
-
-    //do this as in volto-eea-map
-    // has_data_query_by_context: {
-    //   title: 'Has data_query by context',
-    //   type: 'boolean',
-    //   defaultValue: true,
-    // },
-    // has_data_query_by_provider: {
-    //   title: 'Has data_query by provider',
-    //   type: 'boolean',
-    //   defaultValue: true,
-    // },
-    // data_query: {
-    //   title: 'Query',
-    //   widget: 'data_query',
-    // },
-  },
-
-  required: ['vis_url'],
-};
+export default Schema;

@@ -48,6 +48,7 @@ const View = (props) => {
             computer={grid.chart_column.computer}
           >
             <ConnectedChart2
+              id={props.id}
               data={{
                 chartSources: data.chartSources,
                 data_query: data.data_query,
