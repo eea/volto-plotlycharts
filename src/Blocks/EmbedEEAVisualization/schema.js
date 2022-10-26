@@ -16,13 +16,13 @@ const Schema = (props) => {
           'download_button',
         ],
       },
-
       {
         id: 'data_query',
         title: 'Data query',
         fields: [
-          'enable_queries',
-          ...(props.data.enable_queries ? ['data_query_params'] : []),
+          'has_data_query_by_context',
+          'has_data_query_by_provider',
+          'data_query',
         ],
       },
     ],
@@ -63,17 +63,19 @@ const Schema = (props) => {
         title: 'Toggle sources',
         type: 'boolean',
       },
-      enable_queries: {
-        title: 'Enable queries',
-        description:
-          'Will import Criteria from content-type and try to query chart fields.',
+      has_data_query_by_context: {
+        title: 'Use queries from context',
+        description: 'Will use Criteria queries from context (this page)',
         type: 'boolean',
       },
-      data_query_params: {
-        title: 'Query parameters',
-        description:
-          'When using page level parameters to filter the chart, please map those to the corresponding field name from the chart service',
-        widget: 'data_query_widget',
+      has_data_query_by_provider: {
+        title: 'Use queries from visualization',
+        description: 'Will use Criteria queries from visualization',
+        type: 'boolean',
+      },
+      data_query: {
+        title: 'Query',
+        widget: 'data_query',
       },
     },
 
