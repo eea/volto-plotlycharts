@@ -24,7 +24,6 @@ const Edit = (props) => {
       });
     }
   }, [block, data, onChangeBlock]);
-
   return (
     <>
       <ConnectedChart2
@@ -37,10 +36,10 @@ const Edit = (props) => {
           has_data_query_by_provider: data.has_data_query_by_provider,
           use_live_data: true,
           vis_url: data.vis_url,
-          with_sources: data.with_sources,
+          with_sources: data.show_sources,
         }}
         hoverFormatXY={data.hover_format_xy}
-        withSources={true}
+        withSources={data.show_sources}
         width={data.width}
         height={data.height}
       />

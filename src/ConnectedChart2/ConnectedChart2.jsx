@@ -131,6 +131,7 @@ function ConnectedChart2(props) {
           provider_metadata={provider_metadata}
         />
       )}
+      <p>with sources is: {with_sources ? 'true' : 'false'}</p>
       {with_sources && (
         <>
           {data_provenance &&
