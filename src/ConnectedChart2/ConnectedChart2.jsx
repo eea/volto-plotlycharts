@@ -139,7 +139,7 @@ function ConnectedChart2(props) {
           data_provenance.data.length > 0 ? (
             <SourcesWidget data={data_provenance.data} />
           ) : (
-            <p>Data provenance is not set for visualization used or page</p>
+            <p>Data provenance is not set for visualization</p>
           )}
         </>
       )}
