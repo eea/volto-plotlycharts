@@ -123,62 +123,87 @@ const Download = (props) => {
     provider_metadata,
     providers_data,
     providers_metadata,
+    core_metadata,
   } = props;
+  console.log(core_metadata, 'core_metadata');
+
+  const handleDownloadData = () => {
+    let array = [];
+    let readme = provider_metadata?.readme ? [provider_metadata?.readme] : [];
+    const mappedData = {
+      ...provider_data,
+      ...(core_metadata || {}),
+    };
+    console.log(mappedData, 'mappedData');
+    Object.entries(mappedData).forEach(([key, items]) => {
+      console.log(items, 'items');
+      items.forEach((item, index) => {
+        if (!array[index]) array[index] = {};
+        array[index][key] = item;
+      });
+    });
+
+    // if (core_metadata) {
+    //   if (
+    //     core_metadata.data_provenance &&
+    //     core_metadata.data_provenance.data &&
+    //     core_metadata.data_provenance.data.length > 0
+    //   ) {
+    //     core_metadata.data_provenance.data.forEach((item, index) => {
+    //       if (!array[array.length + index]) array[array.length + index] = {};
+    //       array[array.length + index][key] = item;
+    //     });
+    //   }
+    // }
+    const csv = convertToCSV(array, readme);
+    exportCSVFile(csv, title);
+  };
+
+  const handleDownloadMultipleData = () => {
+    let array = [];
+    let readme = [];
+    Object.keys(providers_data).forEach((pKey, pIndex) => {
+      if (!array[pIndex]) array[pIndex] = [];
+      Object.entries(providers_data[pKey]).forEach(([key, items]) => {
+        items.forEach((item, index) => {
+          if (!array[pIndex][index]) array[pIndex][index] = {};
+          array[pIndex][index][key] = item;
+          index++;
+        });
+      });
+    });
+    Object.keys(providers_metadata).forEach((pKey) => {
+      if (providers_metadata[pKey].readme) {
+        readme.push(providers_metadata[pKey].readme);
+      }
+    });
+    const csv = convertMatrixToCSV(array, readme);
+    exportCSVFile(csv, title);
+  };
 
   return (
     <>
-      {provider_data && (
-        <img
-          className="discreet plotly-download-button"
-          title="Download data"
-          alt="Download data"
-          onClick={() => {
-            let array = [];
-            let readme = provider_metadata?.readme
-              ? [provider_metadata?.readme]
-              : [];
-            Object.entries(provider_data).forEach(([key, items]) => {
-              items.forEach((item, index) => {
-                if (!array[index]) array[index] = {};
-                array[index][key] = item;
-              });
-            });
-            const csv = convertToCSV(array, readme);
-            exportCSVFile(csv, title);
-          }}
-          src={downloadSVG}
-        />
-      )}
+      <div className="plotly-download-container">
+        {provider_data && (
+          <img
+            className="discreet plotly-download-button"
+            title="Download data"
+            alt="Download data"
+            onClick={() => handleDownloadData()}
+            src={downloadSVG}
+          />
+        )}
 
-      {providers_data && (
-        <img
-          className="discreet plotly-download-button"
-          title="Download data"
-          alt="Download data"
-          onClick={() => {
-            let array = [];
-            let readme = [];
-            Object.keys(providers_data).forEach((pKey, pIndex) => {
-              if (!array[pIndex]) array[pIndex] = [];
-              Object.entries(providers_data[pKey]).forEach(([key, items]) => {
-                items.forEach((item, index) => {
-                  if (!array[pIndex][index]) array[pIndex][index] = {};
-                  array[pIndex][index][key] = item;
-                  index++;
-                });
-              });
-            });
-            Object.keys(providers_metadata).forEach((pKey) => {
-              if (providers_metadata[pKey].readme) {
-                readme.push(providers_metadata[pKey].readme);
-              }
-            });
-            const csv = convertMatrixToCSV(array, readme);
-            exportCSVFile(csv, title);
-          }}
-          src={downloadSVG}
-        />
-      )}
+        {providers_data && (
+          <img
+            className="discreet plotly-download-button"
+            title="Download data"
+            alt="Download data"
+            onClick={() => handleDownloadMultipleData()}
+            src={downloadSVG}
+          />
+        )}
+      </div>
     </>
   );
 };
