@@ -14,6 +14,9 @@ const Schema = (props) => {
           'hover_format_xy',
           'show_sources',
           'download_button',
+          ...(props.data.download_button
+            ? ['include_core_metadata_download']
+            : []),
         ],
       },
       {
@@ -57,6 +60,11 @@ const Schema = (props) => {
       },
       download_button: {
         title: 'Toggle download',
+        type: 'boolean',
+      },
+      include_core_metadata_download: {
+        title: 'Download core metadata',
+        description: 'Include core metadata in the dowloaded CSV',
         type: 'boolean',
       },
       show_sources: {

@@ -34,6 +34,7 @@ function ConnectedChart2(props) {
   } = props;
   const use_live_data = props.data?.use_live_data ?? true;
   const with_sources = props.data?.with_sources ?? true;
+
   const chartData =
     visualization?.chartData || visualization_data?.chartData || {};
 
@@ -131,10 +132,13 @@ function ConnectedChart2(props) {
           }
           provider_data={provider_data}
           provider_metadata={provider_metadata}
+          include_core_metadata_download={
+            props.data.include_core_metadata_download
+          }
           core_metadata={{
-            data_provenance: data_provenance.data,
+            data_provenance: data_provenance?.data,
             other_organisations,
-            temporal_coverage: temporal_coverage.temporal,
+            temporal_coverage: temporal_coverage?.temporal,
           }}
         />
       )}

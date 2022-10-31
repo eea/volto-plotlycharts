@@ -114,6 +114,44 @@ function exportCSVFile(csv, title = 'data') {
   }
 }
 
+const spreadCoreMetadata = (core_metadata, maxRowsProvData) => {
+  let spread_metadata = {};
+  Object.keys(core_metadata).forEach((key) => {
+    if (core_metadata[key].length > 0) {
+      core_metadata[key].forEach((item) => {
+        Object.keys(item).forEach((subkey) => {
+          if (!spread_metadata['Core metadata']) {
+            spread_metadata['Core metadata'] = [' '];
+          } else {
+            spread_metadata['Core metadata'].push(' ');
+          }
+          if (!spread_metadata[`${key}_${subkey}`]) {
+            spread_metadata[`${key}_${subkey}`] = [item[subkey]];
+          } else {
+            spread_metadata[`${key}_${subkey}`].push(item[subkey]);
+          }
+        });
+      });
+    }
+  });
+
+  const coreMaxRows = Object.values(spread_metadata).reduce((a, b) =>
+    a.length > b.length ? a : b,
+  ).length;
+
+  const maxRows = maxRowsProvData > coreMaxRows ? maxRowsProvData : coreMaxRows;
+
+  let evenMatrix = spread_metadata;
+  Object.entries(evenMatrix).forEach(([key, items]) => {
+    if (items.length < maxRows) {
+      for (let i = items.length; i < maxRows; i++) {
+        items.push('');
+      }
+    }
+  });
+  return evenMatrix;
+};
+
 const Download = (props) => {
   const {
     // sources,
@@ -124,37 +162,36 @@ const Download = (props) => {
     providers_data,
     providers_metadata,
     core_metadata,
+    include_core_metadata_download,
   } = props;
-  console.log(core_metadata, 'core_metadata');
-
   const handleDownloadData = () => {
     let array = [];
     let readme = provider_metadata?.readme ? [provider_metadata?.readme] : [];
     const mappedData = {
       ...provider_data,
-      ...(core_metadata || {}),
     };
-    console.log(mappedData, 'mappedData');
     Object.entries(mappedData).forEach(([key, items]) => {
-      console.log(items, 'items');
       items.forEach((item, index) => {
         if (!array[index]) array[index] = {};
         array[index][key] = item;
       });
     });
 
-    // if (core_metadata) {
-    //   if (
-    //     core_metadata.data_provenance &&
-    //     core_metadata.data_provenance.data &&
-    //     core_metadata.data_provenance.data.length > 0
-    //   ) {
-    //     core_metadata.data_provenance.data.forEach((item, index) => {
-    //       if (!array[array.length + index]) array[array.length + index] = {};
-    //       array[array.length + index][key] = item;
-    //     });
-    //   }
-    // }
+    if (include_core_metadata_download) {
+      const maxRowsMappedData = Object.values(mappedData).reduce((a, b) =>
+        a.length > b.length ? a : b,
+      ).length;
+
+      Object.entries(
+        spreadCoreMetadata(core_metadata, maxRowsMappedData),
+      ).forEach(([key, items]) => {
+        items.forEach((item, index) => {
+          if (!array[index]) array[index] = {};
+          array[index][key] = item;
+        });
+      });
+    }
+
     const csv = convertToCSV(array, readme);
     exportCSVFile(csv, title);
   };
