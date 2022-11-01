@@ -80,7 +80,7 @@ const StyleLayoutPanel = (props, { localize: _ }) => {
 
   const numbersFormat = [
     { label: _('Default'), value: '' },
-    { label: _('No Digit'), value: ',.1s' },
+    { label: _('No Digit'), value: ',.0f' },
     { label: _('1 Digit'), value: ',.1f' },
     { label: _('2 Digits'), value: ',.2f' },
     { label: _('3 Digits'), value: ',.3f' },
