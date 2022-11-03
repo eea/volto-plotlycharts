@@ -11,7 +11,7 @@ export default (config) => {
     group: 'plotly',
     view: View,
     edit: Edit,
-    restricted: false,
+    restricted: true,
     mostUsed: false,
     sidebarTab: 1,
     security: {

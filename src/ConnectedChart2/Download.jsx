@@ -114,6 +114,44 @@ function exportCSVFile(csv, title = 'data') {
   }
 }
 
+const spreadCoreMetadata = (core_metadata, maxRowsProvData) => {
+  let spread_metadata = {};
+  Object.keys(core_metadata).forEach((key) => {
+    if (core_metadata[key].length > 0) {
+      core_metadata[key].forEach((item) => {
+        Object.keys(item).forEach((subkey) => {
+          if (!spread_metadata['Core metadata']) {
+            spread_metadata['Core metadata'] = [' '];
+          } else {
+            spread_metadata['Core metadata'].push(' ');
+          }
+          if (!spread_metadata[`${key}_${subkey}`]) {
+            spread_metadata[`${key}_${subkey}`] = [item[subkey]];
+          } else {
+            spread_metadata[`${key}_${subkey}`].push(item[subkey]);
+          }
+        });
+      });
+    }
+  });
+
+  const coreMaxRows = Object.values(spread_metadata).reduce((a, b) =>
+    a.length > b.length ? a : b,
+  ).length;
+
+  const maxRows = maxRowsProvData > coreMaxRows ? maxRowsProvData : coreMaxRows;
+
+  let evenMatrix = spread_metadata;
+  Object.entries(evenMatrix).forEach(([key, items]) => {
+    if (items.length < maxRows) {
+      for (let i = items.length; i < maxRows; i++) {
+        items.push('');
+      }
+    }
+  });
+  return evenMatrix;
+};
+
 const Download = (props) => {
   const {
     // sources,
@@ -123,62 +161,90 @@ const Download = (props) => {
     provider_metadata,
     providers_data,
     providers_metadata,
+    core_metadata,
+    include_core_metadata_download,
   } = props;
+  const handleDownloadData = () => {
+    let array = [];
+    let readme = provider_metadata?.readme ? [provider_metadata?.readme] : [];
+    const mappedData = {
+      ...provider_data,
+    };
+    Object.entries(mappedData).forEach(([key, items]) => {
+      items.forEach((item, index) => {
+        if (!array[index]) array[index] = {};
+        array[index][key] = item;
+      });
+    });
+    const hasCoreMetadata =
+      core_metadata?.data_provenance?.length > 0 ||
+      core_metadata?.other_organisation?.length > 0 ||
+      core_metadata?.temporal_coverage?.length > 0;
+
+    if (include_core_metadata_download && hasCoreMetadata) {
+      const maxRowsMappedData = Object.values(mappedData).reduce((a, b) =>
+        a.length > b.length ? a : b,
+      ).length;
+
+      Object.entries(
+        spreadCoreMetadata(core_metadata, maxRowsMappedData),
+      ).forEach(([key, items]) => {
+        items.forEach((item, index) => {
+          if (!array[index]) array[index] = {};
+          array[index][key] = item;
+        });
+      });
+    }
+
+    const csv = convertToCSV(array, readme);
+    exportCSVFile(csv, title);
+  };
+
+  const handleDownloadMultipleData = () => {
+    let array = [];
+    let readme = [];
+    Object.keys(providers_data).forEach((pKey, pIndex) => {
+      if (!array[pIndex]) array[pIndex] = [];
+      Object.entries(providers_data[pKey]).forEach(([key, items]) => {
+        items.forEach((item, index) => {
+          if (!array[pIndex][index]) array[pIndex][index] = {};
+          array[pIndex][index][key] = item;
+          index++;
+        });
+      });
+    });
+    Object.keys(providers_metadata).forEach((pKey) => {
+      if (providers_metadata[pKey].readme) {
+        readme.push(providers_metadata[pKey].readme);
+      }
+    });
+    const csv = convertMatrixToCSV(array, readme);
+    exportCSVFile(csv, title);
+  };
 
   return (
     <>
-      {provider_data && (
-        <img
-          className="discreet plotly-download-button"
-          title="Download data"
-          alt="Download data"
-          onClick={() => {
-            let array = [];
-            let readme = provider_metadata?.readme
-              ? [provider_metadata?.readme]
-              : [];
-            Object.entries(provider_data).forEach(([key, items]) => {
-              items.forEach((item, index) => {
-                if (!array[index]) array[index] = {};
-                array[index][key] = item;
-              });
-            });
-            const csv = convertToCSV(array, readme);
-            exportCSVFile(csv, title);
-          }}
-          src={downloadSVG}
-        />
-      )}
+      <div className="plotly-download-container">
+        {provider_data && (
+          <img
+            className="discreet plotly-download-button"
+            title="Download data"
+            alt="Download data"
+            onClick={() => handleDownloadData()}
+            src={downloadSVG}
+          />
+        )}
 
-      {providers_data && (
-        <img
-          className="discreet plotly-download-button"
-          title="Download data"
-          alt="Download data"
-          onClick={() => {
-            let array = [];
-            let readme = [];
-            Object.keys(providers_data).forEach((pKey, pIndex) => {
-              if (!array[pIndex]) array[pIndex] = [];
-              Object.entries(providers_data[pKey]).forEach(([key, items]) => {
-                items.forEach((item, index) => {
-                  if (!array[pIndex][index]) array[pIndex][index] = {};
-                  array[pIndex][index][key] = item;
-                  index++;
-                });
-              });
-            });
-            Object.keys(providers_metadata).forEach((pKey) => {
-              if (providers_metadata[pKey].readme) {
-                readme.push(providers_metadata[pKey].readme);
-              }
-            });
-            const csv = convertMatrixToCSV(array, readme);
-            exportCSVFile(csv, title);
-          }}
-          src={downloadSVG}
-        />
-      )}
+        {providers_data && (
+          <img
+            className="discreet plotly-download-button"
+            title="Download data"
+            alt="Download data"
+            onClick={() => handleDownloadMultipleData()}
+            src={downloadSVG}
+          />
+        )}
+      </div>
     </>
   );
 };

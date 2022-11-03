@@ -14,15 +14,18 @@ const Schema = (props) => {
           'hover_format_xy',
           'show_sources',
           'download_button',
+          ...(props.data.download_button
+            ? ['include_core_metadata_download']
+            : []),
         ],
       },
-
       {
         id: 'data_query',
         title: 'Data query',
         fields: [
-          'enable_queries',
-          ...(props.data.enable_queries ? ['data_query_params'] : []),
+          'has_data_query_by_context',
+          'has_data_query_by_provider',
+          'data_query',
         ],
       },
     ],
@@ -59,21 +62,28 @@ const Schema = (props) => {
         title: 'Toggle download',
         type: 'boolean',
       },
+      include_core_metadata_download: {
+        title: 'Download core metadata',
+        description: 'Include core metadata in the dowloaded CSV',
+        type: 'boolean',
+      },
       show_sources: {
         title: 'Toggle sources',
         type: 'boolean',
       },
-      enable_queries: {
-        title: 'Enable queries',
-        description:
-          'Will import Criteria from content-type and try to query chart fields.',
+      has_data_query_by_context: {
+        title: 'Use queries from context',
+        description: 'Will use Criteria queries from context (this page)',
         type: 'boolean',
       },
-      data_query_params: {
-        title: 'Query parameters',
-        description:
-          'When using page level parameters to filter the chart, please map those to the corresponding field name from the chart service',
-        widget: 'data_query_widget',
+      has_data_query_by_provider: {
+        title: 'Use queries from visualization',
+        description: 'Will use Criteria queries from visualization',
+        type: 'boolean',
+      },
+      data_query: {
+        title: 'Query',
+        widget: 'data_query',
       },
     },
 

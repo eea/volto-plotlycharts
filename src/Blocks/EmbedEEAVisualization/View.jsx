@@ -58,6 +58,8 @@ const View = (props) => {
                 use_live_data: true,
                 vis_url: data.vis_url,
                 with_sources: data.with_sources,
+                include_core_metadata_download:
+                  data.include_core_metadata_download,
               }}
               hoverFormatXY={data.hover_format_xy}
               withSources={true}
