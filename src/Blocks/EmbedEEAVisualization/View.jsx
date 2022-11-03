@@ -24,6 +24,7 @@ const View = (props) => {
       computer: hasText ? 8 : 12,
     },
   };
+  console.log(data, 'da  ');
 
   return (
     <div className="embed-visualization">
@@ -57,12 +58,12 @@ const View = (props) => {
                 has_data_query_by_provider: data.has_data_query_by_provider,
                 use_live_data: true,
                 vis_url: data.vis_url,
-                with_sources: data.with_sources,
+                with_sources: data.show_sources,
                 include_core_metadata_download:
                   data.include_core_metadata_download,
               }}
               hoverFormatXY={data.hover_format_xy}
-              withSources={true}
+              withSources={data.show_sources}
               width={data.width}
               height={data.height}
             />

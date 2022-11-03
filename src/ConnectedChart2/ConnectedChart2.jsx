@@ -33,7 +33,7 @@ function ConnectedChart2(props) {
     temporal_coverage,
   } = props;
   const use_live_data = props.data?.use_live_data ?? true;
-  const with_sources = props.data?.with_sources ?? true;
+  const with_sources = props?.withSources ?? false;
 
   const chartData =
     visualization?.chartData || visualization_data?.chartData || {};
