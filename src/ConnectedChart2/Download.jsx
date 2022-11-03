@@ -176,8 +176,12 @@ const Download = (props) => {
         array[index][key] = item;
       });
     });
+    const hasCoreMetadata =
+      core_metadata?.data_provenance?.length > 0 ||
+      core_metadata?.other_organisation?.length > 0 ||
+      core_metadata?.temporal_coverage?.length > 0;
 
-    if (include_core_metadata_download) {
+    if (include_core_metadata_download && hasCoreMetadata) {
       const maxRowsMappedData = Object.values(mappedData).reduce((a, b) =>
         a.length > b.length ? a : b,
       ).length;
