@@ -24,8 +24,6 @@ const View = (props) => {
       computer: hasText ? 8 : 12,
     },
   };
-  console.log(data, 'da  ');
-
   return (
     <div className="embed-visualization">
       <Grid container>
