@@ -59,6 +59,10 @@ const View = (props) => {
                 with_sources: data.show_sources,
                 include_core_metadata_download:
                   data.include_core_metadata_download,
+                include_sources_download: data?.include_sources_download,
+                include_other_org_download: data?.include_other_org_download,
+                include_temporal_coverage_download:
+                  data?.include_temporal_coverage_download,
               }}
               hoverFormatXY={data.hover_format_xy}
               withSources={data.show_sources}

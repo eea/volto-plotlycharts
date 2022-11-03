@@ -2,6 +2,8 @@ import React from 'react';
 import { SidebarPortal } from '@plone/volto/components';
 import BlockDataForm from '@plone/volto/components/manage/Form/BlockDataForm';
 import ConnectedChart2 from '@eeacms/volto-plotlycharts/ConnectedChart2';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
 
 import '@eeacms/volto-plotlycharts/less/visualization.less';
 import Schema from './schema';
@@ -24,7 +26,6 @@ const Edit = (props) => {
       });
     }
   }, [block, data, onChangeBlock]);
-
   return (
     <>
       <ConnectedChart2
@@ -39,6 +40,10 @@ const Edit = (props) => {
           vis_url: data.vis_url,
           with_sources: data.show_sources,
           include_core_metadata_download: data.include_core_metadata_download,
+          include_sources_download: data?.include_sources_download,
+          include_other_org_download: data?.include_other_org_download,
+          include_temporal_coverage_download:
+            data?.include_temporal_coverage_download,
         }}
         hoverFormatXY={data.hover_format_xy}
         withSources={data.show_sources}
@@ -64,4 +69,18 @@ const Edit = (props) => {
   );
 };
 
-export default Edit;
+export default compose(
+  connect(
+    (state, props) => ({
+      //mapped core metadata data to props. Include more if needed
+      temporal_coverage:
+        state.content.subrequests?.[props.id]?.data?.temporal_coverage,
+      other_organisations:
+        state.content.subrequests?.[props.id]?.data?.other_organisations,
+      data_provenance:
+        state.content.subrequests?.[props.id]?.data?.data_provenance,
+    }),
+    {},
+  ),
+  //add extra hoc here
+)(Edit);

@@ -136,9 +136,15 @@ function ConnectedChart2(props) {
             props.data.include_core_metadata_download
           }
           core_metadata={{
-            data_provenance: data_provenance?.data,
-            other_organisations,
-            temporal_coverage: temporal_coverage?.temporal,
+            data_provenance: props.data?.include_sources_download
+              ? data_provenance?.data
+              : '',
+            other_organisations: props.data?.include_other_org_download
+              ? other_organisations
+              : '',
+            temporal_coverage: props.data?.include_temporal_coverage_download
+              ? temporal_coverage?.temporal
+              : '',
           }}
         />
       )}

@@ -1,6 +1,17 @@
 import React from 'react';
 
 const Schema = (props) => {
+  const hasSources =
+    props.data_provenance &&
+    props.data_provenance.data &&
+    props.data_provenance.data.length > 0;
+  const hasOtherOrg =
+    props.other_organisations && props.other_organisations.length > 0;
+  const hasTemporalCoverage =
+    props.temporal_coverage &&
+    props.temporal_coverage.temporal &&
+    props.temporal_coverage.temporal.length > 0;
+
   return {
     title: 'Embed EEA visualization',
 
@@ -16,6 +27,16 @@ const Schema = (props) => {
           'download_button',
           ...(props.data.download_button
             ? ['include_core_metadata_download']
+            : []),
+          ...(props.data.download_button &&
+          props.data.include_core_metadata_download
+            ? [
+                ...(hasSources ? ['include_sources_download'] : []),
+                ...(hasOtherOrg ? ['include_other_org_download'] : []),
+                ...(hasTemporalCoverage
+                  ? ['include_temporal_coverage_download']
+                  : []),
+              ]
             : []),
         ],
       },
@@ -65,6 +86,21 @@ const Schema = (props) => {
       include_core_metadata_download: {
         title: 'Download core metadata',
         description: 'Include core metadata in the dowloaded CSV',
+        type: 'boolean',
+      },
+      include_sources_download: {
+        title: 'Download sources',
+        description: 'Include sources in the dowloaded CSV',
+        type: 'boolean',
+      },
+      include_other_org_download: {
+        title: 'Download other organisations',
+        description: 'Include other organisations in the dowloaded CSV',
+        type: 'boolean',
+      },
+      include_temporal_coverage_download: {
+        title: 'Download temporal coverage',
+        description: 'Include temporal coverage in the dowloaded CSV',
         type: 'boolean',
       },
       show_sources: {
