@@ -29,9 +29,12 @@ function ConnectedChart2(props) {
     data_provenance,
     height = 450,
     id,
+    other_organisations,
+    temporal_coverage,
   } = props;
   const use_live_data = props.data?.use_live_data ?? true;
   const with_sources = props.data?.with_sources ?? true;
+
   const chartData =
     visualization?.chartData || visualization_data?.chartData || {};
 
@@ -129,6 +132,14 @@ function ConnectedChart2(props) {
           }
           provider_data={provider_data}
           provider_metadata={provider_metadata}
+          include_core_metadata_download={
+            props.data.include_core_metadata_download
+          }
+          core_metadata={{
+            data_provenance: data_provenance?.data,
+            other_organisations,
+            temporal_coverage: temporal_coverage?.temporal,
+          }}
         />
       )}
       {with_sources && (
@@ -138,7 +149,7 @@ function ConnectedChart2(props) {
           data_provenance.data.length > 0 ? (
             <SourcesWidget data={data_provenance.data} />
           ) : (
-            <p>Data provenance is not set for visualization used or page</p>
+            <p>Data provenance is not set for visualization</p>
           )}
         </>
       )}
@@ -149,6 +160,11 @@ function ConnectedChart2(props) {
 export default compose(
   connect(
     (state, props) => ({
+      //mapped core metadata data to props. Include more if needed
+      temporal_coverage:
+        state.content.subrequests?.[props.id]?.data?.temporal_coverage,
+      other_organisations:
+        state.content.subrequests?.[props.id]?.data?.other_organisations,
       data_provenance:
         state.content.subrequests?.[props.id]?.data?.data_provenance,
     }),

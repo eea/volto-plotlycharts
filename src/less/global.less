@@ -60,16 +60,26 @@ body.has-sidebar .ui.modal.chart-editor-modal {
   display: none;
 }
 
-.plotly-download-button {
+.plotly-download-container {
   position: absolute;
   top: 1rem;
   right: 1rem;
-  width: 30px !important;
-  cursor: pointer;
+  display: flex;
+  overflow: hidden;
+  align-items: center;
 }
 
-.plotly-download-button path {
-  fill: red;
+.plotly-download-container:hover {
+  cursor: pointer;
+
+  .plotly-download-button {
+    filter: invert(27%) sepia(4%) saturate(2878%) hue-rotate(346deg)
+      brightness(104%) contrast(97%);
+  }
+}
+
+.plotly-download-button {
+  width: 30px !important;
 }
 
 @media print {
