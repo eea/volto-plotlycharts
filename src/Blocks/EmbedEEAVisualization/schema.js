@@ -44,11 +44,12 @@ const Schema = (props) => {
       {
         id: 'default',
         title: 'Default',
+        fields: ['vis_url', 'height', 'hover_format_xy', 'show_sources'],
+      },
+      {
+        id: 'download',
+        title: 'Download',
         fields: [
-          'vis_url',
-          'height',
-          'hover_format_xy',
-          'show_sources',
           'download_button',
           ...(props.data.download_button
             ? ['include_core_metadata_download']
