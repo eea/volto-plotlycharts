@@ -14,6 +14,22 @@ import SourcesWidget from './Sources';
 
 const LoadablePlotly = loadable(() => import('react-plotly.js'));
 
+const filterItemsIds = (items, allowedIds) => {
+  const newItems =
+    items && items.length > 0
+      ? items
+          .map((item) => {
+            var newItem = {};
+            allowedIds.forEach((id) => {
+              newItem[id] = item[id];
+            });
+            return newItem;
+          })
+          .filter((value) => Object.keys(value).length !== 0)
+      : [];
+  return newItems;
+};
+
 /*
  * ConnectedChart
  */
@@ -26,14 +42,15 @@ function ConnectedChart2(props) {
     visualization,
     visualization_data,
     width,
-    data_provenance,
     height = 450,
     id,
+    //core-metadata data
+    data_provenance,
     other_organisations,
     temporal_coverage,
   } = props;
   const use_live_data = props.data?.use_live_data ?? true;
-  const with_sources = props.data?.with_sources ?? true;
+  const with_sources = props?.withSources ?? false;
 
   const chartData =
     visualization?.chartData || visualization_data?.chartData || {};
@@ -132,13 +149,29 @@ function ConnectedChart2(props) {
           }
           provider_data={provider_data}
           provider_metadata={provider_metadata}
-          include_core_metadata_download={
-            props.data.include_core_metadata_download
-          }
           core_metadata={{
-            data_provenance: data_provenance?.data,
-            other_organisations,
-            temporal_coverage: temporal_coverage?.temporal,
+            data_provenance: props.data?.include_sources_download
+              ? filterItemsIds(
+                  data_provenance?.data,
+                  props.data?.include_sources_download,
+                )
+              : '',
+            other_organisations: props.data?.include_other_org_download
+              ? filterItemsIds(
+                  other_organisations,
+                  props.data?.include_other_org_download,
+                )
+              : '',
+            temporal_coverage:
+              props.data?.include_temporal_coverage_download &&
+              props.data?.include_temporal_coverage_download.length > 0 &&
+              temporal_coverage?.temporal &&
+              temporal_coverage?.temporal?.length > 0
+                ? filterItemsIds(
+                    temporal_coverage?.temporal,
+                    props.data?.include_temporal_coverage_download,
+                  )
+                : '',
           }}
         />
       )}

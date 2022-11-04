@@ -24,7 +24,6 @@ const View = (props) => {
       computer: hasText ? 8 : 12,
     },
   };
-
   return (
     <div className="embed-visualization">
       <Grid container>
@@ -57,12 +56,14 @@ const View = (props) => {
                 has_data_query_by_provider: data.has_data_query_by_provider,
                 use_live_data: true,
                 vis_url: data.vis_url,
-                with_sources: data.with_sources,
-                include_core_metadata_download:
-                  data.include_core_metadata_download,
+                with_sources: data.show_sources,
+                include_sources_download: data?.include_sources_download,
+                include_other_org_download: data?.include_other_org_download,
+                include_temporal_coverage_download:
+                  data?.include_temporal_coverage_download,
               }}
               hoverFormatXY={data.hover_format_xy}
-              withSources={true}
+              withSources={data.show_sources}
               width={data.width}
               height={data.height}
             />
