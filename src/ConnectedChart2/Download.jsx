@@ -114,16 +114,16 @@ function exportCSVFile(csv, title = 'data') {
   }
 }
 
-const spreadCoreMetadata = (core_metadata, maxRowsProvData) => {
+const spreadCoreMetadata = (core_metadata) => {
   let spread_metadata = {};
   Object.keys(core_metadata).forEach((key) => {
     if (core_metadata[key].length > 0) {
       core_metadata[key].forEach((item) => {
         Object.keys(item).forEach((subkey) => {
-          if (!spread_metadata['Core metadata']) {
-            spread_metadata['Core metadata'] = [' '];
+          if (!spread_metadata['EEA Core Metadata']) {
+            spread_metadata['EEA Core Metadata'] = [' '];
           } else {
-            spread_metadata['Core metadata'].push(' ');
+            spread_metadata['EEA Core Metadata'].push(' ');
           }
           if (!spread_metadata[`${key}_${subkey}`]) {
             spread_metadata[`${key}_${subkey}`] = [item[subkey]];
@@ -139,12 +139,10 @@ const spreadCoreMetadata = (core_metadata, maxRowsProvData) => {
     a.length > b.length ? a : b,
   ).length;
 
-  const maxRows = maxRowsProvData > coreMaxRows ? maxRowsProvData : coreMaxRows;
-
   let evenMatrix = spread_metadata;
   Object.entries(evenMatrix).forEach(([key, items]) => {
-    if (items.length < maxRows) {
-      for (let i = items.length; i < maxRows; i++) {
+    if (items.length < coreMaxRows) {
+      for (let i = items.length; i < coreMaxRows; i++) {
         items.push('');
       }
     }
@@ -162,10 +160,11 @@ const Download = (props) => {
     providers_data,
     providers_metadata,
     core_metadata,
-    include_core_metadata_download,
   } = props;
+
   const handleDownloadData = () => {
     let array = [];
+    let core_metadata_array = [];
     let readme = provider_metadata?.readme ? [provider_metadata?.readme] : [];
     const mappedData = {
       ...provider_data,
@@ -181,22 +180,22 @@ const Download = (props) => {
       core_metadata?.other_organisation?.length > 0 ||
       core_metadata?.temporal_coverage?.length > 0;
 
-    if (include_core_metadata_download && hasCoreMetadata) {
-      const maxRowsMappedData = Object.values(mappedData).reduce((a, b) =>
-        a.length > b.length ? a : b,
-      ).length;
-
-      Object.entries(
-        spreadCoreMetadata(core_metadata, maxRowsMappedData),
-      ).forEach(([key, items]) => {
-        items.forEach((item, index) => {
-          if (!array[index]) array[index] = {};
-          array[index][key] = item;
-        });
-      });
+    if (hasCoreMetadata) {
+      Object.entries(spreadCoreMetadata(core_metadata)).forEach(
+        ([key, items]) => {
+          items.forEach((item, index) => {
+            if (!core_metadata_array[index]) core_metadata_array[index] = {};
+            core_metadata_array[index][key] = item;
+          });
+        },
+      );
     }
 
-    const csv = convertToCSV(array, readme);
+    const data_csv = convertToCSV(array, readme);
+    const core_metadata_csv = hasCoreMetadata
+      ? convertToCSV(core_metadata_array, readme)
+      : '';
+    const csv = hasCoreMetadata ? data_csv + core_metadata_csv : data_csv;
     exportCSVFile(csv, title);
   };
 

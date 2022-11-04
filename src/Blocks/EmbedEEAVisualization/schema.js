@@ -17,11 +17,15 @@ const makeMetadataOptions = (data) => {
 const Schema = (props) => {
   const hasSources =
     props.data_provenance &&
+    props.data.download_button &&
     props.data_provenance.data &&
     props.data_provenance.data.length > 0;
   const hasOtherOrg =
-    props.other_organisations && props.other_organisations.length > 0;
+    props.data.download_button &&
+    props.other_organisations &&
+    props.other_organisations.length > 0;
   const hasTemporalCoverage =
+    props.data.download_button &&
     props.temporal_coverage &&
     props.temporal_coverage.temporal &&
     props.temporal_coverage.temporal.length > 0;
@@ -51,18 +55,10 @@ const Schema = (props) => {
         title: 'Download',
         fields: [
           'download_button',
-          ...(props.data.download_button
-            ? ['include_core_metadata_download']
-            : []),
-          ...(props.data.download_button &&
-          props.data.include_core_metadata_download
-            ? [
-                ...(hasSources ? ['include_sources_download'] : []),
-                ...(hasOtherOrg ? ['include_other_org_download'] : []),
-                ...(hasTemporalCoverage
-                  ? ['include_temporal_coverage_download']
-                  : []),
-              ]
+          ...(hasSources ? ['include_sources_download'] : []),
+          ...(hasOtherOrg ? ['include_other_org_download'] : []),
+          ...(hasTemporalCoverage
+            ? ['include_temporal_coverage_download']
             : []),
         ],
       },
@@ -107,11 +103,6 @@ const Schema = (props) => {
       },
       download_button: {
         title: 'Toggle download',
-        type: 'boolean',
-      },
-      include_core_metadata_download: {
-        title: 'Download core metadata',
-        description: 'Include core metadata in the dowloaded CSV',
         type: 'boolean',
       },
       include_sources_download: {

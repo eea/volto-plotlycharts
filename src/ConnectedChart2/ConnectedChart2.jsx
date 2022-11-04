@@ -15,13 +15,18 @@ import SourcesWidget from './Sources';
 const LoadablePlotly = loadable(() => import('react-plotly.js'));
 
 const filterItemsIds = (items, allowedIds) => {
-  const newItems = items.map((item) => {
-    var newItem = {};
-    allowedIds.forEach((id) => {
-      newItem[id] = item[id];
-    });
-    return newItem;
-  });
+  const newItems =
+    items && items.length > 0
+      ? items
+          .map((item) => {
+            var newItem = {};
+            allowedIds.forEach((id) => {
+              newItem[id] = item[id];
+            });
+            return newItem;
+          })
+          .filter((value) => Object.keys(value).length !== 0)
+      : [];
   return newItems;
 };
 
@@ -144,9 +149,6 @@ function ConnectedChart2(props) {
           }
           provider_data={provider_data}
           provider_metadata={provider_metadata}
-          include_core_metadata_download={
-            props.data.include_core_metadata_download
-          }
           core_metadata={{
             data_provenance: props.data?.include_sources_download
               ? filterItemsIds(
