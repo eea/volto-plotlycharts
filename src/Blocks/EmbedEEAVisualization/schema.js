@@ -1,5 +1,19 @@
 import React from 'react';
 
+const makeMetadataOptions = (data) => {
+  if (data && data.length > 0) {
+    return data
+      .map((item) => [...Object.keys(item)]) //get all keys, should be the same for all
+      .flat(1) // flatten all arrays
+      .reduce(function (a, b) {
+        if (a.indexOf(b) < 0) a.push(b);
+        return a;
+      }, []) //remove duplicates. We need only one set of keys
+      .map((item) => [item, item]); //map them for choices
+  }
+  return [];
+};
+
 const Schema = (props) => {
   const hasSources =
     props.data_provenance &&
@@ -12,6 +26,17 @@ const Schema = (props) => {
     props.temporal_coverage.temporal &&
     props.temporal_coverage.temporal.length > 0;
 
+  const data_provenance_options = makeMetadataOptions(
+    props?.data_provenance?.data,
+  );
+
+  const temporal_coverage_options = makeMetadataOptions(
+    props?.temporal_coverage?.temporal,
+  );
+
+  const other_organisations_options = makeMetadataOptions(
+    props?.other_organisations,
+  );
   return {
     title: 'Embed EEA visualization',
 
@@ -91,17 +116,20 @@ const Schema = (props) => {
       include_sources_download: {
         title: 'Download sources',
         description: 'Include sources in the dowloaded CSV',
-        type: 'boolean',
+        choices: data_provenance_options,
+        isMulti: true,
       },
       include_other_org_download: {
         title: 'Download other organisations',
         description: 'Include other organisations in the dowloaded CSV',
-        type: 'boolean',
+        choices: other_organisations_options,
+        isMulti: true,
       },
       include_temporal_coverage_download: {
         title: 'Download temporal coverage',
         description: 'Include temporal coverage in the dowloaded CSV',
-        type: 'boolean',
+        choices: temporal_coverage_options,
+        isMulti: true,
       },
       show_sources: {
         title: 'Toggle sources',

@@ -14,6 +14,17 @@ import SourcesWidget from './Sources';
 
 const LoadablePlotly = loadable(() => import('react-plotly.js'));
 
+const filterItemsIds = (items, allowedIds) => {
+  const newItems = items.map((item) => {
+    var newItem = {};
+    allowedIds.forEach((id) => {
+      newItem[id] = item[id];
+    });
+    return newItem;
+  });
+  return newItems;
+};
+
 /*
  * ConnectedChart
  */
@@ -26,9 +37,10 @@ function ConnectedChart2(props) {
     visualization,
     visualization_data,
     width,
-    data_provenance,
     height = 450,
     id,
+    //core-metadata data
+    data_provenance,
     other_organisations,
     temporal_coverage,
   } = props;
@@ -137,14 +149,27 @@ function ConnectedChart2(props) {
           }
           core_metadata={{
             data_provenance: props.data?.include_sources_download
-              ? data_provenance?.data
+              ? filterItemsIds(
+                  data_provenance?.data,
+                  props.data?.include_sources_download,
+                )
               : '',
             other_organisations: props.data?.include_other_org_download
-              ? other_organisations
+              ? filterItemsIds(
+                  other_organisations,
+                  props.data?.include_other_org_download,
+                )
               : '',
-            temporal_coverage: props.data?.include_temporal_coverage_download
-              ? temporal_coverage?.temporal
-              : '',
+            temporal_coverage:
+              props.data?.include_temporal_coverage_download &&
+              props.data?.include_temporal_coverage_download.length > 0 &&
+              temporal_coverage?.temporal &&
+              temporal_coverage?.temporal?.length > 0
+                ? filterItemsIds(
+                    temporal_coverage?.temporal,
+                    props.data?.include_temporal_coverage_download,
+                  )
+                : '',
           }}
         />
       )}
