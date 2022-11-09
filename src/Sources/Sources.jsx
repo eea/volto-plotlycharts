@@ -4,12 +4,14 @@ import { UniversalLink, Icon } from '@plone/volto/components';
 import rightKeySVG from '@plone/volto/icons/right-key.svg';
 import downKeySVG from '@plone/volto/icons/down-key.svg';
 
+import './style.css';
+
 const SourcesWidget = ({ data }) => {
   const [expand, setExpand] = React.useState(true);
 
   return (
     <div>
-      <button className="legend-action" onClick={() => setExpand(!expand)}>
+      <a className="embed-sources-header" onClick={() => setExpand(!expand)}>
         <h3>
           <Icon
             name={expand ? downKeySVG : rightKeySVG}
@@ -18,17 +20,17 @@ const SourcesWidget = ({ data }) => {
           />
           Sources:
         </h3>
-      </button>
+      </a>
       {expand && (
         <ul>
           {data.map((param, i) => (
             <li key={i}>
-              <div className="map_source_param_container">
-                <UniversalLink className="map_source_title" href={param.link}>
+              <div className="embed-source-param">
+                <UniversalLink className="embed-sources-param-title" href={param.link}>
                   {param.title}
                 </UniversalLink>
                 ,
-                <span className="map_source_description">
+                <span className="embed-sources-param-description">
                   {param.organisation}
                 </span>
               </div>
