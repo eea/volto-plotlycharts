@@ -1,3 +1,6 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
 import { UniversalLink, Icon } from '@plone/volto/components';
 
@@ -24,16 +27,17 @@ const SourcesWidget = ({ data }) => {
       {expand && (
         <ul>
           {data.map((param, i) => (
-            <li key={i}>
-              <div className="embed-source-param">
-                <UniversalLink className="embed-sources-param-title" href={param.link}>
-                  {param.title}
-                </UniversalLink>
-                ,
-                <span className="embed-sources-param-description">
-                  {param.organisation}
-                </span>
-              </div>
+            <li key={i} className="embed-source-param">
+              <UniversalLink
+                className="embed-sources-param-title"
+                href={param.link}
+              >
+                {param.title}
+              </UniversalLink>
+              ,
+              <span className="embed-sources-param-description">
+                {param.organisation}
+              </span>
             </li>
           ))}
         </ul>
