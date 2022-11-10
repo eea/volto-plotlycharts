@@ -9,8 +9,8 @@ import { connectBlockToVisualization } from '@eeacms/volto-plotlycharts/hocs';
 import { getContent } from '@plone/volto/actions';
 
 import config from '@plone/volto/registry';
-import Download from './Download';
-import SourcesWidget from './Sources';
+import { Download } from '../Download';
+import { Sources } from '../Sources';
 
 const LoadablePlotly = loadable(() => import('react-plotly.js'));
 
@@ -180,7 +180,7 @@ function ConnectedChart2(props) {
           {data_provenance &&
           data_provenance.data &&
           data_provenance.data.length > 0 ? (
-            <SourcesWidget data={data_provenance.data} />
+            <Sources data={data_provenance.data} />
           ) : (
             <p>Data provenance is not set for visualization</p>
           )}
