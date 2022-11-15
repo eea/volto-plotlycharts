@@ -34,8 +34,6 @@ const applyConfig = (config) => {
     ...addonReducers,
   };
 
-  config.widgets.widget.data_query_widget = DataQueryWidget;
-
   return [
     installEmbedVisualization,
     //first one here ^^ will get old and be removed in time TODO:
