@@ -51,8 +51,6 @@ const Edit = (props) => {
           data_query: data.data_query,
           download_button: data.download_button,
           has_data_query_by_context: data.has_data_query_by_context,
-          has_data_query_by_provider: data.has_data_query_by_provider,
-          use_live_data: true,
           vis_url: data.vis_url,
           with_sources: data.show_sources,
           include_sources_download: data?.include_sources_download,

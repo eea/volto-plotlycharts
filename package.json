@@ -25,11 +25,11 @@
     "@eeacms/volto-block-style"
   ],
   "dependencies": {
+    "@eeacms/volto-block-style": "4.1.0",
     "@eeacms/volto-datablocks": "*",
     "@eeacms/volto-matomo": "*",
     "@plone/scripts": "*",
     "plotly.js": "^2.9.0",
-    "@eeacms/volto-block-style": "4.1.0",
     "react-chart-editor": "0.45.0",
     "react-colorscales": "0.7.3",
     "react-inspector": "5.1.1",
@@ -37,8 +37,8 @@
     "react-plotly.js": "2.5.1"
   },
   "devDependencies": {
-    "@plone/scripts": "*",
     "@cypress/code-coverage": "^3.10.0",
+    "@plone/scripts": "*",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "md5": "^2.3.0"
   },

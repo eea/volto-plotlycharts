@@ -130,7 +130,8 @@ const Schema = (props) => {
       },
       data_query: {
         title: 'Block Query',
-        description: 'Query data on this block. Will override context queries',
+        description:
+          'Query data on this block. If context queries are present, block queries will be overridden.',
         widget: 'data_query',
       },
     },

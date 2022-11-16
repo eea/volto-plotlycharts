@@ -40,7 +40,6 @@ function ConnectedChart2(props) {
     provider_data,
     provider_metadata,
     visualization,
-    visualization_data,
     width,
     height = 450,
     id,
@@ -49,7 +48,6 @@ function ConnectedChart2(props) {
     other_organisations,
     temporal_coverage,
   } = props;
-  const use_live_data = props.data?.use_live_data ?? true;
   const with_sources = props?.withSources ?? false;
 
   const chartData = visualization || {};

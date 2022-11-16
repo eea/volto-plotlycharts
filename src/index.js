@@ -1,5 +1,5 @@
 import { VisualizationView } from './Views';
-import { DataQueryWidget, VisualizationWidget } from './Widgets';
+import { VisualizationWidget } from './Widgets';
 import installEmbedVisualization from './Blocks/EmbedVisualization';
 
 //TODO: this will replace the current embed viz
