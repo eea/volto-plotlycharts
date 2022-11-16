@@ -65,11 +65,7 @@ const Schema = (props) => {
       {
         id: 'data_query',
         title: 'Data query',
-        fields: [
-          'has_data_query_by_context',
-          'has_data_query_by_provider',
-          'data_query',
-        ],
+        fields: ['has_data_query_by_context', 'data_query'],
       },
     ],
 
@@ -132,13 +128,10 @@ const Schema = (props) => {
         description: 'Will use Criteria queries from context (this page)',
         type: 'boolean',
       },
-      has_data_query_by_provider: {
-        title: 'Use queries from visualization',
-        description: 'Will use Criteria queries from visualization',
-        type: 'boolean',
-      },
       data_query: {
-        title: 'Query',
+        title: 'Block Query',
+        description:
+          'Query data on this block. If context queries are present, block queries will be overridden.',
         widget: 'data_query',
       },
     },

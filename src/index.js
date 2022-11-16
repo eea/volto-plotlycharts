@@ -1,5 +1,5 @@
 import { VisualizationView } from './Views';
-import { DataQueryWidget, VisualizationWidget } from './Widgets';
+import { VisualizationWidget } from './Widgets';
 import installEmbedVisualization from './Blocks/EmbedVisualization';
 
 //TODO: this will replace the current embed viz
@@ -33,8 +33,6 @@ const applyConfig = (config) => {
     ...config.addonReducers,
     ...addonReducers,
   };
-
-  config.widgets.widget.data_query_widget = DataQueryWidget;
 
   return [
     installEmbedVisualization,

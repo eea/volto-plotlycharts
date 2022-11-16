@@ -40,7 +40,6 @@ function ConnectedChart2(props) {
     provider_data,
     provider_metadata,
     visualization,
-    visualization_data,
     width,
     height = 450,
     id,
@@ -49,11 +48,9 @@ function ConnectedChart2(props) {
     other_organisations,
     temporal_coverage,
   } = props;
-  const use_live_data = props.data?.use_live_data ?? true;
   const with_sources = props?.withSources ?? false;
 
-  const chartData =
-    visualization?.chartData || visualization_data?.chartData || {};
+  const chartData = visualization || {};
 
   React.useEffect(() => {
     if (props.data?.vis_url) {
@@ -103,11 +100,12 @@ function ConnectedChart2(props) {
         '',
     };
   }
-
-  let data =
-    provider_data && use_live_data
-      ? updateChartDataFromProvider(chartData.data || [], provider_data)
-      : chartData.data || [];
+  // console.log(provider_data, ' provider_data');
+  // console.log(props.data.data_query, ' props.data.data_query');
+  // console.log(chartData, ' chartData');
+  let data = provider_data
+    ? updateChartDataFromProvider(chartData.data || [], provider_data)
+    : chartData.data || [];
 
   data = data.map((trace) => ({
     ...trace,
@@ -194,6 +192,9 @@ export default compose(
   connect(
     (state, props) => ({
       //mapped core metadata data to props. Include more if needed
+      subreq: state.content.subrequests?.[props.id]?.data,
+      visualization:
+        state.content.subrequests?.[props.id]?.data?.visualization?.chartData,
       temporal_coverage:
         state.content.subrequests?.[props.id]?.data?.temporal_coverage,
       other_organisations:
