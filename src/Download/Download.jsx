@@ -5,17 +5,22 @@ import downloadSVG from '../static/download-cloud-fill.svg';
 
 import { trackLink } from '@eeacms/volto-matomo/utils';
 
-function getHeaders(headers) {
+function getHeaders(headers, onlySectionHeader = false) {
   let str = '';
-  headers.forEach((header) => {
-    if (str !== '') str += ',';
-    if (header.includes(',')) {
-      str += `"${header}"`;
-    } else {
-      str += header;
-    }
-  });
-  return str + '\r\n';
+  if (!onlySectionHeader) {
+    headers.forEach((header) => {
+      if (str !== '') str += ',';
+      if (header.includes(',')) {
+        str += `"${header}"`;
+      } else {
+        str += header;
+      }
+    });
+    return str + '\r\n';
+  } else {
+    str += headers[0];
+    return str;
+  }
 }
 
 function getData(array) {
@@ -41,19 +46,28 @@ function getData(array) {
   return str;
 }
 
-function convertToCSV(array, readme = []) {
+const insertEmptyRows = (matrix, rows) => {
+  for (let i = 0; i < rows; i++) {
+    matrix += '\r\n';
+  }
+  return matrix;
+};
+
+function convertToCSV(array, readme = [], noHeaders = false) {
   const headers = Object.keys(array[0]);
-  let str = getHeaders(headers);
+  let str = getHeaders(headers, noHeaders);
 
   str += getData(array);
 
-  for (let i = 0; i < 5; i++) {
-    str += '\r\n';
-  }
+  str = insertEmptyRows(str, 1);
 
-  readme.forEach((text) => {
-    str += text + '\r\n';
-  });
+  if (readme && readme.lenght > 0) {
+    readme.forEach((text) => {
+      str += text + '\r\n';
+    });
+
+    str = insertEmptyRows(str, 1);
+  }
 
   return str;
 }
@@ -64,14 +78,11 @@ function convertMatrixToCSV(matrix, readme = []) {
   matrix.forEach((array) => {
     str += getHeaders(Object.keys(array[0]));
     str += getData(array);
-    for (let i = 0; i < 2; i++) {
-      str += '\r\n';
-    }
+
+    str = insertEmptyRows(str, 1);
   });
 
-  for (let i = 0; i < 3; i++) {
-    str += '\r\n';
-  }
+  str = insertEmptyRows(str, 1);
 
   readme.forEach((text) => {
     str += text + '\r\n';
@@ -112,27 +123,48 @@ function exportCSVFile(csv, title = 'data') {
   }
 }
 
+const renameKey = (key) => {
+  switch (key) {
+    case 'data_provenance':
+      return 'Sources';
+    case 'other_organisations':
+      return 'Other organisations involved';
+    case 'temporal_coverage':
+      return 'Temporal coverage';
+    case 'geo_coverage':
+      return 'Geographical coverage';
+    case 'publisher':
+      return 'Publisher';
+    default:
+      return key;
+  }
+};
+
 const spreadCoreMetadata = (core_metadata) => {
+  //filter requested metadata and insert head titles
+
   let spread_metadata = {};
   Object.keys(core_metadata).forEach((key) => {
     if (core_metadata[key].length > 0) {
       core_metadata[key].forEach((item) => {
         Object.keys(item).forEach((subkey) => {
-          if (!spread_metadata['EEA Core Metadata']) {
-            spread_metadata['EEA Core Metadata'] = [' '];
-          } else {
-            spread_metadata['EEA Core Metadata'].push(' ');
-          }
-          if (!spread_metadata[`${key}_${subkey}`]) {
-            spread_metadata[`${key}_${subkey}`] = [item[subkey]];
-          } else {
-            spread_metadata[`${key}_${subkey}`].push(item[subkey]);
+          if (subkey !== '@id' && subkey !== 'value') {
+            if (!spread_metadata[`${renameKey(key)}`]) {
+              spread_metadata[`${renameKey(key)}`] = [' '];
+            } else {
+              spread_metadata[`${renameKey(key)}`].push(' ');
+            }
+
+            if (!spread_metadata[`${key}_${subkey}`]) {
+              spread_metadata[`${key}_${subkey}`] = [item[subkey]];
+            } else {
+              spread_metadata[`${key}_${subkey}`].push(item[subkey]);
+            }
           }
         });
       });
     }
   });
-
   const coreMaxRows = Object.values(spread_metadata).reduce((a, b) =>
     a.length > b.length ? a : b,
   ).length;
@@ -158,11 +190,17 @@ const Download = (props) => {
     providers_data,
     providers_metadata,
     core_metadata,
+    url_source,
   } = props;
 
   const handleDownloadData = () => {
     let array = [];
-    let core_metadata_array = [];
+    let data_provenance_array = [];
+    let other_organisation_array = [];
+    let temporal_coverage_array = [];
+    let geo_coverage_array = [];
+    let publisher_array = [];
+
     let readme = provider_metadata?.readme ? [provider_metadata?.readme] : [];
     const mappedData = {
       ...provider_data,
@@ -173,27 +211,92 @@ const Download = (props) => {
         array[index][key] = item;
       });
     });
-    const hasCoreMetadata =
-      core_metadata?.data_provenance?.length > 0 ||
-      core_metadata?.other_organisation?.length > 0 ||
-      core_metadata?.temporal_coverage?.length > 0;
 
-    if (hasCoreMetadata) {
+    const hasDataProvenance = core_metadata?.data_provenance?.length > 0;
+    const hasOtherOrganisation = core_metadata?.other_organisations?.length > 0;
+    const hasTemporalCoverage = core_metadata?.temporal_coverage?.length > 0;
+    const hasGeoCoverage = core_metadata?.geo_coverage?.length > 0;
+    const hasPublisher = core_metadata?.publisher?.length > 0;
+
+    if (
+      hasDataProvenance ||
+      hasOtherOrganisation ||
+      hasTemporalCoverage ||
+      hasGeoCoverage ||
+      hasPublisher
+    ) {
       Object.entries(spreadCoreMetadata(core_metadata)).forEach(
         ([key, items]) => {
           items.forEach((item, index) => {
-            if (!core_metadata_array[index]) core_metadata_array[index] = {};
-            core_metadata_array[index][key] = item;
+            if (key.includes('data_provenance') || key.includes('Sources')) {
+              if (!data_provenance_array[index])
+                data_provenance_array[index] = {};
+              data_provenance_array[index][key] = item;
+            }
+            if (
+              key.includes('other_organisation') ||
+              key.includes('Other organisations involved')
+            ) {
+              if (!other_organisation_array[index])
+                other_organisation_array[index] = {};
+              other_organisation_array[index][key] = item;
+            }
+            if (
+              key.includes('temporal_coverage') ||
+              key.includes('Temporal coverage')
+            ) {
+              if (!temporal_coverage_array[index])
+                temporal_coverage_array[index] = {};
+              temporal_coverage_array[index][key] = item;
+            }
+            if (
+              key.includes('geo_coverage') ||
+              key.includes('Geographical coverage')
+            ) {
+              if (!geo_coverage_array[index]) geo_coverage_array[index] = {};
+              geo_coverage_array[index][key] = item;
+            }
+            if (key.includes('publisher') || key.includes('Publisher')) {
+              if (!publisher_array[index]) publisher_array[index] = {};
+              publisher_array[index][key] = item;
+            }
           });
         },
       );
     }
 
     const data_csv = convertToCSV(array, readme);
-    const core_metadata_csv = hasCoreMetadata
-      ? convertToCSV(core_metadata_array, readme)
+
+    const data_provenance_csv = hasDataProvenance
+      ? convertToCSV(data_provenance_array, [], true)
       : '';
-    const csv = hasCoreMetadata ? data_csv + core_metadata_csv : data_csv;
+    const other_organisation_csv = hasOtherOrganisation
+      ? convertToCSV(other_organisation_array, [], true)
+      : '';
+    const temporal_coverage_csv = hasTemporalCoverage
+      ? convertToCSV(temporal_coverage_array, [], true)
+      : '';
+    const geo_coverage_csv = hasGeoCoverage
+      ? convertToCSV(geo_coverage_array, [], true)
+      : '';
+    const publisher_csv = hasPublisher
+      ? convertToCSV(publisher_array, [], true)
+      : '';
+
+    const download_source_csv = convertToCSV(
+      [{ 'Downloaded from :': ' ', url: url_source }],
+      [],
+      true,
+    );
+
+    const csv =
+      data_csv +
+      download_source_csv +
+      data_provenance_csv +
+      publisher_csv +
+      other_organisation_csv +
+      geo_coverage_csv +
+      temporal_coverage_csv;
     exportCSVFile(csv, title);
   };
 
