@@ -13,14 +13,7 @@ const Schema = (props) => {
       {
         id: 'download',
         title: 'Download',
-        fields: [
-          'download_button',
-          // ...(hasSources ? ['include_sources_download'] : []),
-          // ...(hasOtherOrg ? ['include_other_org_download'] : []),
-          // ...(hasTemporalCoverage
-          //   ? ['include_temporal_coverage_download']
-          //   : []),
-        ],
+        fields: ['download_button'],
       },
       {
         id: 'data_query',
@@ -61,24 +54,6 @@ const Schema = (props) => {
         title: 'Toggle download',
         type: 'boolean',
       },
-      // include_sources_download: {
-      //   title: 'Download sources',
-      //   description: 'Include sources in the dowloaded CSV',
-      //   choices: data_provenance_options,
-      //   isMulti: true,
-      // },
-      // include_other_org_download: {
-      //   title: 'Download other organisations',
-      //   description: 'Include other organisations in the dowloaded CSV',
-      //   choices: other_organisations_options,
-      //   isMulti: true,
-      // },
-      // include_temporal_coverage_download: {
-      //   title: 'Download temporal coverage',
-      //   description: 'Include temporal coverage in the dowloaded CSV',
-      //   choices: temporal_coverage_options,
-      //   isMulti: true,
-      // },
       show_sources: {
         title: 'Toggle sources',
         type: 'boolean',
@@ -89,9 +64,9 @@ const Schema = (props) => {
         type: 'boolean',
       },
       data_query: {
-        title: 'Block Query',
+        title: 'Specific block criteria',
         description:
-          'Query data on this block. If context queries are present, block queries will be overridden.',
+          'Query data on this block. Predefined query criteria options are available only when the taxonomies are present in the site ',
         widget: 'data_query',
       },
     },
