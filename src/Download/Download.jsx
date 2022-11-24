@@ -61,7 +61,7 @@ function convertToCSV(array, readme = [], noHeaders = false) {
 
   str = insertEmptyRows(str, 1);
 
-  if (readme && readme.lenght > 0) {
+  if (readme && readme.length > 0) {
     readme.forEach((text) => {
       str += text + '\r\n';
     });
@@ -142,7 +142,6 @@ const renameKey = (key) => {
 
 const spreadCoreMetadata = (core_metadata) => {
   //filter requested metadata and insert head titles
-
   let spread_metadata = {};
   Object.keys(core_metadata).forEach((key) => {
     if (core_metadata[key].length > 0) {
@@ -165,25 +164,12 @@ const spreadCoreMetadata = (core_metadata) => {
       });
     }
   });
-  const coreMaxRows = Object.values(spread_metadata).reduce((a, b) =>
-    a.length > b.length ? a : b,
-  ).length;
 
-  let evenMatrix = spread_metadata;
-  Object.entries(evenMatrix).forEach(([key, items]) => {
-    if (items.length < coreMaxRows) {
-      for (let i = items.length; i < coreMaxRows; i++) {
-        items.push('');
-      }
-    }
-  });
-  return evenMatrix;
+  return spread_metadata;
 };
 
 const Download = (props) => {
   const {
-    // sources,
-    // className,
     title,
     provider_data,
     provider_metadata,
