@@ -3,6 +3,8 @@ import { compose } from 'redux';
 import loadable from '@loadable/component';
 import { connectToProviderData } from '@eeacms/volto-datablocks/hocs';
 import { updateChartDataFromProvider } from '@eeacms/volto-datablocks/helpers';
+import { toPublicURL } from '@plone/volto/helpers';
+
 import { connect } from 'react-redux';
 import { connectBlockToVisualization } from '@eeacms/volto-plotlycharts/hocs';
 
@@ -13,23 +15,6 @@ import { Download } from '../Download';
 import { Sources } from '../Sources';
 
 const LoadablePlotly = loadable(() => import('react-plotly.js'));
-
-const filterItemsIds = (items, allowedIds) => {
-  const newItems =
-    items && items.length > 0
-      ? items
-          .map((item) => {
-            var newItem = {};
-            allowedIds.forEach((id) => {
-              newItem[id] = item[id];
-            });
-            return newItem;
-          })
-          .filter((value) => Object.keys(value).length !== 0)
-      : [];
-  return newItems;
-};
-
 /*
  * ConnectedChart
  */
@@ -47,6 +32,8 @@ function ConnectedChart2(props) {
     data_provenance,
     other_organisations,
     temporal_coverage,
+    publisher,
+    geo_coverage,
   } = props;
   const with_sources = props?.withSources ?? false;
 
@@ -100,9 +87,6 @@ function ConnectedChart2(props) {
         '',
     };
   }
-  // console.log(provider_data, ' provider_data');
-  // console.log(props.data.data_query, ' props.data.data_query');
-  // console.log(chartData, ' chartData');
   let data = provider_data
     ? updateChartDataFromProvider(chartData.data || [], provider_data)
     : chartData.data || [];
@@ -147,29 +131,13 @@ function ConnectedChart2(props) {
           }
           provider_data={provider_data}
           provider_metadata={provider_metadata}
+          url_source={toPublicURL(props?.location?.pathname)}
           core_metadata={{
-            data_provenance: props.data?.include_sources_download
-              ? filterItemsIds(
-                  data_provenance?.data,
-                  props.data?.include_sources_download,
-                )
-              : '',
-            other_organisations: props.data?.include_other_org_download
-              ? filterItemsIds(
-                  other_organisations,
-                  props.data?.include_other_org_download,
-                )
-              : '',
-            temporal_coverage:
-              props.data?.include_temporal_coverage_download &&
-              props.data?.include_temporal_coverage_download.length > 0 &&
-              temporal_coverage?.temporal &&
-              temporal_coverage?.temporal?.length > 0
-                ? filterItemsIds(
-                    temporal_coverage?.temporal,
-                    props.data?.include_temporal_coverage_download,
-                  )
-                : '',
+            data_provenance: data_provenance?.data,
+            other_organisations: other_organisations,
+            temporal_coverage: temporal_coverage?.temporal,
+            publisher: publisher,
+            geo_coverage: geo_coverage?.geolocation,
           }}
         />
       )}
@@ -191,10 +159,11 @@ function ConnectedChart2(props) {
 export default compose(
   connect(
     (state, props) => ({
-      //mapped core metadata data to props. Include more if needed
-      subreq: state.content.subrequests?.[props.id]?.data,
       visualization:
         state.content.subrequests?.[props.id]?.data?.visualization?.chartData,
+      //mapped core metadata data to props. Include more if needed
+      publisher: state.content.subrequests?.[props.id]?.data?.publisher,
+      geo_coverage: state.content.subrequests?.[props.id]?.data?.geo_coverage,
       temporal_coverage:
         state.content.subrequests?.[props.id]?.data?.temporal_coverage,
       other_organisations:
