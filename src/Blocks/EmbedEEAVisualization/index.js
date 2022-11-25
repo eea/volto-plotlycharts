@@ -1,7 +1,7 @@
 import View from './View';
 import Edit from './Edit';
 
-import presentationSVG from '@plone/volto/icons/presentation.svg';
+import presentationSVG from '@plone/volto/icons/image.svg';
 
 export default (config) => {
   const visualizationBlockConfig = {

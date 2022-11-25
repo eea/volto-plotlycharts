@@ -3,7 +3,6 @@ import React from 'react';
 const Schema = (props) => {
   return {
     title: 'Embed EEA visualization',
-
     fieldsets: [
       {
         id: 'default',
