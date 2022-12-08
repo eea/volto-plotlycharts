@@ -349,7 +349,7 @@ const StyleLayoutPanel = (props, { localize: _ }) => {
           <FontSelector
             label={_('Typeface')}
             attr="font.family"
-            clearable={false}
+            clearable={true}
           />
           <Numeric label={_('Base Font Size')} attr="font.size" units="px" />
           <ColorPicker label={_('Font Color')} attr="font.color" />
@@ -539,7 +539,7 @@ const StyleLayoutPanel = (props, { localize: _ }) => {
         <FontSelector
           label={_('Typeface')}
           attr="title.font.family"
-          clearable={false}
+          clearable={true} // should keep it clearable to apply the default font family EEA
         />
         <Numeric label={_('Font Size')} attr="title.font.size" units="px" />
         <ColorPicker label={_('Font Color')} attr="title.font.color" />
