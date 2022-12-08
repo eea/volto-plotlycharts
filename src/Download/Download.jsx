@@ -118,9 +118,9 @@ const Download = (props) => {
 
     const csv =
       download_source_csv +
-      data_provenance_csv +
       publisher_csv +
       other_organisation_csv +
+      data_provenance_csv +
       geo_coverage_csv +
       temporal_coverage_csv +
       data_csv;
