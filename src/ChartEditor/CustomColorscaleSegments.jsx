@@ -85,7 +85,7 @@ const CustomColorscaleSegments = ({
     handleChange(newColorScale);
   };
 
-  const handleAddColor = (index) => {
+  const handleAddColor = () => {
     const newColorScale = [...colorscale, 'black'];
 
     handleChange(newColorScale);

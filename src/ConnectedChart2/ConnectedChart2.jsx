@@ -102,9 +102,10 @@ function ConnectedChart2(props) {
   if (loadingVisualizationData) {
     return <div>Loading chart...</div>;
   }
-  return !Object.keys(chartData).length ? (
-    <div>No valid data.</div>
-  ) : (
+
+  if (!Object.keys(chartData).length) return <div>No valid data.</div>;
+
+  return (
     <>
       <div className="connected-chart-wrapper">
         <LoadablePlotly

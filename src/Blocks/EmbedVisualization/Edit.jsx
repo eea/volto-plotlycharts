@@ -27,7 +27,7 @@ const Edit = (props) => {
                 selected={selected}
                 block={props.block}
                 onAddBlock={nope}
-                onChangeBlock={(id, { text }) => {
+                onChangeBlock={({ text }) => {
                   props.onChangeBlock(block, {
                     ...props.data,
                     text,

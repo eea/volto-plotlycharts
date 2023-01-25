@@ -9,24 +9,22 @@ import addIcon from '@plone/volto/icons/add.svg';
 import autoIcon from '@plone/volto/icons/replace.svg';
 
 const setColorValue = (i, length) => {
-  var increment = 1 / (length - 1);
-
-  var val = increment * i;
-  return val;
+  let increment = 1 / (length - 1);
+  return increment * i;
 };
 
 const ColorscaleEditor = ({ colorscale, _, handleChange }) => {
   const [expand, setExpand] = React.useState(false);
 
   const handleColorChange = (color, index) => {
-    var newColorscale = [...colorscale];
+    const newColorscale = [...colorscale];
     newColorscale[index][1] = color;
 
     handleChange(newColorscale);
   };
 
   const handleValueChange = (value, index) => {
-    var newColorscale = [...colorscale];
+    const newColorscale = [...colorscale];
     newColorscale[index][0] = value;
 
     handleChange(newColorscale);
@@ -41,7 +39,7 @@ const ColorscaleEditor = ({ colorscale, _, handleChange }) => {
   };
 
   const handleDeleteColor = (colorscale, index) => {
-    var newColorscale = [
+    const newColorscale = [
       ...colorscale.slice(0, index),
       ...colorscale.slice(index + 1),
     ];
@@ -50,7 +48,7 @@ const ColorscaleEditor = ({ colorscale, _, handleChange }) => {
   };
 
   const handleAddColor = (colorscale) => {
-    var newColorscale = [...colorscale, ['1', 'black']];
+    const newColorscale = [...colorscale, ['1', 'black']];
 
     handleAutoValues(newColorscale);
   };

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Schema = (props) => {
+const Schema = () => {
   return {
     title: 'Embed EEA visualization',
     fieldsets: [

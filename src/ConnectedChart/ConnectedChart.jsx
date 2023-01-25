@@ -92,9 +92,9 @@ function ConnectedChart(props) {
     return <div>Loading chart...</div>;
   }
 
-  return !Object.keys(chartData).length ? (
-    <div>No valid data.</div>
-  ) : (
+  if (!Object.keys(chartData).length) return <div>No valid data.</div>;
+
+  return (
     <>
       <div className="connected-chart-wrapper">
         <LoadablePlotly
@@ -113,7 +113,7 @@ function ConnectedChart(props) {
           }}
         />
       </div>
-      {with_sources && props.data ? (
+      {with_sources && props.data && (
         <Sources
           data={{ data_query: props.data.data_query }}
           sources={props.data.chartSources}
@@ -124,8 +124,6 @@ function ConnectedChart(props) {
           provider_metadata={provider_metadata}
           download_button={props.data.download_button}
         />
-      ) : (
-        ''
       )}
     </>
   );

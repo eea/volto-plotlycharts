@@ -37,17 +37,15 @@ import {
   NumericOrDate,
   AxisInterval,
   HoverLabelNameLength,
-} from 'react-chart-editor';
-import {
   BinningDropdown,
   NumericReciprocal,
   ShowInLegend,
   TextInfo,
   HoveronDropdown,
   LevelRendered,
+  localize,
 } from 'react-chart-editor';
 import { traceTypes } from 'react-chart-editor/lib/lib/traceTypes';
-import { localize } from 'react-chart-editor';
 import MarkerColor from './MarkerColor';
 import CustomColorscaleSegments from './CustomColorscaleSegments';
 

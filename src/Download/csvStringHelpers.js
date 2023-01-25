@@ -133,10 +133,10 @@ const renameKey = (key) => {
 const spreadCoreMetadata = (core_metadata) => {
   //filter requested metadata and insert head titles
   let spread_metadata = {};
-  Object.keys(core_metadata).forEach((key, index) => {
+  Object.keys(core_metadata).forEach((key) => {
     if (core_metadata[key].length > 0) {
-      core_metadata[key].forEach((item, jIndex) => {
-        Object.keys(item).forEach((subkey, subindex) => {
+      core_metadata[key].forEach((item) => {
+        Object.keys(item).forEach((subkey) => {
           if (subkey !== '@id' && subkey !== 'value') {
             if (!spread_metadata[`${renameKey(key)}`]) {
               spread_metadata[`${renameKey(key)}`] = [' '];

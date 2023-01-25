@@ -14,14 +14,14 @@ const ColorscaleColorsEditor = ({ colorscale, _, handleChange }) => {
   const [expand, setExpand] = React.useState(false);
 
   const handleColorChange = (color, index) => {
-    var newColorscale = [...colorscale];
+    const newColorscale = [...colorscale];
     newColorscale[index] = color;
 
     handleChange(newColorscale);
   };
 
   const handleDeleteColor = (colorscale, index) => {
-    var newColorscale = [
+    const newColorscale = [
       ...colorscale.slice(0, index),
       ...colorscale.slice(index + 1),
     ];
@@ -29,7 +29,7 @@ const ColorscaleColorsEditor = ({ colorscale, _, handleChange }) => {
   };
 
   const handleAddColor = (colorscale) => {
-    var newColorscale = [...colorscale, 'black'];
+    const newColorscale = [...colorscale, 'black'];
 
     handleChange(newColorscale);
   };

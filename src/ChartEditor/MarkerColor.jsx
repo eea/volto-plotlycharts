@@ -41,7 +41,6 @@ const ColorPicker = ({ selectedColorscale, color, onChange, ...rest }) => {
    * @todo Make this work with colors other than the format #RRGGBB.
    */
   const contrastColor = React.useCallback((color) => {
-    // color = color.replace(/ /g, '').replace('#', '').split(',').map(Number);
     color = color.replace('#', '').split('');
 
     let rr = color[0] + color[1];
@@ -220,7 +219,7 @@ class UnconnectedMarkerColor extends Component {
   /**
    * Also accepts usual fields, not just the custom ones.
    */
-  updateCategoricalsInData = (obj) => {
+  updateCategoricalsInData = () => {
     //TODO: this updateContainer is resetting layout to some defaults when loading component
     //TODO: need to go around that
     //this.context.updateContainer(obj);
@@ -320,7 +319,6 @@ class UnconnectedMarkerColor extends Component {
         break;
 
       default:
-        // console.error('Unknown marker color type', type);
         return;
     }
   }
@@ -329,9 +327,6 @@ class UnconnectedMarkerColor extends Component {
     const { type } = this.state;
 
     if (type === 'manual') {
-      // console.error(
-      //   'When type is set to "manual", setColor should not be called.',
-      // );
       return;
     }
 
@@ -590,7 +585,7 @@ class UnconnectedMarkerColor extends Component {
                 onOptionChange={this.setType}
               />
 
-              {!type ? null : (
+              {type && (
                 <Info>
                   {type === 'constant'
                     ? _('All points in a trace are colored in the same color.')
@@ -607,7 +602,7 @@ class UnconnectedMarkerColor extends Component {
             {type === 'constant' && this.renderConstantControls()}
             {type === 'variable' && this.renderVariableControls()}
           </Field>
-          {type === 'constant' ? null : (
+          {type !== 'constant' && (
             <>
               <Radio
                 label={_('Colorscale Direction')}

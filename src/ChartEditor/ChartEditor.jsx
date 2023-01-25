@@ -1,6 +1,6 @@
 import React from 'react';
-import { DefaultEditor } from 'react-chart-editor';
 import {
+  DefaultEditor,
   GraphCreatePanel,
   GraphTransformsPanel,
   GraphSubplotsPanel,
