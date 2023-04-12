@@ -4,12 +4,9 @@ import BlockDataForm from '@plone/volto/components/manage/Form/BlockDataForm';
 import ConnectedChart2 from '@eeacms/volto-plotlycharts/ConnectedChart2';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import cx from 'classnames';
 
 import '@eeacms/volto-plotlycharts/less/visualization.less';
 import Schema from './schema';
-
-import { BlockStyleWrapperEdit } from '@eeacms/volto-block-style/BlockStyleWrapper';
 
 const Edit = (props) => {
   const { data, block, onChangeBlock } = props;
@@ -30,20 +27,7 @@ const Edit = (props) => {
     }
   }, [block, data, onChangeBlock]);
   return (
-    <BlockStyleWrapperEdit
-      {...props}
-      role="presentation"
-      data={{
-        ...(props.data || {}),
-        styles: {
-          ...(props.data?.styles || {}),
-          customClass: cx(
-            props.data?.styles?.customClass || '',
-            'custom-styles-class',
-          ),
-        },
-      }}
-    >
+    <>
       <ConnectedChart2
         id={props.id}
         data={{
@@ -74,7 +58,7 @@ const Edit = (props) => {
           formData={data}
         />
       </SidebarPortal>
-    </BlockStyleWrapperEdit>
+    </>
   );
 };
 
