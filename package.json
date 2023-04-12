@@ -21,11 +21,9 @@
   },
   "addons": [
     "@eeacms/volto-datablocks",
-    "@eeacms/volto-matomo",
-    "@eeacms/volto-block-style"
+    "@eeacms/volto-matomo"
   ],
   "dependencies": {
-    "@eeacms/volto-block-style": "4.1.0",
     "@eeacms/volto-datablocks": "*",
     "@eeacms/volto-matomo": "*",
     "@plone/scripts": "*",
