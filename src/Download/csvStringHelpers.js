@@ -134,7 +134,7 @@ const spreadCoreMetadata = (core_metadata) => {
   //filter requested metadata and insert head titles
   let spread_metadata = {};
   Object.keys(core_metadata).forEach((key, index) => {
-    if (core_metadata[key].length > 0) {
+    if (core_metadata[key]?.length > 0) {
       core_metadata[key].forEach((item, jIndex) => {
         Object.keys(item).forEach((subkey, subindex) => {
           if (subkey !== '@id' && subkey !== 'value') {
