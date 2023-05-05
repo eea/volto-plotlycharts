@@ -46,7 +46,6 @@ const applyConfig = (config) => {
   };
 
   return [
-    installEmbedVisualization,
     //first one here ^^ will get old and be removed in time TODO:
     installEmbedEEAVisualization,
     installPlotlyChart,
