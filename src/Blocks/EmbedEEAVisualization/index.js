@@ -34,7 +34,7 @@ export default (config) => {
     ],
   };
 
-  config.blocks.blocksConfig.embed_eea_visualization = visualizationBlockConfig;
+  config.blocks.blocksConfig.embed_visualization = visualizationBlockConfig;
 
   return config;
 };
