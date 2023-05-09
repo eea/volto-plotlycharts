@@ -5,7 +5,7 @@ import presentationSVG from '@plone/volto/icons/image.svg';
 
 export default (config) => {
   const visualizationBlockConfig = {
-    id: 'embed_visualization',
+    id: 'embed_eea_visualization',
     title: 'Embed EEA visualization',
     icon: presentationSVG,
     group: 'plotly',
@@ -25,16 +25,10 @@ export default (config) => {
         isDefault: true,
         view: View,
       },
-      {
-        id: 'extra',
-        title: 'Extra (expand if needed)',
-        isDefault: false,
-        view: View,
-      },
     ],
   };
 
-  config.blocks.blocksConfig.embed_visualization = visualizationBlockConfig;
+  config.blocks.blocksConfig.embed_eea_visualization = visualizationBlockConfig;
 
   return config;
 };

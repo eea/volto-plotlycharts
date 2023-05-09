@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
+import isUndefined from 'lodash/isUndefined';
 import { withRouter } from 'react-router';
 import { connect, useDispatch } from 'react-redux';
 import {
@@ -26,11 +27,11 @@ function connectBlockToVisualization(getConfig = () => ({})) {
         ]);
 
         const isPending = vis_url
-          ? props.data_visualizations?.pendingVisualizations?.[vis_url]
+          ? props.data_visualizations?.pendingVisualizations?.[vis_url] ?? false
           : false;
 
         const isFailed = vis_url
-          ? props.data_visualizations?.failedVisualizations?.[vis_url]
+          ? props.data_visualizations?.failedVisualizations?.[vis_url] ?? false
           : false;
 
         const visualization_data = vis_url
@@ -57,7 +58,10 @@ function connectBlockToVisualization(getConfig = () => ({})) {
           <WrappedComponent
             {...props}
             visualization_data={visualization_data}
-            loadingVisualizationData={isPending}
+            loadingVisualizationData={
+              isPending || isUndefined(visualization_data)
+            }
+            hasVisUrl={!!vis_url}
           />
         );
       }),

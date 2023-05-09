@@ -1,13 +1,12 @@
-/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React from 'react';
-import downloadSVG from '../static/download-cloud-fill.svg';
+import { Icon } from '@plone/volto/components';
 import {
   convertMatrixToCSV,
   convertToCSV,
   exportCSVFile,
   spreadCoreMetadata,
 } from './csvStringHelpers';
+import downloadSVG from '@eeacms/volto-plotlycharts/icons/download.svg';
 
 const Download = (props) => {
   const {
@@ -150,29 +149,21 @@ const Download = (props) => {
   };
 
   return (
-    <>
-      <div className="plotly-download-container">
-        {provider_data && (
-          <img
-            className="discreet plotly-download-button"
-            title="Download data"
-            alt="Download data"
-            onClick={() => handleDownloadData()}
-            src={downloadSVG}
-          />
-        )}
-
-        {providers_data && (
-          <img
-            className="discreet plotly-download-button"
-            title="Download data"
-            alt="Download data"
-            onClick={() => handleDownloadMultipleData()}
-            src={downloadSVG}
-          />
-        )}
-      </div>
-    </>
+    <div className="plotly-download-container">
+      <button
+        className="plotly-download-button"
+        onClick={() => {
+          if (provider_data && !providers_data) {
+            handleDownloadData();
+          } else if (providers_data) {
+            handleDownloadMultipleData();
+          }
+        }}
+      >
+        <span>Download data</span>
+        <Icon name={downloadSVG} size="24px" />
+      </button>
+    </div>
   );
 };
 

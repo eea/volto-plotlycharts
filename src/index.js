@@ -1,11 +1,6 @@
+import installBlocks from './Blocks';
 import { VisualizationView } from './Views';
 import { VisualizationWidget } from './Widgets';
-
-//TODO: this will replace the current embed viz
-import installEmbedEEAVisualization from './Blocks/EmbedEEAVisualization';
-
-import installPlotlyChart from './Blocks/PlotlyChart';
-import installTreemap from './Blocks/Treemap';
 import { data_visualizations } from './middlewares';
 import * as addonReducers from './reducers';
 
@@ -44,12 +39,7 @@ const applyConfig = (config) => {
     ...addonReducers,
   };
 
-  return [
-    //first one here ^^ will get old and be removed in time TODO:
-    installEmbedEEAVisualization,
-    installPlotlyChart,
-    installTreemap,
-  ].reduce((acc, apply) => apply(acc), config);
+  return [installBlocks].reduce((acc, apply) => apply(acc), config);
 };
 
 export default applyConfig;

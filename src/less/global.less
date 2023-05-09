@@ -39,7 +39,7 @@
   }
 }
 
-.connected-chart-wrapper {
+.visualization {
   overflow: auto;
 }
 
@@ -56,34 +56,92 @@ body.has-sidebar .ui.modal.chart-editor-modal {
   position: relative;
 }
 
-#page-edit .plotly-download-button {
-  display: none;
-}
-
-.plotly-download-container {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
+.visualization-wrapper .visualization-info {
   display: flex;
-  overflow: hidden;
   align-items: center;
-}
 
-.plotly-download-container:hover {
-  cursor: pointer;
+  > * {
+    border-collapse: collapse;
+    padding: 0 0.5rem;
+  }
 
-  .plotly-download-button {
-    filter: invert(27%) sepia(4%) saturate(2878%) hue-rotate(346deg)
-      brightness(104%) contrast(97%);
+  > *:first-child {
+    padding-left: 0;
+  }
+
+  > *:last-child {
+    padding-right: 0;
+  }
+
+  > *:not(:last-child) {
+    border-right: 2px solid @tertiaryColor;
   }
 }
 
-.plotly-download-button {
-  width: 30px !important;
+#page-edit .plotly-download-container,
+#page-edit .plotly-sources-container {
+  display: none;
+}
+
+.plotly-download-button,
+.plotly-sources-button {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  background-color: transparent;
+  border: none;
+  font-weight: bold;
+  color: @tertiaryColor;
+  padding-bottom: 3px;
+
+  .icon {
+    margin-left: .5rem;
+  }
+
+  &:hover {
+    color: @secondaryColor;
+  }
+
+  &.expanded {
+    padding-bottom: 0;
+    border-bottom: 3px solid @secondaryColor;
+    color: @secondaryColor;
+  }
+}
+
+#plotly-sources-popup {
+  .ui.popup {
+    min-width: 600px;
+    background-color: @grey-1;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+
+    .sources-list > li,
+    .sources-list > li > * {
+      color: @tertiaryColor;
+    }
+
+    a:hover {
+      color: @secondaryColor;
+    }
+  }
+
+  .sources-list {
+    margin: 0;
+    padding-inline-start: 0;
+    list-style: decimal inside;
+  }
+
+  @media screen and (max-width: @largestMobileScreen) {
+    .ui.popup {
+      min-width: 300px;
+    }
+  }
 }
 
 @media print {
-  .plotly-download-button {
+  .plotly-download-container,
+  .plotly-sources-container,
+  #plotly-sources-popup {
     display: none;
   }
 }

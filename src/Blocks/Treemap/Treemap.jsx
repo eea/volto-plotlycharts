@@ -54,7 +54,7 @@ function Treemap(props) {
   return (
     <div className="treemap-chart">
       <VisibilitySensor>
-        <div className="connected-chart-wrapper">
+        <div className="visualization">
           <LoadablePlotly
             data={traces}
             layout={layout}

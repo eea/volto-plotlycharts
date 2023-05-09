@@ -32,26 +32,21 @@ export default {
     {
       id: 'default',
       title: 'Default',
-      fields: ['hover_format_xy', 'width', 'height'],
+      fields: ['hover_format_xy', 'height'],
     },
     {
       id: 'sources',
       title: 'Sources',
-      fields: ['chartSources', 'download_button'],
+      fields: ['chartSources', 'with_sources', 'download_button'],
     },
     {
       id: 'data_query',
       title: 'Data query',
-      fields: ['data_query'],
+      fields: ['has_data_query_by_context', 'data_query'],
     },
   ],
 
   properties: {
-    use_live_data: {
-      type: 'boolean',
-      title: 'Use live data',
-      defaultValue: true,
-    },
     hover_format_xy: {
       type: 'string',
       title: 'Hover format',
@@ -69,10 +64,6 @@ export default {
         </>
       ),
     },
-    width: {
-      title: 'Width',
-      type: 'number',
-    },
     height: {
       title: 'Height',
       type: 'number',
@@ -84,12 +75,25 @@ export default {
       schema: sourceSchema,
     },
     download_button: {
-      title: 'Download button',
+      title: 'Toggle download',
+      type: 'boolean',
+      defaultValue: true,
+    },
+    with_sources: {
+      title: 'Toggle sources',
+      type: 'boolean',
+      defaultValue: true,
+    },
+    has_data_query_by_context: {
+      title: 'Use queries from context',
+      description: 'Will use Criteria queries from context (this page)',
       type: 'boolean',
       defaultValue: true,
     },
     data_query: {
-      title: 'Query',
+      title: 'Specific block criteria',
+      description:
+        'Query data on this block. Predefined query criteria options are available only when the taxonomies are present in the site ',
       widget: 'data_query',
     },
   },
