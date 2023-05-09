@@ -61,8 +61,8 @@ body.has-sidebar .ui.modal.chart-editor-modal {
   align-items: center;
 
   > * {
-    border-collapse: collapse;
     padding: 0 0.5rem;
+    border-collapse: collapse;
   }
 
   > *:first-child {
@@ -85,17 +85,17 @@ body.has-sidebar .ui.modal.chart-editor-modal {
 
 .plotly-download-button,
 .plotly-sources-button {
-  cursor: pointer;
   display: inline-flex;
   align-items: center;
-  background-color: transparent;
-  border: none;
-  font-weight: bold;
-  color: @tertiaryColor;
   padding-bottom: 3px;
+  border: none;
+  background-color: transparent;
+  color: @tertiaryColor;
+  cursor: pointer;
+  font-weight: bold;
 
   .icon {
-    margin-left: .5rem;
+    margin-left: 0.5rem;
   }
 
   &:hover {
@@ -127,8 +127,8 @@ body.has-sidebar .ui.modal.chart-editor-modal {
 
   .sources-list {
     margin: 0;
-    padding-inline-start: 0;
     list-style: decimal inside;
+    padding-inline-start: 0;
   }
 
   @media screen and (max-width: @largestMobileScreen) {
