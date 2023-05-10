@@ -1,6 +1,6 @@
 {
   "name": "@eeacms/volto-plotlycharts",
-  "version": "5.1.1",
+  "version": "6.0.0",
   "description": "Plotly Charts and Editor integration for Volto",
   "main": "src/index.js",
   "author": "European Environment Agency: IDM2 A-Team",
@@ -39,6 +39,9 @@
     "@plone/scripts": "*",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "md5": "^2.3.0"
+  },
+  "resolutions": {
+    "react-countup/countup.js": "2.5.0"
   },
   "scripts": {
     "release": "release-it",

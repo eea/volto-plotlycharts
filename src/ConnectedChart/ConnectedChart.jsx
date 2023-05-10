@@ -1,16 +1,13 @@
-/*
- * The most basic connected block chart
- */
-
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { compose } from 'redux';
 import loadable from '@loadable/component';
+import config from '@plone/volto/registry';
+import { toPublicURL } from '@plone/volto/helpers';
 import { connectToProviderData } from '@eeacms/volto-datablocks/hocs';
 import { updateChartDataFromProvider } from '@eeacms/volto-datablocks/helpers';
-import { Sources } from '@eeacms/volto-datablocks/Utils';
 import { connectBlockToVisualization } from '@eeacms/volto-plotlycharts/hocs';
 
-import config from '@plone/volto/registry';
+import { Download, Sources } from '@eeacms/volto-plotlycharts/Utils';
 
 const LoadablePlotly = loadable(() => import('react-plotly.js'));
 
@@ -18,18 +15,27 @@ const LoadablePlotly = loadable(() => import('react-plotly.js'));
  * ConnectedChart
  */
 function ConnectedChart(props) {
+  const [firstLoad, setFirstLoad] = useState(true);
   const {
-    hoverFormatXY,
     loadingVisualizationData,
+    hasProviderUrl,
     provider_data,
     provider_metadata,
     visualization,
     visualization_data,
-    width,
-    height = 450,
   } = props;
+  const { hover_format_xy, width, height } = props.data || {};
+  const {
+    data_provenance,
+    other_organisations,
+    temporal_coverage,
+    publisher,
+    geo_coverage,
+  } = visualization_data || {};
   const use_live_data = props.data?.use_live_data ?? true;
-  const with_sources = props.data?.with_sources ?? true;
+  const with_sources = props.data?.with_sources ?? false;
+  const loadingProviderData =
+    loadingVisualizationData || (hasProviderUrl && props.loadingProviderData);
 
   const chartData =
     visualization?.chartData || visualization_data?.chartData || {};
@@ -58,7 +64,7 @@ function ConnectedChart(props) {
     layout.xaxis = {
       ...layout.xaxis,
       hoverformat:
-        hoverFormatXY ||
+        hover_format_xy ||
         layout.xaxis.hoverformat ||
         layout.xaxis.tickformat ||
         '',
@@ -68,7 +74,7 @@ function ConnectedChart(props) {
     layout.yaxis = {
       ...layout.yaxis,
       hoverformat:
-        hoverFormatXY ||
+        hover_format_xy ||
         layout.xaxis.hoverformat ||
         layout.xaxis.tickformat ||
         '',
@@ -88,15 +94,21 @@ function ConnectedChart(props) {
     },
   }));
 
-  if (loadingVisualizationData) {
+  useEffect(() => {
+    if (firstLoad && !loadingVisualizationData && !loadingProviderData) {
+      setFirstLoad(false);
+    }
+  }, [firstLoad, loadingVisualizationData, loadingProviderData]);
+
+  if (firstLoad && (loadingVisualizationData || loadingProviderData)) {
     return <div>Loading chart...</div>;
   }
 
   return !Object.keys(chartData).length ? (
     <div>No valid data.</div>
   ) : (
-    <>
-      <div className="connected-chart-wrapper">
+    <div className="visualization-wrapper">
+      <div className="visualization">
         <LoadablePlotly
           useResizeHandler
           data={data}
@@ -113,21 +125,32 @@ function ConnectedChart(props) {
           }}
         />
       </div>
-      {with_sources && props.data ? (
-        <Sources
-          data={{ data_query: props.data.data_query }}
-          sources={props.data.chartSources}
-          title={
-            props.data?.vis_url || props.data?.provider_url || props.data?.title
-          }
-          provider_data={provider_data}
-          provider_metadata={provider_metadata}
-          download_button={props.data.download_button}
-        />
-      ) : (
-        ''
-      )}
-    </>
+      <div className="visualization-info">
+        {with_sources && (
+          <Sources sources={data_provenance?.data || props.data.chartSources} />
+        )}
+        {props.data?.download_button && (
+          <Download
+            data={{ data_query: props.data.data_query }}
+            title={
+              props.data?.vis_url ||
+              props.data?.provider_url ||
+              props.data?.title
+            }
+            provider_data={provider_data}
+            provider_metadata={provider_metadata}
+            url_source={toPublicURL(props?.location?.pathname)}
+            core_metadata={{
+              data_provenance: data_provenance?.data,
+              other_organisations: other_organisations,
+              temporal_coverage: temporal_coverage?.temporal,
+              publisher: publisher,
+              geo_coverage: geo_coverage?.geolocation,
+            }}
+          />
+        )}
+      </div>
+    </div>
   );
 }
 

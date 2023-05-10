@@ -10,7 +10,7 @@ export default (config) => {
     group: 'plotly',
     view: TreemapView,
     edit: TreemapEdit,
-    restricted: false,
+    restricted: true,
     mostUsed: false,
     sidebarTab: 1,
     security: {
