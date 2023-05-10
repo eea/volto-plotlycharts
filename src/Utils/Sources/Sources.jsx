@@ -9,7 +9,7 @@ const Link = ({ children, ...props }) => {
   if (props.href) {
     return <UniversalLink {...props}>{children}</UniversalLink>;
   }
-  return <span>{children}</span>;
+  return <span {...props}>{children}</span>;
 };
 
 const Source = ({ source }) => {
