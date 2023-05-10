@@ -149,9 +149,6 @@ function ConnectedChart(props) {
             }}
           />
         )}
-        {/* {with_sources && !data_provenance?.data?.length && (
-        <p>Data provenance is not set for visualization</p>
-      )} */}
       </div>
     </div>
   );
