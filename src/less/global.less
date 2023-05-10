@@ -74,7 +74,7 @@ body.has-sidebar .ui.modal.chart-editor-modal {
   }
 
   > *:not(:last-child) {
-    border-right: 2px solid @tertiaryColor;
+    border-right: 2px solid @textColor;
   }
 }
 
@@ -90,7 +90,7 @@ body.has-sidebar .ui.modal.chart-editor-modal {
   padding-bottom: 3px;
   border: none;
   background-color: transparent;
-  color: @tertiaryColor;
+  color: @textColor;
   cursor: pointer;
   font-weight: bold;
 
@@ -115,9 +115,13 @@ body.has-sidebar .ui.modal.chart-editor-modal {
     background-color: @grey-1;
     box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
 
+    &::before {
+      background-color: @grey-1;
+    }
+
     .sources-list > li,
     .sources-list > li > * {
-      color: @tertiaryColor;
+      color: @textColor;
     }
 
     a:hover {

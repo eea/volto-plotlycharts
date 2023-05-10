@@ -64,7 +64,6 @@ const SourcesWidget = ({ sources }) => {
         onOpen={() => {
           setExpanded(true);
         }}
-        basic
       />
     </div>
   );
