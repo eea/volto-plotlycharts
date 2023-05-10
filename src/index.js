@@ -1,12 +1,6 @@
+import installBlocks from './Blocks';
 import { VisualizationView } from './Views';
 import { VisualizationWidget } from './Widgets';
-import installEmbedVisualization from './Blocks/EmbedVisualization';
-
-//TODO: this will replace the current embed viz
-import installEmbedEEAVisualization from './Blocks/EmbedEEAVisualization';
-
-import installPlotlyChart from './Blocks/PlotlyChart';
-import installTreemap from './Blocks/Treemap';
 import { data_visualizations } from './middlewares';
 import * as addonReducers from './reducers';
 
@@ -31,7 +25,7 @@ const applyConfig = (config) => {
     ...config.blocks.groupBlocksOrder,
     {
       id: 'plotly',
-      title: 'Plotly blocks',
+      title: 'Data Visualizations (Beta)',
     },
   ];
 
@@ -45,13 +39,7 @@ const applyConfig = (config) => {
     ...addonReducers,
   };
 
-  return [
-    installEmbedVisualization,
-    //first one here ^^ will get old and be removed in time TODO:
-    installEmbedEEAVisualization,
-    installPlotlyChart,
-    installTreemap,
-  ].reduce((acc, apply) => apply(acc), config);
+  return [installBlocks].reduce((acc, apply) => apply(acc), config);
 };
 
 export default applyConfig;

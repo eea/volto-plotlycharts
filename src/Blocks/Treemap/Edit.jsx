@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { compose } from 'redux';
 
-import { SidebarPortal } from '@plone/volto/components';
-import InlineForm from '@plone/volto/components/manage/Form/InlineForm';
+import { SidebarPortal, BlockDataForm } from '@plone/volto/components';
 import { connectToProviderData } from '@eeacms/volto-datablocks/hocs';
 
 import schema from './schema';
@@ -28,9 +27,10 @@ class Edit extends Component {
         <TreemapView {...this.props} />
 
         <SidebarPortal selected={this.props.selected}>
-          <InlineForm
-            schema={this.getSchema(schema)}
+          <BlockDataForm
+            block={this.props.block}
             title={schema.title}
+            schema={this.getSchema(schema)}
             onChangeField={(id, value) => {
               this.props.onChangeBlock(this.props.block, {
                 ...this.props.data,

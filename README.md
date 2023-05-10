@@ -89,6 +89,8 @@ Plotly Charts and Plotly Chart Editor integration with Volto
 
 ## Release
 
+Version ^6.0.0 requires ^eea.api.dataconnector@4.4
+
 See [RELEASE.md](https://github.com/eea/volto-plotlycharts/blob/master/RELEASE.md).
 
 ## How to contribute

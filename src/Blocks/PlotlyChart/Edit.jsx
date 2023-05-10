@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Modal, Grid } from 'semantic-ui-react';
-import { SidebarPortal } from '@plone/volto/components';
-import InlineForm from '@plone/volto/components/manage/Form/InlineForm';
+import { SidebarPortal, BlockDataForm } from '@plone/volto/components';
 import { PickObjectWidget } from '@eeacms/volto-datablocks/components';
 import ChartEditor from '@eeacms/volto-plotlycharts/ChartEditor';
 
@@ -102,7 +101,7 @@ class Edit extends Component {
   // }
 
   render() {
-    const { data = {} } = this.props;
+    const { block, data = {} } = this.props;
     const { visualization = {} } = data;
 
     if (__SERVER__) return '';
@@ -136,16 +135,18 @@ class Edit extends Component {
         )}
 
         <SidebarPortal selected={this.props.selected}>
-          <InlineForm
-            schema={schema}
+          <BlockDataForm
+            block={block}
             title={schema.title}
+            schema={schema}
+            onChangeBlock={this.props.onChangeBlock}
             onChangeField={(id, value) => {
               this.props.onChangeBlock(this.props.block, {
-                ...this.props.data,
+                ...data,
                 [id]: value,
               });
             }}
-            formData={this.props.data}
+            formData={data}
           />
         </SidebarPortal>
       </>

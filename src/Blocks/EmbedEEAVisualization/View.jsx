@@ -1,5 +1,5 @@
 import React from 'react';
-import ConnectedChart2 from '@eeacms/volto-plotlycharts/ConnectedChart2';
+import ConnectedChart from '@eeacms/volto-plotlycharts/ConnectedChart';
 
 import '@eeacms/volto-plotlycharts/less/visualization.less';
 
@@ -8,22 +8,16 @@ const View = (props) => {
 
   return (
     <div className="embed-visualization">
-      <ConnectedChart2
+      <ConnectedChart
         id={props.id}
         data={{
-          chartSources: data.chartSources,
-          data_query: data.data_query,
-          download_button: data.download_button,
-          has_data_query_by_context: data.has_data_query_by_context,
-          has_data_query_by_provider: data.has_data_query_by_provider,
+          ...data,
+          download_button: data.download_button ?? true,
+          has_data_query_by_context: data.has_data_query_by_context ?? true,
+          with_sources: data.with_sources ?? true,
           use_live_data: true,
-          vis_url: data.vis_url,
-          with_sources: data.show_sources,
+          height: data.height ?? 450,
         }}
-        hoverFormatXY={data.hover_format_xy}
-        withSources={data.show_sources}
-        width={data.width}
-        height={data.height}
       />
     </div>
   );
