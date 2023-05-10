@@ -5,22 +5,25 @@ import { UniversalLink } from '@plone/volto/components';
 
 import './style.css';
 
+const Link = ({ children, ...props }) => {
+  if (props.href) {
+    return <UniversalLink {...props}>{children}</UniversalLink>;
+  }
+  return <span>{children}</span>;
+};
+
 const Source = ({ source }) => {
   if (source.chart_source_link && source.chart_source) {
-    return (
-      <UniversalLink href={source.chart_source_link}>
-        {source.chart_source}
-      </UniversalLink>
-    );
+    return <Link href={source.chart_source_link}>{source.chart_source}</Link>;
   }
   if (source.chart_source) {
     return <span>{source.chart_source}</span>;
   }
   return (
     <>
-      <UniversalLink className="embed-sources-param-title" href={source.link}>
+      <Link className="embed-sources-param-title" href={source.link}>
         {source.title}
-      </UniversalLink>
+      </Link>
       ,
       <span className="embed-sources-param-description">
         {source.organisation}
