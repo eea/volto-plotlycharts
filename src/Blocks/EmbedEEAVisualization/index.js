@@ -30,5 +30,12 @@ export default (config) => {
 
   config.blocks.blocksConfig.embed_visualization = visualizationBlockConfig;
 
+  // This is required for compatibility with previous version
+  // TODO: script for migration
+  config.blocks.blocksConfig.embed_chart = {
+    ...visualizationBlockConfig,
+    id: 'embed_chart',
+  };
+
   return config;
 };
