@@ -26,6 +26,7 @@ export default (config) => {
   config.blocks.blocksConfig.connected_plotly_chart = {
     ...visualizationBlockConfig,
     id: 'connected_plotly_chart',
+    restricted: true,
   };
   return config;
 };
