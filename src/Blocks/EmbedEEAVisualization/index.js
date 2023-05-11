@@ -35,6 +35,7 @@ export default (config) => {
   config.blocks.blocksConfig.embed_chart = {
     ...visualizationBlockConfig,
     id: 'embed_chart',
+    restricted: true,
   };
 
   return config;
