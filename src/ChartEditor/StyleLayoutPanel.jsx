@@ -58,7 +58,10 @@ const selectStyles = {
 
 const StyleLayoutPanel = (props, { localize: _ }) => {
   const chartData = props.value.chartData;
-  const { data = [], layout = {} } = chartData;
+  const { data = [], layout = {} } = chartData || {};
+
+  const layoutx = layout.xaxis || {};
+  const layouty = layout.yaxis || {};
 
   const [tickFormat, setTickFormat] = useState({
     xaxis: { label: _('Default'), value: '' },
@@ -112,8 +115,6 @@ const StyleLayoutPanel = (props, { localize: _ }) => {
         setTextFormat(existingTextFormat);
       }
     }
-    const layoutx = layout.xaxis;
-    const layouty = layout.yaxis;
 
     if (
       layoutx.hoverformat &&
@@ -334,8 +335,8 @@ const StyleLayoutPanel = (props, { localize: _ }) => {
                 </div>
               ))
             : ''}
-          {props.value.chartData.layout &&
-            props.value.chartData.layout.colorway && (
+          {props.value.chartData?.layout &&
+            props.value.chartData?.layout.colorway && (
               <div>
                 <ColorscaleColorsEditor
                   _={_}
