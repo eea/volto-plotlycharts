@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   ColorPicker,
-  ColorwayPicker,
-  ColorscalePicker,
   Dropdown,
   FontSelector,
   PlotlyFold,
@@ -19,15 +17,11 @@ import {
 } from 'react-chart-editor/lib/components';
 import { HoverColor } from 'react-chart-editor/lib/components/fields/derived';
 import DataSelector from 'react-chart-editor/lib/components/fields/DataSelector';
-import { Colorscale } from 'react-colorscales';
 
 import loadable from '@loadable/component';
-import config from '@plone/volto/registry';
-import ColorscaleColorsEditor from './ColorscaleColorsEditor';
+import ColorwayPicker from './fields/ColorwayPicker';
 
 const Select = loadable(() => import('react-select'));
-
-const customColors = config.settings.plotlyCustomColors || [];
 
 const styles = {
   scaleContainer: {
@@ -163,19 +157,6 @@ const StyleLayoutPanel = (props, { localize: _ }) => {
     /* eslint-disable-next-line */
   }, [props.value]);
 
-  const onChangeColor = (customColor) => {
-    props.onChangeValue({
-      ...props.value,
-      chartData: {
-        ...chartData,
-        layout: {
-          ...layout,
-          colorway: customColor,
-        },
-      },
-    });
-  };
-
   const handleTextFormat = (e) => {
     setTextFormat(e);
 
@@ -279,6 +260,19 @@ const StyleLayoutPanel = (props, { localize: _ }) => {
     });
   };
 
+  const onChangeColor = (attr, customColor) => {
+    props.onChangeValue({
+      ...props.value,
+      chartData: {
+        ...chartData,
+        layout: {
+          ...layout,
+          [attr]: customColor,
+        },
+      },
+    });
+  };
+
   return (
     <LayoutPanel>
       <PlotlyFold name={_('Defaults')}>
@@ -286,65 +280,11 @@ const StyleLayoutPanel = (props, { localize: _ }) => {
         <ColorPicker label={_('Margin Color')} attr="paper_bgcolor" />
         <PlotlySection name={_('Colorscales')} attr="colorway">
           <ColorwayPicker
-            label={_('Categorical')}
+            label={_('Color')}
             attr="colorway"
-            disableCategorySwitch
+            handleChange={onChangeColor}
             labelWidth={80}
           />
-          <ColorscalePicker
-            label={_('Sequential')}
-            attr="colorscale.sequential"
-            disableCategorySwitch
-            labelWidth={80}
-          />
-          <ColorscalePicker
-            label={_('Diverging')}
-            attr="colorscale.diverging"
-            initialCategory="divergent"
-            disableCategorySwitch
-            labelWidth={80}
-          />
-          <ColorscalePicker
-            label={_('Negative Sequential')}
-            attr="colorscale.sequentialminus"
-            disableCategorySwitch
-            labelWidth={80}
-          />
-        </PlotlySection>
-        <PlotlySection name={_('Custom Colorscales')} attr="colorway">
-          {customColors && customColors.length
-            ? customColors.map((customColorscale) => (
-                <div
-                  style={styles.scaleContainer}
-                  className="field field__colorscale"
-                >
-                  <p style={{ width: '70px', fontSize: '12px' }}>
-                    {customColorscale.title}
-                  </p>
-                  <div
-                    style={{
-                      width: '180px',
-                      'margin-left': '12px',
-                    }}
-                  >
-                    <Colorscale
-                      colorscale={customColorscale.colorscale}
-                      onClick={(colorscale) => onChangeColor(colorscale)}
-                    />
-                  </div>
-                </div>
-              ))
-            : ''}
-          {props.value.chartData?.layout &&
-            props.value.chartData?.layout.colorway && (
-              <div>
-                <ColorscaleColorsEditor
-                  _={_}
-                  handleChange={(colorscale) => onChangeColor(colorscale)}
-                  colorscale={props.value.chartData.layout.colorway}
-                />
-              </div>
-            )}
         </PlotlySection>
         <PlotlySection name={_('Text')} attr="font.family">
           <FontSelector
