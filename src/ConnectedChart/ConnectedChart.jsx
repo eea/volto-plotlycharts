@@ -57,8 +57,6 @@ function ConnectedChart(props) {
     },
   };
 
-  console.log('HERE', chartData);
-
   delete layout.width;
   delete layout.height;
 
