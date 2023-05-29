@@ -18,8 +18,6 @@ import {
   TraceAccordion,
   TraceTypeSection,
   TraceMarkerSection,
-  ColorscalePicker,
-  ColorwayPicker,
   ColorArrayPicker,
   HoverInfo,
   HoverTemplateText,
@@ -48,8 +46,9 @@ import {
 } from 'react-chart-editor';
 import { traceTypes } from 'react-chart-editor/lib/lib/traceTypes';
 import { localize } from 'react-chart-editor';
+import ColorwayPicker from './fields/ColorwayPicker';
+import ColorscalePicker from './fields/ColorscalePicker';
 import MarkerColor from './MarkerColor';
-import CustomColorscaleSegments from './CustomColorscaleSegments';
 
 const allTraceTypes = traceTypes(localize).map(({ value }) => value);
 
@@ -57,14 +56,14 @@ const StyleTracesPanel = (props, { localize: _ }) => {
   const chartData = props.value.chartData;
   const { layout = {} } = chartData;
 
-  const handleSetColorscale = (colorscale) => {
+  const onChangeColor = (attr, customColor) => {
     props.onChangeValue({
       ...props.value,
       chartData: {
         ...chartData,
         layout: {
           ...layout,
-          piecolorway: colorscale,
+          [attr]: customColor,
         },
       },
     });
@@ -129,7 +128,11 @@ const StyleTracesPanel = (props, { localize: _ }) => {
         mode="trace"
       >
         <LayoutSection attr="name">
-          <ColorwayPicker label={_('Colors')} attr="piecolorway" />
+          <ColorwayPicker
+            label={_('Colors')}
+            attr="piecolorway"
+            handleChange={onChangeColor}
+          />
           <Radio
             label={_('Extended Colors')}
             attr="extendpiecolors"
@@ -138,8 +141,16 @@ const StyleTracesPanel = (props, { localize: _ }) => {
               { label: _('Off'), value: false },
             ]}
           />
-          <ColorwayPicker label={_('Colors')} attr="sunburstcolorway" />
-          <ColorwayPicker label={_('Colors')} attr="treemapcolorway" />
+          <ColorwayPicker
+            label={_('Colors')}
+            attr="sunburstcolorway"
+            handleChange={onChangeColor}
+          />
+          <ColorwayPicker
+            label={_('Colors')}
+            attr="treemapcolorway"
+            handleChange={onChangeColor}
+          />
           <Radio
             label={_('Extended Colors')}
             attr="extendsunburstcolors"
@@ -156,7 +167,11 @@ const StyleTracesPanel = (props, { localize: _ }) => {
               { label: _('Off'), value: false },
             ]}
           />
-          <ColorwayPicker label={_('Colors')} attr="funnelareacolorway" />
+          <ColorwayPicker
+            label={_('Colors')}
+            attr="funnelareacolorway"
+            handleChange={onChangeColor}
+          />
           <Radio
             label={_('Extended Colors')}
             attr="extendfunnelareacolors"
@@ -167,13 +182,6 @@ const StyleTracesPanel = (props, { localize: _ }) => {
           />
         </LayoutSection>
       </TraceTypeSection>
-      {layout.piecolorway && (
-        <CustomColorscaleSegments
-          colorscale={layout.piecolorway}
-          handleChange={(colorscale) => handleSetColorscale(colorscale)}
-          _={_}
-        />
-      )}
       <PlotlySection
         name={_('Funnel Dimensions')}
         traceTypes={['funnelarea']}
