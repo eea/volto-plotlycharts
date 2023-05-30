@@ -29,7 +29,7 @@
     "@plone/scripts": "*",
     "plotly.js": "^2.9.0",
     "react-chart-editor": "0.45.0",
-    "react-colorscales": "github:eea/react-colorscales#1.0.0",
+    "react-colorscales": "github:eea/react-colorscales#1.0.1",
     "react-inspector": "5.1.1",
     "react-json-editor-ajrm": "2.5.13",
     "react-plotly.js": "2.5.1"
@@ -42,7 +42,7 @@
   },
   "resolutions": {
     "react-countup/countup.js": "2.5.0",
-    "react-colorscales": "github:eea/react-colorscales#1.0.0"
+    "react-colorscales": "github:eea/react-colorscales#1.0.1"
   },
   "scripts": {
     "release": "release-it",
