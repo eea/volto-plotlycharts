@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import {
-  ColorPicker,
   Dropdown,
   FontSelector,
   PlotlyFold,
@@ -20,6 +19,7 @@ import DataSelector from 'react-chart-editor/lib/components/fields/DataSelector'
 
 import loadable from '@loadable/component';
 import ColorwayPicker from './fields/ColorwayPicker';
+import ColorPicker from './fields/ColorPicker';
 
 const Select = loadable(() => import('react-select'));
 
@@ -282,8 +282,9 @@ const StyleLayoutPanel = (props, { localize: _ }) => {
           <ColorwayPicker
             label={_('Color')}
             attr="colorway"
-            handleChange={onChangeColor}
+            updatePlot={(inputValue) => onChangeColor('colorway', inputValue)}
             labelWidth={80}
+            editable
           />
         </PlotlySection>
         <PlotlySection name={_('Text')} attr="font.family">

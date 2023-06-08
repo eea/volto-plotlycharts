@@ -1,8 +1,9 @@
-import ColorscalePickerWidget from '../widgets/ColorscalePicker';
 import Field from 'react-chart-editor/lib/components/fields/Field';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connectToContainer } from 'react-chart-editor/lib';
+
+import ColorscalePickerWidget from '../widgets/ColorscalePicker';
 
 const EDITOR_ACTIONS = {
   UPDATE_TRACES: 'plotly-editor-update-traces',
@@ -58,6 +59,7 @@ export class UnconnectedColorscalePicker extends Component {
           onColorscaleChange={this.onUpdate}
           initialCategory={this.props.initialCategory}
           disableCategorySwitch={this.props.disableCategorySwitch}
+          editable={this.props.editable}
         />
       </Field>
     );

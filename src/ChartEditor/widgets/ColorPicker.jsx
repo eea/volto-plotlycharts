@@ -79,7 +79,7 @@ class ColorPicker extends Component {
 
     // Convert rgba to rgb if necessary
     const rgbString =
-      selectedColor._a !== 0
+      selectedColor._a >= 0
         ? selectedColor.toRgbString()
         : `rgb(${selectedColor._r},${selectedColor._g},${selectedColor._b})`;
 
