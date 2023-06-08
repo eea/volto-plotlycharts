@@ -81,6 +81,8 @@ function ConnectedChart(props) {
     };
   }
 
+  console.log('HERE', chartData);
+
   let data =
     provider_data && use_live_data
       ? updateChartDataFromProvider(chartData.data || [], provider_data)

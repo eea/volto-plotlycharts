@@ -36,13 +36,14 @@ export class UnconnectedColorscalePicker extends Component {
         }),
         colorscaleType,
       );
-      this.context.onUpdate({
-        type: EDITOR_ACTIONS.UPDATE_TRACES,
-        payload: {
-          update: { autocolorscale: false },
-          traceIndexes: [this.props.fullContainer.index],
-        },
-      });
+      // TODO: Check why this gives an error
+      // this.context.onUpdate({
+      //   type: EDITOR_ACTIONS.UPDATE_TRACES,
+      //   payload: {
+      //     update: { autocolorscale: false },
+      //     traceIndexes: [this.props.fullContainer.index],
+      //   },
+      // });
     }
   }
 
