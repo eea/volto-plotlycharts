@@ -5,18 +5,18 @@ import { connectToContainer } from 'react-chart-editor/lib';
 
 import ColorscalePickerWidget from '../widgets/ColorscalePicker';
 
-const EDITOR_ACTIONS = {
-  UPDATE_TRACES: 'plotly-editor-update-traces',
-  ADD_TRACE: 'plotly-editor-add-trace',
-  DELETE_TRACE: 'plotly-editor-delete-trace',
-  UPDATE_LAYOUT: 'plotly-editor-update-layout',
-  DELETE_ANNOTATION: 'plotly-editor-delete-annotation',
-  DELETE_SHAPE: 'plotly-editor-delete-shape',
-  DELETE_IMAGE: 'plotly-editor-delete-image',
-  DELETE_RANGESELECTOR: 'plotly-editor-delete-rangeselector',
-  DELETE_TRANSFORM: 'plotly-editor-delete-transform',
-  MOVE_TO: 'plotly-editor-move-to',
-};
+// const EDITOR_ACTIONS = {
+//   UPDATE_TRACES: 'plotly-editor-update-traces',
+//   ADD_TRACE: 'plotly-editor-add-trace',
+//   DELETE_TRACE: 'plotly-editor-delete-trace',
+//   UPDATE_LAYOUT: 'plotly-editor-update-layout',
+//   DELETE_ANNOTATION: 'plotly-editor-delete-annotation',
+//   DELETE_SHAPE: 'plotly-editor-delete-shape',
+//   DELETE_IMAGE: 'plotly-editor-delete-image',
+//   DELETE_RANGESELECTOR: 'plotly-editor-delete-rangeselector',
+//   DELETE_TRANSFORM: 'plotly-editor-delete-transform',
+//   MOVE_TO: 'plotly-editor-move-to',
+// };
 
 export class UnconnectedColorscalePicker extends Component {
   constructor() {
