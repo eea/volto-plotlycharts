@@ -27,7 +27,6 @@ import {
   FontSelector,
   TextPosition,
   MarkerSize,
-  MultiColorPicker,
   ErrorBars,
   DataSelector,
   VisibilitySelect,
@@ -48,7 +47,8 @@ import { traceTypes } from 'react-chart-editor/lib/lib/traceTypes';
 import { localize } from 'react-chart-editor';
 import ColorwayPicker from './fields/ColorwayPicker';
 import ColorscalePicker from './fields/ColorscalePicker';
-import MarkerColor from './MarkerColor';
+import MarkerColor from './fields/MarkerColor';
+import MultiColorPicker from './fields/MultiColorPicker';
 
 const allTraceTypes = traceTypes(localize).map(({ value }) => value);
 
@@ -131,7 +131,10 @@ const StyleTracesPanel = (props, { localize: _ }) => {
           <ColorwayPicker
             label={_('Colors')}
             attr="piecolorway"
-            handleChange={onChangeColor}
+            updatePlot={(inputValue) =>
+              onChangeColor('piecolorway', inputValue)
+            }
+            editable
           />
           <Radio
             label={_('Extended Colors')}
@@ -144,12 +147,18 @@ const StyleTracesPanel = (props, { localize: _ }) => {
           <ColorwayPicker
             label={_('Colors')}
             attr="sunburstcolorway"
-            handleChange={onChangeColor}
+            updatePlot={(inputValue) =>
+              onChangeColor('sunburstcolorway', inputValue)
+            }
+            editable
           />
           <ColorwayPicker
             label={_('Colors')}
             attr="treemapcolorway"
-            handleChange={onChangeColor}
+            updatePlot={(inputValue) =>
+              onChangeColor('treemapcolorway', inputValue)
+            }
+            editable
           />
           <Radio
             label={_('Extended Colors')}
@@ -170,7 +179,10 @@ const StyleTracesPanel = (props, { localize: _ }) => {
           <ColorwayPicker
             label={_('Colors')}
             attr="funnelareacolorway"
-            handleChange={onChangeColor}
+            updatePlot={(inputValue) =>
+              onChangeColor('funnelareacolorway', inputValue)
+            }
+            editable
           />
           <Radio
             label={_('Extended Colors')}

@@ -9,7 +9,7 @@ import React, { Component } from 'react';
 import config from '@plone/volto/registry';
 import { Icon } from '@plone/volto/components';
 
-import CustomColorPicker from '../CustomColorPicker';
+import ColorPicker from '../widgets/ColorPicker';
 
 import addIcon from '@plone/volto/icons/add.svg';
 import editingIcon from '@plone/volto/icons/editing.svg';
@@ -48,9 +48,10 @@ class Scale extends Component {
     var newColorscale = [...(this.props.selected || [])];
     newColorscale[index] = color;
 
-    if (this.props.handleChange) {
-      this.props.handleChange(this.props.attr, newColorscale);
-    }
+    this.props.onColorscaleChange(
+      newColorscale,
+      this.state.selectedColorscaleType,
+    );
   }
 
   handleDeleteColor(index) {
@@ -59,17 +60,19 @@ class Scale extends Component {
       ...this.props.selected.slice(index + 1),
     ];
 
-    if (this.props.handleChange) {
-      this.props.handleChange(this.props.attr, newColorscale);
-    }
+    this.props.onColorscaleChange(
+      newColorscale,
+      this.state.selectedColorscaleType,
+    );
   }
 
   handleAddColor() {
     var newColorscale = [...this.props.selected, 'black'];
 
-    if (this.props.handleChange) {
-      this.props.handleChange(this.props.attr, newColorscale);
-    }
+    this.props.onColorscaleChange(
+      newColorscale,
+      this.state.selectedColorscaleType,
+    );
   }
 
   render() {
@@ -96,19 +99,21 @@ class Scale extends Component {
           style={{ display: 'flex', alignItems: 'flex-start' }}
         >
           <Colorscale colorscale={selected} onClick={this.onClick} />
-          <Icon
-            className="color-customize-icon"
-            name={showCustomizeColor ? closeIcon : editingIcon}
-            size="21px"
-            onClick={() =>
-              this.setState({
-                showCustomizeColor: !this.state.showCustomizeColor,
-              })
-            }
-            style={{ cursor: 'pointer', marginLeft: '0.5rem' }}
-          />
+          {this.props.editable && (
+            <Icon
+              className="color-customize-icon"
+              name={showCustomizeColor ? closeIcon : editingIcon}
+              size="21px"
+              onClick={() =>
+                this.setState({
+                  showCustomizeColor: !this.state.showCustomizeColor,
+                })
+              }
+              style={{ cursor: 'pointer', marginLeft: '0.5rem' }}
+            />
+          )}
         </div>
-        {showCustomizeColor && (
+        {this.props.editable && showCustomizeColor && (
           <React.Fragment>
             {selected?.length > 0 &&
               selected.map((item, index) => (
@@ -116,7 +121,7 @@ class Scale extends Component {
                   style={{ position: 'relative', margin: '5px 0' }}
                   key={index}
                 >
-                  <CustomColorPicker
+                  <ColorPicker
                     selectedColor={item}
                     onColorChange={(color) =>
                       this.handleColorChange(color, index)
@@ -196,6 +201,7 @@ Scale.propTypes = {
   label: PropTypes.string,
   initialCategory: PropTypes.string,
   disableCategorySwitch: PropTypes.bool,
+  editable: PropTypes.bool,
 };
 
 Scale.contextTypes = {
