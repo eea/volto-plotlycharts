@@ -8,7 +8,7 @@ export default (config) => {
     id: 'embed_visualization',
     title: 'Embed EEA visualization',
     icon: presentationSVG,
-    group: 'plotly',
+    group: 'data_visualization',
     view: View,
     edit: Edit,
     restricted: false,
