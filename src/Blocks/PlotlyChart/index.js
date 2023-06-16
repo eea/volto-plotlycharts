@@ -8,7 +8,7 @@ export default (config) => {
     id: 'plotly_chart',
     title: 'Plotly chart',
     icon: presentationSVG,
-    group: 'data_visualization',
+    group: 'data_visualizations',
     view: View,
     edit: Edit,
     restricted: true,

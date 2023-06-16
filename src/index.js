@@ -24,7 +24,7 @@ const applyConfig = (config) => {
   config.blocks.groupBlocksOrder = [
     ...config.blocks.groupBlocksOrder,
     {
-      id: 'data_visualization',
+      id: 'data_visualizations',
       title: 'Data Visualizations (Beta)',
     },
   ];

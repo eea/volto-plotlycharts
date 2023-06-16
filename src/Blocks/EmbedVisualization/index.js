@@ -8,7 +8,7 @@ export default (config) => {
     id: 'embed_visualization',
     title: 'Embed EEA visualization',
     icon: presentationSVG,
-    group: 'data_visualization',
+    group: 'data_visualizations',
     view: View,
     edit: Edit,
     restricted: false,
