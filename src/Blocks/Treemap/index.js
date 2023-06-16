@@ -7,7 +7,7 @@ export default (config) => {
     id: 'treemapChart',
     title: 'Treemap',
     icon: tableSVG,
-    group: 'plotly',
+    group: 'data_visualizations',
     view: TreemapView,
     edit: TreemapEdit,
     restricted: true,

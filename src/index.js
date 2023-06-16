@@ -24,7 +24,7 @@ const applyConfig = (config) => {
   config.blocks.groupBlocksOrder = [
     ...config.blocks.groupBlocksOrder,
     {
-      id: 'plotly',
+      id: 'data_visualizations',
       title: 'Data Visualizations (Beta)',
     },
   ];
