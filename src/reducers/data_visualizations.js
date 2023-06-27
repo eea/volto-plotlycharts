@@ -3,7 +3,11 @@
  * @module reducers/data_providers
  */
 
-import { GET_VISUALIZATION, REMOVE_VISUALIZATION } from '../constants';
+import {
+  GET_ES_DATA,
+  GET_VISUALIZATION,
+  REMOVE_VISUALIZATION,
+} from '../constants';
 import { without } from 'lodash';
 
 const initialState = {
@@ -81,6 +85,42 @@ export default function data_providers(state = initialState, action = {}) {
       return {
         ...state,
         data: { ...newData },
+      };
+
+    //todo: move in own reducer/middleware
+    case `${GET_ES_DATA}_PENDING`:
+      console.log('request pending');
+
+      return {
+        ...state,
+        error: null,
+        loaded: false,
+        loading: true,
+      };
+
+    case `${GET_ES_DATA}_SUCCESS`:
+      console.log('request success', action.result);
+      return {
+        ...state,
+        error: null,
+        data: {
+          ...state.data,
+          //maybe save it with the id of the viz that requested it
+          [action.path]: action.result,
+        },
+        loaded: true,
+        loading: false,
+      };
+
+    case `${GET_ES_DATA}_FAIL`:
+      console.log('request fail');
+
+      return {
+        ...state,
+        error: action.error,
+        data: { ...state.data },
+        loaded: false,
+        loading: false,
       };
 
     default:

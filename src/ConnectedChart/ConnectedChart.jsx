@@ -104,6 +104,8 @@ function ConnectedChart(props) {
     return <div>Loading chart...</div>;
   }
 
+  // console.log(provider_data, 'data from provider looks like');
+
   return !Object.keys(chartData).length ? (
     <div>No valid data.</div>
   ) : (

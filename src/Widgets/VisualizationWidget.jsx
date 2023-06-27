@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { Button, Modal, Grid, Label } from 'semantic-ui-react';
+import React from 'react';
+import { Button, Modal, Grid, Label, Select } from 'semantic-ui-react';
 import { map } from 'lodash';
 
 import { PickObjectWidget } from '@eeacms/volto-datablocks/components';
@@ -9,84 +9,123 @@ import ConnectedChart from '../ConnectedChart';
 import ChartEditor from '../ChartEditor';
 
 import './style.less';
+import ESDataWidgetActions from './ESDataWidgetActions';
+import ESDataWidgetBody from './ESDataWidget';
 
-class PlotlyEditorModal extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      value: props.value,
-    };
-  }
+const dataSourceOptions = [
+  { key: 'connector', value: 'connector', text: 'connector' },
+  { key: 'elastic-search', value: 'elastic-search', text: 'elastic-search' },
+];
 
-  render() {
-    return (
-      <Modal open={true} size="fullscreen" className="chart-editor-modal">
-        <Modal.Content scrolling>
+const PlotlyEditorModal = (props) => {
+  const [value, setValue] = React.useState(props?.value);
+  const [queryESData, setQueryESData] = React.useState(false);
+
+  const [dataSource, setDataSource] = React.useState(
+    dataSourceOptions[0].value,
+  );
+
+  const handleESActionsCancel = () => {
+    setQueryESData(false);
+    //should also reset data builded
+  };
+
+  const handleESDataSave = () => {
+    //should set data from datawidget body in state to value
+    //preprocess data maybe
+  };
+
+  console.log(value, 'value in viz');
+  console.log(dataSource, 'data source');
+  console.log(queryESData, 'queryESData');
+
+  return (
+    <Modal open={true} size="fullscreen" className="chart-editor-modal">
+      <Modal.Content scrolling>
+        {(dataSource && dataSource === 'connector') || !queryESData ? (
           <ChartEditor
-            value={this.state.value}
+            value={value}
             onChangeValue={(value) => {
-              this.setState({ value });
+              setValue(value);
             }}
           />
-        </Modal.Content>
-        <Modal.Actions>
-          <Grid>
-            <Grid.Row>
-              <Grid.Column computer={8} tablet={12} verticalAlign="middle">
-                <PickObjectWidget
-                  title="Select data source"
-                  id="provider-data"
-                  onChange={(_, provider_url) => {
-                    this.setState({
-                      value: { ...this.state.value, provider_url },
-                    });
-                  }}
-                  value={this.state.value?.provider_url}
-                  showReload={true}
+        ) : (
+          <ESDataWidgetBody />
+        )}
+      </Modal.Content>
+      <Modal.Actions className="plotly-modal-action">
+        <Grid>
+          <Grid.Row>
+            <Grid.Column
+              computer={8}
+              tablet={12}
+              largeScreen={8}
+              verticalAlign="middle"
+            >
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <p style={{ marginBottom: '0px', marginRight: '5px' }}>
+                  Select data from
+                </p>
+                <Select
+                  placeholder="Select"
+                  options={dataSourceOptions}
+                  value={dataSource}
+                  onChange={(e, { value }) => setDataSource(value)}
                 />
-              </Grid.Column>
-              <Grid.Column computer={4} tablet={12} verticalAlign="middle">
-                <Button
-                  primary
-                  floated="right"
-                  onClick={() => this.props.onChange(this.state.value)}
-                >
-                  Apply changes
-                </Button>
-                <Button floated="right" onClick={this.props.onClose}>
-                  Close
-                </Button>
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
-        </Modal.Actions>
-      </Modal>
-    );
-  }
-}
+                {dataSource && dataSource === 'connector' ? (
+                  <PickObjectWidget
+                    title="Select data source"
+                    id="provider-data"
+                    onChange={(_, provider_url) => {
+                      setValue({ ...value, provider_url });
+                    }}
+                    value={value?.provider_url}
+                    showReload={true}
+                  />
+                ) : (
+                  <ESDataWidgetActions
+                    onConfigure={() => setQueryESData(true)}
+                    onCancel={() => handleESActionsCancel()}
+                    onSave={() => {
+                      handleESDataSave();
+                    }}
+                  />
+                )}
+              </div>
+            </Grid.Column>
+            <Grid.Column computer={4} tablet={12} verticalAlign="middle">
+              <Button
+                primary
+                floated="left"
+                onClick={() => props.onChange(value)}
+              >
+                Apply changes
+              </Button>
+              <Button floated="right" onClick={props.onClose}>
+                Close
+              </Button>
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+      </Modal.Actions>
+    </Modal>
+  );
+};
 
-class VisualizationWidget extends Component {
-  constructor(props) {
-    super(props);
+const VisualizationWidget = (props) => {
+  const [showChartEditor, setShowChartEditor] = React.useState(false);
 
-    this.state = {
-      showChartEditor: false,
-    };
-  }
-
-  handleModalChange(value) {
+  const handleModalChange = (value) => {
     const chartData = {
       ...value.chartData,
       provider_url: value.provider_url,
     };
-    this.props.onChange(this.props.id, {
+    props.onChange(props.id, {
       chartData,
       provider_url: value.provider_url,
     });
-    this.setState({
-      showChartEditor: false,
-    });
-  }
+    setShowChartEditor(false);
+  };
 
   // This is the structure of value
   // value = {
@@ -99,49 +138,43 @@ class VisualizationWidget extends Component {
   //   provider_url: provider_url
   // }
 
-  render() {
-    const { id, title, description, error, value } = this.props;
+  const { id, title, description, error, value } = props;
 
-    if (__SERVER__) return '';
+  if (__SERVER__) return '';
 
-    return (
-      <FormFieldWrapper {...this.props} columns={1}>
-        <div className="wrapper">
-          <label htmlFor={`field-${id}`}>{title}</label>
-          <Button
-            floated="right"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              this.setState({ showChartEditor: true });
-            }}
-          >
-            Open Chart Editor
-          </Button>
-        </div>
-        {description && <p className="help">{description}</p>}
-        <ConnectedChart visualization={value} />
-        {this.state.showChartEditor ? (
-          <PlotlyEditorModal
-            value={value}
-            onChange={(changedValue) => this.handleModalChange(changedValue)}
-            onClose={() =>
-              this.setState({
-                showChartEditor: false,
-              })
-            }
-          />
-        ) : (
-          ''
-        )}
-        {map(error, (message) => (
-          <Label key={message} basic color="red" pointing>
-            {message}
-          </Label>
-        ))}
-      </FormFieldWrapper>
-    );
-  }
-}
+  return (
+    <FormFieldWrapper {...props} columns={1}>
+      <div className="wrapper">
+        <label htmlFor={`field-${id}`}>{title}</label>
+        <Button
+          floated="right"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setShowChartEditor(true);
+          }}
+        >
+          Open Chart Editor
+        </Button>
+      </div>
+      {description && <p className="help">{description}</p>}
+      <ConnectedChart visualization={value} />
+      {showChartEditor ? (
+        <PlotlyEditorModal
+          value={value}
+          onChange={(changedValue) => handleModalChange(changedValue)}
+          onClose={() => setShowChartEditor(false)}
+        />
+      ) : (
+        ''
+      )}
+      {map(error, (message) => (
+        <Label key={message} basic color="red" pointing>
+          {message}
+        </Label>
+      ))}
+    </FormFieldWrapper>
+  );
+};
 
 export default VisualizationWidget;

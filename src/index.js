@@ -2,6 +2,7 @@ import installBlocks from './Blocks';
 import { VisualizationView } from './Views';
 import { VisualizationWidget } from './Widgets';
 import { data_visualizations } from './middlewares';
+
 import * as addonReducers from './reducers';
 
 import './less/global.less';
