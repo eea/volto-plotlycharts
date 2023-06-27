@@ -35,10 +35,6 @@ const PlotlyEditorModal = (props) => {
     //preprocess data maybe
   };
 
-  console.log(value, 'value in viz');
-  console.log(dataSource, 'data source');
-  console.log(queryESData, 'queryESData');
-
   return (
     <Modal open={true} size="fullscreen" className="chart-editor-modal">
       <Modal.Content scrolling>
