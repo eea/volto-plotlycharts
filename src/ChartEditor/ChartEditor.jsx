@@ -7,7 +7,7 @@ import {
   // StyleLayoutPanel,
   StyleAxesPanel,
   StyleMapsPanel,
-  StyleLegendPanel,
+  // StyleLegendPanel,
   StyleNotesPanel,
   StyleShapesPanel,
   StyleSlidersPanel,
@@ -19,8 +19,7 @@ import {
   Logo,
 } from 'react-chart-editor';
 
-import StyleLayoutPanel from './StyleLayoutPanel';
-import StyleTracesPanel from './StyleTracesPanel';
+import { StyleLayoutPanel, StyleTracesPanel, StyleLegendPanel } from './panels';
 
 class CustomEditor extends DefaultEditor {
   render() {

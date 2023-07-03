@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import loadable from '@loadable/component';
 import {
   Dropdown,
   FontSelector,
@@ -8,7 +9,6 @@ import {
   TextEditor,
   PlotlySection,
   LayoutPanel,
-  VisibilitySelect,
   HovermodeDropdown,
   Flaglist,
   Radio,
@@ -17,9 +17,7 @@ import {
 import { HoverColor } from 'react-chart-editor/lib/components/fields/derived';
 import DataSelector from 'react-chart-editor/lib/components/fields/DataSelector';
 
-import loadable from '@loadable/component';
-import ColorwayPicker from './fields/ColorwayPicker';
-import ColorPicker from './fields/ColorPicker';
+import { ColorwayPicker, ColorPicker, VisibilitySelect } from '../fields';
 
 const Select = loadable(() => import('react-select'));
 
@@ -50,7 +48,8 @@ const selectStyles = {
   }),
 };
 
-const StyleLayoutPanel = (props, { localize: _ }) => {
+const StyleLayoutPanel = (props, context) => {
+  const { localize: _ } = context;
   const chartData = props.value.chartData;
   const { data = [], layout = {} } = chartData || {};
 
@@ -255,6 +254,29 @@ const StyleLayoutPanel = (props, { localize: _ }) => {
             ...layout.yaxis,
             hoverformat: format.value,
           },
+        },
+      },
+    });
+  };
+
+  const handleAutosizeChange = (autosize) => {
+    const { width, height } = context.fullLayout;
+    const newLayout = { ...layout };
+
+    if (autosize) {
+      delete newLayout.width;
+      delete newLayout.height;
+    } else {
+      newLayout.width = width;
+      newLayout.height = height;
+    }
+
+    props.onChangeValue({
+      ...props.value,
+      chartData: {
+        ...chartData,
+        layout: {
+          ...newLayout,
         },
       },
     });
@@ -519,6 +541,7 @@ const StyleLayoutPanel = (props, { localize: _ }) => {
           ]}
           showOn={false}
           defaultOpt={true}
+          onChange={handleAutosizeChange}
         >
           <Numeric label={_('Fixed Width')} attr="width" units="px" />
           <Numeric label={_('Fixed height')} attr="height" units="px" />
@@ -633,6 +656,8 @@ const StyleLayoutPanel = (props, { localize: _ }) => {
 
 StyleLayoutPanel.contextTypes = {
   localize: PropTypes.func,
+  layout: PropTypes.object,
+  fullLayout: PropTypes.object,
 };
 
 export default StyleLayoutPanel;

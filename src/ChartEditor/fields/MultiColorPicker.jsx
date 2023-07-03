@@ -1,12 +1,13 @@
-import ColorPicker from './ColorPicker';
-import { UnconnectedColorscalePicker } from './ColorscalePicker';
-import Field from 'react-chart-editor/lib/components/fields/Field';
-import Info from 'react-chart-editor/lib/components/fields/Info';
-import PropTypes from 'prop-types';
-import RadioBlocks from 'react-chart-editor/lib/components/widgets/RadioBlocks';
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import nestedProperty from 'plotly.js/src/lib/nested_property';
 import { adjustColorscale, connectToContainer } from 'react-chart-editor/lib';
+import Field from 'react-chart-editor/lib/components/fields/Field';
+import Info from 'react-chart-editor/lib/components/fields/Info';
+import RadioBlocks from 'react-chart-editor/lib/components/widgets/RadioBlocks';
+
+import { UnconnectedColorscalePicker } from './ColorscalePicker';
+import ColorPicker from './ColorPicker';
 
 const CustomColorscalePicker = connectToContainer(UnconnectedColorscalePicker, {
   modifyPlotProps: (props, context, plotProps) => {

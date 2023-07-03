@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { compose } from 'redux';
+import cx from 'classnames';
 import loadable from '@loadable/component';
 import config from '@plone/volto/registry';
 import { toPublicURL } from '@plone/volto/helpers';
@@ -24,7 +25,7 @@ function ConnectedChart(props) {
     visualization,
     visualization_data,
   } = props;
-  const { hover_format_xy, width, height } = props.data || {};
+  const { hover_format_xy } = props.data || {};
   const {
     data_provenance,
     other_organisations,
@@ -42,7 +43,6 @@ function ConnectedChart(props) {
 
   const layout = {
     ...(chartData.layout || {}),
-    autosize: true,
     dragmode: false,
     font: {
       ...(chartData.layout?.font || {}),
@@ -57,9 +57,7 @@ function ConnectedChart(props) {
     },
   };
 
-  delete layout.width;
-  delete layout.height;
-
+  // Overwrite xaxis
   if (layout.xaxis) {
     layout.xaxis = {
       ...layout.xaxis,
@@ -70,6 +68,8 @@ function ConnectedChart(props) {
         '',
     };
   }
+
+  // Overwrite yaxis
   if (layout.yaxis) {
     layout.yaxis = {
       ...layout.yaxis,
@@ -108,7 +108,7 @@ function ConnectedChart(props) {
     <div>No valid data.</div>
   ) : (
     <div className="visualization-wrapper">
-      <div className="visualization">
+      <div className={cx('visualization', { autosize: layout.autosize })}>
         <LoadablePlotly
           useResizeHandler
           data={data}
@@ -120,8 +120,8 @@ function ConnectedChart(props) {
             responsive: true,
           }}
           style={{
-            width: width ? width + 'px' : '100%',
-            height: height + 'px',
+            position: 'relative',
+            display: 'block',
           }}
         />
       </div>

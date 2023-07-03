@@ -1,15 +1,15 @@
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import ColorscalePicker, {
   Colorscale,
   COLOR_PICKER_CONSTANTS,
 } from 'react-colorscales';
 import { Info } from 'react-chart-editor/lib/components';
 import Dropdown from 'react-chart-editor/lib/components/widgets/Dropdown';
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
 import config from '@plone/volto/registry';
 import { Icon } from '@plone/volto/components';
 
-import ColorPicker from '../widgets/ColorPicker';
+import { ColorPicker } from '../widgets';
 
 import addIcon from '@plone/volto/icons/add.svg';
 import editingIcon from '@plone/volto/icons/editing.svg';

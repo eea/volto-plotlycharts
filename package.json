@@ -27,12 +27,12 @@
     "@eeacms/volto-datablocks": "*",
     "@eeacms/volto-matomo": "*",
     "@plone/scripts": "*",
-    "plotly.js": "^2.9.0",
-    "react-chart-editor": "0.45.0",
+    "plotly.js": "^2.24.2",
+    "react-chart-editor": "latest",
     "react-colorscales": "github:eea/react-colorscales#1.0.2",
-    "react-inspector": "5.1.1",
-    "react-json-editor-ajrm": "2.5.13",
-    "react-plotly.js": "2.5.1"
+    "react-inspector": "6.0.2",
+    "react-json-editor-ajrm": "2.5.14",
+    "react-plotly.js": "2.6.0"
   },
   "devDependencies": {
     "@cypress/code-coverage": "^3.10.0",

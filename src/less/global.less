@@ -29,10 +29,6 @@
   top: 10px;
 }
 
-.visualization {
-  overflow: auto;
-}
-
 .chart-editor-modal {
   z-index: 100 !important;
 }
@@ -46,25 +42,37 @@ body.has-sidebar .ui.modal.chart-editor-modal {
   position: relative;
 }
 
-.visualization-wrapper .visualization-info {
-  display: flex;
-  align-items: center;
+.visualization-wrapper {
+  position: relative;
 
-  > * {
-    padding: 0 0.5rem;
-    border-collapse: collapse;
+  .visualization {
+    position: relative;
+
+    &:not(.autosize) {
+      overflow: auto;
+    }
   }
 
-  > *:first-child {
-    padding-left: 0;
-  }
-
-  > *:last-child {
-    padding-right: 0;
-  }
-
-  > *:not(:last-child) {
-    border-right: 2px solid @textColor;
+  .visualization-info {
+    display: flex;
+    align-items: center;
+  
+    > * {
+      padding: 0 0.5rem;
+      border-collapse: collapse;
+    }
+  
+    > *:first-child {
+      padding-left: 0;
+    }
+  
+    > *:last-child {
+      padding-right: 0;
+    }
+  
+    > *:not(:last-child) {
+      border-right: 2px solid @textColor;
+    }
   }
 }
 

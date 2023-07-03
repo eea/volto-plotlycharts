@@ -16,7 +16,6 @@ const View = (props) => {
           has_data_query_by_context: data.has_data_query_by_context ?? true,
           with_sources: data.with_sources ?? true,
           use_live_data: true,
-          height: data.height ?? 450,
         }}
       />
     </div>
