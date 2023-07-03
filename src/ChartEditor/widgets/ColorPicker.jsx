@@ -1,11 +1,11 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import Fields from 'react-color/lib/components/sketch/SketchFields';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import tinycolor from 'tinycolor2';
-import { Hue, Saturation } from 'react-color/lib/components/common';
 import { CustomPicker as customPicker } from 'react-color';
+import Fields from 'react-color/lib/components/sketch/SketchFields';
+import { Hue, Saturation } from 'react-color/lib/components/common';
 
 // Utility functions for converting ColorPicker color objects or raw strings
 // into TinyColor objects.

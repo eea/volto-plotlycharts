@@ -1,15 +1,15 @@
-import Field from 'react-chart-editor/lib/components/fields/Field';
-import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connectToContainer } from 'react-chart-editor/lib';
+import Field from 'react-chart-editor/lib/components/fields/Field';
 
-import ColorscalePickerWidget from '../widgets/ColorscalePicker';
+import { ColorscalePicker } from '../widgets';
 
 class UnconnectedColorwayPicker extends Component {
   render() {
     return (
       <Field {...this.props}>
-        <ColorscalePickerWidget
+        <ColorscalePicker
           selected={this.props.fullValue}
           onColorscaleChange={this.props.updatePlot}
           initialCategory="categorical"

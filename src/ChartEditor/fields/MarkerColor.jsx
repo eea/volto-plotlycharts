@@ -1,8 +1,8 @@
 /* eslint-disable no-useless-computed-key */
-import Field from 'react-chart-editor/lib/components/fields/Field';
-import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connectToContainer } from 'react-chart-editor/lib';
+import Field from 'react-chart-editor/lib/components/fields/Field';
 import RadioBlocks from 'react-chart-editor/lib/components/widgets/RadioBlocks';
 import Numeric from 'react-chart-editor/lib/components/fields/Numeric';
 import Radio from 'react-chart-editor/lib/components/fields/Radio';

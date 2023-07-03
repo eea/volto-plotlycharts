@@ -32,7 +32,7 @@ export default {
     {
       id: 'default',
       title: 'Default',
-      fields: ['hover_format_xy', 'height'],
+      fields: ['hover_format_xy'],
     },
     {
       id: 'sources',
@@ -63,11 +63,6 @@ export default {
           </a>
         </>
       ),
-    },
-    height: {
-      title: 'Height',
-      type: 'number',
-      default: 450,
     },
     chartSources: {
       widget: 'object_list',

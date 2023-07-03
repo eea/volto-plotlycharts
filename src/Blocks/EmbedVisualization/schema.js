@@ -6,13 +6,7 @@ export default {
     {
       id: 'default',
       title: 'Default',
-      fields: [
-        'vis_url',
-        'height',
-        'hover_format_xy',
-        'with_sources',
-        'download_button',
-      ],
+      fields: ['vis_url', 'hover_format_xy', 'with_sources', 'download_button'],
     },
     {
       id: 'data_query',
@@ -43,11 +37,6 @@ export default {
           </a>
         </>
       ),
-    },
-    height: {
-      title: 'Height',
-      type: 'number',
-      default: 450,
     },
     download_button: {
       title: 'Toggle download',

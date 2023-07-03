@@ -1,12 +1,12 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import Field from 'react-chart-editor/lib/components/fields/Field';
-import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connectToContainer } from 'react-chart-editor/lib';
+import Field from 'react-chart-editor/lib/components/fields/Field';
 
-import ColorPickerWidget from '../widgets/ColorPicker';
+import { ColorPicker } from '../widgets';
 
 export class UnconnectedColorPicker extends Component {
   constructor(props, context) {
@@ -38,7 +38,7 @@ export class UnconnectedColorPicker extends Component {
 
     return (
       <Field {...this.props}>
-        <ColorPickerWidget
+        <ColorPicker
           selectedColor={this.props.fullValue}
           onColorChange={this.props.updatePlot}
         />

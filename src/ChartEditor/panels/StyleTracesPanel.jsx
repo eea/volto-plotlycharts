@@ -45,10 +45,13 @@ import {
 } from 'react-chart-editor';
 import { traceTypes } from 'react-chart-editor/lib/lib/traceTypes';
 import { localize } from 'react-chart-editor';
-import ColorwayPicker from './fields/ColorwayPicker';
-import ColorscalePicker from './fields/ColorscalePicker';
-import MarkerColor from './fields/MarkerColor';
-import MultiColorPicker from './fields/MultiColorPicker';
+
+import {
+  ColorwayPicker,
+  ColorscalePicker,
+  MarkerColor,
+  MultiColorPicker,
+} from '../fields';
 
 const allTraceTypes = traceTypes(localize).map(({ value }) => value);
 

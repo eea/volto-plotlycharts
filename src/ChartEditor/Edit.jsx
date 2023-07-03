@@ -16,7 +16,7 @@ import 'react-chart-editor/lib/react-chart-editor.css';
 const LoadablePlotly = loadable.lib(() => import('plotly.js/dist/plotly'));
 const LoadablePlotlyEditor = loadable.lib(() => import('react-chart-editor'));
 const LoadableChartEditor = loadable.lib(() => import('./ChartEditor'));
-const LoadableInspector = loadable(() => import('react-inspector'));
+// const LoadableInspector = loadable(() => import('react-inspector'));
 
 // TODO: remove these fallbacks;
 const dataSources = {
@@ -142,7 +142,7 @@ class Edit extends Component {
     LoadablePlotly.preload();
     LoadablePlotlyEditor.preload();
     LoadableChartEditor.preload();
-    LoadableInspector.preload();
+    // LoadableInspector.preload();
   }
 
   handleRawDataChange = (val) => {
@@ -255,11 +255,11 @@ class Edit extends Component {
                                     Refresh
                                   </button>
                                   <div style={{ height: '80vh' }}>
-                                    <LoadableInspector
+                                    {/* <LoadableInspector
                                       data={{ _full: this.state.full }}
                                       expandLevel={2}
                                       sortObjectKeys={true}
-                                    />
+                                    /> */}
                                   </div>
                                 </Panel>
                               </ChartEditor>
