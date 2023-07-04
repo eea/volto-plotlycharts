@@ -122,6 +122,7 @@ function ConnectedChart(props) {
           style={{
             position: 'relative',
             display: 'block',
+            ...(!layout.height ? { minHeight: '450px' } : {}),
           }}
         />
       </div>
