@@ -1,6 +1,6 @@
 import installBlocks from './Blocks';
 import { VisualizationView } from './Views';
-import { VisualizationWidget } from './Widgets';
+import { VisualizationWidget, VisualizationViewWidget } from './Widgets';
 import { data_visualizations } from './middlewares';
 import * as addonReducers from './reducers';
 
@@ -9,6 +9,7 @@ import './less/global.less';
 const applyConfig = (config) => {
   config.views.contentTypesViews.visualization = VisualizationView;
   config.widgets.id.visualization = VisualizationWidget;
+  config.widgets.views.id.visualization = VisualizationViewWidget;
 
   //add chart icon to visualization content type in /contents view
   config.settings.contentIcons.visualization = {
