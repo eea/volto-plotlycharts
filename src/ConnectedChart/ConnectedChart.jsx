@@ -122,7 +122,7 @@ function ConnectedChart(props) {
             responsive: true,
           }}
           onClick={(trace) => {
-            if ((layout.customLink && layout.clickmode === 'event')) {
+            if (layout.customLink && layout.clickmode === 'event') {
               // Ex: catalogue?size=n_10_n&filters[0][field]=FIELD&filters[0][values][0]=${value}&filters[0][type]=any
               // FIELD should be known at the time of configuring the url for redirect
               const link = layout.customLink.replace(
