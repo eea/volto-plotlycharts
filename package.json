@@ -1,6 +1,6 @@
 {
   "name": "@eeacms/volto-plotlycharts",
-  "version": "6.4.2",
+  "version": "7.0.0",
   "description": "Plotly Charts and Editor integration for Volto",
   "main": "src/index.js",
   "author": "European Environment Agency: IDM2 A-Team",
@@ -41,7 +41,6 @@
     "md5": "^2.3.0"
   },
   "resolutions": {
-    "react-countup/countup.js": "2.5.0",
     "react-colorscales": "github:eea/react-colorscales#1.0.2"
   },
   "scripts": {
