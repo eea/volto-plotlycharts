@@ -41,7 +41,6 @@
     "md5": "^2.3.0"
   },
   "resolutions": {
-    "react-countup/countup.js": "2.5.0",
     "react-colorscales": "github:eea/react-colorscales#1.0.2"
   },
   "scripts": {
