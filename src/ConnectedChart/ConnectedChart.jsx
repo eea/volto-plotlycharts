@@ -125,13 +125,9 @@ function ConnectedChart(props) {
             if (layout.customLink && layout.clickmode === 'event') {
               // Ex: catalogue?size=n_10_n&filters[0][field]=FIELD&filters[0][values][0]={value}&filters[0][type]=any
               // FIELD should be known at the time of configuring the url for redirect
-              const link = layout.customLink.replace(
-                '{value}',
-                trace.points[0].label,
-              ).replace(
-                '{parent}',
-                trace.points[0].parent,
-              );
+              const link = layout.customLink
+                .replace('{value}', trace.points[0].label)
+                .replace('{parent}', trace.points[0].parent);
               history.push(link);
             }
           }}
