@@ -25,6 +25,8 @@ Plotly Charts and Plotly Chart Editor integration with Volto
   'visualization'. `eea.restapi` has a behavior to implement such a content
   type.
 
+![Plotlycharts](https://github.com/eea/volto-plotlycharts/raw/develop/docs/volto-plotlycharts.gif)
+
 ## Getting started
 
 ### Try volto-plotlycharts with Docker
