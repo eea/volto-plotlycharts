@@ -122,13 +122,26 @@ function ConnectedChart(props) {
             responsive: true,
           }}
           onClick={(trace) => {
-            if (layout.customLink && layout.clickmode === 'event') {
+            if (layout.customLink && layout.clickmode !== 'none') {
               // Ex: catalogue?size=n_10_n&filters[0][field]=FIELD&filters[0][values][0]={value}&filters[0][type]=any
               // FIELD should be known at the time of configuring the url for redirect
               const link = layout.customLink
                 .replace('{value}', trace.points[0].label)
                 .replace('{parent}', trace.points[0].parent);
               history.push(link);
+            }
+          }}
+          onHover={(e) => {
+            if (layout.customLink && layout.clickmode !== 'none') {
+              e.event.target.style.opacity = 0.8;
+              e.event.target.style.transition = 'opacity 0.1s ease-in-out';
+              e.event.target.style.cursor = 'pointer';
+            }
+          }}
+          onUnhover={(e) => {
+            if (layout.customLink && layout.clickmode !== 'none') {
+              e.event.target.style.opacity = 1;
+              e.event.target.style.cursor = 'default';
             }
           }}
           style={{
