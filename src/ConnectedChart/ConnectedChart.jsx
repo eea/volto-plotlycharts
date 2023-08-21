@@ -7,6 +7,7 @@ import { toPublicURL } from '@plone/volto/helpers';
 import { connectToProviderData } from '@eeacms/volto-datablocks/hocs';
 import { updateChartDataFromProvider } from '@eeacms/volto-datablocks/helpers';
 import { connectBlockToVisualization } from '@eeacms/volto-plotlycharts/hocs';
+import { useHistory } from 'react-router-dom';
 
 import { Download, Sources } from '@eeacms/volto-plotlycharts/Utils';
 
@@ -37,6 +38,7 @@ function ConnectedChart(props) {
   const with_sources = props.data?.with_sources ?? false;
   const loadingProviderData =
     loadingVisualizationData || (hasProviderUrl && props.loadingProviderData);
+  const history = useHistory();
 
   const chartData =
     visualization?.chartData || visualization_data?.chartData || {};
@@ -118,6 +120,29 @@ function ConnectedChart(props) {
             displayModeBar: false,
             editable: false,
             responsive: true,
+          }}
+          onClick={(trace) => {
+            if (layout.customLink && layout.clickmode !== 'none') {
+              // Ex: catalogue?size=n_10_n&filters[0][field]=FIELD&filters[0][values][0]={value}&filters[0][type]=any
+              // FIELD should be known at the time of configuring the url for redirect
+              const link = layout.customLink
+                .replace('{value}', trace.points[0].label)
+                .replace('{parent}', trace.points[0].parent);
+              history.push(link);
+            }
+          }}
+          onHover={(e) => {
+            if (layout.customLink && layout.clickmode !== 'none') {
+              e.event.target.style.opacity = 0.8;
+              e.event.target.style.transition = 'opacity 0.1s ease-in-out';
+              e.event.target.style.cursor = 'pointer';
+            }
+          }}
+          onUnhover={(e) => {
+            if (layout.customLink && layout.clickmode !== 'none') {
+              e.event.target.style.opacity = 1;
+              e.event.target.style.cursor = 'default';
+            }
           }}
           style={{
             position: 'relative',
