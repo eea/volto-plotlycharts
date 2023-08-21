@@ -6,3 +6,4 @@ export { default as MultiColorPicker } from './MultiColorPicker';
 export { default as Numeric } from './Numeric';
 export { default as Radio } from './Radio';
 export { default as VisibilitySelect } from './VisibilitySelect';
+export { default as TextInput } from './TextInput';

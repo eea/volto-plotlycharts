@@ -17,7 +17,12 @@ import {
 import { HoverColor } from 'react-chart-editor/lib/components/fields/derived';
 import DataSelector from 'react-chart-editor/lib/components/fields/DataSelector';
 
-import { ColorwayPicker, ColorPicker, VisibilitySelect } from '../fields';
+import {
+  ColorwayPicker,
+  ColorPicker,
+  VisibilitySelect,
+  TextInput,
+} from '../fields';
 
 const Select = loadable(() => import('react-select'));
 
@@ -587,6 +592,12 @@ const StyleLayoutPanel = (props, context) => {
               { label: _('Click Event'), value: 'event' },
               { label: _('Select Data Point'), value: 'select' },
             ]}
+          />
+          <TextInput
+            label={'Search Link'}
+            attr="customLink"
+            {...props}
+            isVisible={true}
           />
         </PlotlySection>
         <PlotlySection name={_('Hover')}>
