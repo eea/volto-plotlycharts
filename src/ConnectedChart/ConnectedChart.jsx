@@ -122,13 +122,26 @@ function ConnectedChart(props) {
             responsive: true,
           }}
           onClick={(trace) => {
+            // Ex: catalogue?size=n_10_n&filters[0][field]={parent}&filters[0][values][0]={value}&filters[0][type]=any
+            // will not redirect on clicking a parent of point (treemap has a zoom feature and usually parents don't have
+            // the same significance as children, with relation to filter types)
             if (layout.customLink && layout.clickmode !== 'none') {
-              // Ex: catalogue?size=n_10_n&filters[0][field]=FIELD&filters[0][values][0]={value}&filters[0][type]=any
-              // FIELD should be known at the time of configuring the url for redirect
-              const link = layout.customLink
-                .replace('{value}', trace.points[0].label)
-                .replace('{parent}', trace.points[0].parent);
-              history.push(link);
+              const { id, label, parent, data = {} } = trace?.points[0] || {};
+              const { type, parents = [] } = data;
+              const shouldRedirect = type
+                ? type !== 'treemap'
+                  ? true
+                  : parents.indexOf(id) === -1
+                  ? true
+                  : false
+                : false;
+
+              if (shouldRedirect) {
+                const link = layout.customLink
+                  .replace('{value}', id || label)
+                  .replace('{parent}', parent);
+                history.push(link);
+              }
             }
           }}
           onHover={(e) => {
