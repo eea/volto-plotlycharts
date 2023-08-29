@@ -25,7 +25,7 @@ Plotly Charts and Plotly Chart Editor integration with Volto
   'visualization'. `eea.restapi` has a behavior to implement such a content
   type.
 
-![Plotlycharts](./docs/volto-plotlycharts.gif)
+![Plotlycharts](https://raw.githubusercontent.com/eea/volto-plotlycharts/master/docs/volto-plotlycharts.gif)
 
 ## Getting started
 
