@@ -55,7 +55,7 @@ const selectStyles = {
 
 const StyleLayoutPanel = (props, context) => {
   const { localize: _ } = context;
-  const chartData = props.value.chartData;
+  const { chartData } = props.value;
   const { data = [], layout = {} } = chartData || {};
 
   const layoutx = layout.xaxis || {};
@@ -266,15 +266,9 @@ const StyleLayoutPanel = (props, context) => {
 
   const handleAutosizeChange = (autosize) => {
     const { width, height } = context.fullLayout;
-    const newLayout = { ...layout };
-
-    if (autosize) {
-      delete newLayout.width;
-      delete newLayout.height;
-    } else {
-      newLayout.width = width;
-      newLayout.height = height;
-    }
+    const newLayout = autosize
+      ? { ...layout, width: null, height: null }
+      : { ...layout, width, height };
 
     props.onChangeValue({
       ...props.value,
