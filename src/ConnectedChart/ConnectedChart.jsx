@@ -126,8 +126,16 @@ function ConnectedChart(props) {
             // will not redirect on clicking a parent of point (treemap has a zoom feature and usually parents don't have
             // the same significance as children, with relation to filter types)
             if (layout.customLink && layout.clickmode !== 'none') {
-              const { id, label, parent, data = {} } = trace?.points[0] || {};
-              const { type, parents = [] } = data;
+              const {
+                id,
+                label,
+                parent,
+                data = {},
+                curveNumber = 0,
+                pointIndex = 0,
+              } = trace?.points[0] || {};
+              const { type, parents = [], y = [], x = [] } = data;
+              const { meta = [] } = layout;
               const shouldRedirect = type
                 ? type !== 'treemap'
                   ? true
@@ -135,8 +143,19 @@ function ConnectedChart(props) {
                   ? true
                   : false
                 : false;
+              const shouldComposeLinks = meta.length > 0;
 
-              if (shouldRedirect) {
+              if (type === 'bar' && shouldComposeLinks) {
+                const yIsLabels = y.indexOf(label) > -1;
+                const labels = yIsLabels
+                  ? y.filter((label) => label === 0 || label)
+                  : x.filter((label) => label === 0 || label); //trimming
+                const noOfLabels = labels.length;
+                const correspondingLinkPosition =
+                  noOfLabels * curveNumber + pointIndex;
+                const correspondingLink = meta[correspondingLinkPosition];
+                history.push(correspondingLink);
+              } else if (shouldRedirect) {
                 const link = layout.customLink
                   .replace('{value}', id || label)
                   .replace('{parent}', parent);
