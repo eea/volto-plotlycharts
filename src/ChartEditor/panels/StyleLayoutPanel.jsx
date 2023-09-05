@@ -13,6 +13,7 @@ import {
   Flaglist,
   Radio,
   Info,
+  PanelMessage,
 } from 'react-chart-editor/lib/components';
 import { HoverColor } from 'react-chart-editor/lib/components/fields/derived';
 import DataSelector from 'react-chart-editor/lib/components/fields/DataSelector';
@@ -599,6 +600,14 @@ const StyleLayoutPanel = (props, context) => {
             {...props}
             isVisible={true}
           />
+          <PanelMessage icon={null}>
+            <div style={{ textAlign: 'left' }}>
+              <p>
+                {_(` For Bar chart use "allLinks" for specific clicked sector, "fullLinks" for clicked parent and set link list in Meta Text/Custom data,
+          or insert direct link `)}
+              </p>
+            </div>
+          </PanelMessage>
         </PlotlySection>
         <PlotlySection name={_('Hover')}>
           <HovermodeDropdown label={_('Mode')} attr="hovermode">
