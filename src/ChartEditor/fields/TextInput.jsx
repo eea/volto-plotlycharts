@@ -18,7 +18,6 @@ const UnconnectedTextInput = (props) => {
         onUpdate={handleChange}
         value={customLink}
         editableClassName="width-100"
-        tooltip="LOL"
       />
     </Field>
   );

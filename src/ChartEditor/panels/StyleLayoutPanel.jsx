@@ -599,7 +599,6 @@ const StyleLayoutPanel = (props, context) => {
             attr="customLink"
             {...props}
             isVisible={true}
-            tooltip="LOL"
           />
           <PanelMessage icon={null}>
             <div style={{ textAlign: 'left' }}>
