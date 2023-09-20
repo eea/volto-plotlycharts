@@ -53,6 +53,11 @@ body.has-sidebar .ui.modal.chart-editor-modal {
     }
   }
 
+  .visualization-info-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
   .visualization-info {
     display: flex;
     align-items: center;
@@ -68,6 +73,10 @@ body.has-sidebar .ui.modal.chart-editor-modal {
 
     > *:last-child {
       padding-right: 0;
+      margin-right: 0;
+      &.plotly-download-container {
+        margin-left: auto;
+      }
     }
 
     > *:not(:last-child) {
@@ -82,6 +91,7 @@ body.has-sidebar .ui.modal.chart-editor-modal {
 }
 
 .plotly-download-button,
+.plotly-notes-button,
 .plotly-sources-button {
   display: inline-flex;
   align-items: center;
@@ -143,6 +153,7 @@ body.has-sidebar .ui.modal.chart-editor-modal {
 @media print {
   .plotly-download-container,
   .plotly-sources-container,
+  .plotly-notes-container,
   #plotly-sources-popup {
     display: none;
   }

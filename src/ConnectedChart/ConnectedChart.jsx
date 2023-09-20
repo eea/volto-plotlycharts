@@ -9,7 +9,12 @@ import { updateChartDataFromProvider } from '@eeacms/volto-datablocks/helpers';
 import { connectBlockToVisualization } from '@eeacms/volto-plotlycharts/hocs';
 import { useHistory } from 'react-router-dom';
 
-import { Download, Sources } from '@eeacms/volto-plotlycharts/Utils';
+import {
+  Download,
+  Sources,
+  Notes,
+  MoreInfo,
+} from '@eeacms/volto-plotlycharts/Utils';
 
 const LoadablePlotly = loadable(() => import('react-plotly.js'));
 
@@ -26,6 +31,7 @@ function ConnectedChart(props) {
     visualization,
     visualization_data,
   } = props;
+  console.log({ props });
   const { hover_format_xy } = props.data || {};
   const {
     data_provenance,
@@ -36,6 +42,9 @@ function ConnectedChart(props) {
   } = visualization_data || {};
   const use_live_data = props.data?.use_live_data ?? true;
   const with_sources = props.data?.with_sources ?? false;
+  const with_notes = props.data?.with_notes ?? false;
+  const download_button = props.data?.download_button;
+  const with_more_info = props.data?.with_more_info ?? false;
   const loadingProviderData =
     loadingVisualizationData || (hasProviderUrl && props.loadingProviderData);
   const history = useHistory();
@@ -191,30 +200,39 @@ function ConnectedChart(props) {
           }}
         />
       </div>
-      <div className="visualization-info">
-        {with_sources && (
-          <Sources sources={data_provenance?.data || props.data.chartSources} />
-        )}
-        {props.data?.download_button && (
-          <Download
-            data={{ data_query: props.data.data_query }}
-            title={
-              props.data?.vis_url ||
-              props.data?.provider_url ||
-              props.data?.title
-            }
-            provider_data={provider_data}
-            provider_metadata={provider_metadata}
-            url_source={toPublicURL(props?.location?.pathname)}
-            core_metadata={{
-              data_provenance: data_provenance?.data,
-              other_organisations: other_organisations,
-              temporal_coverage: temporal_coverage?.temporal,
-              publisher: publisher,
-              geo_coverage: geo_coverage?.geolocation,
-            }}
-          />
-        )}
+      <div className='visualization-info-container'>
+        <div className="visualization-info">
+          {/* // behavior EEA Core metadata */}
+          {with_notes && <Notes notes={'These are notes'} />}
+          {with_sources && (
+            <Sources
+              sources={data_provenance?.data || props.data.chartSources}
+            />
+          )}
+          {with_more_info && <MoreInfo notes={'These is even more info'} />}
+        </div>
+        <div className="visualization-info">
+          {(download_button === undefined || download_button) && (
+            <Download
+              data={{ data_query: props?.data?.data_query }}
+              title={
+                props.data?.vis_url ||
+                props.data?.provider_url ||
+                props.data?.title
+              }
+              provider_data={provider_data}
+              provider_metadata={provider_metadata}
+              url_source={toPublicURL(props?.location?.pathname)}
+              core_metadata={{
+                data_provenance: data_provenance?.data,
+                other_organisations: other_organisations,
+                temporal_coverage: temporal_coverage?.temporal,
+                publisher: publisher,
+                geo_coverage: geo_coverage?.geolocation,
+              }}
+            />
+          )}
+        </div>
       </div>
     </div>
   );

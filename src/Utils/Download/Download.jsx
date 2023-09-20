@@ -1,11 +1,13 @@
 import React from 'react';
 import { Icon } from '@plone/volto/components';
+import cx from 'classnames';
 import {
   convertMatrixToCSV,
   convertToCSV,
   exportCSVFile,
   spreadCoreMetadata,
 } from './csvStringHelpers';
+import { Popup } from 'semantic-ui-react';
 import downloadSVG from '@eeacms/volto-plotlycharts/icons/download.svg';
 
 const Download = (props) => {
@@ -18,6 +20,7 @@ const Download = (props) => {
     core_metadata,
     url_source,
   } = props;
+  const [expanded, setExpanded] = React.useState(false);
 
   const handleDownloadData = () => {
     let array = [];
@@ -150,7 +153,47 @@ const Download = (props) => {
 
   return (
     <div className="plotly-download-container">
-      <button
+      <Popup
+        content={
+          <div className="visualization-wrapper">
+            <div className="visualization-info">
+              <div>
+                <button
+                  className="plotly-download-button"
+                  onClick={() => {
+                    if (provider_data && !providers_data) {
+                      handleDownloadData();
+                    } else if (providers_data) {
+                      handleDownloadMultipleData();
+                    }
+                  }}
+                >
+                  <span>Data (csv)</span>
+                </button>
+              </div>
+              <div>png</div>
+              <div>svg</div>
+            </div>
+          </div>
+        }
+        position="bottom left"
+        popper={{ id: 'plotly-download-popup' }}
+        trigger={
+          <button className={cx('plotly-download-button', { expanded })}>
+            <span>Download</span>
+            <Icon name={downloadSVG} size="24px" />
+          </button>
+        }
+        on="click"
+        onClose={() => {
+          setExpanded(false);
+        }}
+        onOpen={() => {
+          setExpanded(true);
+        }}
+      />
+
+      {/* <button
         className="plotly-download-button"
         onClick={() => {
           if (provider_data && !providers_data) {
@@ -162,7 +205,7 @@ const Download = (props) => {
       >
         <span>Download data</span>
         <Icon name={downloadSVG} size="24px" />
-      </button>
+      </button> */}
     </div>
   );
 };
