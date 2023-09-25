@@ -1,30 +1,38 @@
-// import { slateBeforeEach, slateAfterEach } from '../support/e2e';
+import { slateBeforeEach, slateAfterEach } from '../support/e2e';
 
-// describe('Blocks Tests', () => {
-//   beforeEach(slateBeforeEach);
-//   afterEach(slateAfterEach);
+describe('Addon Tests', () => {
+  beforeEach(slateBeforeEach);
+  afterEach(slateAfterEach);
 
-//   it('Add Block: Empty', () => {
-//     // Change page title
-//     cy.get('[contenteditable=true]').first().clear();
+  it('Add Content Type: add Discodata Connector', () => {
+    cy.visit('/add?type=discodataconnector');
+    cy.get('#field-title').type('connector-demo');
+    cy.get('#toolbar-save').click();
+  });
 
-//     cy.get('[contenteditable=true]').first().type('My Add-on Page');
+  it('Add new page: Empty', () => {
+    cy.get('[contenteditable=true]').first().clear();
+    cy.get('[contenteditable=true]').first().clear();
+    cy.get('[contenteditable=true]').first().type('Plotlycharts Demo');
+    cy.get('.documentFirstHeading').contains('Plotlycharts Demo');
+    cy.get('[contenteditable=true]').first().type('{enter}');
+  });
 
-//     cy.get('.documentFirstHeading').contains('My Add-on Page');
-
-//     cy.get('[contenteditable=true]').first().type('{enter}');
-
-//     // Add block
-//     cy.get('.ui.basic.icon.button.block-add-button').first().click();
-//     cy.get('.blocks-chooser .title').contains('Media').click();
-//     cy.get('.content.active.media .button.image').contains('Image').click();
-
-//     // Save
-//     cy.get('#toolbar-save').click();
-//     cy.url().should('eq', Cypress.config().baseUrl + '/cypress/my-page');
-
-//     // then the page view should contain our changes
-//     cy.contains('My Add-on Page');
-//     cy.get('.block.image');
-//   });
-// });
+  it('Add Content Type: add Visualization', () => {
+    cy.visit('/add?type=visualization');
+    cy.get('#field-title').type('volto-plotlycharts');
+    cy.get('#field-description').type('Some details here');
+    cy.contains('Open Chart Editor').click();
+    cy.get('#field-provider-data').type('/connector-demo');
+    cy.get('.button__label').click();
+    cy.get('.css-19bqh2r').eq(0).click();
+    cy.contains('COUNTRY').click();
+    cy.contains('Apply changes').click();
+    cy.contains('Settings').click();
+    cy.get(
+      '.react-select__indicator.react-select__dropdown-indicator.css-7hdh9a-DropdownIndicator',
+    ).click();
+    cy.contains('No').click();
+    cy.get('#toolbar-save').click();
+  });
+});
