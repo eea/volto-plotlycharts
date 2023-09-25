@@ -25,13 +25,11 @@ describe('Addon Tests', () => {
     cy.contains('Open Chart Editor').click();
     cy.get('#field-provider-data').type('/connector-demo');
     cy.get('.button__label').click();
-    cy.get('.css-19bqh2r').eq(0).click();
+    cy.get('.Select__control').eq(0).click();
     cy.contains('COUNTRY').click();
     cy.contains('Apply changes').click();
     cy.contains('Settings').click();
-    cy.get(
-      '.react-select__indicator.react-select__dropdown-indicator.css-7hdh9a-DropdownIndicator',
-    ).click();
+    cy.get('.react-select__control').click();
     cy.contains('No').click();
     cy.get('#toolbar-save').click();
   });
