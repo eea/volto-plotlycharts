@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { Icon } from '@plone/volto/components';
 import cx from 'classnames';
 import {
@@ -9,6 +9,7 @@ import {
 } from './csvStringHelpers';
 import { Popup } from 'semantic-ui-react';
 import downloadSVG from '@eeacms/volto-plotlycharts/icons/download.svg';
+let DownloadImage = lazy(() => import('./DownloadImage'));
 
 const Download = (props) => {
   const {
@@ -19,9 +20,9 @@ const Download = (props) => {
     providers_metadata,
     core_metadata,
     url_source,
+    chartRef,
   } = props;
   const [expanded, setExpanded] = React.useState(false);
-
   const handleDownloadData = () => {
     let array = [];
     let data_provenance_array = [];
@@ -171,8 +172,12 @@ const Download = (props) => {
                   <span>Data (csv)</span>
                 </button>
               </div>
-              <div>png</div>
-              <div>svg</div>
+              <Suspense fallback={<p>Loading</p>}>
+                <DownloadImage chartRef={chartRef} type="png" />
+              </Suspense>
+              <Suspense fallback={<p>Loading</p>}>
+                <DownloadImage chartRef={chartRef} type="svg" />
+              </Suspense>
             </div>
           </div>
         }
@@ -192,20 +197,6 @@ const Download = (props) => {
           setExpanded(true);
         }}
       />
-
-      {/* <button
-        className="plotly-download-button"
-        onClick={() => {
-          if (provider_data && !providers_data) {
-            handleDownloadData();
-          } else if (providers_data) {
-            handleDownloadMultipleData();
-          }
-        }}
-      >
-        <span>Download data</span>
-        <Icon name={downloadSVG} size="24px" />
-      </button> */}
     </div>
   );
 };

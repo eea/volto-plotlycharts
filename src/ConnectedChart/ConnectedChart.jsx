@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { compose } from 'redux';
 import cx from 'classnames';
 import loadable from '@loadable/component';
@@ -23,6 +23,8 @@ const LoadablePlotly = loadable(() => import('react-plotly.js'));
  */
 function ConnectedChart(props) {
   const [firstLoad, setFirstLoad] = useState(true);
+  const chartRef = useRef(null);
+  const chartDataEl = useRef(null);
   const {
     loadingVisualizationData,
     hasProviderUrl,
@@ -31,7 +33,6 @@ function ConnectedChart(props) {
     visualization,
     visualization_data,
   } = props;
-  console.log({ props });
   const { hover_format_xy } = props.data || {};
   const {
     data_provenance,
@@ -121,6 +122,9 @@ function ConnectedChart(props) {
     <div className="visualization-wrapper">
       <div className={cx('visualization', { autosize: layout.autosize })}>
         <LoadablePlotly
+          onInitialized={(_, chartEl) => {
+            chartRef.current = chartEl;
+          }}
           useResizeHandler
           data={data}
           layout={layout}
@@ -200,7 +204,7 @@ function ConnectedChart(props) {
           }}
         />
       </div>
-      <div className='visualization-info-container'>
+      <div className="visualization-info-container">
         <div className="visualization-info">
           {/* // behavior EEA Core metadata */}
           {with_notes && <Notes notes={'These are notes'} />}
@@ -214,7 +218,7 @@ function ConnectedChart(props) {
         <div className="visualization-info">
           {(download_button === undefined || download_button) && (
             <Download
-              data={{ data_query: props?.data?.data_query }}
+              chartRef={chartRef}
               title={
                 props.data?.vis_url ||
                 props.data?.provider_url ||
