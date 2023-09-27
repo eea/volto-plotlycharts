@@ -89,10 +89,23 @@ body.has-sidebar .ui.modal.chart-editor-modal {
 #page-edit .plotly-sources-container {
   display: none;
 }
+.plotly-enlarge-modal {
+  width: 95% !important;
+  height: 85%;
 
+  .content {
+    height: 90%;
+
+    .js-plotly-plot {
+      height: 100%;
+      width: 100%;
+    }
+  }
+}
 .plotly-download-button,
 .plotly-notes-button,
-.plotly-sources-button {
+.plotly-sources-button,
+.plotly-enlarge-button {
   display: inline-flex;
   align-items: center;
   padding-bottom: 3px;

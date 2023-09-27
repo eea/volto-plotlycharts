@@ -14,6 +14,7 @@ import {
   Sources,
   Notes,
   MoreInfo,
+  Enlarge,
 } from '@eeacms/volto-plotlycharts/Utils';
 
 const LoadablePlotly = loadable(() => import('react-plotly.js'));
@@ -24,7 +25,8 @@ const LoadablePlotly = loadable(() => import('react-plotly.js'));
 function ConnectedChart(props) {
   const [firstLoad, setFirstLoad] = useState(true);
   const chartRef = useRef(null);
-  const chartDataEl = useRef(null);
+  const history = useHistory();
+
   const {
     loadingVisualizationData,
     hasProviderUrl,
@@ -48,7 +50,6 @@ function ConnectedChart(props) {
   const with_more_info = props.data?.with_more_info ?? false;
   const loadingProviderData =
     loadingVisualizationData || (hasProviderUrl && props.loadingProviderData);
-  const history = useHistory();
 
   const chartData =
     visualization?.chartData || visualization_data?.chartData || {};
@@ -207,6 +208,7 @@ function ConnectedChart(props) {
       <div className="visualization-info-container">
         <div className="visualization-info">
           {/* // behavior EEA Core metadata */}
+          <Enlarge data={data} layout={layout} history={history} />
           {with_notes && <Notes notes={'These are notes'} />}
           {with_sources && (
             <Sources
