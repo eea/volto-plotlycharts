@@ -2,9 +2,7 @@ import React from 'react';
 import cx from 'classnames';
 import { Popup } from 'semantic-ui-react';
 
-import './style.css';
-
-const NotesWidget = ({ notes }) => {
+const FigureNoteWidget = ({ notes }) => {
   const [expanded, setExpanded] = React.useState(false);
 
   return (
@@ -15,7 +13,7 @@ const NotesWidget = ({ notes }) => {
         popper={{ id: 'plotly-notes-popup' }}
         trigger={
           <button className={cx('plotly-notes-button', { expanded })}>
-            Notes
+            Note
           </button>
         }
         on="click"
@@ -30,4 +28,4 @@ const NotesWidget = ({ notes }) => {
   );
 };
 
-export default NotesWidget;
+export default FigureNoteWidget;

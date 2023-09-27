@@ -6,7 +6,14 @@ export default {
     {
       id: 'default',
       title: 'Default',
-      fields: ['vis_url', 'hover_format_xy', 'with_sources', 'with_more_info', 'with_notes', 'download_button'],
+      fields: [
+        'vis_url',
+        'hover_format_xy',
+        'with_sources',
+        'with_more_info',
+        'with_notes',
+        'download_button',
+      ],
     },
     {
       id: 'data_query',

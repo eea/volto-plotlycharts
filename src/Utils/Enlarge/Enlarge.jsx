@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Modal, Button } from 'semantic-ui-react';
 import loadable from '@loadable/component';
+import fullscreenIcon from '@plone/volto/icons/fullscreen.svg';
+import { Icon } from '@plone/volto/components';
 
 const LoadablePlotly = loadable(() => import('react-plotly.js'));
 
@@ -10,14 +12,14 @@ const EnlargeWidget = ({ data, layout, history }) => {
   return (
     <div className="plotly-enlarge-container">
       <button className="plotly-enlarge-button" onClick={() => setIsOpen(true)}>
-        Enlarge
+        <Icon name={fullscreenIcon} size="24px" />
       </button>
       <Modal open={isOpen} className="plotly-enlarge-modal">
         <Modal.Content>
           <LoadablePlotly
             useResizeHandler
             data={data}
-            layout={layout}
+            layout={{ ...layout, autosize: true, height: null, width: null }}
             frames={[]}
             config={{
               displayModeBar: false,

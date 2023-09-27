@@ -1,31 +1,20 @@
 import React from 'react';
 import cx from 'classnames';
-import { Popup } from 'semantic-ui-react';
+import { UniversalLink } from '@plone/volto/components';
 
-import './style.css';
+const Link = ({ children, ...props }) => {
+  if (props.href) {
+    return <UniversalLink {...props}>{children}</UniversalLink>;
+  }
+  return <span {...props}>{children}</span>;
+};
 
-const MoreInfoWidget = ({ notes }) => {
-  const [expanded, setExpanded] = React.useState(false);
-
+const MoreInfoWidget = ({ contentTypeLink }) => {
   return (
-    <div className="plotly-notes-container">
-      <Popup
-        content={notes}
-        position="bottom left"
-        popper={{ id: 'plotly-notes-popup' }}
-        trigger={
-          <button className={cx('plotly-notes-button', { expanded })}>
-            More info {'>'}
-          </button>
-        }
-        on="click"
-        onClose={() => {
-          setExpanded(false);
-        }}
-        onOpen={() => {
-          setExpanded(true);
-        }}
-      />
+    <div className="plotly-more-info-container">
+      <Link href={contentTypeLink}>
+        <button className={cx('plotly-notes-button')}>More info {'>'}</button>
+      </Link>
     </div>
   );
 };

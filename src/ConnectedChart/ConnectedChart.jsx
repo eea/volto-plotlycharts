@@ -12,7 +12,7 @@ import { useHistory } from 'react-router-dom';
 import {
   Download,
   Sources,
-  Notes,
+  FigureNote,
   MoreInfo,
   Enlarge,
 } from '@eeacms/volto-plotlycharts/Utils';
@@ -122,6 +122,7 @@ function ConnectedChart(props) {
   ) : (
     <div className="visualization-wrapper">
       <div className={cx('visualization', { autosize: layout.autosize })}>
+        <Enlarge data={data} layout={layout} history={history} />
         <LoadablePlotly
           onInitialized={(_, chartEl) => {
             chartRef.current = chartEl;
@@ -208,14 +209,13 @@ function ConnectedChart(props) {
       <div className="visualization-info-container">
         <div className="visualization-info">
           {/* // behavior EEA Core metadata */}
-          <Enlarge data={data} layout={layout} history={history} />
-          {with_notes && <Notes notes={'These are notes'} />}
+          {with_notes && <FigureNote notes={'These are notes'} />}
           {with_sources && (
             <Sources
               sources={data_provenance?.data || props.data.chartSources}
             />
           )}
-          {with_more_info && <MoreInfo notes={'These is even more info'} />}
+          {with_more_info && <MoreInfo contentTypeLink={props.data?.vis_url} />}
         </div>
         <div className="visualization-info">
           {(download_button === undefined || download_button) && (
