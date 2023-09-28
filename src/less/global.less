@@ -58,6 +58,7 @@ body.has-sidebar .ui.modal.chart-editor-modal {
     align-items: center;
     justify-content: space-between;
   }
+
   .visualization-info {
     display: flex;
     align-items: center;
@@ -74,6 +75,7 @@ body.has-sidebar .ui.modal.chart-editor-modal {
     > *:last-child {
       padding-right: 0;
       margin-right: 0;
+
       &.plotly-download-container {
         margin-left: auto;
       }
@@ -91,23 +93,27 @@ body.has-sidebar .ui.modal.chart-editor-modal {
 #page-edit .plotly-sources-container {
   display: none;
 }
+
 .plotly-enlarge-modal {
   width: 95% !important;
   height: 85%;
+
   .content {
     height: 90%;
 
     .js-plotly-plot {
-      height: 100%;
       width: 100%;
+      height: 100%;
     }
   }
 }
+
 .plotly-enlarge-container {
   display: flex;
   width: 100%;
   justify-content: flex-end;
 }
+
 .plotly-download-button,
 .plotly-notes-button,
 .plotly-sources-button,
