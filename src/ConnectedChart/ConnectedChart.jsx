@@ -38,6 +38,7 @@ function ConnectedChart(props) {
   const { hover_format_xy } = props.data || {};
   const {
     data_provenance,
+    figure_note,
     other_organisations,
     temporal_coverage,
     publisher,
@@ -209,7 +210,7 @@ function ConnectedChart(props) {
       <div className="visualization-info-container">
         <div className="visualization-info">
           {/* // behavior EEA Core metadata */}
-          {with_notes && <FigureNote notes={'These are notes'} />}
+          {with_notes && <FigureNote notes={figure_note} />}
           {with_sources && (
             <Sources
               sources={data_provenance?.data || props.data.chartSources}
