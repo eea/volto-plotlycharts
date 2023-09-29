@@ -16,11 +16,13 @@
 
 1. Go to http://localhost:3000
 
-1.  Happy hacking!
+1. Initialize git hooks
 
     ```Bash
-    cd src/addons/volto-plotlycharts/
+    yarn prepare
     ```
+
+1. Happy hacking!
 
 ### Or add @eeacms/volto-plotlycharts to your Volto project
 
@@ -28,21 +30,19 @@ Before starting make sure your development environment is properly set. See [Vol
 
 1.  Make sure you have installed `yo`, `@plone/generator-volto` and `mrs-developer`
 
-        $ npm install -g yo
-        $ npm install -g @plone/generator-volto
-        $ npm install -g mrs-developer
+        npm install -g yo @plone/generator-volto mrs-developer
 
 1.  Create new volto app
 
-        $ yo @plone/volto my-volto-project --addon volto-plotlycharts --workspace src/addons/volto-plotlycharts
-        $ cd my-volto-project
+        yo @plone/volto my-volto-project --addon @eeacms/volto-plotlycharts --skip-install
+        cd my-volto-project
 
 1.  Add the following to `mrs.developer.json`:
 
         {
             "volto-plotlycharts": {
                 "url": "https://github.com/eea/volto-plotlycharts.git",
-                "package": "volto-plotlycharts",
+                "package": "@eeacms/volto-plotlycharts",
                 "branch": "develop",
                 "path": "src"
             }
@@ -50,28 +50,26 @@ Before starting make sure your development environment is properly set. See [Vol
 
 1.  Install
 
-        $ yarn develop
-        $ yarn
+        make develop
+        yarn
 
 1.  Start backend
 
-        $ docker run -d --name plone -p 8080:8080 -e SITE=Plone plone
+        docker run --pull always -it --rm --name plone -p 8080:8080 -e SITE=Plone plone/plone-backend
 
     ...wait for backend to setup and start - `Ready to handle requests`:
-
-        $ docker logs -f plone
 
     ...you can also check http://localhost:8080/Plone
 
 1.  Start frontend
 
-        $ yarn start
+        yarn start
 
 1.  Go to http://localhost:3000
 
 1.  Happy hacking!
 
-        $ cd src/addons/volto-plotlycharts/
+        cd src/addons/volto-plotlycharts/
 
 ## Cypress
 
