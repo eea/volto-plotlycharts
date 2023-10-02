@@ -173,10 +173,10 @@ const Download = (props) => {
                 </button>
               </div>
               <Suspense fallback={<p>Loading</p>}>
-                <DownloadImage chartRef={chartRef} type="png" />
+                <DownloadImage type="png" {...{ chartRef, title }} />
               </Suspense>
               <Suspense fallback={<p>Loading</p>}>
-                <DownloadImage chartRef={chartRef} type="svg" />
+                <DownloadImage type="svg" {...{ chartRef, title }} />
               </Suspense>
             </div>
           </div>

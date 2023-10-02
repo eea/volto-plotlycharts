@@ -121,6 +121,12 @@ function ConnectedChart(props) {
     return <div>No valid data.</div>;
   }
 
+  const titleVis = (
+    props.data?.vis_url ||
+    props.data?.provider_url ||
+    props.data?.title
+  ).replace(`${props.location.pathname}/`, '');
+
   return (
     <div className="visualization-wrapper">
       <div className={cx('visualization', { autosize: layout.autosize })}>
@@ -156,11 +162,7 @@ function ConnectedChart(props) {
           {(download_button === undefined || download_button) && (
             <Download
               chartRef={chartRef}
-              title={
-                props.data?.vis_url ||
-                props.data?.provider_url ||
-                props.data?.title
-              }
+              title={titleVis}
               provider_data={provider_data}
               provider_metadata={provider_metadata}
               url_source={toPublicURL(props?.location?.pathname)}
