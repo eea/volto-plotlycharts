@@ -9,6 +9,7 @@ const EnlargeWidget = ({ children }) => {
   return (
     <div className="plotly-enlarge-container">
       <button className="plotly-enlarge-button" onClick={() => setIsOpen(true)}>
+        Enlarge {` `}
         <Icon name={fullscreenIcon} size="24px" />
       </button>
       <Modal open={isOpen} className="plotly-enlarge-modal">
