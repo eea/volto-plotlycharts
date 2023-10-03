@@ -121,11 +121,9 @@ function ConnectedChart(props) {
     return <div>No valid data.</div>;
   }
 
-  const titleVis = (
-    props.data?.vis_url ||
-    props.data?.provider_url ||
-    props.data?.title
-  ).replace(`${props.location.pathname}/`, '');
+  //props.data.title doesn't come in contentType mode and is the same as props.location.pathname
+  const pathElements = props.location.pathname.split('/');
+  const titleVis = pathElements[pathElements.length - 1];
 
   return (
     <div className="visualization-wrapper">
