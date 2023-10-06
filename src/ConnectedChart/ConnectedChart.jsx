@@ -141,22 +141,6 @@ function ConnectedChart(props) {
           {with_more_info && <MoreInfo contentTypeLink={props.data?.vis_url} />}
         </div>
         <div className="visualization-info">
-          <Enlarge>
-            {/* For Enlarge we overwrite the custom size setting in order to enlarge it */}
-            <PlotlyComponent
-              {...{
-                chartRef,
-                data,
-                layout: {
-                  ...layout,
-                  autosize: true,
-                  height: null,
-                  width: null,
-                },
-                history,
-              }}
-            />
-          </Enlarge>
           {(download_button === undefined || download_button) && (
             <Download
               chartRef={chartRef}
@@ -173,6 +157,22 @@ function ConnectedChart(props) {
               }}
             />
           )}
+          <Enlarge>
+            {/* For Enlarge we overwrite the custom size setting in order to enlarge it */}
+            <PlotlyComponent
+              {...{
+                chartRef,
+                data,
+                layout: {
+                  ...layout,
+                  autosize: true,
+                  height: null,
+                  width: null,
+                },
+                history,
+              }}
+            />
+          </Enlarge>
         </div>
       </div>
     </div>

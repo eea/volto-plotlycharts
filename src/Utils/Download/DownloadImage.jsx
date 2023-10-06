@@ -10,7 +10,7 @@ const handleDownloadImage = (type, chartRef, title) => {
     // Create a download link for the SVG
     const a = document.createElement('a');
     a.href = dataUrl;
-    a.download = `${title}.${type}`;
+    a.download = `${title}.${type.toLower()}`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -21,7 +21,7 @@ const DownloadImage = ({ type, chartRef, title }) => {
   return (
     <div>
       <button
-        className="plotly-download-button"
+        className="plotly-download-button plotly-format-download"
         onClick={() => {
           handleDownloadImage(type, chartRef, title);
         }}

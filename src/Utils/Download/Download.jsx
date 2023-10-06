@@ -156,30 +156,42 @@ const Download = (props) => {
     <div className="plotly-download-container">
       <Popup
         content={
-          <div className="visualization-wrapper">
-            <div className="visualization-info">
-              <div>
-                <button
-                  className="plotly-download-button"
-                  onClick={() => {
-                    if (provider_data && !providers_data) {
-                      handleDownloadData();
-                    } else if (providers_data) {
-                      handleDownloadMultipleData();
-                    }
-                  }}
-                >
-                  <span>Data (csv)</span>
-                </button>
+          <ul className="no-bullets">
+            <li>
+              Data formats
+              <div className="visualization-wrapper">
+                <div className="visualization-info">
+                  <div>
+                    <button
+                      className="plotly-download-button plotly-format-download"
+                      onClick={() => {
+                        if (provider_data && !providers_data) {
+                          handleDownloadData();
+                        } else if (providers_data) {
+                          handleDownloadMultipleData();
+                        }
+                      }}
+                    >
+                      <span>CSV</span>
+                    </button>
+                  </div>
+                </div>
               </div>
-              <Suspense fallback={<p>Loading</p>}>
-                <DownloadImage type="png" {...{ chartRef, title }} />
-              </Suspense>
-              <Suspense fallback={<p>Loading</p>}>
-                <DownloadImage type="svg" {...{ chartRef, title }} />
-              </Suspense>
-            </div>
-          </div>
+            </li>
+            <li>
+              Image formats
+              <div className="visualization-wrapper">
+                <div className="visualization-info">
+                  <Suspense fallback={<p>Loading</p>}>
+                    <DownloadImage type="SVG" {...{ chartRef, title }} />
+                  </Suspense>
+                  <Suspense fallback={<p>Loading</p>}>
+                    <DownloadImage type="PNG" {...{ chartRef, title }} />
+                  </Suspense>
+                </div>
+              </div>
+            </li>
+          </ul>
         }
         position="bottom left"
         popper={{ id: 'plotly-download-popup' }}
