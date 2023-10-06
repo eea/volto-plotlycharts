@@ -132,7 +132,7 @@ function ConnectedChart(props) {
       </div>
       <div className="visualization-info-container">
         <div className="visualization-info">
-          {with_notes && <FigureNote notes={figure_note} />}
+          {with_notes && <FigureNote notes={figure_note || []} />}
           {with_sources && (
             <Sources
               sources={data_provenance?.data || props.data.chartSources}
