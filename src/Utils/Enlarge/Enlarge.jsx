@@ -12,7 +12,12 @@ const EnlargeWidget = ({ children }) => {
         Enlarge {` `}
         <Icon name={fullscreenIcon} size="24px" />
       </button>
-      <Modal open={isOpen} className="plotly-enlarge-modal">
+      <Modal
+        open={isOpen}
+        closeIcon
+        onClose={() => setIsOpen(false)}
+        className="plotly-enlarge-modal"
+      >
         <Modal.Content>{children}</Modal.Content>
         <Modal.Actions>
           {' '}
