@@ -142,9 +142,10 @@ body.has-sidebar .ui.modal.chart-editor-modal {
   }
 }
 
-#plotly-sources-popup {
+#plotly-sources-popup,
+#plotly-download-popup,
+#plotly-notes-popup {
   .ui.popup {
-    min-width: 600px;
     background-color: @grey-1;
     box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
 
@@ -172,6 +173,13 @@ body.has-sidebar .ui.modal.chart-editor-modal {
     .ui.popup {
       min-width: 300px;
     }
+  }
+}
+
+#plotly-sources-popup,
+#plotly-notes-popup {
+  .ui.popup {
+    min-width: 600px;
   }
 }
 
