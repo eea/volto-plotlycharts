@@ -27,30 +27,20 @@ Plotly Charts and Plotly Chart Editor integration with Volto
 
 ![Plotlycharts](https://raw.githubusercontent.com/eea/volto-plotlycharts/master/docs/volto-plotlycharts.gif)
 
+## Upgrade
+
+* Version `^6.0.0` requires `^eea.api.dataconnector@4.4`
+
 ## Getting started
 
 ### Try volto-plotlycharts with Docker
 
-1. Get the latest Docker images
+      git clone https://github.com/eea/volto-plotlycharts.git
+      cd volto-plotlycharts
+      make
+      make start
 
-   ```
-   docker pull plone
-   docker pull plone/volto
-   ```
-
-1. Start Plone backend
-
-   ```
-   docker run -d --name plone -p 8080:8080 -e SITE=Plone -e PROFILES="profile-plone.restapi:blocks" plone
-   ```
-
-1. Start Volto frontend
-
-   ```
-   docker run -it --rm -p 3000:3000 --link plone -e ADDONS="@eeacms/volto-plotlycharts" plone/volto
-   ```
-
-1. Go to http://localhost:3000
+Go to http://localhost:3000
 
 ### Add volto-plotlycharts to your Volto project
 
@@ -62,25 +52,25 @@ Plotly Charts and Plotly Chart Editor integration with Volto
 
 1. Start Volto frontend
 
-- If you already have a volto project, just update `package.json`:
+* If you already have a volto project, just update `package.json`:
 
-  ```JSON
-  "addons": [
-      "@eeacms/volto-plotlycharts"
-  ],
+   ```JSON
+   "addons": [
+       "@eeacms/volto-plotlycharts"
+   ],
 
-  "dependencies": {
-      "@eeacms/volto-plotlycharts": "^1.0.0"
-  }
-  ```
+   "dependencies": {
+       "@eeacms/volto-plotlycharts": "*"
+   }
+   ```
 
-- If not, create one:
+* If not, create one:
 
-  ```
-  npm install -g yo @plone/generator-volto
-  yo @plone/volto my-volto-project --addon @eeacms/volto-plotlycharts
-  cd my-volto-project
-  ```
+   ```
+   npm install -g yo @plone/generator-volto
+   yo @plone/volto my-volto-project --canary --addon @eeacms/volto-plotlycharts
+   cd my-volto-project
+   ```
 
 1. Install new add-ons and restart Volto:
 
@@ -94,8 +84,6 @@ Plotly Charts and Plotly Chart Editor integration with Volto
 1. Happy editing!
 
 ## Release
-
-Version ^6.0.0 requires ^eea.api.dataconnector@4.4
 
 See [RELEASE.md](https://github.com/eea/volto-plotlycharts/blob/master/RELEASE.md).
 
