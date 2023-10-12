@@ -152,15 +152,6 @@ body.has-sidebar .ui.modal.chart-editor-modal {
     &::before {
       background-color: @grey-1;
     }
-
-    .sources-list > li,
-    .sources-list > li > * {
-      color: @textColor;
-    }
-
-    a:hover {
-      color: @secondaryColor;
-    }
   }
 
   .sources-list {
@@ -197,15 +188,16 @@ body.has-sidebar .ui.modal.chart-editor-modal {
 }
 
 ul.no-bullets {
-  list-style-type: none; /* Remove bullets */
   padding: 0; /* Remove padding */
   margin: 0; /* Remove margins */
+  list-style-type: none; /* Remove bullets */
 }
 
 .plotly-download-button.plotly-format-download {
-  color: #679ad6;
   padding-left: 0;
+  color: #679ad6;
   font-weight: normal;
+
   &:hover {
     color: #164b7f;
   }
