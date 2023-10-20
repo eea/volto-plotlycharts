@@ -1,23 +1,26 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { compose } from 'redux';
 import cx from 'classnames';
-import loadable from '@loadable/component';
 import config from '@plone/volto/registry';
 import { toPublicURL } from '@plone/volto/helpers';
 import { connectToProviderData } from '@eeacms/volto-datablocks/hocs';
 import { updateChartDataFromProvider } from '@eeacms/volto-datablocks/helpers';
 import { connectBlockToVisualization } from '@eeacms/volto-plotlycharts/hocs';
 import { useHistory } from 'react-router-dom';
+import {
+  Download,
+  Sources,
+  FigureNote,
+  MoreInfo,
+  Enlarge,
+} from '@eeacms/volto-plotlycharts/Utils';
+import PlotlyComponent from './PlotlyComponent';
 
-import { Download, Sources } from '@eeacms/volto-plotlycharts/Utils';
-
-const LoadablePlotly = loadable(() => import('react-plotly.js'));
-
-/*
- * ConnectedChart
- */
 function ConnectedChart(props) {
   const [firstLoad, setFirstLoad] = useState(true);
+  const chartRef = useRef(null);
+  const history = useHistory();
+
   const {
     loadingVisualizationData,
     hasProviderUrl,
@@ -26,19 +29,27 @@ function ConnectedChart(props) {
     visualization,
     visualization_data,
   } = props;
-  const { hover_format_xy } = props.data || {};
+
   const {
     data_provenance,
+    figure_note,
     other_organisations,
     temporal_coverage,
     publisher,
     geo_coverage,
   } = visualization_data || {};
-  const use_live_data = props.data?.use_live_data ?? true;
-  const with_sources = props.data?.with_sources ?? false;
+
+  const {
+    hover_format_xy,
+    use_live_data = true,
+    with_sources = false,
+    with_notes = false,
+    download_button,
+    with_more_info = false,
+  } = props.data || {};
+
   const loadingProviderData =
     loadingVisualizationData || (hasProviderUrl && props.loadingProviderData);
-  const history = useHistory();
 
   const chartData =
     visualization?.chartData || visualization_data?.chartData || {};
@@ -51,10 +62,10 @@ function ConnectedChart(props) {
       family: config.settings.chartLayoutFontFamily || "'Roboto', sans-serif",
     },
     margin: {
-      l: 80, // default: 80
-      r: 80, // default: 80
-      b: 80, // default: 80
-      t: 100, // default: 100
+      l: 80,
+      r: 80,
+      b: 80,
+      t: 100,
       ...(chartData.layout?.margin || {}),
     },
   };
@@ -106,115 +117,63 @@ function ConnectedChart(props) {
     return <div>Loading chart...</div>;
   }
 
-  return !Object.keys(chartData).length ? (
-    <div>No valid data.</div>
-  ) : (
+  if (!Object.keys(chartData).length) {
+    return <div>No valid data.</div>;
+  }
+
+  //props.data.title doesn't come in contentType mode and is the same as props.location.pathname
+  const pathElements = props.location.pathname.split('/');
+  const titleVis = pathElements[pathElements.length - 1];
+
+  return (
     <div className="visualization-wrapper">
       <div className={cx('visualization', { autosize: layout.autosize })}>
-        <LoadablePlotly
-          useResizeHandler
-          data={data}
-          layout={layout}
-          frames={[]}
-          config={{
-            displayModeBar: false,
-            editable: false,
-            responsive: true,
-          }}
-          onClick={(trace) => {
-            const { customLink, clickmode, meta = [] } = layout;
-            // Ex: catalogue?size=n_10_n&filters[0][field]={parent}&filters[0][values][0]={value}&filters[0][type]=any
-            // will not redirect on clicking a parent of point (treemap has a zoom feature and usually parents don't have
-            // the same significance as children, with relation to filter types)
-            if (customLink && clickmode !== 'none') {
-              const {
-                id,
-                label,
-                parent,
-                data = {},
-                curveNumber = 0,
-                pointIndex = 0,
-              } = trace?.points[0] || {};
-              const { type, parents = [], y = [], x = [] } = data;
-              const shouldRedirect = type
-                ? type !== 'treemap'
-                  ? true
-                  : parents.indexOf(id) === -1
-                  ? true
-                  : false
-                : false;
-              const shouldComposeLinks = meta.length > 0;
-
-              if (type === 'bar' && shouldComposeLinks) {
-                if (customLink === 'allLinks') {
-                  const yIsLabels = y.indexOf(label) > -1;
-                  const labels = yIsLabels
-                    ? y.filter((label) => label === 0 || label)
-                    : x.filter((label) => label === 0 || label); //trimming
-                  const noOfLabels = labels.length;
-                  const correspondingLinkPosition =
-                    noOfLabels * curveNumber + pointIndex;
-                  const correspondingLink = meta[correspondingLinkPosition];
-
-                  history.push(correspondingLink);
-                } else if (customLink === 'fullLinks') {
-                  const correspondingLinkPosition = pointIndex;
-                  const correspondingLink = meta[correspondingLinkPosition];
-
-                  history.push(correspondingLink);
-                }
-              } else if (shouldRedirect) {
-                const link = layout.customLink
-                  .replace('{value}', id || label)
-                  .replace('{parent}', parent);
-                history.push(link);
-              }
-            }
-          }}
-          onHover={(e) => {
-            if (layout.customLink && layout.clickmode !== 'none') {
-              e.event.target.style.opacity = 0.8;
-              e.event.target.style.transition = 'opacity 0.1s ease-in-out';
-              e.event.target.style.cursor = 'pointer';
-            }
-          }}
-          onUnhover={(e) => {
-            if (layout.customLink && layout.clickmode !== 'none') {
-              e.event.target.style.opacity = 1;
-              e.event.target.style.cursor = 'default';
-            }
-          }}
-          style={{
-            position: 'relative',
-            display: 'block',
-            ...(!layout.height ? { minHeight: '450px' } : {}),
-          }}
-        />
+        <PlotlyComponent {...{ chartRef, data, layout, history }} />
       </div>
-      <div className="visualization-info">
-        {with_sources && (
-          <Sources sources={data_provenance?.data || props.data.chartSources} />
-        )}
-        {props.data?.download_button && (
-          <Download
-            data={{ data_query: props.data.data_query }}
-            title={
-              props.data?.vis_url ||
-              props.data?.provider_url ||
-              props.data?.title
-            }
-            provider_data={provider_data}
-            provider_metadata={provider_metadata}
-            url_source={toPublicURL(props?.location?.pathname)}
-            core_metadata={{
-              data_provenance: data_provenance?.data,
-              other_organisations: other_organisations,
-              temporal_coverage: temporal_coverage?.temporal,
-              publisher: publisher,
-              geo_coverage: geo_coverage?.geolocation,
-            }}
-          />
-        )}
+      <div className="visualization-info-container">
+        <div className="visualization-info">
+          {with_notes && <FigureNote notes={figure_note || []} />}
+          {with_sources && (
+            <Sources
+              sources={data_provenance?.data || props.data.chartSources}
+            />
+          )}
+          {with_more_info && <MoreInfo contentTypeLink={props.data?.vis_url} />}
+        </div>
+        <div className="visualization-info">
+          {(download_button === undefined || download_button) && (
+            <Download
+              chartRef={chartRef}
+              title={titleVis}
+              provider_data={provider_data}
+              provider_metadata={provider_metadata}
+              url_source={toPublicURL(props?.location?.pathname)}
+              core_metadata={{
+                data_provenance: data_provenance?.data,
+                other_organisations: other_organisations,
+                temporal_coverage: temporal_coverage?.temporal,
+                publisher: publisher,
+                geo_coverage: geo_coverage?.geolocation,
+              }}
+            />
+          )}
+          <Enlarge>
+            {/* For Enlarge we overwrite the custom size setting in order to enlarge it */}
+            <PlotlyComponent
+              {...{
+                chartRef,
+                data,
+                layout: {
+                  ...layout,
+                  autosize: true,
+                  height: null,
+                  width: null,
+                },
+                history,
+              }}
+            />
+          </Enlarge>
+        </div>
       </div>
     </div>
   );

@@ -6,7 +6,14 @@ export default {
     {
       id: 'default',
       title: 'Default',
-      fields: ['vis_url', 'hover_format_xy', 'with_sources', 'download_button'],
+      fields: [
+        'vis_url',
+        'hover_format_xy',
+        'with_sources',
+        'with_more_info',
+        'with_notes',
+        'download_button',
+      ],
     },
     {
       id: 'data_query',
@@ -45,6 +52,16 @@ export default {
     },
     with_sources: {
       title: 'Toggle sources',
+      type: 'boolean',
+      defaultValue: true,
+    },
+    with_more_info: {
+      title: 'Toggle more info',
+      type: 'boolean',
+      defaultValue: true,
+    },
+    with_notes: {
+      title: 'Toggle notes',
       type: 'boolean',
       defaultValue: true,
     },
