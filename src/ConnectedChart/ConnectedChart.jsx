@@ -90,8 +90,6 @@ function ConnectedChart(props) {
       ? updateChartDataFromProvider(chartData.data || [], provider_data)
       : chartData.data || [];
 
-  console.log('data', data);
-
   data = data.map((trace) => ({
     ...trace,
     textfont: {

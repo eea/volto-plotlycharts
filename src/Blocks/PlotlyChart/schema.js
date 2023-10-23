@@ -42,7 +42,11 @@ export default {
     {
       id: 'data_query',
       title: 'Data query',
-      fields: ['has_data_query_by_context', 'data_query'],
+      fields: [
+        'has_data_query_by_context',
+        'filter_connector_data_at_source',
+        'data_query',
+      ],
     },
   ],
 
@@ -82,6 +86,13 @@ export default {
     has_data_query_by_context: {
       title: 'Use queries from context',
       description: 'Will use Criteria queries from context (this page)',
+      type: 'boolean',
+      defaultValue: true,
+    },
+    filter_connector_data_at_source: {
+      title: 'Filter connector data at source',
+      description:
+        'The connector data endpoint is passed the data query from context. If your block needs unfiltered access, set this to false (unchecked)',
       type: 'boolean',
       defaultValue: true,
     },
