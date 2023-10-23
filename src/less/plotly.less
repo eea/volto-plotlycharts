@@ -1,0 +1,7 @@
+.block-editor-plotly_chart {
+  // fix "Open chart editor" button, makes it clickable. See also https://github.com/plone/volto/pull/5029
+  // Note: in Volto the z-index: auto is actually undone, see https://github.com/plone/volto/commit/c4b31316ae2981bee2d96b5e38ee3f6e8654dc75
+  .block .block:not(.inner)::before {
+    z-index: -1;
+  }
+}

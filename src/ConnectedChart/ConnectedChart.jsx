@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { compose } from 'redux';
+import { useHistory } from 'react-router-dom';
 import cx from 'classnames';
+
 import loadable from '@loadable/component';
-import config from '@plone/volto/registry';
 import { toPublicURL } from '@plone/volto/helpers';
+import config from '@plone/volto/registry';
+
 import { connectToProviderData } from '@eeacms/volto-datablocks/hocs';
 import { updateChartDataFromProvider } from '@eeacms/volto-datablocks/helpers';
 import { connectBlockToVisualization } from '@eeacms/volto-plotlycharts/hocs';
-import { useHistory } from 'react-router-dom';
 
 import { Download, Sources } from '@eeacms/volto-plotlycharts/Utils';
 
@@ -88,6 +90,8 @@ function ConnectedChart(props) {
       ? updateChartDataFromProvider(chartData.data || [], provider_data)
       : chartData.data || [];
 
+  console.log('data', data);
+
   data = data.map((trace) => ({
     ...trace,
     textfont: {
@@ -143,9 +147,9 @@ function ConnectedChart(props) {
                   ? true
                   : false
                 : false;
-              const shouldComposeLinks = meta.length > 0;
 
-              if (type === 'bar' && shouldComposeLinks) {
+              const includeLinks = meta.length > 0;
+              if (type === 'bar' && includeLinks) {
                 if (customLink === 'allLinks') {
                   const yIsLabels = y.indexOf(label) > -1;
                   const labels = yIsLabels
