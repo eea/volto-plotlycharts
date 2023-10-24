@@ -30,11 +30,14 @@ export function PlotlyEditorModal(props) {
                 title="Select data source"
                 id="provider-data"
                 onChange={(_, provider_url) => {
-                  setStoredValue({ ...storedValue, provider_url });
+                  setStoredValue({
+                    chartData: { ...storedValue?.chartData, provider_url },
+                    provider_url,
+                  });
                 }}
                 value={flattenToAppURL(
-                  storedValue?.provider_url ||
-                    storedValue?.chartData?.provider_url ||
+                  storedValue?.provider_url ??
+                    storedValue?.chartData?.provider_url ??
                     '',
                 )}
                 showReload={true}
