@@ -13,7 +13,16 @@ export class UnconnectedColorPicker extends Component {
     super(props, context);
     this.state = {
       empty: !this.props.fullValue && this.props.handleEmpty,
+      colorComponentVisibility: false,
     };
+    this.handleVisibilityChange = this.handleVisibilityChange.bind(this);
+  }
+
+  handleVisibilityChange(isVisible) {
+    const newColorComponentVisibility = isVisible;
+    this.setState({
+      colorComponentVisibility: newColorComponentVisibility,
+    });
   }
 
   render() {
@@ -41,6 +50,9 @@ export class UnconnectedColorPicker extends Component {
         <ColorPicker
           selectedColor={this.props.fullValue}
           onColorChange={this.props.updatePlot}
+          onVisibilityChange={(isVisible) =>
+            this.handleVisibilityChange(isVisible)
+          }
         />
       </Field>
     );
