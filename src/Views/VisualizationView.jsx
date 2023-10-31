@@ -12,7 +12,9 @@ const VisualizationView = (props) => {
       {hasBlocksData(content) ? (
         <RenderBlocks {...props} />
       ) : (
-        <ConnectedChart visualization={content.visualization} />
+        <div className="plotly-chart">
+          <ConnectedChart visualization={content.visualization} />
+        </div>
       )}
     </Container>
   );

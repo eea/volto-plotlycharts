@@ -1,5 +1,6 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { compose } from 'redux';
+import { connect } from 'react-redux';
 import cx from 'classnames';
 import config from '@plone/volto/registry';
 import { toPublicURL } from '@plone/volto/helpers';
@@ -8,20 +9,26 @@ import { updateChartDataFromProvider } from '@eeacms/volto-datablocks/helpers';
 import { connectBlockToVisualization } from '@eeacms/volto-plotlycharts/hocs';
 import { useHistory } from 'react-router-dom';
 import {
-  Download,
-  Sources,
-  FigureNote,
-  MoreInfo,
   Enlarge,
-} from '@eeacms/volto-plotlycharts/Utils';
+  FigureNote,
+  Sources,
+  MoreInfo,
+  Share,
+} from '@eeacms/volto-datablocks/Toolbar';
+import { Download } from '@eeacms/volto-plotlycharts/Utils';
 import PlotlyComponent from './PlotlyComponent';
 
+import '@eeacms/volto-datablocks/Toolbar/styles.less';
+
 function ConnectedChart(props) {
-  const [firstLoad, setFirstLoad] = useState(true);
+  const [initialized, setInitialized] = useState(false);
+  const [mobile, setMobile] = useState(false);
+  const visEl = useRef(null);
   const chartRef = useRef(null);
   const history = useHistory();
 
   const {
+    screen,
     loadingVisualizationData,
     hasProviderUrl,
     provider_data,
@@ -31,21 +38,24 @@ function ConnectedChart(props) {
   } = props;
 
   const {
+    title,
     data_provenance,
     figure_note,
     other_organisations,
     temporal_coverage,
     publisher,
     geo_coverage,
-  } = visualization_data || {};
+  } = visualization_data || props.content || {};
 
   const {
     hover_format_xy,
     use_live_data = true,
-    with_sources = false,
-    with_notes = false,
-    download_button,
-    with_more_info = false,
+    with_sources = true,
+    with_notes = true,
+    with_more_info = true,
+    download_button = true,
+    with_enlarge = true,
+    with_share = true,
   } = props.data || {};
 
   const loadingProviderData =
@@ -108,12 +118,18 @@ function ConnectedChart(props) {
   }));
 
   useEffect(() => {
-    if (firstLoad && !loadingVisualizationData && !loadingProviderData) {
-      setFirstLoad(false);
-    }
-  }, [firstLoad, loadingVisualizationData, loadingProviderData]);
+    if (visEl.current) {
+      const visWidth = visEl.current.parentElement.offsetWidth;
 
-  if (firstLoad && (loadingVisualizationData || loadingProviderData)) {
+      if (visWidth < 600 && !mobile) {
+        setMobile(true);
+      } else if (visWidth >= 600 && mobile) {
+        setMobile(false);
+      }
+    }
+  }, [screen, mobile, initialized]);
+
+  if (loadingVisualizationData || loadingProviderData) {
     return <div>Loading chart...</div>;
   }
 
@@ -121,60 +137,73 @@ function ConnectedChart(props) {
     return <div>No valid data.</div>;
   }
 
-  //props.data.title doesn't come in contentType mode and is the same as props.location.pathname
-  const pathElements = props.location.pathname.split('/');
-  const titleVis = pathElements[pathElements.length - 1];
-
   return (
-    <div className="visualization-wrapper">
-      <div className={cx('visualization', { autosize: layout.autosize })}>
-        <PlotlyComponent {...{ chartRef, data, layout, history }} />
+    <div className={cx('visualization-wrapper', { mobile })}>
+      <div
+        className={cx('visualization', { autosize: layout.autosize })}
+        ref={visEl}
+      >
+        <PlotlyComponent
+          {...{ chartRef, data, layout, history, setInitialized }}
+        />
       </div>
-      <div className="visualization-info-container">
-        <div className="visualization-info">
-          {with_notes && <FigureNote notes={figure_note || []} />}
-          {with_sources && (
-            <Sources
-              sources={data_provenance?.data || props.data.chartSources}
-            />
-          )}
-          {with_more_info && <MoreInfo contentTypeLink={props.data?.vis_url} />}
+      {initialized && (
+        <div className="visualization-toolbar">
+          <div className="left-col">
+            {with_notes && <FigureNote notes={figure_note || []} />}
+            {with_sources && (
+              <Sources
+                sources={data_provenance?.data || props.data?.chartSources}
+              />
+            )}
+            {with_more_info && (
+              <MoreInfo
+                href={visualization_data?.['@id'] || props.content?.['@id']}
+              />
+            )}
+          </div>
+          <div className="right-col">
+            {download_button && (
+              <Download
+                chartRef={chartRef}
+                title={title}
+                provider_data={provider_data}
+                provider_metadata={provider_metadata}
+                url_source={toPublicURL(props?.location?.pathname)}
+                core_metadata={{
+                  data_provenance: data_provenance?.data,
+                  other_organisations: other_organisations,
+                  temporal_coverage: temporal_coverage?.temporal,
+                  publisher: publisher,
+                  geo_coverage: geo_coverage?.geolocation,
+                }}
+              />
+            )}
+            {with_share && (
+              <Share
+                href={visualization_data?.['@id'] || props.content?.['@id']}
+              />
+            )}
+            {with_enlarge && (
+              <Enlarge>
+                <PlotlyComponent
+                  {...{
+                    chartRef,
+                    data,
+                    layout: {
+                      ...layout,
+                      autosize: true,
+                      height: null,
+                      width: null,
+                    },
+                    history,
+                  }}
+                />
+              </Enlarge>
+            )}
+          </div>
         </div>
-        <div className="visualization-info">
-          {(download_button === undefined || download_button) && (
-            <Download
-              chartRef={chartRef}
-              title={titleVis}
-              provider_data={provider_data}
-              provider_metadata={provider_metadata}
-              url_source={toPublicURL(props?.location?.pathname)}
-              core_metadata={{
-                data_provenance: data_provenance?.data,
-                other_organisations: other_organisations,
-                temporal_coverage: temporal_coverage?.temporal,
-                publisher: publisher,
-                geo_coverage: geo_coverage?.geolocation,
-              }}
-            />
-          )}
-          <Enlarge>
-            {/* For Enlarge we overwrite the custom size setting in order to enlarge it */}
-            <PlotlyComponent
-              {...{
-                chartRef,
-                data,
-                layout: {
-                  ...layout,
-                  autosize: true,
-                  height: null,
-                  width: null,
-                },
-                history,
-              }}
-            />
-          </Enlarge>
-        </div>
-      </div>
+      )}
     </div>
   );
 }
@@ -194,4 +223,7 @@ export default compose(
         props.data?.provider_url,
     };
   }),
+  connect((state) => ({
+    screen: state.screen,
+  })),
 )(ConnectedChart);

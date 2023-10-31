@@ -9,7 +9,7 @@ const Edit = (props) => {
   const { data, block, onChangeBlock } = props;
 
   return (
-    <>
+    <div className="embed-visualization edit">
       <ConnectedChart
         id={props.id}
         data={{
@@ -38,7 +38,7 @@ const Edit = (props) => {
           formData={data}
         />
       </SidebarPortal>
-    </>
+    </div>
   );
 };
 
