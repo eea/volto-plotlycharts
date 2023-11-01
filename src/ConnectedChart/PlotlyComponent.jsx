@@ -3,7 +3,13 @@ import loadable from '@loadable/component';
 
 const LoadablePlotly = loadable(() => import('react-plotly.js'));
 
-const PlotlyComponent = ({ chartRef, data, layout, history }) => {
+const PlotlyComponent = ({
+  chartRef,
+  data,
+  layout,
+  history,
+  setInitialized,
+}) => {
   const handleChartClick = (trace, layout, history) => {
     const { customLink, clickmode, meta = [] } = layout;
 
@@ -65,11 +71,11 @@ const PlotlyComponent = ({ chartRef, data, layout, history }) => {
 
   return (
     <LoadablePlotly
+      {...{ data, layout }}
       onInitialized={(_, chartEl) => {
+        setInitialized(true);
         chartRef.current = chartEl;
       }}
-      useResizeHandler
-      {...{ data, layout }}
       frames={[]}
       config={{
         displayModeBar: false,
@@ -84,6 +90,7 @@ const PlotlyComponent = ({ chartRef, data, layout, history }) => {
         display: 'block',
         ...(!layout.height ? { minHeight: '450px' } : {}),
       }}
+      useResizeHandler
     />
   );
 };

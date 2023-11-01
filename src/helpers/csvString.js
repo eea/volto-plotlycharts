@@ -1,4 +1,5 @@
 import { trackLink } from '@eeacms/volto-matomo/utils';
+import { downloadDataURL } from './index';
 
 function getHeaders(headers, onlySectionHeader = false) {
   let str = '';
@@ -96,20 +97,7 @@ function exportCSVFile(csv, title = 'data') {
     // IE 10+
     navigator.msSaveBlob(blob, exportedFilenmae);
   } else {
-    let link = document.createElement('a');
-    if (link.download !== undefined) {
-      // feature detection
-      // Browsers that support HTML5 download attribute
-      if (document) {
-        let url = URL.createObjectURL(blob);
-        link.setAttribute('href', url);
-        link.setAttribute('download', exportedFilenmae);
-        link.style.visibility = 'hidden';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      }
-    }
+    downloadDataURL(URL.createObjectURL(blob), exportedFilenmae);
   }
 }
 

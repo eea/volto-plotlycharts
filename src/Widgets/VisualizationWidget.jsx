@@ -120,7 +120,17 @@ class VisualizationWidget extends Component {
           </Button>
         </div>
         {description && <p className="help">{description}</p>}
-        <ConnectedChart visualization={value} />
+        <ConnectedChart
+          visualization={value}
+          data={{
+            with_sources: false,
+            with_notes: false,
+            with_more_info: false,
+            download_button: false,
+            with_enlarge: false,
+            with_share: false,
+          }}
+        />
         {this.state.showChartEditor ? (
           <PlotlyEditorModal
             value={value}
