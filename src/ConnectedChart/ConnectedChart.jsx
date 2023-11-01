@@ -14,11 +14,11 @@ import {
   Sources,
   MoreInfo,
   Share,
-} from '@eeacms/volto-datablocks/Toolbar';
+} from '@eeacms/volto-embed/Toolbar';
 import { Download } from '@eeacms/volto-plotlycharts/Utils';
 import PlotlyComponent from './PlotlyComponent';
 
-import '@eeacms/volto-datablocks/Toolbar/styles.less';
+import '@eeacms/volto-embed/Toolbar/styles.less';
 
 function ConnectedChart(props) {
   const [initialized, setInitialized] = useState(false);
