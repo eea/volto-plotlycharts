@@ -9,10 +9,12 @@ export default {
       fields: [
         'vis_url',
         'hover_format_xy',
+        'with_notes',
         'with_sources',
         'with_more_info',
-        'with_notes',
         'download_button',
+        'with_share',
+        'with_enlarge',
       ],
     },
     {
@@ -45,8 +47,8 @@ export default {
         </>
       ),
     },
-    download_button: {
-      title: 'Toggle download',
+    with_notes: {
+      title: 'Toggle notes',
       type: 'boolean',
       defaultValue: true,
     },
@@ -60,8 +62,18 @@ export default {
       type: 'boolean',
       defaultValue: true,
     },
-    with_notes: {
-      title: 'Toggle notes',
+    download_button: {
+      title: 'Toggle download',
+      type: 'boolean',
+      defaultValue: true,
+    },
+    with_share: {
+      title: 'Toggle share',
+      type: 'boolean',
+      defaultValue: true,
+    },
+    with_enlarge: {
+      title: 'Toggle enlarge',
       type: 'boolean',
       defaultValue: true,
     },

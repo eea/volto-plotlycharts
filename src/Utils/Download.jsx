@@ -1,17 +1,15 @@
-import React, { Suspense, lazy } from 'react';
-import { Icon } from '@plone/volto/components';
+import React from 'react';
 import cx from 'classnames';
+import { Popup } from 'semantic-ui-react';
 import {
   convertMatrixToCSV,
   convertToCSV,
   exportCSVFile,
   spreadCoreMetadata,
-} from './csvStringHelpers';
-import { Popup } from 'semantic-ui-react';
-import downloadSVG from '@eeacms/volto-plotlycharts/icons/download.svg';
-let DownloadImage = lazy(() => import('./DownloadImage'));
+} from '@eeacms/volto-plotlycharts/helpers/csvString';
+import { downloadDataURL } from '@eeacms/volto-plotlycharts/helpers';
 
-const Download = (props) => {
+export default function Download(props) {
   const {
     title,
     provider_data,
@@ -22,7 +20,8 @@ const Download = (props) => {
     url_source,
     chartRef,
   } = props;
-  const [expanded, setExpanded] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
+
   const handleDownloadData = () => {
     let array = [];
     let data_provenance_array = [];
@@ -152,65 +151,87 @@ const Download = (props) => {
     exportCSVFile(csv, title);
   };
 
-  return (
-    <div className="plotly-download-container">
-      <Popup
-        content={
-          <ul className="no-bullets">
-            <li>
-              Data formats
-              <div className="visualization-wrapper">
-                <div className="visualization-info">
-                  <div>
-                    <button
-                      className="plotly-download-button plotly-format-download"
-                      onClick={() => {
-                        if (provider_data && !providers_data) {
-                          handleDownloadData();
-                        } else if (providers_data) {
-                          handleDownloadMultipleData();
-                        }
-                      }}
-                    >
-                      <span>CSV</span>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </li>
-            <li>
-              Image formats
-              <div className="visualization-wrapper">
-                <div className="visualization-info">
-                  <Suspense fallback={<p>Loading</p>}>
-                    <DownloadImage type="SVG" {...{ chartRef, title }} />
-                  </Suspense>
-                  <Suspense fallback={<p>Loading</p>}>
-                    <DownloadImage type="PNG" {...{ chartRef, title }} />
-                  </Suspense>
-                </div>
-              </div>
-            </li>
-          </ul>
-        }
-        position="bottom left"
-        popper={{ id: 'plotly-download-popup' }}
-        trigger={
-          <button className={cx('plotly-download-button', { expanded })}>
-            <span>Download</span>
-            <Icon name={downloadSVG} size="24px" />
-          </button>
-        }
-        on="click"
-        onClose={() => {
-          setExpanded(false);
-        }}
-        onOpen={() => {
-          setExpanded(true);
-        }}
-      />
-    </div>
-  );
-};
+  const handleDownloadImage = (type) => {
+    import('plotly.js/dist/plotly.min.js').then(({ toImage }) => {
+      const {
+        clientWidth: width = 700,
+        clientHeight: height = 450,
+      } = chartRef.current;
 
-export default Download;
+      toImage(chartRef.current, { format: type, height, width }).then(
+        (dataUrl) => {
+          downloadDataURL(dataUrl, `${title}.${type.toLowerCase()}`);
+          setOpen(false);
+        },
+      );
+    });
+  };
+
+  return (
+    <Popup
+      popper={{ id: 'vis-toolbar-popup', className: 'download-popup' }}
+      position="bottom left"
+      on="click"
+      open={open}
+      onClose={() => {
+        setOpen(false);
+      }}
+      onOpen={() => {
+        setOpen(true);
+      }}
+      trigger={
+        <div className="download">
+          <button className={cx('trigger-button', { open })}>
+            <i className="ri-download-fill" />
+            <span>Download</span>
+          </button>
+        </div>
+      }
+      content={
+        <>
+          <div className="item">
+            <span className="label">Data formats</span>
+            <div className="types">
+              <div className="type">
+                <button
+                  onClick={() => {
+                    if (provider_data && !providers_data) {
+                      handleDownloadData();
+                    } else if (providers_data) {
+                      handleDownloadMultipleData();
+                    }
+                  }}
+                >
+                  <span>CSV</span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div className="item">
+            <span className="label">Image formats</span>
+            <div className="types">
+              <div className="type">
+                <button
+                  onClick={() => {
+                    handleDownloadImage('svg');
+                  }}
+                >
+                  <span>SVG</span>
+                </button>
+              </div>
+              <div className="type">
+                <button
+                  onClick={() => {
+                    handleDownloadImage('png');
+                  }}
+                >
+                  <span>PNG</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </>
+      }
+    />
+  );
+}
