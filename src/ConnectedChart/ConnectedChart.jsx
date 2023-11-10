@@ -138,7 +138,7 @@ function ConnectedChart(props) {
   }
 
   return (
-    <div className={cx('visualization-wrapper', { mobile })}>
+    <div className="visualization-wrapper">
       <div
         className={cx('visualization', { autosize: layout.autosize })}
         ref={visEl}
@@ -148,7 +148,7 @@ function ConnectedChart(props) {
         />
       </div>
       {initialized && (
-        <div className="visualization-toolbar">
+        <div className={cx('visualization-toolbar', { mobile })}>
           <div className="left-col">
             {with_notes && <FigureNote notes={figure_note || []} />}
             {with_sources && (

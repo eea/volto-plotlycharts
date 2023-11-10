@@ -6,9 +6,12 @@ export default {
     {
       id: 'default',
       title: 'Default',
+      fields: ['vis_url', 'hover_format_xy'],
+    },
+    {
+      id: 'toolbar',
+      title: 'Toolbar',
       fields: [
-        'vis_url',
-        'hover_format_xy',
         'with_notes',
         'with_sources',
         'with_more_info',
@@ -48,32 +51,33 @@ export default {
       ),
     },
     with_notes: {
-      title: 'Toggle notes',
+      title: 'Show notes',
       type: 'boolean',
       defaultValue: true,
     },
     with_sources: {
-      title: 'Toggle sources',
+      title: 'Show sources',
+      description: 'Will show sources set in this page Data provenance',
       type: 'boolean',
       defaultValue: true,
     },
     with_more_info: {
-      title: 'Toggle more info',
+      title: 'Show more info',
       type: 'boolean',
       defaultValue: true,
     },
     download_button: {
-      title: 'Toggle download',
+      title: 'Show download button',
       type: 'boolean',
       defaultValue: true,
     },
     with_share: {
-      title: 'Toggle share',
+      title: 'Show share button',
       type: 'boolean',
       defaultValue: true,
     },
     with_enlarge: {
-      title: 'Toggle enlarge',
+      title: 'Show enlarge button',
       type: 'boolean',
       defaultValue: true,
     },
