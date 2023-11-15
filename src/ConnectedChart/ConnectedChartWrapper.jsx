@@ -3,14 +3,14 @@
  */
 
 import React from 'react';
-import ConnectedChart from './ConnectedChart';
+import ConnectedChart, { ChartSkeleton } from './ConnectedChart';
 
 import { VisibilitySensor } from '@eeacms/volto-datablocks/components';
 
 function ConnectedChartWrapper(props) {
   return (
     <>
-      <VisibilitySensor className="connected-chart">
+      <VisibilitySensor className="connected-chart" Placeholder={ChartSkeleton}>
         <ConnectedChart {...props} />
       </VisibilitySensor>
     </>

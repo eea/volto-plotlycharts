@@ -5,7 +5,6 @@ import '@eeacms/volto-plotlycharts/less/plotly.less';
 
 const View = (props) => {
   const { data = {} } = props;
-  const { visualization = {} } = data;
 
   return (
     <div className="plotly-chart">
@@ -17,7 +16,6 @@ const View = (props) => {
           with_sources: data.with_sources ?? true,
           use_live_data: true,
         }}
-        visualization={visualization}
       />
     </div>
   );

@@ -29,7 +29,9 @@ Plotly Charts and Plotly Chart Editor integration with Volto
 
 ## Upgrade
 
-* Version `^6.0.0` requires `^eea.api.dataconnector@4.4`
+- Version `^8.0.0` requires `^eea.api.dataconnector@7.0`
+
+- Version `^6.0.0` requires `^eea.api.dataconnector@4.4`
 
 ## Getting started
 
@@ -52,25 +54,25 @@ Go to http://localhost:3000
 
 1. Start Volto frontend
 
-* If you already have a volto project, just update `package.json`:
+- If you already have a volto project, just update `package.json`:
 
-   ```JSON
-   "addons": [
-       "@eeacms/volto-plotlycharts"
-   ],
+  ```JSON
+  "addons": [
+      "@eeacms/volto-plotlycharts"
+  ],
 
-   "dependencies": {
-       "@eeacms/volto-plotlycharts": "*"
-   }
-   ```
+  "dependencies": {
+      "@eeacms/volto-plotlycharts": "*"
+  }
+  ```
 
-* If not, create one:
+- If not, create one:
 
-   ```
-   npm install -g yo @plone/generator-volto
-   yo @plone/volto my-volto-project --canary --addon @eeacms/volto-plotlycharts
-   cd my-volto-project
-   ```
+  ```
+  npm install -g yo @plone/generator-volto
+  yo @plone/volto my-volto-project --canary --addon @eeacms/volto-plotlycharts
+  cd my-volto-project
+  ```
 
 1. Install new add-ons and restart Volto:
 

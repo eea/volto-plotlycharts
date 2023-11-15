@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
-import isUndefined from 'lodash/isUndefined';
+import { isUndefined } from 'lodash';
 import { withRouter } from 'react-router';
 import { connect, useDispatch } from 'react-redux';
 import {
@@ -34,15 +34,15 @@ function connectBlockToVisualization(getConfig = () => ({})) {
           ? props.data_visualizations?.failedVisualizations?.[vis_url] ?? false
           : false;
 
-        const visualization_data = vis_url
+        const visualizaiton = vis_url
           ? props.data_visualizations?.data?.[vis_url]
           : null;
 
         const readyToDispatch =
-          vis_url && !visualization_data && !isPending && !isFailed;
+          vis_url && isUndefined(visualizaiton) && !isPending && !isFailed;
 
         useEffect(() => {
-          if (visualization_data) {
+          if (visualizaiton) {
             dispatch(removeVisualization(vis_url));
           }
           /* eslint-disable-next-line */
@@ -57,10 +57,8 @@ function connectBlockToVisualization(getConfig = () => ({})) {
         return (
           <WrappedComponent
             {...props}
-            visualization_data={visualization_data}
-            loadingVisualizationData={
-              isPending || isUndefined(visualization_data)
-            }
+            visualization={visualizaiton}
+            loadingVisualization={isPending || isUndefined(visualizaiton)}
             hasVisUrl={!!vis_url}
           />
         );

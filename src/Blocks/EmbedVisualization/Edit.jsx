@@ -12,6 +12,7 @@ const Edit = (props) => {
     <div className="embed-visualization edit">
       <ConnectedChart
         id={props.id}
+        mode="edit"
         data={{
           ...data,
           download_button: data.download_button ?? true,
