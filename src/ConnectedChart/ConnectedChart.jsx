@@ -2,8 +2,9 @@ import React, { useState, useRef, useEffect } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import cx from 'classnames';
+import { Message, Dimmer, Loader, Image } from 'semantic-ui-react';
 import config from '@plone/volto/registry';
-import { toPublicURL } from '@plone/volto/helpers';
+import { toPublicURL, flattenToAppURL } from '@plone/volto/helpers';
 import { connectToProviderData } from '@eeacms/volto-datablocks/hocs';
 import { updateChartDataFromProvider } from '@eeacms/volto-datablocks/helpers';
 import { connectBlockToVisualization } from '@eeacms/volto-plotlycharts/hocs';
@@ -20,6 +21,27 @@ import PlotlyComponent from './PlotlyComponent';
 
 import '@eeacms/volto-embed/Toolbar/styles.less';
 
+export function ChartSkeleton() {
+  return (
+    <div style={{ position: 'relative', minHeight: '200px' }}>
+      <Dimmer active inverted>
+        <Loader size="mini">Loading chart...</Loader>
+      </Dimmer>
+
+      <Image src="https://react.semantic-ui.com/images/wireframe/paragraph.png" />
+    </div>
+  );
+}
+
+function getVisualization(props) {
+  return (
+    props.data?.visualization ||
+    props.content?.visualization ||
+    props.visualization ||
+    null
+  );
+}
+
 function ConnectedChart(props) {
   const [initialized, setInitialized] = useState(false);
   const [mobile, setMobile] = useState(false);
@@ -29,23 +51,12 @@ function ConnectedChart(props) {
 
   const {
     screen,
-    loadingVisualizationData,
     hasProviderUrl,
     provider_data,
     provider_metadata,
-    visualization,
-    visualization_data,
+    loadingVisualization,
+    mode,
   } = props;
-
-  const {
-    title,
-    data_provenance,
-    figure_note,
-    other_organisations,
-    temporal_coverage,
-    publisher,
-    geo_coverage,
-  } = visualization_data || props.content || {};
 
   const {
     hover_format_xy,
@@ -58,11 +69,24 @@ function ConnectedChart(props) {
     with_share = true,
   } = props.data || {};
 
-  const loadingProviderData =
-    loadingVisualizationData || (hasProviderUrl && props.loadingProviderData);
+  const visualization = getVisualization(props);
 
-  const chartData =
-    visualization?.chartData || visualization_data?.chartData || {};
+  const {
+    title,
+    data_provenance,
+    figure_note,
+    other_organisations,
+    temporal_coverage,
+    publisher,
+    geo_coverage,
+  } = visualization || props.content || {};
+
+  const visualization_id =
+    visualization?.['@id'] || props.content?.['@id'] || props.data.vis_url;
+
+  const loadingProviderData = hasProviderUrl && props.loadingProviderData;
+
+  const chartData = visualization?.chartData || {};
 
   const layout = {
     ...(chartData.layout || {}),
@@ -129,98 +153,97 @@ function ConnectedChart(props) {
     }
   }, [screen, mobile, initialized]);
 
-  if (loadingVisualizationData || loadingProviderData) {
-    return <div>Loading chart...</div>;
+  if (loadingVisualization || loadingProviderData) {
+    return <ChartSkeleton />;
   }
 
   if (!Object.keys(chartData).length) {
+    if (mode === 'edit')
+      return (
+        <Message>Please select a visualization from block editor.</Message>
+      );
     return <div>No valid data.</div>;
   }
 
   return (
-    <div className="visualization-wrapper">
-      <div
-        className={cx('visualization', { autosize: layout.autosize })}
-        ref={visEl}
-      >
-        <PlotlyComponent
-          {...{ chartRef, data, layout, history, setInitialized }}
-        />
-      </div>
-      {initialized && (
-        <div className={cx('visualization-toolbar', { mobile })}>
-          <div className="left-col">
-            {with_notes && <FigureNote notes={figure_note || []} />}
-            {with_sources && (
-              <Sources
-                sources={data_provenance?.data || props.data?.chartSources}
-              />
-            )}
-            {with_more_info && (
-              <MoreInfo
-                href={visualization_data?.['@id'] || props.content?.['@id']}
-              />
-            )}
-          </div>
-          <div className="right-col">
-            {download_button && (
-              <Download
-                chartRef={chartRef}
-                title={title}
-                provider_data={provider_data}
-                provider_metadata={provider_metadata}
-                url_source={toPublicURL(props?.location?.pathname)}
-                core_metadata={{
-                  data_provenance: data_provenance?.data,
-                  other_organisations: other_organisations,
-                  temporal_coverage: temporal_coverage?.temporal,
-                  publisher: publisher,
-                  geo_coverage: geo_coverage?.geolocation,
-                }}
-              />
-            )}
-            {with_share && (
-              <Share
-                href={visualization_data?.['@id'] || props.content?.['@id']}
-              />
-            )}
-            {with_enlarge && (
-              <Enlarge>
-                <PlotlyComponent
-                  {...{
-                    chartRef,
-                    data,
-                    layout: {
-                      ...layout,
-                      autosize: true,
-                      height: null,
-                      width: null,
-                    },
-                    history,
+    <>
+      {!initialized && <ChartSkeleton />}
+      <div className="visualization-wrapper">
+        <div
+          className={cx('visualization', { autosize: layout.autosize })}
+          ref={visEl}
+        >
+          <PlotlyComponent
+            {...{ chartRef, data, layout, history, setInitialized }}
+          />
+        </div>
+        {initialized && (
+          <div className={cx('visualization-toolbar', { mobile })}>
+            <div className="left-col">
+              {with_notes && <FigureNote notes={figure_note || []} />}
+              {with_sources && (
+                <Sources
+                  sources={data_provenance?.data || props.data?.chartSources}
+                />
+              )}
+              {with_more_info && <MoreInfo href={visualization_id} />}
+            </div>
+            <div className="right-col">
+              {download_button && (
+                <Download
+                  chartRef={chartRef}
+                  title={title}
+                  provider_data={provider_data}
+                  provider_metadata={provider_metadata}
+                  url_source={toPublicURL(props?.location?.pathname)}
+                  core_metadata={{
+                    data_provenance: data_provenance?.data,
+                    other_organisations: other_organisations,
+                    temporal_coverage: temporal_coverage?.temporal,
+                    publisher: publisher,
+                    geo_coverage: geo_coverage?.geolocation,
                   }}
                 />
-              </Enlarge>
-            )}
+              )}
+              {with_share && <Share href={visualization_id} />}
+              {with_enlarge && (
+                <Enlarge>
+                  <PlotlyComponent
+                    {...{
+                      chartRef,
+                      data,
+                      layout: {
+                        ...layout,
+                        autosize: true,
+                        height: null,
+                        width: null,
+                      },
+                      history,
+                    }}
+                  />
+                </Enlarge>
+              )}
+            </div>
           </div>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
+    </>
   );
 }
 
 export default compose(
   connectBlockToVisualization((props) => ({
-    vis_url: props.data?.vis_url || null,
+    vis_url:
+      !props.data?.visualization && !props.content?.visualization
+        ? flattenToAppURL(props.data?.vis_url || '')
+        : null,
     use_live_data: props.data?.use_live_data ?? true,
   })),
   connectToProviderData((props) => {
     const use_live_data = props.data?.use_live_data ?? true;
     if (!use_live_data) return {};
     return {
-      provider_url:
-        props.visualization?.provider_url ||
-        props.visualization_data?.provider_url ||
-        props.data?.provider_url,
+      provider_url: getVisualization(props)?.provider_url,
     };
   }),
   connect((state) => ({
