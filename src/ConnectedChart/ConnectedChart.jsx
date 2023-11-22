@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import cx from 'classnames';
@@ -9,7 +9,6 @@ import { connectToProviderData } from '@eeacms/volto-datablocks/hocs';
 import { updateChartDataFromProvider } from '@eeacms/volto-datablocks/helpers';
 import { connectBlockToVisualization } from '@eeacms/volto-plotlycharts/hocs';
 import { useHistory } from 'react-router-dom';
-import { pickMetadata } from '@eeacms/volto-embed/helpers';
 import {
   Enlarge,
   FigureNote,
@@ -35,14 +34,7 @@ export function ChartSkeleton() {
 }
 
 function getVisualization(props) {
-  const { isBlock, content } = props;
-  if (!isBlock) {
-    return {
-      ...pickMetadata(content),
-      ...(content.visualization || {}),
-    };
-  }
-  return props.visualization || props.data.visualization;
+  return props.visualization || props.data?.visualization || {};
 }
 
 function ConnectedChart(props) {
@@ -71,7 +63,7 @@ function ConnectedChart(props) {
     with_share = true,
   } = props.data || {};
 
-  const visualization = getVisualization(props);
+  const visualization = useMemo(() => getVisualization(props), [props]);
 
   const {
     title,
@@ -229,21 +221,17 @@ function ConnectedChart(props) {
 }
 
 export default compose(
-  connect((state, props) => ({
+  connect((state) => ({
     screen: state.screen,
-    isBlock: !!props.data?.['@type'],
   })),
   connectBlockToVisualization((props) => {
-    const isBlock = !!props.data?.['@type'];
     const url = flattenToAppURL(props.data?.vis_url);
     const currentUrl = props.data.visualization
       ? flattenToAppURL(props.data.visualization['@id'])
       : null;
     return {
       vis_url:
-        isBlock && url && (!props.data.visualization || currentUrl !== url)
-          ? url
-          : null,
+        url && (!props.data.visualization || currentUrl !== url) ? url : null,
       use_live_data: props.data?.use_live_data ?? true,
     };
   }),
