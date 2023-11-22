@@ -19,6 +19,10 @@
     "type": "git",
     "url": "git@github.com:eea/volto-plotlycharts.git"
   },
+  "addons": [
+    "@eeacms/volto-embed",
+    "@eeacms/volto-matomo"
+  ],
   "dependencies": {
     "@eeacms/volto-embed": "github:eea/volto-embed#develop",
     "@eeacms/volto-matomo": "*",

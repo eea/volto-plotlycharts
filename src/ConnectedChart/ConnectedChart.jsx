@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { pick } from 'lodash';
 import cx from 'classnames';
 import { Dimmer, Loader, Image } from 'semantic-ui-react';
 import config from '@plone/volto/registry';
@@ -10,6 +9,7 @@ import { connectToProviderData } from '@eeacms/volto-datablocks/hocs';
 import { updateChartDataFromProvider } from '@eeacms/volto-datablocks/helpers';
 import { connectBlockToVisualization } from '@eeacms/volto-plotlycharts/hocs';
 import { useHistory } from 'react-router-dom';
+import { pickMetadata } from '@eeacms/volto-embed/helpers';
 import {
   Enlarge,
   FigureNote,
@@ -34,29 +34,11 @@ export function ChartSkeleton() {
   );
 }
 
-function pickMetadata(content) {
-  return pick(content, [
-    '@id',
-    'title',
-    'data_provenance',
-    'figure_note',
-    'other_organisations',
-    'temporan_coverage',
-    'publisher',
-    'geo_coverage',
-  ]);
-}
-
 function getVisualization(props) {
   const { isBlock, content } = props;
   if (!isBlock) {
     return {
-      ...pickMetadata(content, [
-        '@id',
-        'title',
-        'data_provenance',
-        'figure_note',
-      ]),
+      ...pickMetadata(content),
       ...(content.visualization || {}),
     };
   }
