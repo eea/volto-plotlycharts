@@ -34,15 +34,15 @@ function connectBlockToVisualization(getConfig = () => ({})) {
           ? props.data_visualizations?.failedVisualizations?.[vis_url] ?? false
           : false;
 
-        const visualizaiton = vis_url
+        const visualization = vis_url
           ? props.data_visualizations?.data?.[vis_url]
           : null;
 
         const readyToDispatch =
-          vis_url && isUndefined(visualizaiton) && !isPending && !isFailed;
+          vis_url && isUndefined(visualization) && !isPending && !isFailed;
 
         useEffect(() => {
-          if (visualizaiton) {
+          if (visualization) {
             dispatch(removeVisualization(vis_url));
           }
           /* eslint-disable-next-line */
@@ -57,8 +57,8 @@ function connectBlockToVisualization(getConfig = () => ({})) {
         return (
           <WrappedComponent
             {...props}
-            visualization={visualizaiton}
-            loadingVisualization={isPending || isUndefined(visualizaiton)}
+            visualization={visualization}
+            loadingVisualization={isPending || isUndefined(visualization)}
             hasVisUrl={!!vis_url}
           />
         );

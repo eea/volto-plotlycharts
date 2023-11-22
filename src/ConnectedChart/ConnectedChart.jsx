@@ -1,8 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+import { pick } from 'lodash';
 import cx from 'classnames';
-import { Message, Dimmer, Loader, Image } from 'semantic-ui-react';
+import { Dimmer, Loader, Image } from 'semantic-ui-react';
 import config from '@plone/volto/registry';
 import { toPublicURL, flattenToAppURL } from '@plone/volto/helpers';
 import { connectToProviderData } from '@eeacms/volto-datablocks/hocs';
@@ -33,13 +34,33 @@ export function ChartSkeleton() {
   );
 }
 
+function pickMetadata(content) {
+  return pick(content, [
+    '@id',
+    'title',
+    'data_provenance',
+    'figure_note',
+    'other_organisations',
+    'temporan_coverage',
+    'publisher',
+    'geo_coverage',
+  ]);
+}
+
 function getVisualization(props) {
-  return (
-    props.data?.visualization ||
-    props.content?.visualization ||
-    props.visualization ||
-    null
-  );
+  const { isBlock, content } = props;
+  if (!isBlock) {
+    return {
+      ...pickMetadata(content, [
+        '@id',
+        'title',
+        'data_provenance',
+        'figure_note',
+      ]),
+      ...(content.visualization || {}),
+    };
+  }
+  return props.visualization || props.data.visualization;
 }
 
 function ConnectedChart(props) {
@@ -55,7 +76,6 @@ function ConnectedChart(props) {
     provider_data,
     provider_metadata,
     loadingVisualization,
-    mode,
   } = props;
 
   const {
@@ -79,10 +99,9 @@ function ConnectedChart(props) {
     temporal_coverage,
     publisher,
     geo_coverage,
-  } = visualization || props.content || {};
+  } = visualization;
 
-  const visualization_id =
-    visualization?.['@id'] || props.content?.['@id'] || props.data.vis_url;
+  const visualization_id = visualization['@id'] || props.data?.vis_url;
 
   const loadingProviderData = hasProviderUrl && props.loadingProviderData;
 
@@ -158,10 +177,6 @@ function ConnectedChart(props) {
   }
 
   if (!Object.keys(chartData).length) {
-    if (mode === 'edit')
-      return (
-        <Message>Please select a visualization from block editor.</Message>
-      );
     return <div>No valid data.</div>;
   }
 
@@ -232,21 +247,29 @@ function ConnectedChart(props) {
 }
 
 export default compose(
-  connectBlockToVisualization((props) => ({
-    vis_url:
-      !props.data?.visualization && !props.content?.visualization
-        ? flattenToAppURL(props.data?.vis_url || '')
-        : null,
-    use_live_data: props.data?.use_live_data ?? true,
+  connect((state, props) => ({
+    screen: state.screen,
+    isBlock: !!props.data?.['@type'],
   })),
+  connectBlockToVisualization((props) => {
+    const isBlock = !!props.data?.['@type'];
+    const url = flattenToAppURL(props.data?.vis_url);
+    const currentUrl = props.data.visualization
+      ? flattenToAppURL(props.data.visualization['@id'])
+      : null;
+    return {
+      vis_url:
+        isBlock && url && (!props.data.visualization || currentUrl !== url)
+          ? url
+          : null,
+      use_live_data: props.data?.use_live_data ?? true,
+    };
+  }),
   connectToProviderData((props) => {
     const use_live_data = props.data?.use_live_data ?? true;
     if (!use_live_data) return {};
     return {
-      provider_url: getVisualization(props)?.provider_url,
+      provider_url: getVisualization(props).provider_url,
     };
   }),
-  connect((state) => ({
-    screen: state.screen,
-  })),
 )(ConnectedChart);
