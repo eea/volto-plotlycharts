@@ -1,8 +1,8 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import cx from 'classnames';
-import { Message, Dimmer, Loader, Image } from 'semantic-ui-react';
+import { Dimmer, Loader, Image } from 'semantic-ui-react';
 import config from '@plone/volto/registry';
 import { toPublicURL, flattenToAppURL } from '@plone/volto/helpers';
 import { connectToProviderData } from '@eeacms/volto-datablocks/hocs';
@@ -34,12 +34,7 @@ export function ChartSkeleton() {
 }
 
 function getVisualization(props) {
-  return (
-    props.data?.visualization ||
-    props.content?.visualization ||
-    props.visualization ||
-    null
-  );
+  return props.visualization || props.data?.visualization || {};
 }
 
 function ConnectedChart(props) {
@@ -55,7 +50,6 @@ function ConnectedChart(props) {
     provider_data,
     provider_metadata,
     loadingVisualization,
-    mode,
   } = props;
 
   const {
@@ -69,7 +63,7 @@ function ConnectedChart(props) {
     with_share = true,
   } = props.data || {};
 
-  const visualization = getVisualization(props);
+  const visualization = useMemo(() => getVisualization(props), [props]);
 
   const {
     title,
@@ -79,10 +73,9 @@ function ConnectedChart(props) {
     temporal_coverage,
     publisher,
     geo_coverage,
-  } = visualization || props.content || {};
+  } = visualization;
 
-  const visualization_id =
-    visualization?.['@id'] || props.content?.['@id'] || props.data.vis_url;
+  const visualization_id = visualization['@id'] || props.data?.vis_url;
 
   const loadingProviderData = hasProviderUrl && props.loadingProviderData;
 
@@ -158,10 +151,6 @@ function ConnectedChart(props) {
   }
 
   if (!Object.keys(chartData).length) {
-    if (mode === 'edit')
-      return (
-        <Message>Please select a visualization from block editor.</Message>
-      );
     return <div>No valid data.</div>;
   }
 
@@ -232,21 +221,25 @@ function ConnectedChart(props) {
 }
 
 export default compose(
-  connectBlockToVisualization((props) => ({
-    vis_url:
-      !props.data?.visualization && !props.content?.visualization
-        ? flattenToAppURL(props.data?.vis_url || '')
-        : null,
-    use_live_data: props.data?.use_live_data ?? true,
+  connect((state) => ({
+    screen: state.screen,
   })),
+  connectBlockToVisualization((props) => {
+    const url = flattenToAppURL(props.data?.vis_url);
+    const currentUrl = props.data.visualization
+      ? flattenToAppURL(props.data.visualization['@id'])
+      : null;
+    return {
+      vis_url:
+        url && (!props.data.visualization || currentUrl !== url) ? url : null,
+      use_live_data: props.data?.use_live_data ?? true,
+    };
+  }),
   connectToProviderData((props) => {
     const use_live_data = props.data?.use_live_data ?? true;
     if (!use_live_data) return {};
     return {
-      provider_url: getVisualization(props)?.provider_url,
+      provider_url: getVisualization(props).provider_url,
     };
   }),
-  connect((state) => ({
-    screen: state.screen,
-  })),
 )(ConnectedChart);
