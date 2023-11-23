@@ -1,6 +1,6 @@
 {
   "name": "@eeacms/volto-plotlycharts",
-  "version": "8.0.1",
+  "version": "8.1.0",
   "description": "Plotly Charts and Editor integration for Volto",
   "main": "src/index.js",
   "author": "European Environment Agency: IDM2 A-Team",
@@ -24,7 +24,7 @@
     "@eeacms/volto-matomo"
   ],
   "dependencies": {
-    "@eeacms/volto-embed": "github:eea/volto-embed#develop",
+    "@eeacms/volto-embed": "*",
     "@eeacms/volto-matomo": "*",
     "@plone/scripts": "*",
     "plotly.js": "^2.24.2",
