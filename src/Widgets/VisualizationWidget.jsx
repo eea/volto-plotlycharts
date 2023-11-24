@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { Button, Modal, Grid, Label } from 'semantic-ui-react';
 import { map } from 'lodash';
 
-import { PickObjectWidget } from '@eeacms/volto-datablocks/components';
 import { FormFieldWrapper } from '@plone/volto/components';
+import { pickMetadata } from '@eeacms/volto-embed/helpers';
+import { PickObjectWidget } from '@eeacms/volto-datablocks/components';
 
 import ConnectedChart from '../ConnectedChart';
 import ChartEditor from '../ChartEditor';
@@ -121,7 +122,6 @@ class VisualizationWidget extends Component {
         </div>
         {description && <p className="help">{description}</p>}
         <ConnectedChart
-          visualization={value}
           data={{
             with_sources: false,
             with_notes: false,
@@ -129,6 +129,10 @@ class VisualizationWidget extends Component {
             download_button: false,
             with_enlarge: false,
             with_share: false,
+            visualization: {
+              ...(value || {}),
+              ...pickMetadata(this.props.formData || {}),
+            },
           }}
         />
         {this.state.showChartEditor ? (
