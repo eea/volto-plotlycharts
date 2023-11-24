@@ -1,8 +1,9 @@
 import React from 'react';
 import { Container } from 'semantic-ui-react';
-import ConnectedChart from '../ConnectedChart';
 import { hasBlocksData } from '@plone/volto/helpers';
 import RenderBlocks from '@plone/volto/components/theme/View/RenderBlocks';
+import { pickMetadata } from '@eeacms/volto-embed/helpers';
+import ConnectedChart from '@eeacms/volto-plotlycharts/ConnectedChart';
 
 const VisualizationView = (props) => {
   const { content = {} } = props;
@@ -14,14 +15,17 @@ const VisualizationView = (props) => {
       ) : (
         <div className="plotly-chart">
           <ConnectedChart
-            visualization={content.visualization}
             data={{
               with_sources: false,
               with_notes: false,
               with_more_info: false,
-              download_button: false,
-              with_enlarge: false,
-              with_share: false,
+              download_button: true,
+              with_enlarge: true,
+              with_share: true,
+              visualization: {
+                ...(props.content.visualization || {}),
+                ...pickMetadata(props.content),
+              },
             }}
           />
         </div>
