@@ -6,7 +6,7 @@ import presentationSVG from '@plone/volto/icons/image.svg';
 export default (config) => {
   const visualizationBlockConfig = {
     id: 'embed_visualization',
-    title: 'Embed EEA visualization',
+    title: 'Embed interactive Chart (Plotly)',
     icon: presentationSVG,
     group: 'data_visualizations',
     view: View,
