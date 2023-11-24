@@ -1,9 +1,10 @@
+import { connect } from 'react-redux';
+import { pickMetadata } from '@eeacms/volto-embed/helpers';
 import ConnectedChart from '../ConnectedChart';
 
-export default function VisualizationViewWidget(props) {
+function VisualizationViewWidget(props) {
   return (
     <ConnectedChart
-      visualization={props.value}
       data={{
         with_sources: false,
         with_notes: false,
@@ -11,7 +12,15 @@ export default function VisualizationViewWidget(props) {
         download_button: true,
         with_enlarge: true,
         with_share: true,
+        visualization: {
+          ...(props.value || {}),
+          ...pickMetadata(props.content),
+        },
       }}
     />
   );
 }
+
+export default connect((state) => ({ content: state.content.data }))(
+  VisualizationViewWidget,
+);
