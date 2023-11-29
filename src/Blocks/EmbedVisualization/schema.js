@@ -1,7 +1,7 @@
 import React from 'react';
 
 export default {
-  title: 'Embed EEA visualization',
+  title: 'Embed interactive Chart (Plotly)',
   fieldsets: [
     {
       id: 'default',
