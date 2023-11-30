@@ -31,6 +31,10 @@
 
 .chart-editor-modal {
   z-index: 100 !important;
+
+  .ui.input {
+    max-width: none;
+  }
 }
 
 body.has-sidebar .ui.modal.chart-editor-modal {
@@ -85,4 +89,15 @@ body.has-sidebar .ui.modal.chart-editor-modal {
 
 .editor_controls .text-input.width-100 {
   width: 100%;
+}
+
+.block.plotly_chart .block:not(.inner)::before {
+  z-index: -1; // fix not clickable editor button
+}
+
+.ui.modal {
+  textarea.json-textarea {
+    width: 100% !important;
+    max-width: none;
+  }
 }
