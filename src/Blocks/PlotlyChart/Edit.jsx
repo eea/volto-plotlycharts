@@ -3,6 +3,7 @@ import { Button, Modal, Grid } from 'semantic-ui-react';
 import { SidebarPortal, BlockDataForm } from '@plone/volto/components';
 import { PickObjectWidget } from '@eeacms/volto-datablocks/components';
 import ChartEditor from '@eeacms/volto-plotlycharts/ChartEditor';
+import PlotlyJsonModal from './PlotlyJsonModal';
 
 import schema from './schema';
 import View from './View';
@@ -14,7 +15,17 @@ class PlotlyEditorModal extends Component {
     this.state = {
       value: props.value,
     };
+    this.updateChartData = this.updateChartData.bind(this);
   }
+
+  updateChartData = (data) => {
+    this.setState({
+      value: {
+        ...this.props.value,
+        chartData: data,
+      },
+    });
+  };
 
   render() {
     return (
@@ -30,7 +41,7 @@ class PlotlyEditorModal extends Component {
         <Modal.Actions>
           <Grid>
             <Grid.Row>
-              <Grid.Column computer={8} tablet={12} verticalAlign="middle">
+              <Grid.Column computer={7} tablet={12} verticalAlign="middle">
                 <PickObjectWidget
                   title="Select data source"
                   id="provider-data"
@@ -43,7 +54,11 @@ class PlotlyEditorModal extends Component {
                   showReload={true}
                 />
               </Grid.Column>
-              <Grid.Column computer={4} tablet={12} verticalAlign="middle">
+              <Grid.Column computer={5} tablet={12} verticalAlign="middle">
+                <PlotlyJsonModal
+                  updateChartData={this.updateChartData}
+                  data={this.state.value}
+                />
                 <Button
                   primary
                   floated="right"
