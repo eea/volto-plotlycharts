@@ -29,7 +29,7 @@ export default {
 
   properties: {
     vis_url: {
-      widget: 'object_by_path',
+      widget: 'internal_url',
       title: 'Visualization',
     },
 
