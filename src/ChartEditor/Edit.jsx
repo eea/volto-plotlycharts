@@ -66,7 +66,7 @@ function getDataSourceOptions(data) {
   }));
 }
 
-async function initEditor(el, editor, dflt, schema) {
+async function initEditor(el, editor, dflt, schema, onInit) {
   const jsoneditor = await import('jsoneditor');
   const JSONEditor = jsoneditor.default;
   // create the editor
@@ -80,6 +80,7 @@ async function initEditor(el, editor, dflt, schema) {
 
   const options = {
     mode: 'code',
+    enableTransform: false,
     schema: schema || {
       type: 'array',
       items: {
@@ -91,6 +92,8 @@ async function initEditor(el, editor, dflt, schema) {
   editor.current = new JSONEditor(container, options);
   // set initial json
   editor.current.set(dflt);
+
+  if (onInit) onInit();
 }
 
 function destroyEditor(editor) {
@@ -119,8 +122,11 @@ async function validate(editor) {
 
 const TabEditData = (props) => {
   const editor = useRef();
-  const initialData = useRef(props.value.chartData?.data || []);
-
+  const initialData = useRef(
+    (props.value.use_live_data
+      ? props.liveData
+      : props.value.chartData?.data) || [],
+  );
   useEffect(() => {
     initEditor('jsoneditor-data', editor, initialData.current);
 
@@ -251,6 +257,7 @@ const RawDataEditor = (props) => {
 };
 
 const Edit = (props) => {
+  const plotlyEl = useRef();
   const initialProps = useRef(props);
   const [dataSources, setDataSources] = useState(() =>
     getDataSources({
@@ -344,6 +351,7 @@ const Edit = (props) => {
                       const ChartEditor = chartEditor.default;
                       return (
                         <PlotlyEditor
+                          ref={plotlyEl}
                           divId="gd"
                           config={config}
                           data={data}
@@ -366,7 +374,6 @@ const Edit = (props) => {
                           chartHelp={chartHelp}
                           showFieldTooltips
                           useResizeHandler
-                          debug
                           advancedTraceTypeSelector
                         >
                           <ChartEditor

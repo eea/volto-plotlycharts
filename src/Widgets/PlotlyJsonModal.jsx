@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { connect } from 'react-redux';
 import { toast } from 'react-toastify';
 import { Portal } from 'react-portal';
+import { isArray, isString } from 'lodash';
 import {
   Button,
   Modal,
@@ -139,6 +140,50 @@ const PlotlyJsonModal = (props) => {
                           error
                           title={'JSON error'}
                           content={error.message}
+                        />,
+                      );
+                    }
+                  }}
+                />
+                <DropdownDivider />
+                <DropdownItem
+                  text="Use chart data"
+                  onClick={() => {
+                    const data = {};
+                    if (props.chartData?.data) {
+                      props.chartData.data.forEach((trace) => {
+                        Object.keys(trace).forEach((traceKey) => {
+                          const originalColumnName = traceKey.replace(
+                            /src$/,
+                            '',
+                          );
+                          if (
+                            !traceKey.endsWith('src') &&
+                            isArray(trace[traceKey])
+                          ) {
+                            data[traceKey] = [...trace[traceKey]];
+                            return;
+                          }
+                          if (
+                            traceKey.endsWith('src') &&
+                            Object.keys(trace).includes(originalColumnName) &&
+                            isString(trace[traceKey]) &&
+                            isArray(trace[originalColumnName])
+                          ) {
+                            delete data[originalColumnName];
+                            data[trace[traceKey]] = [
+                              ...trace[originalColumnName],
+                            ];
+                          }
+                        });
+                      });
+                      editor.current.set(data);
+                    } else {
+                      toast.warn(
+                        <Toast
+                          error
+                          title={'JSON error'}
+                          content={'No chart data found'}
                         />,
                       );
                     }

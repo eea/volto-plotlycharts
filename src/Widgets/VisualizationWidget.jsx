@@ -89,6 +89,7 @@ const PlotlyEditorModal = (props) => {
               use_live_data: true,
             }));
           }}
+          chartData={value.chartData}
           jsonData={value.json_data}
           onClose={() => setShowImportJSON(false)}
         />
