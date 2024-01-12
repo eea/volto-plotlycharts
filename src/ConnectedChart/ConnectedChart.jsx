@@ -261,10 +261,13 @@ function ConnectedChart(props) {
 export default compose(
   connectBlockToVisualization((props) => {
     const url = flattenToAppURL(props.data?.vis_url);
-    const currentUrl = props.viz?.['@id'] || null;
+    const currentUrl = props.data.visualization
+      ? flattenToAppURL(props.data.visualization['@id'])
+      : null;
 
     return {
-      vis_url: url && (!props.viz || currentUrl !== url) ? url : null,
+      vis_url:
+        url && (!props.data.visualization || currentUrl !== url) ? url : null,
     };
   }),
   connect((state, props) => {
