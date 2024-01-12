@@ -29,6 +29,8 @@ Plotly Charts and Plotly Chart Editor integration with Volto
 
 ## Upgrade
 
+- Version `^9.0.0` requires `^eea.api.dataconnector@9.0`
+
 - Version `^8.0.0` requires `^eea.api.dataconnector@7.0`
 
 - Version `^6.0.0` requires `^eea.api.dataconnector@4.4`
