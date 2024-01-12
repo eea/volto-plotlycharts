@@ -38,7 +38,7 @@ const PlotlyEditorModal = (props) => {
                     setValue((value) => ({
                       ...value,
                       provider_url,
-                      use_live_data: true,
+                      use_data_sources: true,
                     }));
                   }}
                   value={value.provider_url}
@@ -84,7 +84,7 @@ const PlotlyEditorModal = (props) => {
             setValue((value) => ({
               ...value,
               json_data: data,
-              use_live_data: true,
+              use_data_sources: true,
             }));
           }}
           jsonData={value.json_data}
@@ -122,7 +122,7 @@ class Edit extends Component {
   //   }
   //   provider_url: provider_url
   //   json_data: json_data
-  //   use_live_data: use_live_data
+  //   use_data_sources: use_data_sources
   // }
 
   render() {

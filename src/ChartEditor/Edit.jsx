@@ -12,7 +12,13 @@ import { Toast } from '@plone/volto/components';
 import { updateChartDataFromProvider } from '@eeacms/volto-datablocks/helpers';
 import { connectToProviderData } from '@eeacms/volto-datablocks/hocs';
 
-import { getDataSources } from '@eeacms/volto-plotlycharts/helpers';
+import {
+  getDataSources,
+  initEditor,
+  destroyEditor,
+  validateEditor,
+  onPasteEditor,
+} from '@eeacms/volto-plotlycharts/helpers';
 
 import 'react-chart-editor/lib/react-chart-editor.css';
 
@@ -66,69 +72,16 @@ function getDataSourceOptions(data) {
   }));
 }
 
-async function initEditor(el, editor, dflt, schema, onInit) {
-  const jsoneditor = await import('jsoneditor');
-  const JSONEditor = jsoneditor.default;
-  // create the editor
-  const container = document.getElementById(el);
-
-  if (!container) {
-    return;
-  }
-
-  container.innerHTML = '';
-
-  const options = {
-    mode: 'code',
-    enableTransform: false,
-    schema: schema || {
-      type: 'array',
-      items: {
-        type: 'object',
-      },
-    },
-  };
-
-  editor.current = new JSONEditor(container, options);
-  // set initial json
-  editor.current.set(dflt);
-
-  if (onInit) onInit();
-}
-
-function destroyEditor(editor) {
-  if (editor) {
-    editor.destroy();
-    editor = null;
-  }
-}
-
-async function validate(editor) {
-  const err = await editor.current.validate();
-
-  if (err.length) {
-    toast.warn(
-      <Toast
-        error
-        title={'JSON validation'}
-        content={'Please make sure all the fields are in the correct format'}
-      />,
-    );
-    return false;
-  }
-
-  return true;
-}
-
 const TabEditData = (props) => {
   const editor = useRef();
-  const initialData = useRef(
-    (props.value.use_live_data
-      ? props.liveData
-      : props.value.chartData?.data) || [],
-  );
+  const initialData = useRef(props.chartData.data || []);
+
   useEffect(() => {
-    initEditor('jsoneditor-data', editor, initialData.current);
+    initEditor({
+      el: 'jsoneditor-data',
+      editor,
+      dflt: initialData.current,
+    });
 
     const editorCurr = editor.current;
 
@@ -138,20 +91,19 @@ const TabEditData = (props) => {
   }, []);
 
   useEffect(() => {
-    if (editor.current && props.value.use_live_data) {
-      editor.current.set(props.liveData);
-    }
-  }, [props.value.use_live_data, props.liveData]);
+    if (!editor.current) return;
+    editor.current.set(props.chartData.data);
+  }, [props.chartData.data]);
 
   return (
     <Tab.Pane style={paneStyle}>
       <Checkbox
-        label="Use live data"
-        checked={props.value.use_live_data}
+        label="Use data sources"
+        checked={props.value.use_data_sources}
         onChange={(_, data) => {
           props.onChangeValue({
             ...props.value,
-            use_live_data: data.checked,
+            use_data_sources: data.checked,
           });
         }}
         toggle
@@ -160,14 +112,14 @@ const TabEditData = (props) => {
         style={{ padding: '10px 20px', margin: '10px 0' }}
         primary
         onClick={async () => {
-          const isValid = await validate(editor);
+          const isValid = await validateEditor(editor);
           if (!isValid) return;
           try {
             props.onChangeValue({
               ...props.value,
-              use_live_data: false,
+              use_data_sources: false,
               chartData: {
-                ...(props.value.chartData || {}),
+                ...props.chartData,
                 data: editor.current.get(),
               },
             });
@@ -180,18 +132,31 @@ const TabEditData = (props) => {
       >
         Save
       </Button>
-      <div id="jsoneditor-data" style={{ width: '100%', height: '100%' }} />
+      <div
+        id="jsoneditor-data"
+        style={{ width: '100%', height: '100%' }}
+        onPaste={(e) => {
+          onPasteEditor(editor);
+        }}
+      />
     </Tab.Pane>
   );
 };
 
 const TabEditLayout = (props) => {
   const editor = useRef();
-  const initialLayout = useRef(props.value.chartData?.layout || {});
+  const initialLayout = useRef(props.chartData.layout || {});
 
   useEffect(() => {
-    initEditor('jsoneditor-layout', editor, initialLayout.current, {
-      type: 'object',
+    initEditor({
+      el: 'jsoneditor-layout',
+      editor,
+      dflt: initialLayout.current,
+      options: {
+        schema: {
+          type: 'object',
+        },
+      },
     });
 
     const editorCurr = editor.current;
@@ -201,19 +166,24 @@ const TabEditLayout = (props) => {
     };
   }, []);
 
+  useEffect(() => {
+    if (!editor.current) return;
+    editor.current.set(props.chartData.layout);
+  }, [props.chartData.layout]);
+
   return (
     <Tab.Pane style={paneStyle}>
       <Button
         style={{ padding: '10px 20px', margin: '10px 0' }}
         primary
         onClick={async () => {
-          const isValid = await validate(editor);
+          const isValid = await validateEditor(editor);
           if (!isValid) return;
           try {
             props.onChangeValue({
               ...props.value,
               chartData: {
-                ...(props.value.chartData || {}),
+                ...props.chartData,
                 layout: editor.current.get(),
               },
             });
@@ -226,7 +196,13 @@ const TabEditLayout = (props) => {
       >
         Save
       </Button>
-      <div id="jsoneditor-layout" style={{ width: '100%', height: '100%' }} />
+      <div
+        id="jsoneditor-layout"
+        style={{ width: '100%', height: '100%' }}
+        onPaste={(e) => {
+          onPasteEditor(editor);
+        }}
+      />
     </Tab.Pane>
   );
 };
@@ -262,32 +238,32 @@ const Edit = (props) => {
   const [dataSources, setDataSources] = useState(() =>
     getDataSources({
       provider_data: props.provider_data,
-      json_data: props.value.json_data,
+      data_source: props.value.data_source,
     }),
   );
   const [data, setData] = useState(props.value.chartData?.data || []);
+
+  const chartData = useMemo(() => props.value.chartData || {}, [
+    props.value.chartData,
+  ]);
 
   const dataSourceOptions = useMemo(() => getDataSourceOptions(dataSources), [
     dataSources,
   ]);
 
   const liveData = useMemo(() => {
-    return updateChartDataFromProvider(
-      props.value.chartData?.data || [],
-      dataSources,
-    );
-    /* eslint-disable-next-line */
-  }, [props.value.chartData?.data, dataSources]);
+    return updateChartDataFromProvider(chartData.data || [], dataSources);
+  }, [chartData.data, dataSources]);
 
   useEffect(() => {
     LoadablePlotly.preload();
     LoadablePlotlyEditor.preload();
     LoadableChartEditor.preload();
 
-    if (isNil(initialProps.current.value.use_live_data)) {
+    if (isNil(initialProps.current.value.use_data_sources)) {
       initialProps.current.onChangeValue({
         ...initialProps.current.value,
-        use_live_data: true,
+        use_data_sources: true,
       });
     }
   }, []);
@@ -296,42 +272,39 @@ const Edit = (props) => {
     setDataSources(
       getDataSources({
         provider_data: props.provider_data,
-        json_data: props.value.json_data,
+        data_source: props.value.data_source,
       }),
     );
-    /* eslint-disable-next-line */
-  }, [props.provider_data, props.value.json_data]);
+  }, [props.provider_data, props.value.data_source]);
 
   useEffect(() => {
     setData(
-      (props.value.use_live_data
-        ? liveData
-        : props.value.chartData?.data || []
-      ).map((trace) => ({
-        ...trace,
-        ...(trace.type === 'scatterpolar' &&
-          trace.connectgaps &&
-          trace.mode === 'lines' && {
-            r: [...trace.r, trace.r[0]],
-            theta: [...trace.theta, trace.theta[0]],
-          }),
-      })),
+      (props.value.use_data_sources ? liveData : chartData.data || []).map(
+        (trace) => ({
+          ...trace,
+          ...(trace.type === 'scatterpolar' &&
+            trace.connectgaps &&
+            trace.mode === 'lines' && {
+              r: [...trace.r, trace.r[0]],
+              theta: [...trace.theta, trace.theta[0]],
+            }),
+        }),
+      ),
     );
-    /* eslint-disable-next-line */
-  }, [props.value.use_live_data, props.value.chartData?.data, liveData]);
+  }, [props.value.use_data_sources, chartData.data, liveData]);
 
   useEffect(() => {
-    if (props.value.use_live_data) {
+    if (props.value.use_data_sources) {
       props.onChangeValue({
         ...props.value,
         chartData: {
-          ...(props.value.chartData || {}),
+          ...chartData,
           data: liveData,
         },
       });
     }
     /* eslint-disable-next-line */
-  }, [props.value.use_live_data]);
+  }, [props.value.use_data_sources]);
 
   if (__SERVER__) return '';
 
@@ -364,7 +337,6 @@ const Edit = (props) => {
                             props.onChangeValue({
                               ...props.value,
                               chartData: {
-                                ...(props.value.chartData || {}),
                                 data,
                                 layout,
                                 frames,
@@ -386,7 +358,7 @@ const Edit = (props) => {
                               name="Raw editor"
                               style={{ height: '100%' }}
                             >
-                              <RawDataEditor {...props} liveData={liveData} />
+                              <RawDataEditor {...props} chartData={chartData} />
                             </Panel>
                           </ChartEditor>
                         </PlotlyEditor>

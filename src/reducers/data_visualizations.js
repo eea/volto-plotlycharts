@@ -17,10 +17,10 @@ const initialState = {
 };
 
 export default function data_providers(state = initialState, action = {}) {
-  const use_live_data = action.use_live_data;
+  const use_data_sources = action.use_data_sources;
   const path = action.path
     ? action.path.replace(
-        `/@${use_live_data ? 'visualization-layout' : 'visualization'}`,
+        `/@${use_data_sources ? 'visualization-layout' : 'visualization'}`,
         '',
       )
     : undefined;

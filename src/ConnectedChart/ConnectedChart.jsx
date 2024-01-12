@@ -79,9 +79,9 @@ function getChartLayout({ hover_format_xy, layout = {} }) {
   };
 }
 
-function getChartData({ data = [], dataSources, use_live_data }) {
+function getChartData({ data = [], dataSources, use_data_sources }) {
   const newData =
-    dataSources && use_live_data
+    dataSources && use_data_sources
       ? updateChartDataFromProvider(data, dataSources)
       : data;
 
@@ -115,7 +115,7 @@ function ConnectedChart(props) {
     provider_data,
     provider_metadata,
     loadingVisualization,
-    use_live_data,
+    use_data_sources,
   } = props;
 
   const {
@@ -154,14 +154,14 @@ function ConnectedChart(props) {
           data: viz?.chartData?.data,
           dataSources: getDataSources({
             provider_data,
-            json_data: viz?.json_data,
+            data_source: viz?.data_source,
           }),
-          use_live_data,
+          use_data_sources,
         }),
         frames: viz?.chartData?.frames || [],
       };
     });
-  }, [viz, provider_data, use_live_data, hover_format_xy]);
+  }, [viz, provider_data, use_data_sources, hover_format_xy]);
 
   useEffect(() => {
     if (visEl.current) {
@@ -272,17 +272,17 @@ export default compose(
   }),
   connect((state, props) => {
     const viz = getVisualization(props);
-    const use_live_data =
-      props.data?.use_live_data ?? viz?.use_live_data ?? true;
+    const use_data_sources =
+      props.data?.use_data_sources ?? viz?.use_data_sources ?? true;
     return {
       screen: state.screen,
       viz,
-      use_live_data,
+      use_data_sources,
     };
   }),
   connectToProviderData((props) => {
-    const use_live_data = props.use_live_data ?? true;
-    if (!use_live_data) return {};
+    const use_data_sources = props.use_data_sources ?? true;
+    if (!use_data_sources) return {};
     return {
       provider_url: props.viz.provider_url,
     };
