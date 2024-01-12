@@ -12,3 +12,10 @@ export function downloadDataURL(dataURL, filename) {
   });
   a.dispatchEvent(clickEvent);
 }
+
+export function getDataSources(props) {
+  return {
+    ...(props.provider_data || {}),
+    ...(props.json_data || {}),
+  };
+}

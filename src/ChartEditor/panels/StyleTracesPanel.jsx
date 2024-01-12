@@ -56,7 +56,7 @@ import {
 const allTraceTypes = traceTypes(localize).map(({ value }) => value);
 
 const StyleTracesPanel = (props, { localize: _ }) => {
-  const chartData = props.value.chartData;
+  const chartData = props.value.chartData || {};
   const { layout = {} } = chartData;
 
   const onChangeColor = (attr, customColor) => {

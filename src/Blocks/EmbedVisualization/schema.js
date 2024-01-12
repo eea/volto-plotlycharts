@@ -32,7 +32,6 @@ export default {
       widget: 'internal_url',
       title: 'Visualization',
     },
-
     hover_format_xy: {
       type: 'string',
       title: 'Hover format',

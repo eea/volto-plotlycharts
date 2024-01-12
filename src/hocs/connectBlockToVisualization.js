@@ -2,10 +2,7 @@ import React, { useEffect, useMemo } from 'react';
 import { isUndefined } from 'lodash';
 import { withRouter } from 'react-router';
 import { connect, useDispatch } from 'react-redux';
-import {
-  getVisualization,
-  removeVisualization,
-} from '@eeacms/volto-plotlycharts/actions';
+import { getVisualization } from '@eeacms/volto-plotlycharts/actions';
 
 /**
  * connectBlockToVisualization.
@@ -22,9 +19,6 @@ function connectBlockToVisualization(getConfig = () => ({})) {
         const config = useMemo(() => getConfig(props), [props]);
 
         const vis_url = useMemo(() => config.vis_url, [config.vis_url]);
-        const use_live_data = useMemo(() => config.use_live_data ?? true, [
-          config.use_live_data,
-        ]);
 
         const isPending = vis_url
           ? props.data_visualizations?.pendingVisualizations?.[vis_url] ?? false
@@ -42,17 +36,10 @@ function connectBlockToVisualization(getConfig = () => ({})) {
           vis_url && isUndefined(visualization) && !isPending && !isFailed;
 
         useEffect(() => {
-          if (visualization) {
-            dispatch(removeVisualization(vis_url));
-          }
-          /* eslint-disable-next-line */
-        }, [use_live_data]);
-
-        useEffect(() => {
           if (readyToDispatch) {
-            dispatch(getVisualization(vis_url, use_live_data));
+            dispatch(getVisualization(vis_url));
           }
-        });
+        }, [dispatch, readyToDispatch, vis_url]);
 
         return (
           <WrappedComponent

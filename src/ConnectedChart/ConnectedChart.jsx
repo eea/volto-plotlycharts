@@ -1,6 +1,8 @@
-import React, { useState, useRef, useEffect, useMemo } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { map } from 'lodash';
 import cx from 'classnames';
 import { Dimmer, Loader, Image } from 'semantic-ui-react';
 import config from '@plone/volto/registry';
@@ -8,7 +10,6 @@ import { toPublicURL, flattenToAppURL } from '@plone/volto/helpers';
 import { connectToProviderData } from '@eeacms/volto-datablocks/hocs';
 import { updateChartDataFromProvider } from '@eeacms/volto-datablocks/helpers';
 import { connectBlockToVisualization } from '@eeacms/volto-plotlycharts/hocs';
-import { useHistory } from 'react-router-dom';
 import {
   Enlarge,
   FigureNote,
@@ -16,6 +17,7 @@ import {
   MoreInfo,
   Share,
 } from '@eeacms/volto-embed/Toolbar';
+import { getDataSources } from '@eeacms/volto-plotlycharts/helpers';
 import { Download } from '@eeacms/volto-plotlycharts/Utils';
 import PlotlyComponent from './PlotlyComponent';
 
@@ -37,24 +39,87 @@ function getVisualization(props) {
   return props.visualization || props.data?.visualization || {};
 }
 
+function getChartLayout({ hover_format_xy, layout = {} }) {
+  return {
+    ...layout,
+    dragmode: false,
+    font: {
+      family: config.settings.chartLayoutFontFamily || "'Roboto', sans-serif",
+      ...(layout.font || {}),
+    },
+    margin: {
+      l: 80,
+      r: 80,
+      b: 80,
+      t: 100,
+      ...(layout.margin || {}),
+    },
+    // Overwrite xaxis
+    ...(!!layout.xaxis && {
+      xaxis: {
+        ...layout.xaxis,
+        hoverformat:
+          hover_format_xy ||
+          layout.xaxis.hoverformat ||
+          layout.xaxis.tickformat ||
+          '',
+      },
+    }),
+    // Overwrite yaxis
+    ...(!!layout.yaxis && {
+      yaxis: {
+        ...layout.yaxis,
+        hoverformat:
+          hover_format_xy ||
+          layout.xaxis.hoverformat ||
+          layout.xaxis.tickformat ||
+          '',
+      },
+    }),
+  };
+}
+
+function getChartData({ data = [], dataSources, use_live_data }) {
+  const newData =
+    dataSources && use_live_data
+      ? updateChartDataFromProvider(data, dataSources)
+      : data;
+
+  return map(newData, (trace) => ({
+    ...trace,
+    textfont: {
+      ...trace.textfont,
+      family: config.settings.chartDataFontFamily || "'Roboto', sans-serif",
+    },
+    ...(trace.type === 'scatterpolar' &&
+      trace.connectgaps &&
+      trace.mode === 'lines' && {
+        r: [...trace.r, trace.r[0]],
+        theta: [...trace.theta, trace.theta[0]],
+      }),
+  }));
+}
+
 function ConnectedChart(props) {
-  const [initialized, setInitialized] = useState(false);
-  const [mobile, setMobile] = useState(false);
+  const history = useHistory();
   const visEl = useRef(null);
   const chartRef = useRef(null);
-  const history = useHistory();
+  const [initialized, setInitialized] = useState(false);
+  const [mobile, setMobile] = useState(false);
+  const [chart, setChart] = useState({});
 
   const {
     screen,
+    viz,
     hasProviderUrl,
     provider_data,
     provider_metadata,
     loadingVisualization,
+    use_live_data,
   } = props;
 
   const {
     hover_format_xy,
-    use_live_data = true,
     with_sources = true,
     with_notes = true,
     with_more_info = true,
@@ -62,8 +127,6 @@ function ConnectedChart(props) {
     with_enlarge = true,
     with_share = true,
   } = props.data || {};
-
-  const visualization = useMemo(() => getVisualization(props), [props]);
 
   const {
     title,
@@ -73,66 +136,32 @@ function ConnectedChart(props) {
     temporal_coverage,
     publisher,
     geo_coverage,
-  } = visualization;
+  } = viz;
 
-  const visualization_id = visualization['@id'] || props.data?.vis_url;
+  const visualization_id = viz['@id'] || props.data?.vis_url;
 
   const loadingProviderData = hasProviderUrl && props.loadingProviderData;
 
-  const chartData = visualization?.chartData || {};
-
-  const layout = {
-    ...(chartData.layout || {}),
-    dragmode: false,
-    font: {
-      ...(chartData.layout?.font || {}),
-      family: config.settings.chartLayoutFontFamily || "'Roboto', sans-serif",
-    },
-    margin: {
-      l: 80,
-      r: 80,
-      b: 80,
-      t: 100,
-      ...(chartData.layout?.margin || {}),
-    },
-  };
-
-  // Overwrite xaxis
-  if (layout.xaxis) {
-    layout.xaxis = {
-      ...layout.xaxis,
-      hoverformat:
-        hover_format_xy ||
-        layout.xaxis.hoverformat ||
-        layout.xaxis.tickformat ||
-        '',
-    };
-  }
-
-  // Overwrite yaxis
-  if (layout.yaxis) {
-    layout.yaxis = {
-      ...layout.yaxis,
-      hoverformat:
-        hover_format_xy ||
-        layout.xaxis.hoverformat ||
-        layout.xaxis.tickformat ||
-        '',
-    };
-  }
-
-  let data =
-    provider_data && use_live_data
-      ? updateChartDataFromProvider(chartData.data || [], provider_data)
-      : chartData.data || [];
-
-  data = data.map((trace) => ({
-    ...trace,
-    textfont: {
-      ...trace.textfont,
-      family: config.settings.chartDataFontFamily || "'Roboto', sans-serif",
-    },
-  }));
+  useEffect(() => {
+    setChart((chart) => {
+      return {
+        ...chart,
+        layout: getChartLayout({
+          hover_format_xy,
+          layout: viz?.chartData?.layout,
+        }),
+        data: getChartData({
+          data: viz?.chartData?.data,
+          dataSources: getDataSources({
+            provider_data,
+            json_data: viz?.json_data,
+          }),
+          use_live_data,
+        }),
+        frames: viz?.chartData?.frames || [],
+      };
+    });
+  }, [viz, provider_data, use_live_data, hover_format_xy]);
 
   useEffect(() => {
     if (visEl.current) {
@@ -150,7 +179,11 @@ function ConnectedChart(props) {
     return <ChartSkeleton />;
   }
 
-  if (!Object.keys(chartData).length) {
+  if (!chart) {
+    return null;
+  }
+
+  if (!Object.keys(chart).length) {
     return <div>No valid data.</div>;
   }
 
@@ -159,11 +192,16 @@ function ConnectedChart(props) {
       {!initialized && <ChartSkeleton />}
       <div className="visualization-wrapper">
         <div
-          className={cx('visualization', { autosize: layout.autosize })}
+          className={cx('visualization', {
+            autosize: chart.layout.autosize,
+          })}
           ref={visEl}
         >
           <PlotlyComponent
-            {...{ chartRef, data, layout, history, setInitialized }}
+            {...chart}
+            chartRef={chartRef}
+            history={history}
+            setInitialized={setInitialized}
           />
         </div>
         {initialized && (
@@ -198,16 +236,16 @@ function ConnectedChart(props) {
               {with_enlarge && (
                 <Enlarge>
                   <PlotlyComponent
+                    chartRef={chartRef}
+                    history={history}
                     {...{
-                      chartRef,
-                      data,
+                      ...chart,
                       layout: {
-                        ...layout,
+                        ...chart.layout,
                         autosize: true,
                         height: null,
                         width: null,
                       },
-                      history,
                     }}
                   />
                 </Enlarge>
@@ -221,25 +259,29 @@ function ConnectedChart(props) {
 }
 
 export default compose(
-  connect((state) => ({
-    screen: state.screen,
-  })),
   connectBlockToVisualization((props) => {
     const url = flattenToAppURL(props.data?.vis_url);
-    const currentUrl = props.data.visualization
-      ? flattenToAppURL(props.data.visualization['@id'])
-      : null;
+    const currentUrl = props.viz?.['@id'] || null;
+
     return {
-      vis_url:
-        url && (!props.data.visualization || currentUrl !== url) ? url : null,
-      use_live_data: props.data?.use_live_data ?? true,
+      vis_url: url && (!props.viz || currentUrl !== url) ? url : null,
+    };
+  }),
+  connect((state, props) => {
+    const viz = getVisualization(props);
+    const use_live_data =
+      props.data?.use_live_data ?? viz?.use_live_data ?? true;
+    return {
+      screen: state.screen,
+      viz,
+      use_live_data,
     };
   }),
   connectToProviderData((props) => {
-    const use_live_data = props.data?.use_live_data ?? true;
+    const use_live_data = props.use_live_data ?? true;
     if (!use_live_data) return {};
     return {
-      provider_url: getVisualization(props).provider_url,
+      provider_url: props.viz.provider_url,
     };
   }),
 )(ConnectedChart);

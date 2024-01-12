@@ -2,7 +2,26 @@
   z-index: 1001 !important;
 }
 
+.field-wrapper-provider-data .wrapper .ui.input {
+  width: 100%;
+}
+
 .field-provider-data-action-button {
   border: 1px solid #c7d5d8;
   cursor: pointer;
+}
+
+.panel__content {
+  height: 100%;
+  display: flex;
+  flex-flow: column;
+}
+
+.jsoneditor-poweredBy {
+  display: none;
+}
+
+.panel__content .ui.toggle.checkbox input:focus:checked ~ label,
+.panel__content .ui.toggle.checkbox input:checked ~ label {
+  color: #000 !important;
 }
