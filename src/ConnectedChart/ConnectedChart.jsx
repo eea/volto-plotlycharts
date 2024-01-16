@@ -17,23 +17,14 @@ import {
   MoreInfo,
   Share,
 } from '@eeacms/volto-embed/Toolbar';
-import { getDataSources } from '@eeacms/volto-plotlycharts/helpers';
+import {
+  getDataSources,
+  getFigureMetadata,
+} from '@eeacms/volto-plotlycharts/helpers';
 import { Download } from '@eeacms/volto-plotlycharts/Utils';
 import PlotlyComponent from './PlotlyComponent';
 
 import '@eeacms/volto-embed/Toolbar/styles.less';
-
-export function ChartSkeleton() {
-  return (
-    <div style={{ position: 'relative', minHeight: '200px' }}>
-      <Dimmer active inverted>
-        <Loader size="mini">Loading chart...</Loader>
-      </Dimmer>
-
-      <Image src="https://react.semantic-ui.com/images/wireframe/paragraph.png" />
-    </div>
-  );
-}
 
 function getVisualization(props) {
   return props.visualization || props.data?.visualization || {};
@@ -98,6 +89,18 @@ function getChartData({ data = [], dataSources, use_data_sources }) {
         theta: [...trace.theta, trace.theta[0]],
       }),
   }));
+}
+
+export function ChartSkeleton() {
+  return (
+    <div style={{ position: 'relative', minHeight: '200px' }}>
+      <Dimmer active inverted>
+        <Loader size="mini">Loading chart...</Loader>
+      </Dimmer>
+
+      <Image src="https://react.semantic-ui.com/images/wireframe/paragraph.png" />
+    </div>
+  );
 }
 
 function ConnectedChart(props) {
@@ -174,6 +177,18 @@ function ConnectedChart(props) {
       }
     }
   }, [screen, mobile, initialized]);
+
+  useEffect(() => {
+    const mode = props.mode;
+    const visUrl = props.data?.vis_url;
+    if (mode === 'edit' && visUrl) {
+      const metadataSection = getFigureMetadata(props.block, viz);
+      if (!metadataSection) return;
+
+      props.onInsertBlock(props.block, metadataSection);
+    }
+    /* eslint-disable-next-line */
+  }, [props.data.vis_url]);
 
   if (loadingVisualization || loadingProviderData) {
     return <ChartSkeleton />;
