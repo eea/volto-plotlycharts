@@ -7,17 +7,15 @@ const View = (props) => {
   const { data = {} } = props;
 
   return (
-    <div className="embed-visualization">
-      <ConnectedChart
-        id={props.id}
-        data={{
-          ...data,
-          download_button: data.download_button ?? true,
-          has_data_query_by_context: data.has_data_query_by_context ?? true,
-          with_sources: data.with_sources ?? true,
-        }}
-      />
-    </div>
+    <ConnectedChart
+      id={props.id}
+      data={{
+        ...data,
+        download_button: data.download_button ?? true,
+        has_data_query_by_context: data.has_data_query_by_context ?? true,
+        with_sources: true,
+      }}
+    />
   );
 };
 

@@ -5,7 +5,7 @@ import presentationSVG from '@plone/volto/icons/presentation.svg';
 
 export default (config) => {
   const visualizationBlockConfig = {
-    id: 'plotly_chart_2',
+    id: 'plotly_chart',
     title: 'Plotly chart',
     icon: presentationSVG,
     group: 'data_visualizations',
@@ -20,7 +20,7 @@ export default (config) => {
     },
   };
 
-  config.blocks.blocksConfig.plotly_chart_2 = visualizationBlockConfig;
+  config.blocks.blocksConfig.plotly_chart = visualizationBlockConfig;
   // This is required for compatibility with previous version
   // TODO: script for migration
   config.blocks.blocksConfig.connected_plotly_chart = {

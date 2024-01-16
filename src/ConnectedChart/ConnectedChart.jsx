@@ -179,16 +179,28 @@ function ConnectedChart(props) {
     return <ChartSkeleton />;
   }
 
+  if (viz?.error) {
+    return <p dangerouslySetInnerHTML={{ __html: viz.error }} />;
+  }
+
   if (!chart) {
     return null;
   }
 
   if (!Object.keys(chart).length) {
-    return <div>No valid data.</div>;
+    return (
+      <p>
+        No valid data for this{' '}
+        <a rel="noreferrer" href={visualization_id} target="_blank">
+          Chart (Interactive)
+        </a>
+        .
+      </p>
+    );
   }
 
   return (
-    <>
+    <div className="embed-visualization">
       {!initialized && <ChartSkeleton />}
       <div className="visualization-wrapper">
         <div
@@ -254,7 +266,7 @@ function ConnectedChart(props) {
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 }
 
@@ -265,9 +277,12 @@ export default compose(
       ? flattenToAppURL(props.data.visualization['@id'])
       : null;
 
+    const shouldFetchVisualization =
+      !props.data.visualization?.error &&
+      url &&
+      (!props.data.visualization || currentUrl !== url);
     return {
-      vis_url:
-        url && (!props.data.visualization || currentUrl !== url) ? url : null,
+      vis_url: shouldFetchVisualization ? url : null,
     };
   }),
   connect((state, props) => {

@@ -23,7 +23,7 @@ const Edit = (props) => {
               ...data,
               download_button: data.download_button ?? true,
               has_data_query_by_context: data.has_data_query_by_context ?? true,
-              with_sources: data.with_sources ?? true,
+              with_sources: true,
               with_more_info: data.with_more_info ?? true,
               with_notes: data.with_notes ?? true,
             }}

@@ -13,7 +13,6 @@ export default {
       title: 'Toolbar',
       fields: [
         'with_notes',
-        'with_sources',
         'with_more_info',
         'download_button',
         'with_share',
