@@ -206,7 +206,7 @@ function ConnectedChart(props) {
     return (
       <p>
         No valid data for this{' '}
-        <a rel="noreferrer" href={visualization_id} target="_blank">
+        <a rel="noopener" href={visualization_id} target="_blank">
           Chart (Interactive)
         </a>
         .
