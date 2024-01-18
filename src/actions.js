@@ -1,15 +1,12 @@
 import { GET_VISUALIZATION, REMOVE_VISUALIZATION } from './constants';
 
-export function getVisualization(path, use_live_data) {
+export function getVisualization(path) {
   return {
     type: GET_VISUALIZATION,
     path,
-    use_live_data,
     request: {
       op: 'get',
-      path: `${path}/@${
-        use_live_data ? 'visualization-layout' : 'visualization'
-      }`,
+      path: `${path}/@visualization`,
     },
   };
 }

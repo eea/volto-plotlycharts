@@ -1,6 +1,8 @@
-import React, { useState, useRef, useEffect, useMemo } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { map } from 'lodash';
 import cx from 'classnames';
 import { Dimmer, Loader, Image } from 'semantic-ui-react';
 import config from '@plone/volto/registry';
@@ -8,7 +10,6 @@ import { toPublicURL, flattenToAppURL } from '@plone/volto/helpers';
 import { connectToProviderData } from '@eeacms/volto-datablocks/hocs';
 import { updateChartDataFromProvider } from '@eeacms/volto-datablocks/helpers';
 import { connectBlockToVisualization } from '@eeacms/volto-plotlycharts/hocs';
-import { useHistory } from 'react-router-dom';
 import {
   Enlarge,
   FigureNote,
@@ -16,10 +17,79 @@ import {
   MoreInfo,
   Share,
 } from '@eeacms/volto-embed/Toolbar';
+import {
+  getDataSources,
+  getFigureMetadata,
+} from '@eeacms/volto-plotlycharts/helpers';
 import { Download } from '@eeacms/volto-plotlycharts/Utils';
 import PlotlyComponent from './PlotlyComponent';
 
 import '@eeacms/volto-embed/Toolbar/styles.less';
+
+function getVisualization(props) {
+  return props.visualization || props.data?.visualization || {};
+}
+
+function getChartLayout({ hover_format_xy, layout = {} }) {
+  return {
+    ...layout,
+    dragmode: false,
+    font: {
+      family: config.settings.chartLayoutFontFamily || "'Roboto', sans-serif",
+      ...(layout.font || {}),
+    },
+    margin: {
+      l: 80,
+      r: 80,
+      b: 80,
+      t: 100,
+      ...(layout.margin || {}),
+    },
+    // Overwrite xaxis
+    ...(!!layout.xaxis && {
+      xaxis: {
+        ...layout.xaxis,
+        hoverformat:
+          hover_format_xy ||
+          layout.xaxis.hoverformat ||
+          layout.xaxis.tickformat ||
+          '',
+      },
+    }),
+    // Overwrite yaxis
+    ...(!!layout.yaxis && {
+      yaxis: {
+        ...layout.yaxis,
+        hoverformat:
+          hover_format_xy ||
+          layout.xaxis.hoverformat ||
+          layout.xaxis.tickformat ||
+          '',
+      },
+    }),
+  };
+}
+
+function getChartData({ data = [], dataSources, use_data_sources }) {
+  const newData =
+    dataSources && use_data_sources
+      ? updateChartDataFromProvider(data, dataSources)
+      : data;
+
+  return map(newData, (trace) => ({
+    ...trace,
+    textfont: {
+      ...trace.textfont,
+      family: config.settings.chartDataFontFamily || "'Roboto', sans-serif",
+    },
+    ...(trace.type === 'scatterpolar' &&
+      trace.connectgaps &&
+      trace.mode === 'lines' && {
+        r: [...trace.r, trace.r[0]],
+        theta: [...trace.theta, trace.theta[0]],
+      }),
+  }));
+}
 
 export function ChartSkeleton() {
   return (
@@ -33,28 +103,26 @@ export function ChartSkeleton() {
   );
 }
 
-function getVisualization(props) {
-  return props.visualization || props.data?.visualization || {};
-}
-
 function ConnectedChart(props) {
-  const [initialized, setInitialized] = useState(false);
-  const [mobile, setMobile] = useState(false);
+  const history = useHistory();
   const visEl = useRef(null);
   const chartRef = useRef(null);
-  const history = useHistory();
+  const [initialized, setInitialized] = useState(false);
+  const [mobile, setMobile] = useState(false);
+  const [chart, setChart] = useState({});
 
   const {
     screen,
+    viz,
     hasProviderUrl,
     provider_data,
     provider_metadata,
     loadingVisualization,
+    use_data_sources,
   } = props;
 
   const {
     hover_format_xy,
-    use_live_data = true,
     with_sources = true,
     with_notes = true,
     with_more_info = true,
@@ -62,8 +130,6 @@ function ConnectedChart(props) {
     with_enlarge = true,
     with_share = true,
   } = props.data || {};
-
-  const visualization = useMemo(() => getVisualization(props), [props]);
 
   const {
     title,
@@ -73,66 +139,32 @@ function ConnectedChart(props) {
     temporal_coverage,
     publisher,
     geo_coverage,
-  } = visualization;
+  } = viz;
 
-  const visualization_id = visualization['@id'] || props.data?.vis_url;
+  const visualization_id = viz['@id'] || props.data?.vis_url;
 
   const loadingProviderData = hasProviderUrl && props.loadingProviderData;
 
-  const chartData = visualization?.chartData || {};
-
-  const layout = {
-    ...(chartData.layout || {}),
-    dragmode: false,
-    font: {
-      ...(chartData.layout?.font || {}),
-      family: config.settings.chartLayoutFontFamily || "'Roboto', sans-serif",
-    },
-    margin: {
-      l: 80,
-      r: 80,
-      b: 80,
-      t: 100,
-      ...(chartData.layout?.margin || {}),
-    },
-  };
-
-  // Overwrite xaxis
-  if (layout.xaxis) {
-    layout.xaxis = {
-      ...layout.xaxis,
-      hoverformat:
-        hover_format_xy ||
-        layout.xaxis.hoverformat ||
-        layout.xaxis.tickformat ||
-        '',
-    };
-  }
-
-  // Overwrite yaxis
-  if (layout.yaxis) {
-    layout.yaxis = {
-      ...layout.yaxis,
-      hoverformat:
-        hover_format_xy ||
-        layout.xaxis.hoverformat ||
-        layout.xaxis.tickformat ||
-        '',
-    };
-  }
-
-  let data =
-    provider_data && use_live_data
-      ? updateChartDataFromProvider(chartData.data || [], provider_data)
-      : chartData.data || [];
-
-  data = data.map((trace) => ({
-    ...trace,
-    textfont: {
-      ...trace.textfont,
-      family: config.settings.chartDataFontFamily || "'Roboto', sans-serif",
-    },
-  }));
+  useEffect(() => {
+    setChart((chart) => {
+      return {
+        ...chart,
+        layout: getChartLayout({
+          hover_format_xy,
+          layout: viz?.chartData?.layout,
+        }),
+        data: getChartData({
+          data: viz?.chartData?.data,
+          dataSources: getDataSources({
+            provider_data,
+            data_source: viz?.data_source,
+          }),
+          use_data_sources,
+        }),
+        frames: viz?.chartData?.frames || [],
+      };
+    });
+  }, [viz, provider_data, use_data_sources, hover_format_xy]);
 
   useEffect(() => {
     if (visEl.current) {
@@ -146,24 +178,57 @@ function ConnectedChart(props) {
     }
   }, [screen, mobile, initialized]);
 
+  useEffect(() => {
+    const mode = props.mode;
+    const visUrl = props.data?.vis_url;
+    if (mode === 'edit' && visUrl) {
+      const metadataSection = getFigureMetadata(props.block, viz);
+      if (!metadataSection) return;
+
+      props.onInsertBlock(props.block, metadataSection);
+    }
+    /* eslint-disable-next-line */
+  }, [props.data.vis_url]);
+
   if (loadingVisualization || loadingProviderData) {
     return <ChartSkeleton />;
   }
 
-  if (!Object.keys(chartData).length) {
-    return <div>No valid data.</div>;
+  if (viz?.error) {
+    return <p dangerouslySetInnerHTML={{ __html: viz.error }} />;
+  }
+
+  if (!chart) {
+    return null;
+  }
+
+  if (!Object.keys(chart).length) {
+    return (
+      <p>
+        No valid data for this{' '}
+        <a rel="noreferrer" href={visualization_id} target="_blank">
+          Chart (Interactive)
+        </a>
+        .
+      </p>
+    );
   }
 
   return (
-    <>
+    <div className="embed-visualization">
       {!initialized && <ChartSkeleton />}
       <div className="visualization-wrapper">
         <div
-          className={cx('visualization', { autosize: layout.autosize })}
+          className={cx('visualization', {
+            autosize: chart.layout.autosize,
+          })}
           ref={visEl}
         >
           <PlotlyComponent
-            {...{ chartRef, data, layout, history, setInitialized }}
+            {...chart}
+            chartRef={chartRef}
+            history={history}
+            setInitialized={setInitialized}
           />
         </div>
         {initialized && (
@@ -198,16 +263,16 @@ function ConnectedChart(props) {
               {with_enlarge && (
                 <Enlarge>
                   <PlotlyComponent
+                    chartRef={chartRef}
+                    history={history}
                     {...{
-                      chartRef,
-                      data,
+                      ...chart,
                       layout: {
-                        ...layout,
+                        ...chart.layout,
                         autosize: true,
                         height: null,
                         width: null,
                       },
-                      history,
                     }}
                   />
                 </Enlarge>
@@ -216,30 +281,40 @@ function ConnectedChart(props) {
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 }
 
 export default compose(
-  connect((state) => ({
-    screen: state.screen,
-  })),
   connectBlockToVisualization((props) => {
     const url = flattenToAppURL(props.data?.vis_url);
     const currentUrl = props.data.visualization
       ? flattenToAppURL(props.data.visualization['@id'])
       : null;
+
+    const shouldFetchVisualization =
+      !props.data.visualization?.error &&
+      url &&
+      (!props.data.visualization || currentUrl !== url);
     return {
-      vis_url:
-        url && (!props.data.visualization || currentUrl !== url) ? url : null,
-      use_live_data: props.data?.use_live_data ?? true,
+      vis_url: shouldFetchVisualization ? url : null,
+    };
+  }),
+  connect((state, props) => {
+    const viz = getVisualization(props);
+    const use_data_sources =
+      props.data?.use_data_sources ?? viz?.use_data_sources ?? true;
+    return {
+      screen: state.screen,
+      viz,
+      use_data_sources,
     };
   }),
   connectToProviderData((props) => {
-    const use_live_data = props.data?.use_live_data ?? true;
-    if (!use_live_data) return {};
+    const use_data_sources = props.use_data_sources ?? true;
+    if (!use_data_sources) return {};
     return {
-      provider_url: getVisualization(props).provider_url,
+      provider_url: props.viz.provider_url,
     };
   }),
 )(ConnectedChart);

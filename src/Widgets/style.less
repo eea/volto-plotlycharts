@@ -1,8 +1,35 @@
+.chart-editor-modal .scrolling.content {
+  height: 80vh;
+}
+
+.plotly-json-modal .scrolling.content {
+  height: 80vh;
+}
+
 .sidebar-container-enter-done {
   z-index: 1001 !important;
+}
+
+.field-wrapper-provider-data .wrapper .ui.input {
+  width: 100%;
 }
 
 .field-provider-data-action-button {
   border: 1px solid #c7d5d8;
   cursor: pointer;
+}
+
+.panel__content {
+  display: flex;
+  height: 100%;
+  flex-flow: column;
+}
+
+.jsoneditor-poweredBy {
+  display: none;
+}
+
+.panel__content .ui.toggle.checkbox input:focus:checked ~ label,
+.panel__content .ui.toggle.checkbox input:checked ~ label {
+  color: #000 !important;
 }

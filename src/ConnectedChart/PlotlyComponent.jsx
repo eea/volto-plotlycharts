@@ -7,6 +7,7 @@ const PlotlyComponent = ({
   chartRef,
   data,
   layout,
+  frames,
   history,
   setInitialized,
 }) => {
@@ -71,12 +72,13 @@ const PlotlyComponent = ({
 
   return (
     <LoadablePlotly
-      {...{ data, layout }}
+      data={data}
+      layout={layout}
+      frames={frames || []}
       onInitialized={(_, chartEl) => {
         setInitialized(true);
         chartRef.current = chartEl;
       }}
-      frames={[]}
       config={{
         displayModeBar: false,
         editable: false,

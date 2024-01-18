@@ -1,44 +1,31 @@
-import React, { Component } from 'react';
+import React, { useState, Component } from 'react';
 import { Button, Modal, Grid, Label } from 'semantic-ui-react';
 import { map } from 'lodash';
 
+import config from '@plone/volto/registry';
 import { FormFieldWrapper } from '@plone/volto/components';
 import { pickMetadata } from '@eeacms/volto-embed/helpers';
-import { PickObjectWidget } from '@eeacms/volto-datablocks/components';
 
+import PlotlyJsonModal from './PlotlyJsonModal';
 import ConnectedChart from '../ConnectedChart';
 import ChartEditor from '../ChartEditor';
 
-import PlotlyJsonModal from '../Blocks/PlotlyChart/PlotlyJsonModal';
-
 import './style.less';
 
-class PlotlyEditorModal extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      value: props.value,
-    };
-    this.updateChartData = this.updateChartData.bind(this);
-  }
+const PlotlyEditorModal = (props) => {
+  const [value, setValue] = useState(props.value);
+  const [showImportJSON, setShowImportJSON] = useState(false);
 
-  updateChartData = (data) => {
-    this.setState({
-      value: {
-        ...this.props.value,
-        chartData: data,
-      },
-    });
-  };
+  const InternalUrlWidget = config.widgets.widget.internal_url;
 
-  render() {
-    return (
+  return (
+    <>
       <Modal open={true} size="fullscreen" className="chart-editor-modal">
         <Modal.Content scrolling>
           <ChartEditor
-            value={this.state.value}
+            value={value}
             onChangeValue={(value) => {
-              this.setState({ value });
+              setValue(value);
             }}
           />
         </Modal.Content>
@@ -46,41 +33,63 @@ class PlotlyEditorModal extends Component {
           <Grid>
             <Grid.Row>
               <Grid.Column computer={7} tablet={12} verticalAlign="middle">
-                <PickObjectWidget
+                <InternalUrlWidget
                   title="Select data source"
                   id="provider-data"
                   onChange={(_, provider_url) => {
-                    this.setState({
-                      value: { ...this.state.value, provider_url },
-                    });
+                    setValue((value) => ({
+                      ...value,
+                      provider_url,
+                      use_data_sources: true,
+                    }));
                   }}
-                  value={this.state.value?.provider_url}
+                  value={value.provider_url}
                   showReload={true}
                 />
               </Grid.Column>
-              <Grid.Column computer={5} tablet={12} verticalAlign="middle">
-                <PlotlyJsonModal
-                  updateChartData={this.updateChartData}
-                  data={this.state.value}
-                />
-                <Button
-                  primary
-                  floated="right"
-                  onClick={() => this.props.onChange(this.state.value)}
-                >
-                  Apply changes
+              <Grid.Column
+                computer={5}
+                tablet={12}
+                verticalAlign="middle"
+                style={{
+                  display: 'inline-flex',
+                  flexFlow: 'row',
+                  justifyContent: 'space-between',
+                }}
+              >
+                <Button floated="right" onClick={() => setShowImportJSON(true)}>
+                  JSON
                 </Button>
-                <Button floated="right" onClick={this.props.onClose}>
-                  Close
-                </Button>
+                <div style={{ display: 'flex' }}>
+                  <Button floated="right" onClick={props.onClose}>
+                    Close
+                  </Button>
+                  <Button
+                    primary
+                    floated="right"
+                    onClick={() => {
+                      props.onChange(props.id, value);
+                      props.onClose();
+                    }}
+                  >
+                    Apply
+                  </Button>
+                </div>
               </Grid.Column>
             </Grid.Row>
           </Grid>
         </Modal.Actions>
       </Modal>
-    );
-  }
-}
+      {showImportJSON && (
+        <PlotlyJsonModal
+          value={value}
+          onChange={setValue}
+          onClose={() => setShowImportJSON(false)}
+        />
+      )}
+    </>
+  );
+};
 
 class VisualizationWidget extends Component {
   constructor(props) {
@@ -91,29 +100,16 @@ class VisualizationWidget extends Component {
     };
   }
 
-  handleModalChange(value) {
-    const chartData = {
-      ...value.chartData,
-      provider_url: value.provider_url,
-    };
-    this.props.onChange(this.props.id, {
-      chartData,
-      provider_url: value.provider_url,
-    });
-    this.setState({
-      showChartEditor: false,
-    });
-  }
-
   // This is the structure of value
   // value = {
   //   chartData: {
   //     data: data || [],
   //     layout: layout || {},
   //     frames: frames || [],
-  //     provider_url: provider_url || undefined
   //   }
   //   provider_url: provider_url
+  //   json_data: json_data
+  //   use_data_sources: use_data_sources
   // }
 
   render() {
@@ -151,18 +147,16 @@ class VisualizationWidget extends Component {
             },
           }}
         />
-        {this.state.showChartEditor ? (
+        {this.state.showChartEditor && (
           <PlotlyEditorModal
+            {...this.props}
             value={value}
-            onChange={(changedValue) => this.handleModalChange(changedValue)}
             onClose={() =>
               this.setState({
                 showChartEditor: false,
               })
             }
           />
-        ) : (
-          ''
         )}
         {map(error, (message) => (
           <Label key={message} basic color="red" pointing>

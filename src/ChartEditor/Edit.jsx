@@ -2,37 +2,31 @@
  * A wrapper around the react-chart-editor component.
  */
 
-import React, { Component } from 'react';
-import { Tab, Button } from 'semantic-ui-react';
+import React, { useEffect, useMemo, useState, useRef } from 'react';
+import { isNil } from 'lodash';
+import { Tab, Button, Checkbox } from 'semantic-ui-react';
 import loadable from '@loadable/component';
-import JSONInput from 'react-json-editor-ajrm';
-import locale from 'react-json-editor-ajrm/locale/en';
+import { toast } from 'react-toastify';
+import { Toast } from '@plone/volto/components';
 
 import { updateChartDataFromProvider } from '@eeacms/volto-datablocks/helpers';
 import { connectToProviderData } from '@eeacms/volto-datablocks/hocs';
+
+import {
+  getDataSources,
+  initEditor,
+  destroyEditor,
+  validateEditor,
+  onPasteEditor,
+} from '@eeacms/volto-plotlycharts/helpers';
 
 import 'react-chart-editor/lib/react-chart-editor.css';
 
 const LoadablePlotly = loadable.lib(() => import('plotly.js/dist/plotly'));
 const LoadablePlotlyEditor = loadable.lib(() => import('react-chart-editor'));
 const LoadableChartEditor = loadable.lib(() => import('./ChartEditor'));
-// const LoadableInspector = loadable(() => import('react-inspector'));
-
-// TODO: remove these fallbacks;
-const dataSources = {
-  col1: [1, 2, 3],
-  col2: [4213321.567, 3231123.4, 2929845.5721],
-  col3: [1746.424, 12353.532, 9124.21],
-};
 
 const config = { editable: true };
-
-function getDataSourceOptions(data) {
-  return Object.keys(data).map((name) => ({
-    value: name,
-    label: name,
-  }));
-}
 
 const chartHelp = {
   area: {
@@ -65,219 +59,321 @@ const chartHelp = {
   timeseries: { helpDoc: 'https://help.plot.ly/range-slider/' },
 };
 
-const RawDataEditor = ({
-  locale,
-  dataPlaceholder,
-  layoutPlaceholder,
-  handleDataChange,
-  handleLayoutChange,
-}) => {
-  const [dataObject, setDataObject] = React.useState(dataPlaceholder);
-  const [layoutObject, setLayoutObject] = React.useState(layoutPlaceholder);
+const paneStyle = {
+  flexGrow: 1,
+  display: 'flex',
+  flexFlow: 'column',
+};
 
-  const panes = [
-    {
-      menuItem: 'Data',
-      render: () => (
-        <Tab.Pane>
-          <Button
-            style={{ padding: '10px 20px', margin: '10px 0' }}
-            primary
-            disabled={dataObject.error ? true : false}
-            onClick={() => handleDataChange(dataObject)}
-          >
-            Save
-          </Button>
-          <JSONInput
-            id="raw_data_edit"
-            theme="light_mitsuketa_tribute"
-            locale={locale}
-            height="550px"
-            width="100%"
-            placeholder={dataPlaceholder}
-            onChange={(e) => setDataObject(e)}
-          />
-        </Tab.Pane>
-      ),
-    },
-    {
-      menuItem: 'Layout',
-      render: () => (
-        <Tab.Pane>
-          <Button
-            style={{ padding: '10px 20px', margin: '10px 0' }}
-            primary
-            disabled={layoutObject.error ? true : false}
-            onClick={() => handleLayoutChange(layoutObject)}
-          >
-            Save
-          </Button>
-          <JSONInput
-            id="raw_layout_edit"
-            theme="light_mitsuketa_tribute"
-            locale={locale}
-            height="550px"
-            width="100%"
-            placeholder={layoutPlaceholder}
-            onChange={(e) => setLayoutObject(e)}
-          />
-        </Tab.Pane>
-      ),
-    },
-  ];
+function getDataSourceOptions(data) {
+  return Object.keys(data).map((name) => ({
+    value: name,
+    label: name,
+  }));
+}
+
+const TabEditData = (props) => {
+  const editor = useRef();
+  const initialData = useRef(props.chartData.data || []);
+
+  useEffect(() => {
+    initEditor({
+      el: 'jsoneditor-data',
+      editor,
+      dflt: initialData.current,
+    });
+
+    const editorCurr = editor.current;
+
+    return () => {
+      destroyEditor(editorCurr);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!editor.current) return;
+    editor.current.set(props.chartData.data);
+  }, [props.chartData.data]);
+
   return (
-    <div style={{ width: '100%' }}>
-      <Tab menu={{ secondary: true, pointing: true }} panes={panes} />
-    </div>
+    <Tab.Pane style={paneStyle}>
+      <Checkbox
+        label="Use data sources"
+        checked={props.value.use_data_sources}
+        onChange={(_, data) => {
+          props.onChangeValue({
+            ...props.value,
+            use_data_sources: data.checked,
+          });
+        }}
+        toggle
+      />
+      <Button
+        style={{ padding: '10px 20px', margin: '10px 0' }}
+        primary
+        onClick={async () => {
+          const isValid = await validateEditor(editor);
+          if (!isValid) return;
+          try {
+            props.onChangeValue({
+              ...props.value,
+              use_data_sources: false,
+              chartData: {
+                ...props.chartData,
+                data: editor.current.get(),
+              },
+            });
+          } catch (error) {
+            toast.error(
+              <Toast error title={'JSON error'} content={error.message} />,
+            );
+          }
+        }}
+      >
+        Save
+      </Button>
+      <div
+        id="jsoneditor-data"
+        style={{ width: '100%', height: '100%' }}
+        onPaste={(e) => {
+          onPasteEditor(editor);
+        }}
+      />
+    </Tab.Pane>
   );
 };
 
-class Edit extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      full: null,
-    };
+const TabEditLayout = (props) => {
+  const editor = useRef();
+  const initialLayout = useRef(props.chartData.layout || {});
 
+  useEffect(() => {
+    initEditor({
+      el: 'jsoneditor-layout',
+      editor,
+      dflt: initialLayout.current,
+      options: {
+        schema: {
+          type: 'object',
+        },
+      },
+    });
+
+    const editorCurr = editor.current;
+
+    return () => {
+      destroyEditor(editorCurr);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!editor.current) return;
+    editor.current.set(props.chartData.layout);
+  }, [props.chartData.layout]);
+
+  return (
+    <Tab.Pane style={paneStyle}>
+      <Button
+        style={{ padding: '10px 20px', margin: '10px 0' }}
+        primary
+        onClick={async () => {
+          const isValid = await validateEditor(editor);
+          if (!isValid) return;
+          try {
+            props.onChangeValue({
+              ...props.value,
+              chartData: {
+                ...props.chartData,
+                layout: editor.current.get(),
+              },
+            });
+          } catch (error) {
+            toast.error(
+              <Toast error title={'JSON error'} content={error.message} />,
+            );
+          }
+        }}
+      >
+        Save
+      </Button>
+      <div
+        id="jsoneditor-layout"
+        style={{ width: '100%', height: '100%' }}
+        onPaste={(e) => {
+          onPasteEditor(editor);
+        }}
+      />
+    </Tab.Pane>
+  );
+};
+
+const RawDataEditor = (props) => {
+  const panes = [
+    {
+      menuItem: 'Data',
+      render: () => <TabEditData {...props} />,
+    },
+    {
+      menuItem: 'Layout',
+      render: () => <TabEditLayout {...props} />,
+    },
+  ];
+
+  return (
+    <Tab
+      style={{
+        height: '100%',
+        display: 'flex',
+        flexFlow: 'column',
+      }}
+      menu={{ secondary: true, pointing: true }}
+      panes={panes}
+    />
+  );
+};
+
+const Edit = (props) => {
+  const plotlyEl = useRef();
+  const initialProps = useRef(props);
+  const [dataSources, setDataSources] = useState(() =>
+    getDataSources({
+      provider_data: props.provider_data,
+      data_source: props.value.data_source,
+    }),
+  );
+  const [data, setData] = useState(props.value.chartData?.data || []);
+
+  const chartData = useMemo(() => props.value.chartData || {}, [
+    props.value.chartData,
+  ]);
+
+  const dataSourceOptions = useMemo(() => getDataSourceOptions(dataSources), [
+    dataSources,
+  ]);
+
+  const liveData = useMemo(() => {
+    return updateChartDataFromProvider(chartData.data || [], dataSources);
+  }, [chartData.data, dataSources]);
+
+  useEffect(() => {
     LoadablePlotly.preload();
     LoadablePlotlyEditor.preload();
     LoadableChartEditor.preload();
-    // LoadableInspector.preload();
-  }
 
-  handleRawDataChange = (val) => {
-    this.props.onChangeValue({
-      ...this.props.value,
-      chartData: {
-        ...this.props.chartData,
-        data: val.jsObject,
-      },
-    });
-  };
+    if (isNil(initialProps.current.value.use_data_sources)) {
+      initialProps.current.onChangeValue({
+        ...initialProps.current.value,
+        use_data_sources: true,
+      });
+    }
+  }, []);
 
-  handleRawLayoutChange = (val) => {
-    this.props.onChangeValue({
-      ...this.props.value,
-      chartData: {
-        ...this.props.chartData,
-        layout: val.jsObject,
-      },
-    });
-  };
-
-  render() {
-    if (__SERVER__) return '';
-
-    const { chartData = {} } = this.props.value;
-    const { data = [], layout = {}, frames = [] } = chartData;
-    const provider_data = this.props.provider_data;
-
-    const dataSourceOptions = getDataSourceOptions(
-      provider_data || dataSources,
+  useEffect(() => {
+    setDataSources(
+      getDataSources({
+        provider_data: props.provider_data,
+        data_source: props.value.data_source,
+      }),
     );
+  }, [props.provider_data, props.value.data_source]);
 
-    const updatedData = updateChartDataFromProvider(data, provider_data);
+  useEffect(() => {
+    setData(
+      (props.value.use_data_sources ? liveData : chartData.data || []).map(
+        (trace) => ({
+          ...trace,
+          ...(trace.type === 'scatterpolar' &&
+            trace.connectgaps &&
+            trace.mode === 'lines' && {
+              r: [...trace.r, trace.r[0]],
+              theta: [...trace.theta, trace.theta[0]],
+            }),
+        }),
+      ),
+    );
+  }, [props.value.use_data_sources, chartData.data, liveData]);
 
-    return (
-      <>
-        <LoadablePlotlyEditor>
-          {(plotlyEditor) => {
-            const Panel = plotlyEditor.Panel;
-            const PlotlyEditor = plotlyEditor.default;
-            return (
-              <LoadablePlotly>
-                {(plotly) => {
-                  return (
-                    <LoadableChartEditor>
-                      {(chartEditor) => {
-                        const ChartEditor = chartEditor.default;
-                        return (
-                          <PlotlyEditor
-                            divId="gd"
-                            config={config}
-                            data={updatedData}
-                            layout={layout}
-                            frames={frames}
-                            dataSourceOptions={dataSourceOptions}
-                            dataSources={
-                              this.props.provider_data || dataSources
-                            }
-                            plotly={plotly}
-                            onUpdate={(data, layout, frames) => {
-                              this.props.onChangeValue({
-                                ...this.props.value,
-                                chartData: {
-                                  ...chartData,
-                                  data,
-                                  layout,
-                                  frames,
-                                },
-                              });
-                            }}
-                            chartHelp={chartHelp}
-                            showFieldTooltips
-                            useResizeHandler
-                            debug
-                            advancedTraceTypeSelector
+  useEffect(() => {
+    if (props.value.use_data_sources) {
+      props.onChangeValue({
+        ...props.value,
+        chartData: {
+          ...chartData,
+          data: liveData,
+        },
+      });
+    }
+    /* eslint-disable-next-line */
+  }, [props.value.use_data_sources]);
+
+  if (__SERVER__) return '';
+
+  return (
+    <>
+      <LoadablePlotlyEditor>
+        {(plotlyEditor) => {
+          const Panel = plotlyEditor.Panel;
+          const PlotlyEditor = plotlyEditor.default;
+
+          return (
+            <LoadablePlotly>
+              {(plotly) => {
+                return (
+                  <LoadableChartEditor>
+                    {(chartEditor) => {
+                      const ChartEditor = chartEditor.default;
+                      return (
+                        <PlotlyEditor
+                          ref={plotlyEl}
+                          divId="gd"
+                          config={config}
+                          data={data}
+                          layout={props.value.chartData?.layout || {}}
+                          frames={props.value.chartData?.frames || []}
+                          dataSourceOptions={dataSourceOptions}
+                          dataSources={dataSources}
+                          plotly={plotly}
+                          onUpdate={(data, layout, frames) => {
+                            props.onChangeValue({
+                              ...props.value,
+                              chartData: {
+                                data,
+                                layout,
+                                frames,
+                              },
+                            });
+                          }}
+                          chartHelp={chartHelp}
+                          showFieldTooltips
+                          useResizeHandler
+                          advancedTraceTypeSelector
+                        >
+                          <ChartEditor
+                            onChangeValue={props.onChangeValue}
+                            value={props.value}
+                            logoSrc=""
                           >
-                            {this.props.hasCustomData ? (
-                              <RawDataEditor
-                                locale={locale}
-                                dataPlaceholder={data}
-                                layoutPlaceholder={layout}
-                                handleDataChange={(e) =>
-                                  this.handleRawDataChange(e)
-                                }
-                                handleLayoutChange={(e) =>
-                                  this.handleRawLayoutChange(e)
-                                }
-                              />
-                            ) : (
-                              <ChartEditor
-                                onChangeValue={this.props.onChangeValue}
-                                value={this.props.value}
-                                logoSrc=""
-                              >
-                                <Panel group="Dev" name="Inspector">
-                                  <button
-                                    className="devbtn"
-                                    onClick={() => {
-                                      const gd =
-                                        document.getElementById('gd') || {};
-                                      this.setState({
-                                        full: {
-                                          _fullData: gd._fullData || [],
-                                          _fullLayout: gd._fullLayout || {},
-                                        },
-                                      });
-                                    }}
-                                  >
-                                    Refresh
-                                  </button>
-                                  <div style={{ height: '80vh' }}>
-                                    {/* <LoadableInspector
-                                      data={{ _full: this.state.full }}
-                                      expandLevel={2}
-                                      sortObjectKeys={true}
-                                    /> */}
-                                  </div>
-                                </Panel>
-                              </ChartEditor>
-                            )}
-                          </PlotlyEditor>
-                        );
-                      }}
-                    </LoadableChartEditor>
-                  );
-                }}
-              </LoadablePlotly>
-            );
-          }}
-        </LoadablePlotlyEditor>
-      </>
-    );
-  }
-}
+                            <Panel
+                              group="Advanced"
+                              name="Raw editor"
+                              style={{ height: '100%' }}
+                            >
+                              <RawDataEditor {...props} chartData={chartData} />
+                            </Panel>
+                          </ChartEditor>
+                        </PlotlyEditor>
+                      );
+                    }}
+                  </LoadableChartEditor>
+                );
+              }}
+            </LoadablePlotly>
+          );
+        }}
+      </LoadablePlotlyEditor>
+    </>
+  );
+};
 
 export default connectToProviderData((props) => ({
   provider_url: props.provider_url || props.value?.provider_url,

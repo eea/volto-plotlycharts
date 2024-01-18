@@ -56,8 +56,8 @@ const selectStyles = {
 
 const StyleLayoutPanel = (props, context) => {
   const { localize: _ } = context;
-  const chartData = props.value.chartData;
-  const { data = [], layout = {} } = chartData || {};
+  const chartData = props.value.chartData || {};
+  const { data = [], layout = {} } = chartData;
 
   const layoutx = layout.xaxis || {};
   const layouty = layout.yaxis || {};

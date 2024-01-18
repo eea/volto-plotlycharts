@@ -13,7 +13,6 @@ export default {
       title: 'Toolbar',
       fields: [
         'with_notes',
-        'with_sources',
         'with_more_info',
         'download_button',
         'with_share',
@@ -32,7 +31,6 @@ export default {
       widget: 'internal_url',
       title: 'Visualization',
     },
-
     hover_format_xy: {
       type: 'string',
       title: 'Hover format',

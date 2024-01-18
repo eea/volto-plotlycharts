@@ -11,7 +11,7 @@ export default (config) => {
     group: 'data_visualizations',
     view: View,
     edit: Edit,
-    restricted: true,
+    restricted: false,
     mostUsed: false,
     sidebarTab: 1,
     security: {
