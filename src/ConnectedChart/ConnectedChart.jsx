@@ -26,10 +26,6 @@ import PlotlyComponent from './PlotlyComponent';
 
 import '@eeacms/volto-embed/Toolbar/styles.less';
 
-function getVisualization(props) {
-  return props.visualization || props.data?.visualization || {};
-}
-
 function getChartLayout({ hover_format_xy, layout = {} }) {
   return {
     ...layout,
@@ -181,14 +177,14 @@ function ConnectedChart(props) {
   useEffect(() => {
     const mode = props.mode;
     const visUrl = props.data?.vis_url;
-    if (mode === 'edit' && visUrl) {
+    if (mode === 'edit' && visUrl && !loadingVisualization) {
       const metadataSection = getFigureMetadata(props.block, viz);
       if (!metadataSection) return;
 
       props.onInsertBlock(props.block, metadataSection);
     }
     /* eslint-disable-next-line */
-  }, [props.data.vis_url]);
+  }, [props.data.vis_url, loadingVisualization]);
 
   if (loadingVisualization || loadingProviderData) {
     return <ChartSkeleton />;
@@ -301,7 +297,7 @@ export default compose(
     };
   }),
   connect((state, props) => {
-    const viz = getVisualization(props);
+    const viz = props.visualization || props.data?.visualization || {};
     const use_data_sources =
       props.data?.use_data_sources ?? viz?.use_data_sources ?? true;
     return {
