@@ -110,7 +110,6 @@ const VisualizationWidget = (props) => {
   const handleJupyterChSetContent = useCallback(
     (event) => {
       if (event.data.type === 'jupyter-ch:setContent') {
-        console.log('HERE', event.data);
         mapKeys(event.data.content, (contentValue, key) => {
           if (key === id) {
             onChange(id, {
@@ -180,7 +179,7 @@ const VisualizationWidget = (props) => {
       {showChartEditor && (
         <PlotlyEditorModal
           {...props}
-          value={value}
+          value={value || {}}
           onClose={() => setShowChartEditor(false)}
         />
       )}
