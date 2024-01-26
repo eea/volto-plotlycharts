@@ -1,9 +1,11 @@
 import React, { useState, Component } from 'react';
 import { Button, Modal, Grid } from 'semantic-ui-react';
 import config from '@plone/volto/registry';
-import { SidebarPortal, BlockDataForm } from '@plone/volto/components';
+import { SidebarPortal, BlockDataForm, Icon } from '@plone/volto/components';
 import ChartEditor from '@eeacms/volto-plotlycharts/ChartEditor';
 import PlotlyJsonModal from '@eeacms/volto-plotlycharts/Widgets/PlotlyJsonModal';
+
+import editSVG from '@plone/volto/icons/editing.svg';
 
 import schema from './schema';
 import View from './View';
@@ -55,7 +57,12 @@ const PlotlyEditorModal = (props) => {
                   justifyContent: 'space-between',
                 }}
               >
-                <Button floated="right" onClick={() => setShowImportJSON(true)}>
+                <Button
+                  secondary
+                  className="json-btn"
+                  onClick={() => setShowImportJSON(true)}
+                >
+                  <Icon name={editSVG} size="20px" />
                   JSON
                 </Button>
                 <div style={{ display: 'flex' }}>
