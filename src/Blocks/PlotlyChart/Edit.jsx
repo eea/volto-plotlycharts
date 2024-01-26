@@ -80,14 +80,8 @@ const PlotlyEditorModal = (props) => {
       </Modal>
       {showImportJSON && (
         <PlotlyJsonModal
-          updateChartData={(data) => {
-            setValue((value) => ({
-              ...value,
-              json_data: data,
-              use_data_sources: true,
-            }));
-          }}
-          jsonData={value.json_data}
+          value={value}
+          onChange={setValue}
           onClose={() => setShowImportJSON(false)}
         />
       )}
