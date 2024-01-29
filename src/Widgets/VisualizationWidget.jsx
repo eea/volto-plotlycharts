@@ -101,6 +101,7 @@ const PlotlyEditorModal = (props) => {
 const VisualizationWidget = (props) => {
   const { id, title, description, error, value, onChange } = props;
   const [showChartEditor, setShowChartEditor] = useState(false);
+  const [params] = useState(new URLSearchParams(props.location.search));
 
   // This is the structure of value
   // value = {
@@ -136,20 +137,22 @@ const VisualizationWidget = (props) => {
   );
 
   useEffect(() => {
+    if (params.get('jupyter') !== 'y') return;
     window.parent.postMessage(
       {
         type: 'jupyter-ch:getContent',
       },
       '*',
     );
-  }, []);
+  }, [params]);
 
   useEffect(() => {
+    if (params.get('jupyter') !== 'y') return;
     window.addEventListener('message', handleJupyterChSetContent);
     return () => {
       window.removeEventListener('message', handleJupyterChSetContent);
     };
-  }, [handleJupyterChSetContent]);
+  }, [params, handleJupyterChSetContent]);
 
   if (__SERVER__) return '';
 

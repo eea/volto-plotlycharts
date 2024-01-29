@@ -1,3 +1,4 @@
+import installAppExtras from './AppExtras';
 import installBlocks from './Blocks';
 import { VisualizationView } from './Views';
 import { VisualizationWidget, VisualizationViewWidget } from './Widgets';
@@ -32,7 +33,10 @@ const applyConfig = (config) => {
     ...addonReducers,
   };
 
-  return [installBlocks].reduce((acc, apply) => apply(acc), config);
+  return [installAppExtras, installBlocks].reduce(
+    (acc, apply) => apply(acc),
+    config,
+  );
 };
 
 export default applyConfig;
