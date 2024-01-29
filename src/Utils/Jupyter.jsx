@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { mapKeys } from 'lodash';
 import { Button, Modal, ModalActions, ModalHeader } from 'semantic-ui-react';
+import config from '@plone/volto/registry';
 
 let chClosed = false;
 
@@ -41,7 +42,7 @@ const Jupyter = (props) => {
       {
         type: 'jupyter-ch:getContent',
       },
-      '*',
+      config.settings.jupyterOrigin,
     );
   }, [inIframe]);
 

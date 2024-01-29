@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { withCookies } from 'react-cookie';
+import config from '@plone/volto/registry';
 
 const Jupyter = (props) => {
   const { cookies } = props;
@@ -17,7 +18,7 @@ const Jupyter = (props) => {
           location,
         },
       },
-      '*',
+      config.settings.jupyterOrigin,
     );
   }, [location, auth_token, inIframe]);
 

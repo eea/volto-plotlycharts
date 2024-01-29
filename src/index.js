@@ -12,6 +12,8 @@ const applyConfig = (config) => {
   config.widgets.id.visualization = VisualizationWidget;
   config.widgets.views.id.visualization = VisualizationViewWidget;
 
+  config.settings.jupyterOrigin = process.env.RAZZLE_JUPYTER_ORIGIN || '*';
+
   //add chart icon to visualization content type in /contents view
   config.settings.contentIcons.visualization = {
     attributes: {
