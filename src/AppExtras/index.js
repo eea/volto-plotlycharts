@@ -1,13 +1,12 @@
-import JupyterCH from './PlotlyJupyter';
+import Jupyter from './Jupyter';
 
 export default function applyConfig(config) {
   config.settings.appExtras = [
     ...(config.settings.appExtras || []),
     {
-      match: {
-        path: ['/add', '/**/add', '/edit', '/**/edit'],
-      },
-      component: JupyterCH,
+      match: '*',
+      exclude: ['/login', '/**/login'],
+      component: Jupyter,
     },
   ];
 

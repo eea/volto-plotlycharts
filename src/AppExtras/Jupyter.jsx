@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { withCookies } from 'react-cookie';
 
-const JupyterCH = (props) => {
+const Jupyter = (props) => {
   const { cookies } = props;
   const [location] = useState(props.location);
   const [auth_token] = useState(cookies.get('auth_token'));
@@ -24,4 +24,4 @@ const JupyterCH = (props) => {
   return null;
 };
 
-export default withCookies(JupyterCH);
+export default withCookies(Jupyter);

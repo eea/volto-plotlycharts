@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState } from 'react';
 import { Button, Modal, Grid, Label } from 'semantic-ui-react';
-import { map, mapKeys } from 'lodash';
+import { map } from 'lodash';
 
 import config from '@plone/volto/registry';
 import { FormFieldWrapper, Icon } from '@plone/volto/components';
@@ -99,9 +99,8 @@ const PlotlyEditorModal = (props) => {
 };
 
 const VisualizationWidget = (props) => {
-  const { id, title, description, error, value, onChange } = props;
+  const { id, title, description, error, value } = props;
   const [showChartEditor, setShowChartEditor] = useState(false);
-  const [inIframe] = useState(__CLIENT__ && window.self !== window.top);
 
   // This is the structure of value
   // value = {
@@ -114,45 +113,6 @@ const VisualizationWidget = (props) => {
   //   json_data: json_data
   //   use_data_sources: use_data_sources
   // }
-
-  const handleJupyterChSetContent = useCallback(
-    (event) => {
-      if (event.data.type === 'jupyter-ch:setContent') {
-        mapKeys(event.data.content, (contentValue, key) => {
-          if (key === id) {
-            onChange(id, {
-              ...(value || {}),
-              chartData: {
-                ...(value?.chartData || {}),
-                ...(contentValue?.chartData || {}),
-              },
-            });
-          } else {
-            onChange(key, contentValue);
-          }
-        });
-      }
-    },
-    [id, value, onChange],
-  );
-
-  useEffect(() => {
-    if (!inIframe) return;
-    window.parent.postMessage(
-      {
-        type: 'jupyter-ch:getContent',
-      },
-      '*',
-    );
-  }, [inIframe]);
-
-  useEffect(() => {
-    if (!inIframe) return;
-    window.addEventListener('message', handleJupyterChSetContent);
-    return () => {
-      window.removeEventListener('message', handleJupyterChSetContent);
-    };
-  }, [inIframe, handleJupyterChSetContent]);
 
   if (__SERVER__) return '';
 
@@ -173,6 +133,8 @@ const VisualizationWidget = (props) => {
       </div>
       {description && <p className="help">{description}</p>}
       <ConnectedChart
+        {...props}
+        mode="edit"
         data={{
           with_sources: false,
           with_notes: false,
