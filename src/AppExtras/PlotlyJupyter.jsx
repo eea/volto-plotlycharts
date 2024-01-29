@@ -4,22 +4,22 @@ import { withCookies } from 'react-cookie';
 const JupyterCH = (props) => {
   const { cookies } = props;
   const [location] = useState(props.location);
-  const [params] = useState(new URLSearchParams(location.search));
   const [auth_token] = useState(cookies.get('auth_token'));
+  const [inIframe] = useState(__CLIENT__ && window.self !== window.top);
 
   useEffect(() => {
-    if (params.get('jupyter') !== 'y') return;
+    if (!inIframe) return;
     window.parent.postMessage(
       {
         type: 'jupyter-ch:login',
         content: {
-          auth: !auth_token,
-          return_url: location.pathname,
+          auth: !!auth_token,
+          location,
         },
       },
       '*',
     );
-  }, [location, auth_token, params]);
+  }, [location, auth_token, inIframe]);
 
   return null;
 };
