@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { map } from 'lodash';
+import { map, mapKeys } from 'lodash';
 import cx from 'classnames';
 import { Dimmer, Loader, Image } from 'semantic-ui-react';
 import config from '@plone/volto/registry';
@@ -177,14 +177,33 @@ function ConnectedChart(props) {
   useEffect(() => {
     const mode = props.mode;
     const visUrl = props.data?.vis_url;
-    if (mode === 'edit' && visUrl && !loadingVisualization) {
+    const with_metadata_section = props.data?.with_metadata_section ?? true;
+    if (mode !== 'edit') return;
+    if (!with_metadata_section) {
+      let metadataBlock = null;
+      mapKeys(props.properties.blocks, (data, block) => {
+        if (data?.['id'] === `figure-metadata-${props.block}`) {
+          metadataBlock = block;
+        }
+      });
+      if (metadataBlock) {
+        props.onDeleteBlock(metadataBlock);
+        props.onSelectBlock(props.block);
+      }
+      return;
+    }
+    if (visUrl && !loadingVisualization) {
       const metadataSection = getFigureMetadata(props.block, viz);
       if (!metadataSection) return;
 
       props.onInsertBlock(props.block, metadataSection);
     }
     /* eslint-disable-next-line */
-  }, [props.data.vis_url, loadingVisualization]);
+  }, [
+    props.data.vis_url,
+    props.data.with_metadata_section,
+    loadingVisualization,
+  ]);
 
   if (loadingVisualization || loadingProviderData) {
     return <ChartSkeleton />;

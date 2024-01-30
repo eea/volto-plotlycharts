@@ -6,7 +6,7 @@ export default {
     {
       id: 'default',
       title: 'Default',
-      fields: ['vis_url', 'hover_format_xy'],
+      fields: ['vis_url', 'hover_format_xy', 'with_metadata_section'],
     },
     {
       id: 'toolbar',
@@ -47,6 +47,11 @@ export default {
           </a>
         </>
       ),
+    },
+    with_metadata_section: {
+      title: 'Show metadata section',
+      type: 'boolean',
+      defaultValue: true,
     },
     with_notes: {
       title: 'Show notes',
