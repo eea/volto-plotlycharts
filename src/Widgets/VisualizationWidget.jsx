@@ -1,14 +1,16 @@
-import React, { useState, Component } from 'react';
+import React, { useState } from 'react';
 import { Button, Modal, Grid, Label } from 'semantic-ui-react';
 import { map } from 'lodash';
 
 import config from '@plone/volto/registry';
-import { FormFieldWrapper } from '@plone/volto/components';
+import { FormFieldWrapper, Icon } from '@plone/volto/components';
 import { pickMetadata } from '@eeacms/volto-embed/helpers';
 
 import PlotlyJsonModal from './PlotlyJsonModal';
 import ConnectedChart from '../ConnectedChart';
 import ChartEditor from '../ChartEditor';
+
+import editSVG from '@plone/volto/icons/editing.svg';
 
 import './style.less';
 
@@ -57,7 +59,12 @@ const PlotlyEditorModal = (props) => {
                   justifyContent: 'space-between',
                 }}
               >
-                <Button floated="right" onClick={() => setShowImportJSON(true)}>
+                <Button
+                  secondary
+                  className="json-btn"
+                  onClick={() => setShowImportJSON(true)}
+                >
+                  <Icon name={editSVG} size="20px" />
                   JSON
                 </Button>
                 <div style={{ display: 'flex' }}>
@@ -91,14 +98,9 @@ const PlotlyEditorModal = (props) => {
   );
 };
 
-class VisualizationWidget extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      showChartEditor: false,
-    };
-  }
+const VisualizationWidget = (props) => {
+  const { id, title, description, error, value } = props;
+  const [showChartEditor, setShowChartEditor] = useState(false);
 
   // This is the structure of value
   // value = {
@@ -112,60 +114,54 @@ class VisualizationWidget extends Component {
   //   use_data_sources: use_data_sources
   // }
 
-  render() {
-    const { id, title, description, error, value } = this.props;
+  if (__SERVER__) return '';
 
-    if (__SERVER__) return '';
-
-    return (
-      <FormFieldWrapper {...this.props} columns={1}>
-        <div className="wrapper">
-          <label htmlFor={`field-${id}`}>{title}</label>
-          <Button
-            floated="right"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              this.setState({ showChartEditor: true });
-            }}
-          >
-            Open Chart Editor
-          </Button>
-        </div>
-        {description && <p className="help">{description}</p>}
-        <ConnectedChart
-          data={{
-            with_sources: false,
-            with_notes: false,
-            with_more_info: false,
-            download_button: false,
-            with_enlarge: false,
-            with_share: false,
-            visualization: {
-              ...(value || {}),
-              ...pickMetadata(this.props.formData || {}),
-            },
+  return (
+    <FormFieldWrapper {...props} columns={1}>
+      <div className="wrapper">
+        <label htmlFor={`field-${id}`}>{title}</label>
+        <Button
+          floated="right"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setShowChartEditor(true);
           }}
+        >
+          Open Chart Editor
+        </Button>
+      </div>
+      {description && <p className="help">{description}</p>}
+      <ConnectedChart
+        {...props}
+        mode="edit"
+        data={{
+          with_sources: false,
+          with_notes: false,
+          with_more_info: false,
+          download_button: false,
+          with_enlarge: false,
+          with_share: false,
+          visualization: {
+            ...(value || {}),
+            ...pickMetadata(props.formData || {}),
+          },
+        }}
+      />
+      {showChartEditor && (
+        <PlotlyEditorModal
+          {...props}
+          value={value || {}}
+          onClose={() => setShowChartEditor(false)}
         />
-        {this.state.showChartEditor && (
-          <PlotlyEditorModal
-            {...this.props}
-            value={value}
-            onClose={() =>
-              this.setState({
-                showChartEditor: false,
-              })
-            }
-          />
-        )}
-        {map(error, (message) => (
-          <Label key={message} basic color="red" pointing>
-            {message}
-          </Label>
-        ))}
-      </FormFieldWrapper>
-    );
-  }
-}
+      )}
+      {map(error, (message) => (
+        <Label key={message} basic color="red" pointing>
+          {message}
+        </Label>
+      ))}
+    </FormFieldWrapper>
+  );
+};
 
 export default VisualizationWidget;

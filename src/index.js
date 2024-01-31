@@ -1,3 +1,4 @@
+import installAppExtras from './AppExtras';
 import installBlocks from './Blocks';
 import { VisualizationView } from './Views';
 import { VisualizationWidget, VisualizationViewWidget } from './Widgets';
@@ -10,6 +11,8 @@ const applyConfig = (config) => {
   config.views.contentTypesViews.visualization = VisualizationView;
   config.widgets.id.visualization = VisualizationWidget;
   config.widgets.views.id.visualization = VisualizationViewWidget;
+
+  config.settings.jupyterOrigin = process.env.RAZZLE_JUPYTER_ORIGIN || '*';
 
   //add chart icon to visualization content type in /contents view
   config.settings.contentIcons.visualization = {
@@ -32,7 +35,10 @@ const applyConfig = (config) => {
     ...addonReducers,
   };
 
-  return [installBlocks].reduce((acc, apply) => apply(acc), config);
+  return [installAppExtras, installBlocks].reduce(
+    (acc, apply) => apply(acc),
+    config,
+  );
 };
 
 export default applyConfig;

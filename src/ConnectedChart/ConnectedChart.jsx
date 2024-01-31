@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { map } from 'lodash';
+import { map, mapKeys } from 'lodash';
 import cx from 'classnames';
 import { Dimmer, Loader, Image } from 'semantic-ui-react';
 import config from '@plone/volto/registry';
@@ -21,14 +21,10 @@ import {
   getDataSources,
   getFigureMetadata,
 } from '@eeacms/volto-plotlycharts/helpers';
-import { Download } from '@eeacms/volto-plotlycharts/Utils';
+import { Download, Jupyter } from '@eeacms/volto-plotlycharts/Utils';
 import PlotlyComponent from './PlotlyComponent';
 
 import '@eeacms/volto-embed/Toolbar/styles.less';
-
-function getVisualization(props) {
-  return props.visualization || props.data?.visualization || {};
-}
 
 function getChartLayout({ hover_format_xy, layout = {} }) {
   return {
@@ -181,14 +177,33 @@ function ConnectedChart(props) {
   useEffect(() => {
     const mode = props.mode;
     const visUrl = props.data?.vis_url;
-    if (mode === 'edit' && visUrl) {
+    const with_metadata_section = props.data?.with_metadata_section ?? true;
+    if (mode !== 'edit') return;
+    if (!with_metadata_section) {
+      let metadataBlock = null;
+      mapKeys(props.properties.blocks, (data, block) => {
+        if (data?.['id'] === `figure-metadata-${props.block}`) {
+          metadataBlock = block;
+        }
+      });
+      if (metadataBlock) {
+        props.onDeleteBlock(metadataBlock);
+        props.onSelectBlock(props.block);
+      }
+      return;
+    }
+    if (visUrl && !loadingVisualization) {
       const metadataSection = getFigureMetadata(props.block, viz);
       if (!metadataSection) return;
 
       props.onInsertBlock(props.block, metadataSection);
     }
     /* eslint-disable-next-line */
-  }, [props.data.vis_url]);
+  }, [
+    props.data.vis_url,
+    props.data.with_metadata_section,
+    loadingVisualization,
+  ]);
 
   if (loadingVisualization || loadingProviderData) {
     return <ChartSkeleton />;
@@ -206,7 +221,7 @@ function ConnectedChart(props) {
     return (
       <p>
         No valid data for this{' '}
-        <a rel="noreferrer" href={visualization_id} target="_blank">
+        <a rel="noopener noreferrer" href={visualization_id} target="_blank">
           Chart (Interactive)
         </a>
         .
@@ -215,73 +230,76 @@ function ConnectedChart(props) {
   }
 
   return (
-    <div className="embed-visualization">
-      {!initialized && <ChartSkeleton />}
-      <div className="visualization-wrapper">
-        <div
-          className={cx('visualization', {
-            autosize: chart.layout.autosize,
-          })}
-          ref={visEl}
-        >
-          <PlotlyComponent
-            {...chart}
-            chartRef={chartRef}
-            history={history}
-            setInitialized={setInitialized}
-          />
-        </div>
-        {initialized && (
-          <div className={cx('visualization-toolbar', { mobile })}>
-            <div className="left-col">
-              {with_notes && <FigureNote notes={figure_note || []} />}
-              {with_sources && (
-                <Sources
-                  sources={data_provenance?.data || props.data?.chartSources}
-                />
-              )}
-              {with_more_info && <MoreInfo href={visualization_id} />}
-            </div>
-            <div className="right-col">
-              {download_button && (
-                <Download
-                  chartRef={chartRef}
-                  title={title}
-                  provider_data={provider_data}
-                  provider_metadata={provider_metadata}
-                  url_source={toPublicURL(props?.location?.pathname)}
-                  core_metadata={{
-                    data_provenance: data_provenance?.data,
-                    other_organisations: other_organisations,
-                    temporal_coverage: temporal_coverage?.temporal,
-                    publisher: publisher,
-                    geo_coverage: geo_coverage?.geolocation,
-                  }}
-                />
-              )}
-              {with_share && <Share href={visualization_id} />}
-              {with_enlarge && (
-                <Enlarge>
-                  <PlotlyComponent
+    <>
+      <Jupyter {...props} />
+      <div className="embed-visualization">
+        {!initialized && <ChartSkeleton />}
+        <div className="visualization-wrapper">
+          <div
+            className={cx('visualization', {
+              autosize: chart.layout.autosize,
+            })}
+            ref={visEl}
+          >
+            <PlotlyComponent
+              {...chart}
+              chartRef={chartRef}
+              history={history}
+              setInitialized={setInitialized}
+            />
+          </div>
+          {initialized && (
+            <div className={cx('visualization-toolbar', { mobile })}>
+              <div className="left-col">
+                {with_notes && <FigureNote notes={figure_note || []} />}
+                {with_sources && (
+                  <Sources
+                    sources={data_provenance?.data || props.data?.chartSources}
+                  />
+                )}
+                {with_more_info && <MoreInfo href={visualization_id} />}
+              </div>
+              <div className="right-col">
+                {download_button && (
+                  <Download
                     chartRef={chartRef}
-                    history={history}
-                    {...{
-                      ...chart,
-                      layout: {
-                        ...chart.layout,
-                        autosize: true,
-                        height: null,
-                        width: null,
-                      },
+                    title={title}
+                    provider_data={provider_data}
+                    provider_metadata={provider_metadata}
+                    url_source={toPublicURL(props?.location?.pathname)}
+                    core_metadata={{
+                      data_provenance: data_provenance?.data,
+                      other_organisations: other_organisations,
+                      temporal_coverage: temporal_coverage?.temporal,
+                      publisher: publisher,
+                      geo_coverage: geo_coverage?.geolocation,
                     }}
                   />
-                </Enlarge>
-              )}
+                )}
+                {with_share && <Share href={visualization_id} />}
+                {with_enlarge && (
+                  <Enlarge>
+                    <PlotlyComponent
+                      chartRef={chartRef}
+                      history={history}
+                      {...{
+                        ...chart,
+                        layout: {
+                          ...chart.layout,
+                          autosize: true,
+                          height: null,
+                          width: null,
+                        },
+                      }}
+                    />
+                  </Enlarge>
+                )}
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
@@ -301,7 +319,7 @@ export default compose(
     };
   }),
   connect((state, props) => {
-    const viz = getVisualization(props);
+    const viz = props.visualization || props.data?.visualization || {};
     const use_data_sources =
       props.data?.use_data_sources ?? viz?.use_data_sources ?? true;
     return {

@@ -120,8 +120,8 @@ export function getFigureMetadata(block, metadata) {
   }
 
   const blocks = [
-    getBlock('h4', `Figure 1. ${title}`),
-    getBlock('p', description),
+    ...(title ? [getBlock('h4', `Figure 1. ${title}`)] : []),
+    ...(description ? [getBlock('p', description)] : []),
   ];
 
   blocks.forEach((block) => {
