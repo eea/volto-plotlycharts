@@ -69,7 +69,7 @@ const TabPlotlyJSON = forwardRef(({ active, value }, ref) => {
               type: 'array',
             },
           },
-          required: ['data', 'layout', 'frames'],
+          required: ['data', 'layout'],
           additionalProperties: false,
         },
       },
