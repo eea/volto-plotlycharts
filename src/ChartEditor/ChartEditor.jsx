@@ -19,7 +19,13 @@ import {
   Logo,
 } from 'react-chart-editor';
 
-import { StyleLayoutPanel, StyleTracesPanel, StyleLegendPanel } from './panels';
+import {
+  StyleLayoutPanel,
+  StyleTracesPanel,
+  StyleLegendPanel,
+  FilterPanel,
+  SettingsPanel,
+} from './panels';
 
 class CustomEditor extends DefaultEditor {
   render() {
@@ -35,6 +41,11 @@ class CustomEditor extends DefaultEditor {
         {this.hasTransforms() && (
           <GraphTransformsPanel group={_('Structure')} name={_('Transforms')} />
         )}
+        <FilterPanel
+          {...this.props}
+          group={_('Structure')}
+          name={_('Filters')}
+        />
         <StyleLayoutPanel
           group={_('Style')}
           name={_('General')}
@@ -68,6 +79,11 @@ class CustomEditor extends DefaultEditor {
         {this.hasMenus() && (
           <StyleUpdateMenusPanel group={_('Control')} name={_('Menus')} />
         )}
+        <SettingsPanel
+          {...this.props}
+          group={_('Advanced')}
+          name={_('Settings')}
+        />
         {this.props.children ? this.props.children : null}
       </PanelMenuWrapper>
     );

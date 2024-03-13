@@ -24,7 +24,7 @@ import {
   destroyEditor,
   validateEditor,
   onPasteEditor,
-} from '@eeacms/volto-plotlycharts/helpers';
+} from '@eeacms/volto-plotlycharts/helpers/editor';
 
 import 'jsoneditor/dist/jsoneditor.min.css';
 

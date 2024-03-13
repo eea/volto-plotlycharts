@@ -29,6 +29,10 @@
   top: 10px;
 }
 
+.plot-container.plotly svg.main-svg {
+  background: transparent !important;
+}
+
 .chart-editor-modal {
   z-index: 100 !important;
 
@@ -83,6 +87,23 @@ body.has-sidebar .ui.modal.chart-editor-modal {
 
     > *:not(:last-child) {
       border-right: 2px solid @textColor;
+    }
+  }
+
+  .visualization-filters {
+    display: flex;
+    flex-flow: column;
+    row-gap: 1rem;
+
+    &.filters_on_top {
+      @media only screen and (min-width: @tabletBreakpoint) {
+        flex-flow: row;
+        column-gap: 1rem;
+    
+        .field {
+          min-width: 160px;
+        }
+      }
     }
   }
 }
