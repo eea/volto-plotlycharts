@@ -124,9 +124,10 @@ const Edit = (props) => {
     );
   }, [dataSources, filters]);
 
-  const dataSourceOptions = useMemo(() => getDataSourceOptions(dataSources), [
-    dataSources,
-  ]);
+  const dataSourceOptions = useMemo(
+    () => getDataSourceOptions(dataSources),
+    [dataSources],
+  );
 
   useEffect(() => {
     LoadablePlotly.preload();

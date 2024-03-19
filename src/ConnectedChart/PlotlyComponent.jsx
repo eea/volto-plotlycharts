@@ -15,8 +15,14 @@ const PlotlyComponent = ({
     const { customLink, clickmode, meta = [] } = layout;
 
     if (customLink && clickmode !== 'none') {
-      const { id, label, parent, data = {}, curveNumber = 0, pointIndex = 0 } =
-        trace?.points[0] || {};
+      const {
+        id,
+        label,
+        parent,
+        data = {},
+        curveNumber = 0,
+        pointIndex = 0,
+      } = trace?.points[0] || {};
 
       const { type, parents = [], y = [], x = [] } = data;
       const shouldRedirect = type

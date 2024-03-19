@@ -46,9 +46,8 @@ class UnconnectedMarkerColor extends Component {
     this.setType = this.setType.bind(this);
     this.setColor = this.setColor.bind(this);
     this.setColorScale = this.setColorScale.bind(this);
-    this.onConstantColorOptionChange = this.onConstantColorOptionChange.bind(
-      this,
-    );
+    this.onConstantColorOptionChange =
+      this.onConstantColorOptionChange.bind(this);
   }
 
   setType(type) {
