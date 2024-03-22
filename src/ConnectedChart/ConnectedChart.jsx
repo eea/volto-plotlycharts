@@ -162,7 +162,6 @@ function ConnectedChart(props) {
   } = props.data || {};
 
   const {
-    variation = 'filters_on_top',
     title,
     data_provenance,
     figure_note,
@@ -171,6 +170,8 @@ function ConnectedChart(props) {
     publisher,
     geo_coverage,
   } = viz;
+
+  const variation = viz.variation || 'filters_on_top';
 
   const visualization_id = viz['@id'] || props.data?.vis_url;
 
@@ -313,39 +314,45 @@ function ConnectedChart(props) {
           reversed={variation === 'filters_on_right' && 'computer'}
         >
           <GridRow>
+            {filters?.length > 0 && (
+              <GridColumn
+                computer={variation !== 'filters_on_top' ? 4 : 12}
+                mobile={12}
+              >
+                {initialized && (
+                  <div className={cx('visualization-filters', variation)}>
+                    {filters.map((filter, index) => {
+                      const options = getFilterOptions(
+                        dataSources[filter.field],
+                      );
+                      return (
+                        <FormField key={filter.field || index}>
+                          <label>{filter.label}</label>
+                          <Select
+                            options={options}
+                            value={filter.data || filter.defaultData}
+                            onChange={(data) => {
+                              setFilters((filters) => {
+                                const newFilters = [...filters];
+                                newFilters[index] = {
+                                  ...newFilters[index],
+                                  data,
+                                };
+                                return newFilters;
+                              });
+                            }}
+                          />
+                        </FormField>
+                      );
+                    })}
+                  </div>
+                )}
+              </GridColumn>
+            )}
             <GridColumn
-              computer={variation !== 'filters_on_top' ? 4 : 12}
-              mobile={12}
-            >
-              {initialized && filters?.length > 0 && (
-                <div className={cx('visualization-filters', variation)}>
-                  {filters.map((filter, index) => {
-                    const options = getFilterOptions(dataSources[filter.field]);
-                    return (
-                      <FormField key={filter.field || index}>
-                        <label>{filter.label}</label>
-                        <Select
-                          options={options}
-                          value={filter.data || filter.defaultData}
-                          onChange={(data) => {
-                            setFilters((filters) => {
-                              const newFilters = [...filters];
-                              newFilters[index] = {
-                                ...newFilters[index],
-                                data,
-                              };
-                              return newFilters;
-                            });
-                          }}
-                        />
-                      </FormField>
-                    );
-                  })}
-                </div>
-              )}
-            </GridColumn>
-            <GridColumn
-              computer={variation !== 'filters_on_top' ? 8 : 12}
+              computer={
+                filters?.length > 0 && variation !== 'filters_on_top' ? 8 : 12
+              }
               mobile={12}
             >
               <div
