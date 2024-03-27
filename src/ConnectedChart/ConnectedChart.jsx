@@ -8,8 +8,9 @@ import {
   mapValues,
   keys,
   isArray,
-  uniq,
   cloneDeep,
+  uniqBy,
+  sortBy,
 } from 'lodash';
 import cx from 'classnames';
 import {
@@ -105,12 +106,19 @@ function getChartData({ data = [], dataSources, use_data_sources }) {
   }));
 }
 
-function getFilterOptions(rows) {
+function getFilterOptions(rows, rowsOrder = null) {
   if (!isArray(rows)) return [];
-  return uniq(rows).map((value) => ({
-    label: value,
-    value,
-  }));
+  return sortBy(
+    uniqBy(
+      rows.map((value, index) => ({
+        label: value,
+        value,
+        order: rowsOrder ? rowsOrder[index] : 1,
+      })),
+      'value',
+    ),
+    ['order', 'label'],
+  );
 }
 
 export function ChartSkeleton() {
@@ -324,6 +332,7 @@ function ConnectedChart(props) {
                     {filters.map((filter, index) => {
                       const options = getFilterOptions(
                         dataSources[filter.field],
+                        dataSources['filtersOrder'],
                       );
                       return (
                         <FormField key={filter.field || index}>
