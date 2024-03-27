@@ -153,10 +153,8 @@ export default function Download(props) {
 
   const handleDownloadImage = (type) => {
     import('plotly.js/dist/plotly.min.js').then(({ toImage }) => {
-      const {
-        clientWidth: width = 700,
-        clientHeight: height = 450,
-      } = chartRef.current;
+      const { clientWidth: width = 700, clientHeight: height = 450 } =
+        chartRef.current;
 
       toImage(chartRef.current, { format: type, height, width }).then(
         (dataUrl) => {

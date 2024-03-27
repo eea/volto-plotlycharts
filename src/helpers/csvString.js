@@ -167,9 +167,8 @@ const spreadCoreMetadata = (core_metadata) => {
     spread_metadata?.temporal_coverage_label &&
     spread_metadata?.temporal_coverage_label.length > 0
   ) {
-    const stringedTemporalCoverage = spread_metadata.temporal_coverage_label.join(
-      ', ',
-    );
+    const stringedTemporalCoverage =
+      spread_metadata.temporal_coverage_label.join(', ');
     spread_metadata.temporal_coverage_label = [stringedTemporalCoverage];
   }
   return spread_metadata;
