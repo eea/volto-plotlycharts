@@ -6,7 +6,7 @@ export default {
     {
       id: 'default',
       title: 'Default',
-      fields: ['vis_url', 'hover_format_xy', 'with_metadata_section'],
+      fields: ['vis_url', 'hover_format_xy', 'height', 'with_metadata_section'],
     },
     {
       id: 'toolbar',
@@ -47,6 +47,10 @@ export default {
           </a>
         </>
       ),
+    },
+    height: {
+      title: 'Height',
+      type: 'number',
     },
     with_metadata_section: {
       title: 'Show metadata section',

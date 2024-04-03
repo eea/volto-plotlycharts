@@ -90,7 +90,8 @@ const PlotlyComponent = ({
       style={{
         position: 'relative',
         display: 'block',
-        ...(!layout.height ? { minHeight: '450px' } : {}),
+        minHeight:
+          !layout.height || layout.height < 10 ? '450px' : `${layout.height}px`,
       }}
       useResizeHandler
     />
