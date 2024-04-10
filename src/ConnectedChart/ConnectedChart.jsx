@@ -11,6 +11,7 @@ import {
   cloneDeep,
   uniqBy,
   sortBy,
+  toNumber,
 } from 'lodash';
 import cx from 'classnames';
 import {
@@ -45,8 +46,9 @@ import '@eeacms/volto-embed/Toolbar/styles.less';
 import { FormField } from 'semantic-ui-react';
 import { injectLazyLibs } from '@plone/volto/helpers/Loadable/Loadable';
 
-function getChartLayout({ hover_format_xy, layout = {} }) {
+function getChartLayout({ hover_format_xy, defaultLayout = {}, layout = {} }) {
   return {
+    ...defaultLayout,
     ...layout,
     dragmode: false,
     font: {
@@ -161,6 +163,7 @@ function ConnectedChart(props) {
 
   const {
     hover_format_xy,
+    height,
     with_sources = true,
     with_notes = true,
     with_more_info = true,
@@ -227,6 +230,9 @@ function ConnectedChart(props) {
         ...chart,
         layout: getChartLayout({
           hover_format_xy,
+          defaultLayout: {
+            ...(height ? { height: toNumber(height) || 0 } : {}),
+          },
           layout: viz?.chartData?.layout,
         }),
         data: getChartData({
@@ -242,6 +248,7 @@ function ConnectedChart(props) {
     provider_data,
     use_data_sources,
     hover_format_xy,
+    height,
     filteredDataSources,
   ]);
 
