@@ -25,7 +25,7 @@ const sourceSchema = {
   required: ['source'],
 };
 
-export default {
+const schema = {
   title: 'Plotly chart',
 
   fieldsets: [
@@ -95,3 +95,5 @@ export default {
 
   required: [],
 };
+
+export default schema;
