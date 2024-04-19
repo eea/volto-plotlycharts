@@ -3,7 +3,7 @@ import Edit from './Edit';
 
 import presentationSVG from '@plone/volto/icons/image.svg';
 
-export default (config) => {
+const config = (config) => {
   const visualizationBlockConfig = {
     id: 'embed_visualization',
     title: 'Embed interactive Chart (Plotly)',
@@ -40,3 +40,5 @@ export default (config) => {
 
   return config;
 };
+
+export default config;
