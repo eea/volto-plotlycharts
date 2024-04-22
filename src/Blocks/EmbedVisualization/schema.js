@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default {
+const schema = {
   title: 'Embed interactive Chart (Plotly)',
   fieldsets: [
     {
@@ -104,3 +104,5 @@ export default {
 
   required: ['vis_url'],
 };
+
+export default schema;

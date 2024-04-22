@@ -3,7 +3,7 @@ import Edit from './Edit';
 
 import presentationSVG from '@plone/volto/icons/presentation.svg';
 
-export default (config) => {
+const config = (config) => {
   const visualizationBlockConfig = {
     id: 'plotly_chart',
     title: 'Plotly chart',
@@ -30,3 +30,5 @@ export default (config) => {
   };
   return config;
 };
+
+export default config;

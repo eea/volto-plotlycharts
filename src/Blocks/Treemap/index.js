@@ -2,7 +2,7 @@ import tableSVG from '@plone/volto/icons/table.svg';
 import TreemapView from './View';
 import TreemapEdit from './Edit';
 
-export default (config) => {
+const config = (config) => {
   config.blocks.blocksConfig.treemapChart = {
     id: 'treemapChart',
     title: 'Treemap',
@@ -20,3 +20,5 @@ export default (config) => {
   };
   return config;
 };
+
+export default config;
