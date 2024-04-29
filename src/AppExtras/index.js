@@ -5,7 +5,7 @@ export default function applyConfig(config) {
     ...(config.settings.appExtras || []),
     {
       match: '*',
-      exclude: ['/login', '/**/login'],
+      ignore: ['/login', '/**/login'],
       component: Jupyter,
     },
   ];
