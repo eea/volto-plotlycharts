@@ -5,7 +5,8 @@ export default function applyConfig(config) {
     ...(config.settings.appExtras || []),
     {
       match: '*',
-      exclude: ['/login', '/**/login'],
+      ignore: ['/login', '/**/login'],
+      exclude: ['/login', '/**/login'], //deprecated since Volto-17
       component: Jupyter,
     },
   ];
