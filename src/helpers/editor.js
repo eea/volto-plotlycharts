@@ -2,7 +2,11 @@ import { isString } from 'lodash';
 import { toast } from 'react-toastify';
 import { Toast } from '@plone/volto/components';
 
-const jsoneditor = __CLIENT__ && require('jsoneditor');
+import loadable from '@loadable/component';
+
+const LoadableJsonEditor = loadable(() => import('jsoneditor'));
+
+const jsoneditor = __CLIENT__ && LoadableJsonEditor;
 
 export function initEditor({ el, editor, dflt, options, onInit }) {
   if (!jsoneditor) return;
