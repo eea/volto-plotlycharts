@@ -456,6 +456,7 @@ const PlotlyJsonModal = (props) => {
       pane: () => (
         <TabPlotlyJSON
           {...props}
+          key={'plotly-json'}
           ref={tabPlotlyJson}
           active={activeIndex === 0}
         />
@@ -466,6 +467,7 @@ const PlotlyJsonModal = (props) => {
       pane: () => (
         <TabDataSource
           {...props}
+          key={'data-source'}
           ref={tabDataSource}
           active={activeIndex === 1}
         />
