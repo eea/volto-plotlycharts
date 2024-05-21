@@ -76,7 +76,7 @@ export class Fold extends Component {
             deleteContainer(foldInfo);
           }}
           role="button"
-          tabindex="0"
+          tabIndex="0"
           onKeyUp={() => {}}
         >
           <CloseIcon />
@@ -101,7 +101,7 @@ export class Fold extends Component {
             }
           }}
           role="button"
-          tabindex="0"
+          tabIndex="0"
           onKeyUp={() => {}}
         >
           <AngleDownIcon />
@@ -121,7 +121,7 @@ export class Fold extends Component {
             }
           }}
           role="button"
-          tabindex="0"
+          tabIndex="0"
           onKeyUp={() => {}}
         >
           <AngleDownIcon />
@@ -134,7 +134,7 @@ export class Fold extends Component {
         className={headerClass}
         onClick={toggleFold}
         role="button"
-        tabindex="0"
+        tabIndex="0"
         onKeyUp={() => {}}
       >
         <div className="fold__top__arrow-title">
