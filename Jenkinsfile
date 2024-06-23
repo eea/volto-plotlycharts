@@ -9,7 +9,7 @@ pipeline {
   environment {
     GIT_NAME = "volto-plotlycharts"
     NAMESPACE = "@eeacms"
-    SONARQUBE_TAGS = "volto.eea.europa.eu,climate-energy.eea.europa.eu,forest.eea.europa.eu,biodiversity.europa.eu,water.europa.eu-freshwater,demo-www.eea.europa.eu,www.eea.europa.eu-en"
+    SONARQUBE_TAGS = "volto.eea.europa.eu,climate-energy.eea.europa.eu,forest.eea.europa.eu,biodiversity.europa.eu,water.europa.eu-freshwater,demo-www.eea.europa.eu,www.eea.europa.eu-en,water.europa.eu-marine"
     DEPENDENCIES = "@eeacms/volto-datablocks"
     BACKEND_PROFILES = "eea.kitkat:testing"
     BACKEND_ADDONS = ""

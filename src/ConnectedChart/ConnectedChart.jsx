@@ -79,8 +79,8 @@ function getChartLayout({ hover_format_xy, defaultLayout = {}, layout = {} }) {
         ...layout.yaxis,
         hoverformat:
           hover_format_xy ||
-          layout.xaxis.hoverformat ||
-          layout.xaxis.tickformat ||
+          layout.yaxis.hoverformat ||
+          layout.yaxis.tickformat ||
           '',
       },
     }),
