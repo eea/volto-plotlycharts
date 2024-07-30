@@ -5,7 +5,6 @@ import {
 import { isArray } from 'lodash';
 
 export const preview_image = (middlewares) => [
-  //array cu CREATE, UPDATE
   (store) => (next) => async (action) => {
     if (![CREATE_CONTENT, UPDATE_CONTENT].includes(action.type))
       return next(action);
