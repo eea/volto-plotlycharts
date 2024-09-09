@@ -10,16 +10,20 @@ export const preview_image = (middlewares) => [
       return next(action);
 
     const state = store.getState();
+    const contentData = state.content.data;
+    const lastPreviewImage = Object.keys(action?.request?.data).includes(
+      'preview_image',
+    )
+      ? action?.request?.data.preview_image
+      : contentData?.preview_image;
+    const type = action?.request?.data?.['@type'] || contentData['@type'];
 
     if (
-      !state.content.data ||
-      state.content.data['@type'] !== 'visualization' ||
+      type !== 'visualization' ||
       state.content.data.preview_image_saved ||
-      !(
-        !state.content.data.preview_image ||
-        state.content.data.preview_image.filename ===
-          'preview_image_generated_plotly_chart.png'
-      )
+      (lastPreviewImage &&
+        lastPreviewImage.filename !==
+          'preview_image_generated_plotly_chart.png')
     )
       return next(action);
 
