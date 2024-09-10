@@ -63,11 +63,13 @@ class Scale extends Component {
   }
 
   handleVisibilityChange(index, isVisible) {
-    const newColorComponentVisibility = [
-      ...this.state.colorComponentVisibility,
-    ];
-    newColorComponentVisibility[index] = isVisible;
-    this.setState({ colorComponentVisibility: newColorComponentVisibility });
+    this.setState((prevState) => {
+      const newColorComponentVisibility = [
+        ...this.state.colorComponentVisibility,
+      ];
+      newColorComponentVisibility[index] = isVisible;
+      return { colorComponentVisibility: newColorComponentVisibility };
+    });
   }
 
   handleDeleteColor(index) {
