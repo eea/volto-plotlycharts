@@ -32,7 +32,7 @@ export const preview_image = (middlewares) => [
       const { toImage } = plotly;
       const width = 700;
       const height = 450;
-      const plotlyElement = document.querySelector('.visualization');
+      const plotlyElement = document.querySelector('.js-plotly-plot');
 
       if (!plotlyElement) throw Error("plotlyElement doesn't exit");
 
