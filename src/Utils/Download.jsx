@@ -7,7 +7,10 @@ import {
   exportCSVFile,
   spreadCoreMetadata,
 } from '@eeacms/volto-plotlycharts/helpers/csvString';
-import { downloadDataURL } from '@eeacms/volto-plotlycharts/helpers';
+import {
+  downloadSVGAsPNG,
+  downloadSVG,
+} from '@eeacms/volto-plotlycharts/helpers';
 
 export default function Download(props) {
   const {
@@ -19,7 +22,9 @@ export default function Download(props) {
     core_metadata,
     url_source,
     chartRef,
+    filters,
   } = props;
+  console.log(props);
   const [open, setOpen] = React.useState(false);
 
   const handleDownloadData = () => {
@@ -153,15 +158,40 @@ export default function Download(props) {
 
   const handleDownloadImage = (type) => {
     import('plotly.js/dist/plotly.min.js').then(({ toImage }) => {
-      const { clientWidth: width = 700, clientHeight: height = 450 } =
-        chartRef.current;
+      const svg = chartRef.current.querySelector('svg');
+      if (svg) {
+        const clonedSvg = svg.cloneNode(true);
 
-      toImage(chartRef.current, { format: type, height, width }).then(
-        (dataUrl) => {
-          downloadDataURL(dataUrl, `${title}.${type.toLowerCase()}`);
-          setOpen(false);
-        },
-      );
+        const svgWidth = parseInt(
+          clonedSvg.viewBox.baseVal.width || clonedSvg?.width?.baseVal?.value,
+        );
+        const svgHeight = parseInt(
+          clonedSvg?.viewBox?.baseVal?.height ||
+            clonedSvg?.height?.baseVal?.value,
+        );
+
+        filters.forEach((filter, index) => {
+          const textElement = document.createElementNS(
+            'http://www.w3.org/2000/svg',
+            'text',
+          );
+          //position
+          textElement.setAttribute('x', svgWidth / 2);
+          textElement.setAttribute('y', svgHeight * 0.1 + index * 20);
+          //styles
+          textElement.setAttribute('text-anchor', 'middle');
+          textElement.setAttribute('fill', 'black');
+          textElement.setAttribute('font-size', '20');
+          textElement.textContent = filter.label + ': ' + filter.data.label;
+          clonedSvg.insertBefore(textElement, clonedSvg.firstChild);
+        });
+
+        if (type === 'svg') {
+          downloadSVG(clonedSvg, `${title}.${type.toLowerCase()}`);
+        } else if (type === 'png') {
+          downloadSVGAsPNG(clonedSvg, `${title}.${type.toLowerCase()}`);
+        }
+      }
     });
   };
 
