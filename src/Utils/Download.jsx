@@ -24,7 +24,6 @@ export default function Download(props) {
     chartRef,
     filters,
   } = props;
-  console.log(props);
   const [open, setOpen] = React.useState(false);
 
   const handleDownloadData = () => {
