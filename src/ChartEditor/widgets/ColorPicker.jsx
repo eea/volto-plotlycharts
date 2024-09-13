@@ -68,9 +68,12 @@ class ColorPicker extends Component {
   }
 
   toggleVisible() {
-    this.setState({ isVisible: !this.state.isVisible }, () => {
-      this.props.onVisibilityChange(this.state.isVisible);
-    });
+    this.setState(
+      (prevState) => ({ isVisible: !prevState }),
+      () => {
+        this.props.onVisibilityChange(this.state.isVisible);
+      },
+    );
   }
 
   render() {
@@ -98,12 +101,26 @@ class ColorPicker extends Component {
               className="colorpicker__swatch +cursor-clickable"
               style={swatchStyle}
               onClick={this.toggleVisible}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  this.toggleVisible();
+                }
+              }}
+              role="button"
+              tabIndex={0} // Makes the element keyboard-focusable
             />
           </div>
 
           <div
             className="colorpicker__selected-color +hover-grey"
             onClick={this.toggleVisible}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                this.toggleVisible();
+              }
+            }}
+            role="button"
+            tabIndex={0}
           >
             {colorText}
           </div>
