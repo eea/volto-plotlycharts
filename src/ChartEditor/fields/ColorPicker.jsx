@@ -32,10 +32,18 @@ export class UnconnectedColorPicker extends Component {
           <div className="js-test-info">
             This color is computed from other parts of the figure but you can{' '}
             <a
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  this.setState({ empty: false });
+                  this.props.updatePlot(this.props.defaultColor);
+                }
+              }}
               onClick={() => {
                 this.setState({ empty: false });
                 this.props.updatePlot(this.props.defaultColor);
               }}
+              role="button"
+              tabIndex={0} // Makes the element focusable
             >
               override it
             </a>

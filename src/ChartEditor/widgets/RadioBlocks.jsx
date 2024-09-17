@@ -39,7 +39,14 @@ class RadioBlocks extends Component {
         className={optionClass}
         key={value}
         checked={defaultActive}
+        role="button"
+        tabIndex={0}
         onClick={() => this.handleChange(value)}
+        onKeyPress={(e) => {
+          if (e.key === 'Enter') {
+            this.handleChange(value);
+          }
+        }}
       >
         {Icon ? <Icon className="radio-block__icon" /> : null}
         {label ? <span>{label}</span> : null}
