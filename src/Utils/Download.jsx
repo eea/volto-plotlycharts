@@ -157,41 +157,112 @@ export default function Download(props) {
 
   const handleDownloadImage = (type) => {
     import('plotly.js/dist/plotly.min.js').then(({ toImage }) => {
-      const svg = chartRef.current.querySelector('svg');
-      if (svg) {
-        const clonedSvg = svg.cloneNode(true);
+      // Selectează toate SVG-urile din chartRef
+      const allSvgs = chartRef.current.querySelectorAll('svg');
 
-        const svgWidth = parseInt(
-          clonedSvg.viewBox.baseVal.width || clonedSvg?.width?.baseVal?.value,
-        );
-        const svgHeight = parseInt(
-          clonedSvg?.viewBox?.baseVal?.height ||
-            clonedSvg?.height?.baseVal?.value,
+      if (allSvgs.length > 0) {
+        // Creează un nou element SVG container pentru a combina toate elementele
+        const combinedSvg = document.createElementNS(
+          'http://www.w3.org/2000/svg',
+          'svg',
         );
 
-        filters.forEach((filter, index) => {
+        // Obține dimensiunile celui mai mare SVG pentru a seta dimensiunea totală
+        let maxWidth = 0;
+        let totalHeight = 0;
+        const textHeight = 16; // Dimensiune mai mică a textului
+        const paddingBetweenText = 10; // Padding între rândurile de text
+        let totalTextHeight = 0; // Total înălțime pentru textele filtrelor
+
+        // Creează un SVG nou pentru textele filtrelor
+        const textSvg = document.createElementNS(
+          'http://www.w3.org/2000/svg',
+          'svg',
+        );
+
+        // Calculează înălțimea necesară pentru toate textele filtrelor
+        if (filters.length > 0) {
+          totalTextHeight = filters.length * (textHeight + paddingBetweenText);
+        }
+
+        // Setează dimensiunile SVG-ului pentru text în funcție de numărul de filtre
+        textSvg.setAttribute('width', '100%');
+        textSvg.setAttribute('height', totalTextHeight);
+
+        // Adaugă textele în noul SVG dedicat textelor
+        filters.forEach((filter, filterIndex) => {
           const textElement = document.createElementNS(
             'http://www.w3.org/2000/svg',
             'text',
           );
-          //position
-          textElement.setAttribute('x', svgWidth / 2);
-          textElement.setAttribute('y', svgHeight * 0.1 + index * 20);
-          //styles
-          textElement.setAttribute('text-anchor', 'middle');
+
+          // Setează coordonatele x și y la 50% pentru centrare orizontală și verticală
+          textElement.setAttribute('x', '50%');
+          textElement.setAttribute(
+            'y',
+            paddingBetweenText +
+              filterIndex * (textHeight + paddingBetweenText) +
+              textHeight / 2,
+          ); // Poziționat în funcție de index
+          textElement.setAttribute('text-anchor', 'middle'); // Centrează textul orizontal
+          textElement.setAttribute('dominant-baseline', 'middle'); // Centrează textul vertical
           textElement.setAttribute('fill', 'black');
-          textElement.setAttribute('font-size', '20');
-          textElement.textContent = filter.label + ': ' + filter.data.label;
-          clonedSvg.insertBefore(textElement, clonedSvg.firstChild);
+          textElement.setAttribute('font-size', '16'); // Font puțin mai mic
+          textElement.setAttribute('font-family', 'sans-serif'); // Setează fontul la sans-serif
+          textElement.textContent = `${filter.label}: ${filter.data.label}`;
+
+          // Adaugă textul în SVG-ul pentru text
+          textSvg.appendChild(textElement);
         });
 
+        // Adaugă SVG-ul textelor în containerul principal
+        combinedSvg.appendChild(textSvg);
+
+        // Mutăm toate celelalte SVG-uri
+        const shiftY = 10 * filters.length; // Valoarea cu care mutăm SVG-urile
+        allSvgs.forEach((svg, index) => {
+          const svgClone = svg.cloneNode(true);
+
+          const svgWidth = parseInt(
+            svgClone.viewBox.baseVal.width || svgClone?.width?.baseVal?.value,
+          );
+          const svgHeight = parseInt(
+            svgClone?.viewBox?.baseVal.height ||
+              svgClone?.height?.baseVal?.value,
+          );
+
+          // Actualizează dimensiunile maxime pentru lățime
+          if (svgWidth > maxWidth) maxWidth = svgWidth;
+
+          // Mută fiecare SVG în jos, adăugând spațiu pentru textele filtrelor
+          const originalY = svgClone.getAttribute('y') || 0;
+          const newY = parseInt(originalY) + shiftY;
+          svgClone.setAttribute('y', newY + totalTextHeight); // Muta fiecare SVG cu shiftY + spațiu suplimentar
+
+          // Actualizează înălțimea totală pentru a muta următoarele SVG-uri
+          totalHeight += svgHeight;
+
+          // Adaugă SVG-ul clonat în containerul principal
+          combinedSvg.appendChild(svgClone);
+        });
+
+        // Setează dimensiunile combinate pentru SVG-ul final
+        combinedSvg.setAttribute('width', maxWidth);
+        combinedSvg.setAttribute('height', totalHeight + totalTextHeight);
+
+        // Exportare în funcție de tip (svg sau png)
         if (type === 'svg') {
-          downloadSVG(clonedSvg, `${title}.${type.toLowerCase()}`);
+          downloadSVG(combinedSvg, `${title}.${type.toLowerCase()}`);
         } else if (type === 'png') {
-          downloadSVGAsPNG(clonedSvg, `${title}.${type.toLowerCase()}`);
+          downloadSVGAsPNG(combinedSvg, `${title}.${type.toLowerCase()}`);
         }
       }
+
+      // Asigură-te că faci și exportul prin plotly
     });
+
+    const { clientWidth: width = 700, clientHeight: height = 450 } =
+      chartRef.current;
   };
 
   return (
