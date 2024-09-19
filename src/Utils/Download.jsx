@@ -7,7 +7,10 @@ import {
   exportCSVFile,
   spreadCoreMetadata,
 } from '@eeacms/volto-plotlycharts/helpers/csvString';
-import { downloadDataURL } from '@eeacms/volto-plotlycharts/helpers';
+import {
+  downloadSVGAsPNG,
+  downloadSVG,
+} from '@eeacms/volto-plotlycharts/helpers';
 
 export default function Download(props) {
   const {
@@ -19,6 +22,7 @@ export default function Download(props) {
     core_metadata,
     url_source,
     chartRef,
+    filters,
   } = props;
   const [open, setOpen] = React.useState(false);
 
@@ -152,17 +156,88 @@ export default function Download(props) {
   };
 
   const handleDownloadImage = (type) => {
-    import('plotly.js/dist/plotly.min.js').then(({ toImage }) => {
-      const { clientWidth: width = 700, clientHeight: height = 450 } =
-        chartRef.current;
+    const allSvgs = chartRef.current.querySelectorAll('svg');
 
-      toImage(chartRef.current, { format: type, height, width }).then(
-        (dataUrl) => {
-          downloadDataURL(dataUrl, `${title}.${type.toLowerCase()}`);
-          setOpen(false);
-        },
+    if (allSvgs.length > 0) {
+      const combinedSvg = document.createElementNS(
+        'http://www.w3.org/2000/svg',
+        'svg',
       );
-    });
+
+      let maxWidth = 0;
+      let totalHeight = 0;
+      const textHeight = 16;
+      const paddingBetweenText = 10;
+      let totalTextHeight = 0;
+
+      const textSvg = document.createElementNS(
+        'http://www.w3.org/2000/svg',
+        'svg',
+      );
+
+      if (filters.length > 0) {
+        totalTextHeight = filters.length * (textHeight + paddingBetweenText);
+      }
+
+      textSvg.setAttribute('width', '100%');
+      textSvg.setAttribute('height', totalTextHeight);
+
+      filters.forEach((filter, filterIndex) => {
+        const textElement = document.createElementNS(
+          'http://www.w3.org/2000/svg',
+          'text',
+        );
+
+        textElement.setAttribute('x', '50%');
+        textElement.setAttribute(
+          'y',
+          paddingBetweenText +
+            filterIndex * (textHeight + paddingBetweenText) +
+            textHeight / 2,
+        );
+        textElement.setAttribute('text-anchor', 'middle');
+        textElement.setAttribute('dominant-baseline', 'middle');
+        textElement.setAttribute('fill', 'black');
+        textElement.setAttribute('font-size', '16');
+        textElement.setAttribute('font-family', 'sans-serif');
+        textElement.textContent = `${filter.label}: ${filter.data.label}`;
+
+        textSvg.appendChild(textElement);
+      });
+
+      combinedSvg.appendChild(textSvg);
+
+      const shiftY = 10 * filters.length;
+      allSvgs.forEach((svg, index) => {
+        const svgClone = svg.cloneNode(true);
+
+        const svgWidth = parseInt(
+          svgClone.viewBox.baseVal.width || svgClone?.width?.baseVal?.value,
+        );
+        const svgHeight = parseInt(
+          svgClone?.viewBox?.baseVal.height || svgClone?.height?.baseVal?.value,
+        );
+
+        if (svgWidth > maxWidth) maxWidth = svgWidth;
+
+        const originalY = svgClone.getAttribute('y') || 0;
+        const newY = parseInt(originalY) + shiftY;
+        svgClone.setAttribute('y', newY + totalTextHeight);
+
+        totalHeight += svgHeight;
+
+        combinedSvg.appendChild(svgClone);
+      });
+
+      combinedSvg.setAttribute('width', maxWidth);
+      combinedSvg.setAttribute('height', totalHeight + totalTextHeight);
+
+      if (type === 'svg') {
+        downloadSVG(combinedSvg, `${title}.${type.toLowerCase()}`);
+      } else if (type === 'png') {
+        downloadSVGAsPNG(combinedSvg, `${title}.${type.toLowerCase()}`);
+      }
+    }
   };
 
   return (
