@@ -404,6 +404,7 @@ function ConnectedChart(props) {
                         title={title}
                         provider_data={provider_data}
                         provider_metadata={provider_metadata}
+                        filters={filters}
                         url_source={toPublicURL(props?.location?.pathname)}
                         core_metadata={{
                           data_provenance: data_provenance?.data,
