@@ -168,6 +168,7 @@ export default function Download(props) {
       let totalHeight = 0;
       const textHeight = 16;
       const paddingBetweenText = 10;
+      const startDistance = 30;
       let totalTextHeight = 0;
 
       const textSvg = document.createElementNS(
@@ -176,7 +177,8 @@ export default function Download(props) {
       );
 
       if (filters.length > 0) {
-        totalTextHeight = filters.length * (textHeight + paddingBetweenText);
+        totalTextHeight =
+          startDistance + filters.length * (textHeight + paddingBetweenText);
       }
 
       textSvg.setAttribute('width', '100%');
@@ -191,13 +193,14 @@ export default function Download(props) {
         textElement.setAttribute('x', '50%');
         textElement.setAttribute(
           'y',
-          paddingBetweenText +
+          startDistance +
+            paddingBetweenText +
             filterIndex * (textHeight + paddingBetweenText) +
             textHeight / 2,
         );
         textElement.setAttribute('text-anchor', 'middle');
         textElement.setAttribute('dominant-baseline', 'middle');
-        textElement.setAttribute('fill', 'black');
+        textElement.setAttribute('fill', 'black'); // Ensure text is black
         textElement.setAttribute('font-size', '16');
         textElement.setAttribute('font-family', 'sans-serif');
         textElement.textContent = `${filter.label}: ${filter.data.label}`;
@@ -211,6 +214,7 @@ export default function Download(props) {
       allSvgs.forEach((svg, index) => {
         const svgClone = svg.cloneNode(true);
 
+        // Get width and height of the SVG
         const svgWidth = parseInt(
           svgClone.viewBox.baseVal.width || svgClone?.width?.baseVal?.value,
         );
@@ -218,17 +222,51 @@ export default function Download(props) {
           svgClone?.viewBox?.baseVal.height || svgClone?.height?.baseVal?.value,
         );
 
+        // Make all elements inside SVG modify only x and width attributes (no scaling)
+        const elements = svgClone.querySelectorAll('*');
+        elements.forEach((el) => {
+          // Modify only x and width attributes
+          ['x', 'width', 'cx'].forEach((attr) => {
+            if (el.hasAttribute(attr)) {
+              const originalValue = parseFloat(el.getAttribute(attr));
+              el.setAttribute(attr, originalValue); // No scaling, just keep original values
+            }
+          });
+
+          // Center text for svg with index 1
+          if (index === 1 && el.tagName === 'text') {
+            el.setAttribute('x', '50%');
+            el.setAttribute('text-anchor', 'middle');
+          }
+
+          // Ensure text color is black
+          if (el.tagName === 'text') {
+            el.setAttribute('fill', 'black');
+            if (el.hasAttribute('style')) {
+              const style = el.getAttribute('style');
+              const newStyle = style.replace(/fill:[^;]+;/, 'fill:black;');
+              el.setAttribute('style', newStyle);
+            }
+          }
+        });
+
+        // Remove white background and set transparent
+        svgClone.style.background = 'none'; // Remove background color
+        svgClone.setAttribute('style', 'background-color: transparent');
+
         if (svgWidth > maxWidth) maxWidth = svgWidth;
 
         const originalY = svgClone.getAttribute('y') || 0;
         const newY = parseInt(originalY) + shiftY;
-        svgClone.setAttribute('y', newY + totalTextHeight);
 
-        totalHeight += svgHeight;
+        if (index !== 1) svgClone.setAttribute('y', newY + totalTextHeight);
+
+        totalHeight += svgHeight; // Keep height unchanged
 
         combinedSvg.appendChild(svgClone);
       });
 
+      // Adjust the final combined SVG size based on the original dimensions
       combinedSvg.setAttribute('width', maxWidth);
       combinedSvg.setAttribute('height', totalHeight + totalTextHeight);
 
