@@ -69,7 +69,7 @@ class ColorPicker extends Component {
 
   toggleVisible() {
     this.setState(
-      (prevState) => ({ isVisible: !prevState }),
+      (prevState) => ({ isVisible: !prevState.isVisible }),
       () => {
         this.props.onVisibilityChange(this.state.isVisible);
       },
