@@ -225,18 +225,21 @@ export default function Download(props) {
         // Make all elements inside SVG modify only x and width attributes (no scaling)
         const elements = svgClone.querySelectorAll('*');
         elements.forEach((el) => {
+          // Modify only x and width attributes
           ['x', 'width', 'cx'].forEach((attr) => {
             if (el.hasAttribute(attr)) {
               const originalValue = parseFloat(el.getAttribute(attr));
-              el.setAttribute(attr, originalValue);
+              el.setAttribute(attr, originalValue); // No scaling, just keep original values
             }
           });
 
+          // Center text for svg with index 1
           if (index === 1 && el.tagName === 'text') {
             el.setAttribute('x', '50%');
             el.setAttribute('text-anchor', 'middle');
           }
 
+          // Ensure text color is black
           if (el.tagName === 'text') {
             el.setAttribute('fill', 'black');
             if (el.hasAttribute('style')) {
@@ -247,7 +250,8 @@ export default function Download(props) {
           }
         });
 
-        svgClone.style.background = 'none';
+        // Remove white background and set transparent
+        svgClone.style.background = 'none'; // Remove background color
         svgClone.setAttribute('style', 'background-color: transparent');
 
         if (svgWidth > maxWidth) maxWidth = svgWidth;
@@ -257,23 +261,14 @@ export default function Download(props) {
 
         if (index !== 1) svgClone.setAttribute('y', newY + totalTextHeight);
 
-        totalHeight += svgHeight;
+        totalHeight += svgHeight; // Keep height unchanged
 
         combinedSvg.appendChild(svgClone);
       });
 
       // Adjust the final combined SVG size based on the original dimensions
-      const forcedWidth = 700;
-      const aspectRatio = maxWidth / totalHeight;
-      const forcedHeight = forcedWidth / aspectRatio;
-
-      combinedSvg.setAttribute('width', forcedWidth);
-      combinedSvg.setAttribute('height', forcedHeight + totalTextHeight);
-
-      combinedSvg.setAttribute(
-        'viewBox',
-        `0 0 ${maxWidth} ${totalHeight + totalTextHeight}`,
-      );
+      combinedSvg.setAttribute('width', maxWidth);
+      combinedSvg.setAttribute('height', totalHeight + totalTextHeight);
 
       if (type === 'svg') {
         downloadSVG(combinedSvg, `${title}.${type.toLowerCase()}`);
