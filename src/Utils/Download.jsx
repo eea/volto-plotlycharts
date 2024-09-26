@@ -158,7 +158,13 @@ export default function Download(props) {
   const handleDownloadImage = (type) => {
     const chartClone = chartRef.current.cloneNode(true);
     const allSvgs = chartClone.querySelectorAll('svg');
-
+    let maxWidth = 0;
+    let totalHeight = 0;
+    const textHeight = 16;
+    const paddingBetweenText = 10;
+    const titleHeight = 18;
+    const startDistance = 30;
+    let totalTextHeight = 0;
     const titleElement = allSvgs?.[1].querySelector('.g-gtitle');
 
     const adjustYPosition = (textElement, newY) => {
@@ -168,6 +174,9 @@ export default function Download(props) {
       const tspanElements = textElement.querySelectorAll('tspan');
       tspanElements.forEach((tspan) => {
         tspan.setAttribute('y', newY);
+        tspan.setAttribute('font-family', 'Times New Roman');
+        tspan.setAttribute('font-size', titleHeight);
+        tspan.setAttribute('fill', 'black');
       });
     };
     if (allSvgs.length > 0) {
@@ -176,13 +185,6 @@ export default function Download(props) {
         'svg',
       );
 
-      let maxWidth = 0;
-      let totalHeight = 0;
-      const textHeight = 16;
-      const paddingBetweenText = 10;
-      const titleHeight = 18;
-      const startDistance = 30;
-      let totalTextHeight = 0;
       if (filters.length > 0) {
         totalTextHeight =
           startDistance + filters.length * (textHeight + paddingBetweenText);
