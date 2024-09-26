@@ -157,28 +157,56 @@ export default function Download(props) {
 
   const handleDownloadImage = (type) => {
     const chartClone = chartRef.current.cloneNode(true);
-    const allSvgs = chartClone.querySelectorAll('svg');
-    let maxWidth = 0;
-    let totalHeight = 0;
-    const textHeight = 16;
-    const paddingBetweenText = 10;
-    const titleHeight = 18;
-    const startDistance = 30;
-    let totalTextHeight = 0;
-    const titleElement = allSvgs?.[1].querySelector('.g-gtitle');
 
-    const adjustYPosition = (textElement, newY) => {
-      // Adjust the 'y' of the text element itself
+    const DEFAULT_FONT_FAMILY = 'Times New Roman';
+    const DEFAULT_FONT_SIZE = 16;
+    const DEFAULT_FILL_COLOR = 'black';
+    const PADDING_BETWEEN_TEXT = 10;
+    const TITLE_HEIGHT = 18;
+    const START_DISTANCE = 30;
+
+    // Function to replace transparent fill with white
+    const replaceTransparentWithWhite = (svgElement) => {
+      const allElements = svgElement.querySelectorAll('*');
+      allElements.forEach((element) => {
+        const styleAttr = element.getAttribute('style');
+        if (styleAttr && styleAttr.includes('fill')) {
+          const fillMatch = styleAttr.match(/fill:\s*([^;]+)/);
+          if (
+            fillMatch &&
+            (fillMatch[1] === 'transparent' ||
+              fillMatch[1] === 'rgba(0, 0, 0, 0)')
+          ) {
+            const updatedStyle = styleAttr
+              .replace(/fill:\s*transparent/g, 'fill: white')
+              .replace(/fill:\s*rgba\(0, 0, 0, 0\)/g, 'fill: white');
+            element.setAttribute('style', updatedStyle);
+          }
+        }
+      });
+    };
+
+    // Function to adjust the y position and set font styles
+    const adjustYPositionAndStyle = (textElement, newY) => {
       textElement.setAttribute('y', newY);
-      // Also adjust 'y' for all its tspans
       const tspanElements = textElement.querySelectorAll('tspan');
       tspanElements.forEach((tspan) => {
         tspan.setAttribute('y', newY);
-        tspan.setAttribute('font-family', 'Times New Roman');
-        tspan.setAttribute('font-size', titleHeight);
-        tspan.setAttribute('fill', 'black');
+        tspan.setAttribute('font-family', DEFAULT_FONT_FAMILY);
+        tspan.setAttribute('font-size', TITLE_HEIGHT);
+        tspan.setAttribute('fill', DEFAULT_FILL_COLOR);
       });
     };
+
+    replaceTransparentWithWhite(chartClone);
+
+    const allSvgs = chartClone.querySelectorAll('svg');
+    let maxWidth = 0;
+    let totalHeight = 0;
+    let totalTextHeight = 0;
+
+    const titleElement = allSvgs?.[1]?.querySelector('.g-gtitle');
+
     if (allSvgs.length > 0) {
       const combinedSvg = document.createElementNS(
         'http://www.w3.org/2000/svg',
@@ -187,45 +215,43 @@ export default function Download(props) {
 
       if (filters.length > 0) {
         totalTextHeight =
-          startDistance + filters.length * (textHeight + paddingBetweenText);
+          START_DISTANCE +
+          PADDING_BETWEEN_TEXT * 2 +
+          filters.length * (DEFAULT_FONT_SIZE + PADDING_BETWEEN_TEXT);
       }
 
-      // Extract g-title from each SVG and append them to the top
-      allSvgs.forEach((svg, index) => {
+      // Loop through each SVG and adjust layout
+      allSvgs.forEach((svg) => {
         const svgClone = svg.cloneNode(true);
-
-        // Get width and height of the SVG
         const svgWidth = parseInt(
           svgClone.viewBox.baseVal.width || svgClone?.width?.baseVal?.value,
+          10,
         );
         const svgHeight = parseInt(
           svgClone?.viewBox?.baseVal.height || svgClone?.height?.baseVal?.value,
+          10,
         );
 
-        // Find and extract g-title elements
-
         const gTitleElements = svgClone.querySelectorAll('.g-gtitle');
-        gTitleElements.forEach((titleElement) => {
-          // Remove the g-title element from the SVG
-          titleElement.parentNode.removeChild(titleElement);
-        });
+        gTitleElements.forEach((titleElement) =>
+          titleElement.parentNode.removeChild(titleElement),
+        );
 
         const originalY = svgClone.getAttribute('y') || 0;
-
-        const newY = parseInt(originalY) + totalTextHeight - titleHeight;
+        const newY =
+          parseInt(originalY, 10) +
+          totalTextHeight -
+          (TITLE_HEIGHT + PADDING_BETWEEN_TEXT) *
+            (titleElement?.querySelectorAll('tspan')?.length || 0);
 
         svgClone.setAttribute('y', newY);
-
         if (svgWidth > maxWidth) maxWidth = svgWidth;
-
         totalHeight = Math.max(svgHeight, totalHeight);
 
         combinedSvg.appendChild(svgClone);
       });
 
-      //Add extracted titles to the top, above the filters
-
-      // Adjust the final combined SVG size based on the original dimensions
+      // Add background rectangle to combined SVG
       const backgroundRect = document.createElementNS(
         'http://www.w3.org/2000/svg',
         'rect',
@@ -236,6 +262,7 @@ export default function Download(props) {
       backgroundRect.setAttribute('height', totalHeight + totalTextHeight);
       backgroundRect.setAttribute('fill', 'white');
       combinedSvg.insertBefore(backgroundRect, combinedSvg.firstChild);
+
       combinedSvg.setAttribute('width', maxWidth);
       combinedSvg.setAttribute('height', totalHeight + totalTextHeight);
       combinedSvg.setAttribute(
@@ -243,60 +270,49 @@ export default function Download(props) {
         `0 0 ${maxWidth} ${totalHeight + totalTextHeight}`,
       );
 
-      // Create a text SVG to hold filters and titles
-      const textSvg = document.createElementNS(
-        'http://www.w3.org/2000/svg',
-        'svg',
-      );
-
-      // Add the filters to the textSvg
-      // Append each cloned title element directly into the combinedSvg
+      // Add extracted titles and filters
       const newTitleElement = document.createElementNS(
         'http://www.w3.org/2000/svg',
         'g',
       );
-
-      // Set necessary attributes for positioning, if needed
-      adjustYPosition(titleElement, startDistance);
+      adjustYPositionAndStyle(titleElement, START_DISTANCE);
       newTitleElement.setAttribute('x', '50%');
-      newTitleElement.setAttribute('y', startDistance);
+      newTitleElement.setAttribute('y', START_DISTANCE);
       newTitleElement.setAttribute('text-anchor', 'middle');
       newTitleElement.setAttribute('dominant-baseline', 'middle');
-
-      // Append the cloned title (with tspans) to the new g element
       newTitleElement.appendChild(titleElement);
-
-      // Add this new title element to the combinedSvg
-
       combinedSvg.appendChild(newTitleElement);
 
+      const textSvg = document.createElementNS(
+        'http://www.w3.org/2000/svg',
+        'svg',
+      );
       filters.forEach((filter, filterIndex) => {
         const textElement = document.createElementNS(
           'http://www.w3.org/2000/svg',
           'text',
         );
-
         textElement.setAttribute('x', '50%');
         textElement.setAttribute(
           'y',
-          startDistance +
-            paddingBetweenText * 2 +
-            (titleHeight + paddingBetweenText) +
-            paddingBetweenText +
-            filterIndex * (textHeight + paddingBetweenText),
+          START_DISTANCE +
+            (titleElement?.children?.length > 0
+              ? TITLE_HEIGHT + PADDING_BETWEEN_TEXT * 3 + PADDING_BETWEEN_TEXT
+              : 0) +
+            filterIndex * (DEFAULT_FONT_SIZE + PADDING_BETWEEN_TEXT),
         );
         textElement.setAttribute('text-anchor', 'middle');
         textElement.setAttribute('dominant-baseline', 'middle');
-        textElement.setAttribute('fill', 'black');
-        textElement.setAttribute('font-size', '16');
+        textElement.setAttribute('fill', DEFAULT_FILL_COLOR);
+        textElement.setAttribute('font-size', `${DEFAULT_FONT_SIZE}`);
         textElement.setAttribute('font-family', 'sans-serif');
         textElement.textContent = `${filter.label}: ${filter.data.label}`;
-
         textSvg.appendChild(textElement);
       });
       textSvg.setAttribute('width', '100%');
       combinedSvg.appendChild(textSvg);
 
+      // Trigger download of final SVG or PNG
       if (type === 'svg') {
         downloadSVG(combinedSvg, `${title}.${type.toLowerCase()}`);
       } else if (type === 'png') {
