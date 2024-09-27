@@ -8,7 +8,7 @@ import React, {
 import { connect } from 'react-redux';
 import { toast } from 'react-toastify';
 import { Portal } from 'react-portal';
-import { isArray, isString, isPlainObject } from 'lodash';
+import { isArray, isPlainObject } from 'lodash';
 import {
   Button,
   Modal,
@@ -39,7 +39,7 @@ const getPaneStyle = (active) =>
       }
     : {};
 
-const TabPlotlyJSON = forwardRef(({ active, value }, ref) => {
+const TabPlotlyJSON = forwardRef(({ active, value, setValue }, ref) => {
   const editor = useRef();
   const initialChartData = useRef({
     data: value.chartData.data || [],
@@ -94,7 +94,7 @@ const TabPlotlyJSON = forwardRef(({ active, value }, ref) => {
         frames: value.chartData.frames || [],
       });
     }
-  }, [value.chartData.data, value.chartData.layout, value.chartData.frames]);
+  }, [value]);
 
   useImperativeHandle(
     ref,
@@ -128,11 +128,28 @@ const TabPlotlyJSON = forwardRef(({ active, value }, ref) => {
       const text = await file.text();
       try {
         const json = JSON.parse(text);
-        editor.current.set({
+
+        let chartData = {
           data: json.data || [],
           layout: json.layout || {},
           frames: json.frames || [],
+        };
+
+        const [error, data_source, chart] = getProviderData({ chartData });
+
+        if (error) {
+          toast.error(
+            <Toast error title={'JSON error'} content={error.message} />,
+          );
+          return;
+        }
+
+        setValue({
+          ...value,
+          ...chart,
+          data_source,
         });
+        editor.current.set(chart);
       } catch (error) {
         toast.error(
           <Toast error title={'JSON error'} content={error.message} />,
@@ -203,10 +220,9 @@ const TabPlotlyJSON = forwardRef(({ active, value }, ref) => {
 });
 
 const TabDataSource = forwardRef((props, ref) => {
-  const { active, data_providers } = props;
+  const { active, data_providers, value, setValue } = props;
   const editor = useRef();
   const initialDataSource = useRef(props.value.data_source || {});
-  const [value, setValue] = useState(props.value);
   const [init, setInit] = useState(false);
 
   useEffect(() => {
@@ -234,6 +250,12 @@ const TabDataSource = forwardRef((props, ref) => {
     };
   }, []);
 
+  useEffect(() => {
+    if (editor.current) {
+      editor.current.set(value.data_source);
+    }
+  }, [value]);
+
   useImperativeHandle(
     ref,
     () => {
@@ -246,7 +268,6 @@ const TabDataSource = forwardRef((props, ref) => {
           }
           try {
             return {
-              ...value,
               data_source: editor.current.get(),
             };
           } catch {
@@ -343,7 +364,7 @@ const TabDataSource = forwardRef((props, ref) => {
               <DropdownItem
                 text="Use chart data"
                 onClick={() => {
-                  const [error, data, newValue] = getProviderData(value);
+                  const [error, data_source, newValue] = getProviderData(value);
 
                   if (error) {
                     toast.warn(
@@ -355,11 +376,9 @@ const TabDataSource = forwardRef((props, ref) => {
                     );
                     return;
                   }
-                  setValue({
-                    ...value,
-                    ...newValue,
-                  });
-                  editor.current.set(data);
+
+                  setValue(newValue);
+                  editor.current.set(data_source);
                 }}
               />
               {Object.keys(data_providers.data).length > 0 && (
@@ -401,10 +420,11 @@ const TabDataSource = forwardRef((props, ref) => {
 });
 
 const PlotlyJsonModal = (props) => {
-  const { value, onClose, onChange } = props;
-  const initialValue = useRef(value);
+  const { onClose, onChange } = props;
+  const initialValue = useRef(props.value);
   const tabPlotlyJson = useRef(null);
   const tabDataSource = useRef(null);
+  const [value, setValue] = useState(props.value);
   const [activeIndex, setActiveIndex] = useState(0);
   const tabs = [tabPlotlyJson, tabDataSource];
 
@@ -414,6 +434,8 @@ const PlotlyJsonModal = (props) => {
       pane: () => (
         <TabPlotlyJSON
           {...props}
+          value={value}
+          setValue={setValue}
           key={'plotly-json'}
           ref={tabPlotlyJson}
           active={activeIndex === 0}
@@ -425,6 +447,8 @@ const PlotlyJsonModal = (props) => {
       pane: () => (
         <TabDataSource
           {...props}
+          value={value}
+          setValue={setValue}
           key={'data-source'}
           ref={tabDataSource}
           active={activeIndex === 1}
@@ -451,7 +475,7 @@ const PlotlyJsonModal = (props) => {
                 ...value,
                 ...(await tabs[activeIndex].current.getValue()),
               };
-              onChange(newValue);
+              setValue(newValue);
               setActiveIndex(data.activeIndex);
             } catch {}
           }}
@@ -474,8 +498,7 @@ const PlotlyJsonModal = (props) => {
             try {
               const newValue = {
                 ...value,
-                ...(await tabPlotlyJson.current.getValue()),
-                ...(await tabDataSource.current.getValue()),
+                ...(await tabs[activeIndex].current.getValue()),
               };
               onChange(newValue);
               onClose();
