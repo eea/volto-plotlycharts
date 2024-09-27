@@ -294,7 +294,7 @@ const TabDataSource = forwardRef((props, ref) => {
         },
       };
     },
-    [value],
+    [],
   );
 
   function importJson() {
