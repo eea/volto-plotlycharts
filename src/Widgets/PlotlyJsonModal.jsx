@@ -194,6 +194,24 @@ const TabPlotlyJSON = forwardRef(({ active, value, setValue }, ref) => {
         style={{ width: '100%', height: '100%' }}
         onPaste={(e) => {
           onPasteEditor(editor);
+          const { data, layout, frames } = editor.current.get();
+          const chartData = { data, layout, frames };
+
+          const [error, data_source, chart] = getProviderData({ chartData });
+
+          if (error) {
+            toast.error(
+              <Toast error title={'JSON error'} content={error.message} />,
+            );
+            return;
+          }
+
+          setValue({
+            ...value,
+            ...chart,
+            data_source,
+          });
+          editor.current.set(chart);
         }}
       />
       {init && (
