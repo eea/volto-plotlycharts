@@ -401,6 +401,10 @@ function ConnectedChart(props) {
                     {download_button && (
                       <Download
                         chartRef={chartRef}
+                        chart={{
+                          chartData: chart,
+                          data_source: viz?.data_source,
+                        }}
                         title={title}
                         provider_data={provider_data}
                         provider_metadata={provider_metadata}

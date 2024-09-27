@@ -2,7 +2,6 @@ import React from 'react';
 import cx from 'classnames';
 import { Popup } from 'semantic-ui-react';
 import {
-  convertMatrixToCSV,
   convertToCSV,
   exportCSVFile,
   spreadCoreMetadata,
@@ -10,17 +9,18 @@ import {
 import {
   downloadSVGAsPNG,
   downloadSVG,
+  getDataSources,
 } from '@eeacms/volto-plotlycharts/helpers';
+import { getProviderData } from '@eeacms/volto-plotlycharts/helpers/plotly';
 
 export default function Download(props) {
   const {
     title,
     provider_data,
     provider_metadata,
-    providers_data,
-    providers_metadata,
     core_metadata,
     url_source,
+    chart,
     chartRef,
     filters,
   } = props;
@@ -35,10 +35,16 @@ export default function Download(props) {
     let publisher_array = [];
 
     let readme = provider_metadata?.readme ? [provider_metadata?.readme] : [];
-    const mappedData = {
-      ...provider_data,
-    };
-    Object.entries(mappedData).forEach(([key, items]) => {
+
+    const dataSources = getDataSources({
+      provider_data,
+      data_source:
+        Object.keys(chart?.data_source || {}).length > 0
+          ? chart?.data_source
+          : getProviderData(chart)[1],
+    });
+
+    Object.entries(dataSources).forEach(([key, items]) => {
       items.forEach((item, index) => {
         if (!array[index]) array[index] = {};
         array[index][key] = item;
@@ -117,7 +123,7 @@ export default function Download(props) {
       : '';
 
     const download_source_csv = convertToCSV(
-      [{ 'Downloaded from :': ' ', url: url_source }],
+      [{ 'Downloaded from: ': url_source }],
       [],
       true,
     );
@@ -133,30 +139,57 @@ export default function Download(props) {
     exportCSVFile(csv, title);
   };
 
-  const handleDownloadMultipleData = () => {
-    let array = [];
-    let readme = [];
-    Object.keys(providers_data).forEach((pKey, pIndex) => {
-      if (!array[pIndex]) array[pIndex] = [];
-      Object.entries(providers_data[pKey]).forEach(([key, items]) => {
-        items.forEach((item, index) => {
-          if (!array[pIndex][index]) array[pIndex][index] = {};
-          array[pIndex][index][key] = item;
-          index++;
-        });
-      });
-    });
-    Object.keys(providers_metadata).forEach((pKey) => {
-      if (providers_metadata[pKey].readme) {
-        readme.push(providers_metadata[pKey].readme);
-      }
-    });
-    const csv = convertMatrixToCSV(array, readme);
-    exportCSVFile(csv, title);
-  };
-
   const handleDownloadImage = (type) => {
-    const allSvgs = chartRef.current.querySelectorAll('svg');
+    const chartClone = chartRef.current.cloneNode(true);
+
+    const DEFAULT_FONT_FAMILY = 'Times New Roman';
+    const DEFAULT_FONT_SIZE = 16;
+    const DEFAULT_FILL_COLOR = 'black';
+    const PADDING_BETWEEN_TEXT = 10;
+    const TITLE_HEIGHT = 18;
+    const START_DISTANCE = 30;
+
+    // Function to replace transparent fill with white
+    const replaceTransparentWithWhite = (svgElement) => {
+      const allElements = svgElement.querySelectorAll('*');
+      allElements.forEach((element) => {
+        const styleAttr = element.getAttribute('style');
+        if (styleAttr && styleAttr.includes('fill')) {
+          const fillMatch = styleAttr.match(/fill:\s*([^;]+)/);
+          if (
+            fillMatch &&
+            (fillMatch[1] === 'transparent' ||
+              fillMatch[1] === 'rgba(0, 0, 0, 0)')
+          ) {
+            const updatedStyle = styleAttr
+              .replace(/fill:\s*transparent/g, 'fill: white')
+              .replace(/fill:\s*rgba\(0, 0, 0, 0\)/g, 'fill: white');
+            element.setAttribute('style', updatedStyle);
+          }
+        }
+      });
+    };
+
+    // Function to adjust the y position and set font styles
+    const adjustYPositionAndStyle = (textElement, newY) => {
+      textElement.setAttribute('y', newY);
+      const tspanElements = textElement.querySelectorAll('tspan');
+      tspanElements.forEach((tspan) => {
+        tspan.setAttribute('y', newY);
+        tspan.setAttribute('font-family', DEFAULT_FONT_FAMILY);
+        tspan.setAttribute('font-size', TITLE_HEIGHT);
+        tspan.setAttribute('fill', DEFAULT_FILL_COLOR);
+      });
+    };
+
+    replaceTransparentWithWhite(chartClone);
+
+    const allSvgs = chartClone.querySelectorAll('svg');
+    let maxWidth = 0;
+    let totalHeight = 0;
+    let totalTextHeight = 0;
+
+    const titleElement = allSvgs?.[1]?.querySelector('.g-gtitle');
 
     if (allSvgs.length > 0) {
       const combinedSvg = document.createElementNS(
@@ -164,74 +197,106 @@ export default function Download(props) {
         'svg',
       );
 
-      let maxWidth = 0;
-      let totalHeight = 0;
-      const textHeight = 16;
-      const paddingBetweenText = 10;
-      let totalTextHeight = 0;
+      if (filters.length > 0) {
+        totalTextHeight =
+          START_DISTANCE +
+          PADDING_BETWEEN_TEXT * 2 +
+          filters.length * (DEFAULT_FONT_SIZE + PADDING_BETWEEN_TEXT);
+      }
+
+      // Loop through each SVG and adjust layout
+      allSvgs.forEach((svg) => {
+        const svgClone = svg.cloneNode(true);
+        const svgWidth = parseInt(
+          svgClone.viewBox.baseVal.width || svgClone?.width?.baseVal?.value,
+          10,
+        );
+        const svgHeight = parseInt(
+          svgClone?.viewBox?.baseVal.height || svgClone?.height?.baseVal?.value,
+          10,
+        );
+
+        const gTitleElements = svgClone.querySelectorAll('.g-gtitle');
+        gTitleElements.forEach((titleElement) =>
+          titleElement.parentNode.removeChild(titleElement),
+        );
+
+        const originalY = svgClone.getAttribute('y') || 0;
+        const newY =
+          parseInt(originalY, 10) +
+          totalTextHeight -
+          (TITLE_HEIGHT + PADDING_BETWEEN_TEXT) *
+            (titleElement?.querySelectorAll('tspan')?.length || 0);
+
+        svgClone.setAttribute('y', newY);
+        if (svgWidth > maxWidth) maxWidth = svgWidth;
+        totalHeight = Math.max(svgHeight, totalHeight);
+
+        combinedSvg.appendChild(svgClone);
+      });
+
+      // Add background rectangle to combined SVG
+      const backgroundRect = document.createElementNS(
+        'http://www.w3.org/2000/svg',
+        'rect',
+      );
+      backgroundRect.setAttribute('x', 0);
+      backgroundRect.setAttribute('y', 0);
+      backgroundRect.setAttribute('width', maxWidth);
+      backgroundRect.setAttribute('height', totalHeight + totalTextHeight);
+      backgroundRect.setAttribute('fill', 'white');
+      combinedSvg.insertBefore(backgroundRect, combinedSvg.firstChild);
+
+      combinedSvg.setAttribute('width', maxWidth);
+      combinedSvg.setAttribute('height', totalHeight + totalTextHeight);
+      combinedSvg.setAttribute(
+        'viewBox',
+        `0 0 ${maxWidth} ${totalHeight + totalTextHeight}`,
+      );
+
+      // Add extracted titles and filters
+      const newTitleElement = document.createElementNS(
+        'http://www.w3.org/2000/svg',
+        'g',
+      );
+      adjustYPositionAndStyle(titleElement, START_DISTANCE);
+      newTitleElement.setAttribute('x', '50%');
+      newTitleElement.setAttribute('y', START_DISTANCE);
+      newTitleElement.setAttribute('text-anchor', 'middle');
+      newTitleElement.setAttribute('dominant-baseline', 'middle');
+      newTitleElement.appendChild(titleElement);
+      combinedSvg.appendChild(newTitleElement);
 
       const textSvg = document.createElementNS(
         'http://www.w3.org/2000/svg',
         'svg',
       );
-
-      if (filters.length > 0) {
-        totalTextHeight = filters.length * (textHeight + paddingBetweenText);
-      }
-
-      textSvg.setAttribute('width', '100%');
-      textSvg.setAttribute('height', totalTextHeight);
-
       filters.forEach((filter, filterIndex) => {
         const textElement = document.createElementNS(
           'http://www.w3.org/2000/svg',
           'text',
         );
-
         textElement.setAttribute('x', '50%');
         textElement.setAttribute(
           'y',
-          paddingBetweenText +
-            filterIndex * (textHeight + paddingBetweenText) +
-            textHeight / 2,
+          START_DISTANCE +
+            (titleElement?.children?.length > 0
+              ? TITLE_HEIGHT + PADDING_BETWEEN_TEXT * 3 + PADDING_BETWEEN_TEXT
+              : 0) +
+            filterIndex * (DEFAULT_FONT_SIZE + PADDING_BETWEEN_TEXT),
         );
         textElement.setAttribute('text-anchor', 'middle');
         textElement.setAttribute('dominant-baseline', 'middle');
-        textElement.setAttribute('fill', 'black');
-        textElement.setAttribute('font-size', '16');
+        textElement.setAttribute('fill', DEFAULT_FILL_COLOR);
+        textElement.setAttribute('font-size', `${DEFAULT_FONT_SIZE}`);
         textElement.setAttribute('font-family', 'sans-serif');
         textElement.textContent = `${filter.label}: ${filter.data.label}`;
-
         textSvg.appendChild(textElement);
       });
-
+      textSvg.setAttribute('width', '100%');
       combinedSvg.appendChild(textSvg);
 
-      const shiftY = 10 * filters.length;
-      allSvgs.forEach((svg, index) => {
-        const svgClone = svg.cloneNode(true);
-
-        const svgWidth = parseInt(
-          svgClone.viewBox.baseVal.width || svgClone?.width?.baseVal?.value,
-        );
-        const svgHeight = parseInt(
-          svgClone?.viewBox?.baseVal.height || svgClone?.height?.baseVal?.value,
-        );
-
-        if (svgWidth > maxWidth) maxWidth = svgWidth;
-
-        const originalY = svgClone.getAttribute('y') || 0;
-        const newY = parseInt(originalY) + shiftY;
-        svgClone.setAttribute('y', newY + totalTextHeight);
-
-        totalHeight += svgHeight;
-
-        combinedSvg.appendChild(svgClone);
-      });
-
-      combinedSvg.setAttribute('width', maxWidth);
-      combinedSvg.setAttribute('height', totalHeight + totalTextHeight);
-
+      // Trigger download of final SVG or PNG
       if (type === 'svg') {
         downloadSVG(combinedSvg, `${title}.${type.toLowerCase()}`);
       } else if (type === 'png') {
@@ -268,11 +333,7 @@ export default function Download(props) {
               <div className="type">
                 <button
                   onClick={() => {
-                    if (provider_data && !providers_data) {
-                      handleDownloadData();
-                    } else if (providers_data) {
-                      handleDownloadMultipleData();
-                    }
+                    handleDownloadData();
                   }}
                 >
                   <span>CSV</span>
