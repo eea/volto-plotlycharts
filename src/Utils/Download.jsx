@@ -2,7 +2,6 @@ import React from 'react';
 import cx from 'classnames';
 import { Popup } from 'semantic-ui-react';
 import {
-  convertMatrixToCSV,
   convertToCSV,
   exportCSVFile,
   spreadCoreMetadata,
@@ -10,17 +9,18 @@ import {
 import {
   downloadSVGAsPNG,
   downloadSVG,
+  getDataSources,
 } from '@eeacms/volto-plotlycharts/helpers';
+import { getProviderData } from '@eeacms/volto-plotlycharts/helpers/plotly';
 
 export default function Download(props) {
   const {
     title,
     provider_data,
     provider_metadata,
-    providers_data,
-    providers_metadata,
     core_metadata,
     url_source,
+    chart,
     chartRef,
     filters,
   } = props;
@@ -35,10 +35,16 @@ export default function Download(props) {
     let publisher_array = [];
 
     let readme = provider_metadata?.readme ? [provider_metadata?.readme] : [];
-    const mappedData = {
-      ...provider_data,
-    };
-    Object.entries(mappedData).forEach(([key, items]) => {
+
+    const dataSources = getDataSources({
+      provider_data,
+      data_source:
+        Object.keys(chart?.data_source || {}).length > 0
+          ? chart?.data_source
+          : getProviderData(chart)[1],
+    });
+
+    Object.entries(dataSources).forEach(([key, items]) => {
       items.forEach((item, index) => {
         if (!array[index]) array[index] = {};
         array[index][key] = item;
@@ -117,7 +123,7 @@ export default function Download(props) {
       : '';
 
     const download_source_csv = convertToCSV(
-      [{ 'Downloaded from :': ' ', url: url_source }],
+      [{ 'Downloaded from: ': url_source }],
       [],
       true,
     );
@@ -130,28 +136,6 @@ export default function Download(props) {
       geo_coverage_csv +
       temporal_coverage_csv +
       data_csv;
-    exportCSVFile(csv, title);
-  };
-
-  const handleDownloadMultipleData = () => {
-    let array = [];
-    let readme = [];
-    Object.keys(providers_data).forEach((pKey, pIndex) => {
-      if (!array[pIndex]) array[pIndex] = [];
-      Object.entries(providers_data[pKey]).forEach(([key, items]) => {
-        items.forEach((item, index) => {
-          if (!array[pIndex][index]) array[pIndex][index] = {};
-          array[pIndex][index][key] = item;
-          index++;
-        });
-      });
-    });
-    Object.keys(providers_metadata).forEach((pKey) => {
-      if (providers_metadata[pKey].readme) {
-        readme.push(providers_metadata[pKey].readme);
-      }
-    });
-    const csv = convertMatrixToCSV(array, readme);
     exportCSVFile(csv, title);
   };
 
@@ -349,11 +333,7 @@ export default function Download(props) {
               <div className="type">
                 <button
                   onClick={() => {
-                    if (provider_data && !providers_data) {
-                      handleDownloadData();
-                    } else if (providers_data) {
-                      handleDownloadMultipleData();
-                    }
+                    handleDownloadData();
                   }}
                 >
                   <span>CSV</span>

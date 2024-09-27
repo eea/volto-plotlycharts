@@ -25,6 +25,7 @@ import {
   validateEditor,
   onPasteEditor,
 } from '@eeacms/volto-plotlycharts/helpers/editor';
+import { getProviderData } from '@eeacms/volto-plotlycharts/helpers/plotly';
 
 import 'jsoneditor/dist/jsoneditor.min.css';
 
@@ -118,6 +119,57 @@ const TabPlotlyJSON = forwardRef(({ active, value }, ref) => {
     [],
   );
 
+  function importJson() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    input.onchange = async (e) => {
+      const file = e.target.files[0];
+      const text = await file.text();
+      try {
+        const json = JSON.parse(text);
+        editor.current.set({
+          data: json.data || [],
+          layout: json.layout || {},
+          frames: json.frames || [],
+        });
+      } catch (error) {
+        toast.error(
+          <Toast error title={'JSON error'} content={error.message} />,
+        );
+      }
+    };
+    input.click();
+  }
+
+  async function exportJson() {
+    const err = await editor.current.validate();
+
+    if (err.length) {
+      toast.warn(
+        <Toast
+          error
+          title={'JSON validation'}
+          content={'Please make sure all the fields are in the correct format'}
+        />,
+      );
+      return;
+    }
+    try {
+      const element = document.createElement('a');
+      element.setAttribute(
+        'href',
+        'data:text/plain;charset=utf-8,' +
+          encodeURIComponent(editor.current.getText()),
+      );
+      element.setAttribute('download', 'plotly.json');
+      element.style.display = 'none';
+      element.click();
+    } catch (error) {
+      toast.error(<Toast error title={'JSON error'} content={error.message} />);
+    }
+  }
+
   return (
     <Tab.Pane active={active} style={getPaneStyle(active)}>
       <div
@@ -140,73 +192,8 @@ const TabPlotlyJSON = forwardRef(({ active, value }, ref) => {
             direction="left"
           >
             <DropdownMenu>
-              <DropdownItem
-                text="Import json"
-                onClick={() => {
-                  const input = document.createElement('input');
-                  input.type = 'file';
-                  input.accept = '.json';
-                  input.onchange = async (e) => {
-                    const file = e.target.files[0];
-                    const text = await file.text();
-                    try {
-                      const json = JSON.parse(text);
-                      editor.current.set({
-                        data: json.data || [],
-                        layout: json.layout || {},
-                        frames: json.frames || [],
-                      });
-                    } catch (error) {
-                      toast.error(
-                        <Toast
-                          error
-                          title={'JSON error'}
-                          content={error.message}
-                        />,
-                      );
-                    }
-                  };
-                  input.click();
-                }}
-              />
-              <DropdownItem
-                text="Export json"
-                onClick={async () => {
-                  const err = await editor.current.validate();
-
-                  if (err.length) {
-                    toast.warn(
-                      <Toast
-                        error
-                        title={'JSON validation'}
-                        content={
-                          'Please make sure all the fields are in the correct format'
-                        }
-                      />,
-                    );
-                    return;
-                  }
-                  try {
-                    const element = document.createElement('a');
-                    element.setAttribute(
-                      'href',
-                      'data:text/plain;charset=utf-8,' +
-                        encodeURIComponent(editor.current.getText()),
-                    );
-                    element.setAttribute('download', 'plotly.json');
-                    element.style.display = 'none';
-                    element.click();
-                  } catch (error) {
-                    toast.error(
-                      <Toast
-                        error
-                        title={'JSON error'}
-                        content={error.message}
-                      />,
-                    );
-                  }
-                }}
-              />
+              <DropdownItem text="Import json" onClick={importJson} />
+              <DropdownItem text="Export json" onClick={exportJson} />
             </DropdownMenu>
           </Dropdown>
         </Portal>
@@ -215,9 +202,11 @@ const TabPlotlyJSON = forwardRef(({ active, value }, ref) => {
   );
 });
 
-const TabDataSource = forwardRef(({ active, data_providers, value }, ref) => {
+const TabDataSource = forwardRef((props, ref) => {
+  const { active, data_providers } = props;
   const editor = useRef();
-  const initialDataSource = useRef(value.data_source || {});
+  const initialDataSource = useRef(props.value.data_source || {});
+  const [value, setValue] = useState(props.value);
   const [init, setInit] = useState(false);
 
   useEffect(() => {
@@ -257,6 +246,7 @@ const TabDataSource = forwardRef(({ active, data_providers, value }, ref) => {
           }
           try {
             return {
+              ...value,
               data_source: editor.current.get(),
             };
           } catch {
@@ -265,8 +255,65 @@ const TabDataSource = forwardRef(({ active, data_providers, value }, ref) => {
         },
       };
     },
-    [],
+    [value],
   );
+
+  function importJson() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    input.onchange = async (e) => {
+      const file = e.target.files[0];
+      const text = await file.text();
+      try {
+        const json = JSON.parse(text);
+        const data = {};
+
+        if (isPlainObject(json)) {
+          Object.keys(json).forEach((key) => {
+            if (isArray(json[key])) {
+              data[key] = json[key];
+            }
+          });
+        }
+
+        editor.current.set(data);
+      } catch (error) {
+        toast.error(
+          <Toast error title={'JSON error'} content={error.message} />,
+        );
+      }
+    };
+    input.click();
+  }
+
+  async function exportJson() {
+    const err = await editor.current.validate();
+
+    if (err.length) {
+      toast.warn(
+        <Toast
+          error
+          title={'JSON validation'}
+          content={'Please make sure all the fields are in the correct format'}
+        />,
+      );
+      return;
+    }
+    try {
+      const element = document.createElement('a');
+      element.setAttribute(
+        'href',
+        'data:text/plain;charset=utf-8,' +
+          encodeURIComponent(editor.current.getText()),
+      );
+      element.setAttribute('download', 'data.json');
+      element.style.display = 'none';
+      element.click();
+    } catch (error) {
+      toast.error(<Toast error title={'JSON error'} content={error.message} />);
+    }
+  }
 
   return (
     <Tab.Pane active={active} style={getPaneStyle(active)}>
@@ -290,118 +337,29 @@ const TabDataSource = forwardRef(({ active, data_providers, value }, ref) => {
             direction="left"
           >
             <DropdownMenu>
+              <DropdownItem text="Import json" onClick={importJson} />
+              <DropdownItem text="Export json" onClick={exportJson} />
+              <DropdownDivider />
               <DropdownItem
-                text="Import json"
+                text="Use chart data"
                 onClick={() => {
-                  const input = document.createElement('input');
-                  input.type = 'file';
-                  input.accept = '.json';
-                  input.onchange = async (e) => {
-                    const file = e.target.files[0];
-                    const text = await file.text();
-                    try {
-                      const json = JSON.parse(text);
-                      const data = {};
+                  const [error, data, newValue] = getProviderData(value);
 
-                      if (isPlainObject(json)) {
-                        Object.keys(json).forEach((key) => {
-                          if (isArray(json[key])) {
-                            data[key] = json[key];
-                          }
-                        });
-                      }
-
-                      editor.current.set(data);
-                    } catch (error) {
-                      toast.error(
-                        <Toast
-                          error
-                          title={'JSON error'}
-                          content={error.message}
-                        />,
-                      );
-                    }
-                  };
-                  input.click();
-                }}
-              />
-              <DropdownItem
-                text="Export json"
-                onClick={async () => {
-                  const err = await editor.current.validate();
-
-                  if (err.length) {
+                  if (error) {
                     toast.warn(
-                      <Toast
-                        error
-                        title={'JSON validation'}
-                        content={
-                          'Please make sure all the fields are in the correct format'
-                        }
-                      />,
-                    );
-                    return;
-                  }
-                  try {
-                    const element = document.createElement('a');
-                    element.setAttribute(
-                      'href',
-                      'data:text/plain;charset=utf-8,' +
-                        encodeURIComponent(editor.current.getText()),
-                    );
-                    element.setAttribute('download', 'data.json');
-                    element.style.display = 'none';
-                    element.click();
-                  } catch (error) {
-                    toast.error(
                       <Toast
                         error
                         title={'JSON error'}
                         content={error.message}
                       />,
                     );
+                    return;
                   }
-                }}
-              />
-              <DropdownDivider />
-              <DropdownItem
-                text="Use chart data"
-                onClick={() => {
-                  const data = {};
-                  if (value.chartData?.data) {
-                    value.chartData.data.forEach((trace) => {
-                      Object.keys(trace).forEach((traceKey) => {
-                        const originalColumnName = traceKey.replace(/src$/, '');
-                        if (
-                          !traceKey.endsWith('src') &&
-                          isArray(trace[traceKey])
-                        ) {
-                          data[traceKey] = [...trace[traceKey]];
-                          return;
-                        }
-                        if (
-                          traceKey.endsWith('src') &&
-                          Object.keys(trace).includes(originalColumnName) &&
-                          isString(trace[traceKey]) &&
-                          isArray(trace[originalColumnName])
-                        ) {
-                          delete data[originalColumnName];
-                          data[trace[traceKey]] = [
-                            ...trace[originalColumnName],
-                          ];
-                        }
-                      });
-                    });
-                    editor.current.set(data);
-                  } else {
-                    toast.warn(
-                      <Toast
-                        error
-                        title={'JSON error'}
-                        content={'No chart data found'}
-                      />,
-                    );
-                  }
+                  setValue({
+                    ...value,
+                    ...newValue,
+                  });
+                  editor.current.set(data);
                 }}
               />
               {Object.keys(data_providers.data).length > 0 && (

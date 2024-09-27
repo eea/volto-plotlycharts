@@ -51,6 +51,9 @@ const insertEmptyRows = (matrix, rows) => {
 };
 
 function convertToCSV(array, readme = [], noHeaders = false) {
+  if (!array.length) {
+    return '';
+  }
   const headers = Object.keys(array[0]);
   let str = getHeaders(headers, noHeaders);
 
