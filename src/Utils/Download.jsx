@@ -169,7 +169,6 @@ export default function Download(props) {
       });
     };
 
-
     const adjustYPositionAndStyle = (textElement, newY) => {
       textElement.setAttribute('y', newY);
       const tspanElements = textElement.querySelectorAll('tspan');
@@ -184,9 +183,7 @@ export default function Download(props) {
           ? currentStyle.replace(/fill:\s*[^;]+/, `fill: ${DEFAULT_FILL_COLOR}`)
           : `${currentStyle}; fill: ${DEFAULT_FILL_COLOR}`;
 
-
         tspan.setAttribute('style', updatedStyle);
-
       });
       const textElements = textElement.querySelectorAll('text');
       textElements.forEach((tspan) => {
@@ -196,14 +193,11 @@ export default function Download(props) {
         tspan.setAttribute('fill', DEFAULT_FILL_COLOR);
         let currentStyle = tspan.getAttribute('style') || '';
 
-
         const updatedStyle = currentStyle.includes('fill')
           ? currentStyle.replace(/fill:\s*[^;]+/, `fill: ${DEFAULT_FILL_COLOR}`)
           : `${currentStyle}; fill: ${DEFAULT_FILL_COLOR}`;
 
-
         tspan.setAttribute('style', updatedStyle);
-
       });
     };
 
@@ -215,8 +209,9 @@ export default function Download(props) {
     let totalTextHeight = 0;
 
     const titleElement = allSvgs?.[1]?.querySelector('.g-gtitle');
-    const totalTitileHeight = titleElement.children?.[0] ? chartRef.current.querySelector('.g-gtitle').getBBox().height : 0;
-
+    const totalTitileHeight = titleElement.children?.[0]
+      ? chartRef.current.querySelector('.g-gtitle').getBBox().height
+      : 0;
 
     if (allSvgs.length > 0) {
       const combinedSvg = document.createElementNS(
@@ -227,7 +222,8 @@ export default function Download(props) {
       if (filters.length > 0) {
         totalTextHeight =
           START_DISTANCE +
-          filters.length * (DEFAULT_FONT_SIZE + PADDING_BETWEEN_TEXT) - PADDING_BETWEEN_TEXT;
+          filters.length * (DEFAULT_FONT_SIZE + PADDING_BETWEEN_TEXT) -
+          PADDING_BETWEEN_TEXT;
       }
 
       // Loop through each SVG and adjust layout
@@ -248,8 +244,10 @@ export default function Download(props) {
         );
 
         const originalY = svgClone.getAttribute('y') || 0;
-        const newY = originalY +
-          filters.length * (DEFAULT_FONT_SIZE + PADDING_BETWEEN_TEXT) + PADDING_BETWEEN_TEXT
+        const newY =
+          originalY +
+          filters.length * (DEFAULT_FONT_SIZE + PADDING_BETWEEN_TEXT) +
+          PADDING_BETWEEN_TEXT;
         svgClone.setAttribute('y', newY);
         if (svgWidth > maxWidth) maxWidth = svgWidth;
         totalHeight = Math.max(svgHeight, totalHeight);
@@ -299,12 +297,18 @@ export default function Download(props) {
           'http://www.w3.org/2000/svg',
           'text',
         );
-        textElement.setAttribute('x', titleElement.children?.[0] ? titleElement.children?.[0].getAttribute('x') : '50%');
+        textElement.setAttribute(
+          'x',
+          titleElement.children?.[0]
+            ? titleElement.children?.[0].getAttribute('x')
+            : '50%',
+        );
         textElement.setAttribute(
           'y',
           START_DISTANCE +
-          totalTitileHeight + PADDING_BETWEEN_TEXT +
-          filterIndex * (DEFAULT_FONT_SIZE + PADDING_BETWEEN_TEXT),
+            totalTitileHeight +
+            PADDING_BETWEEN_TEXT +
+            filterIndex * (DEFAULT_FONT_SIZE + PADDING_BETWEEN_TEXT),
         );
         textElement.setAttribute('text-anchor', 'middle');
         textElement.setAttribute('dominant-baseline', 'middle');
