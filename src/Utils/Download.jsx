@@ -141,7 +141,6 @@ export default function Download(props) {
 
   const handleDownloadImage = (type) => {
     const chartClone = chartRef.current.cloneNode(true);
-
     const DEFAULT_FONT_FAMILY = 'Times New Roman';
     const DEFAULT_FONT_SIZE = 16;
     const DEFAULT_FILL_COLOR = 'black';
@@ -170,7 +169,6 @@ export default function Download(props) {
       });
     };
 
-    // Function to adjust the y position and set font styles
     const adjustYPositionAndStyle = (textElement, newY) => {
       textElement.setAttribute('y', newY);
       const tspanElements = textElement.querySelectorAll('tspan');
@@ -179,6 +177,27 @@ export default function Download(props) {
         tspan.setAttribute('font-family', DEFAULT_FONT_FAMILY);
         tspan.setAttribute('font-size', TITLE_HEIGHT);
         tspan.setAttribute('fill', DEFAULT_FILL_COLOR);
+        let currentStyle = tspan.getAttribute('style') || '';
+
+        const updatedStyle = currentStyle.includes('fill')
+          ? currentStyle.replace(/fill:\s*[^;]+/, `fill: ${DEFAULT_FILL_COLOR}`)
+          : `${currentStyle}; fill: ${DEFAULT_FILL_COLOR}`;
+
+        tspan.setAttribute('style', updatedStyle);
+      });
+      const textElements = textElement.querySelectorAll('text');
+      textElements.forEach((tspan) => {
+        tspan.setAttribute('y', newY);
+        tspan.setAttribute('font-family', DEFAULT_FONT_FAMILY);
+        tspan.setAttribute('font-size', TITLE_HEIGHT);
+        tspan.setAttribute('fill', DEFAULT_FILL_COLOR);
+        let currentStyle = tspan.getAttribute('style') || '';
+
+        const updatedStyle = currentStyle.includes('fill')
+          ? currentStyle.replace(/fill:\s*[^;]+/, `fill: ${DEFAULT_FILL_COLOR}`)
+          : `${currentStyle}; fill: ${DEFAULT_FILL_COLOR}`;
+
+        tspan.setAttribute('style', updatedStyle);
       });
     };
 
@@ -190,6 +209,9 @@ export default function Download(props) {
     let totalTextHeight = 0;
 
     const titleElement = allSvgs?.[1]?.querySelector('.g-gtitle');
+    const totalTitileHeight = titleElement.children?.[0]
+      ? chartRef.current.querySelector('.g-gtitle').getBBox().height
+      : 0;
 
     if (allSvgs.length > 0) {
       const combinedSvg = document.createElementNS(
@@ -200,8 +222,8 @@ export default function Download(props) {
       if (filters.length > 0) {
         totalTextHeight =
           START_DISTANCE +
-          PADDING_BETWEEN_TEXT * 2 +
-          filters.length * (DEFAULT_FONT_SIZE + PADDING_BETWEEN_TEXT);
+          filters.length * (DEFAULT_FONT_SIZE + PADDING_BETWEEN_TEXT) -
+          PADDING_BETWEEN_TEXT;
       }
 
       // Loop through each SVG and adjust layout
@@ -223,11 +245,9 @@ export default function Download(props) {
 
         const originalY = svgClone.getAttribute('y') || 0;
         const newY =
-          parseInt(originalY, 10) +
-          totalTextHeight -
-          (TITLE_HEIGHT + PADDING_BETWEEN_TEXT) *
-            (titleElement?.querySelectorAll('tspan')?.length || 0);
-
+          originalY +
+          filters.length * (DEFAULT_FONT_SIZE + PADDING_BETWEEN_TEXT) +
+          PADDING_BETWEEN_TEXT;
         svgClone.setAttribute('y', newY);
         if (svgWidth > maxWidth) maxWidth = svgWidth;
         totalHeight = Math.max(svgHeight, totalHeight);
@@ -271,18 +291,23 @@ export default function Download(props) {
         'http://www.w3.org/2000/svg',
         'svg',
       );
+
       filters.forEach((filter, filterIndex) => {
         const textElement = document.createElementNS(
           'http://www.w3.org/2000/svg',
           'text',
         );
-        textElement.setAttribute('x', '50%');
+        textElement.setAttribute(
+          'x',
+          titleElement.children?.[0]
+            ? titleElement.children?.[0].getAttribute('x')
+            : '50%',
+        );
         textElement.setAttribute(
           'y',
           START_DISTANCE +
-            (titleElement?.children?.length > 0
-              ? TITLE_HEIGHT + PADDING_BETWEEN_TEXT * 3 + PADDING_BETWEEN_TEXT
-              : 0) +
+            totalTitileHeight +
+            PADDING_BETWEEN_TEXT +
             filterIndex * (DEFAULT_FONT_SIZE + PADDING_BETWEEN_TEXT),
         );
         textElement.setAttribute('text-anchor', 'middle');
