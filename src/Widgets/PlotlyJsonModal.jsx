@@ -49,6 +49,17 @@ const TabPlotlyJSON = forwardRef(({ active, value, setValue }, ref) => {
   const [init, setInit] = useState(false);
 
   useEffect(() => {
+    if (!editor.current) {
+      return;
+    }
+    editor.current.set({
+      data: value.chartData.data || [],
+      layout: value.chartData.layout || {},
+      frames: value.chartData.frames || [],
+    });
+  }, [value]);
+
+  useEffect(() => {
     initEditor({
       el: 'jsoneditor-plotlyjson',
       editor,
@@ -85,16 +96,6 @@ const TabPlotlyJSON = forwardRef(({ active, value, setValue }, ref) => {
       destroyEditor(editorCurr);
     };
   }, []);
-
-  useEffect(() => {
-    if (editor.current) {
-      editor.current.set({
-        data: value.chartData.data || [],
-        layout: value.chartData.layout || {},
-        frames: value.chartData.frames || [],
-      });
-    }
-  }, [value]);
 
   useImperativeHandle(
     ref,
@@ -244,6 +245,13 @@ const TabDataSource = forwardRef((props, ref) => {
   const [init, setInit] = useState(false);
 
   useEffect(() => {
+    if (!editor.current) {
+      return;
+    }
+    editor.current.set(value.data_source || {});
+  }, [value]);
+
+  useEffect(() => {
     initEditor({
       el: 'jsoneditor-datasource',
       editor,
@@ -267,12 +275,6 @@ const TabDataSource = forwardRef((props, ref) => {
       destroyEditor(editorCurr);
     };
   }, []);
-
-  useEffect(() => {
-    if (editor.current) {
-      editor.current.set(value.data_source);
-    }
-  }, [value]);
 
   useImperativeHandle(
     ref,
