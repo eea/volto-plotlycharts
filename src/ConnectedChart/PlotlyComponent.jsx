@@ -3,6 +3,12 @@ import loadable from '@loadable/component';
 
 const LoadablePlotly = loadable(() => import('react-plotly.js'));
 
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+const animationsMS = {
+  tree: 1000,
+};
+
 const PlotlyComponent = ({
   chartRef,
   data,
@@ -11,7 +17,7 @@ const PlotlyComponent = ({
   history,
   setInitialized,
 }) => {
-  const handleChartClick = (trace, layout, history) => {
+  const handleChartClick = async (trace, layout) => {
     const { customLink, clickmode, meta = [] } = layout;
 
     if (customLink && clickmode !== 'none') {
@@ -25,12 +31,14 @@ const PlotlyComponent = ({
       } = trace?.points[0] || {};
 
       const { type, parents = [], y = [], x = [] } = data;
+
+      // Wait for animation to finish
+      await sleep(animationsMS[type] || 0);
+
       const shouldRedirect = type
         ? type !== 'treemap'
           ? true
           : parents.indexOf(id) === -1
-          ? true
-          : false
         : false;
 
       const shouldComposeLinks = meta.length > 0;
@@ -90,7 +98,7 @@ const PlotlyComponent = ({
         editable: false,
         responsive: true,
       }}
-      onClick={(trace) => handleChartClick(trace, layout, history)}
+      onClick={(trace) => handleChartClick(trace, layout)}
       onHover={(trace) => handleChartHover(trace, layout)}
       onUnhover={(trace) => handleChartUnhover(trace, layout)}
       style={{
