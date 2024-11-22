@@ -11,7 +11,7 @@ export const preview_image = (middlewares) => [
 
     const state = store.getState();
     const contentData = state.content.data;
-    const lastPreviewImage = Object.keys(action?.request?.data).includes(
+    const lastPreviewImage = Object.keys(action?.request?.data || {}).includes(
       'preview_image',
     )
       ? action?.request?.data.preview_image
