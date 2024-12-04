@@ -3,6 +3,8 @@ import { mapKeys } from 'lodash';
 import { Button, Modal, ModalActions, ModalHeader } from 'semantic-ui-react';
 import config from '@plone/volto/registry';
 
+import { getProviderData } from '@eeacms/volto-plotlycharts/helpers/plotly';
+
 let chClosed = false;
 
 const Jupyter = (props) => {
@@ -19,12 +21,19 @@ const Jupyter = (props) => {
       if (mode === 'edit' && event.data.type === 'jupyter-ch:setContent') {
         mapKeys(event.data.content, (contentValue, key) => {
           if (key === id) {
-            onChange(id, {
+            const newValue = {
               ...(value || {}),
+              ...(contentValue || {}),
               chartData: {
                 ...(value?.chartData || {}),
                 ...(contentValue?.chartData || {}),
               },
+            };
+            const [, data_source] = getProviderData(newValue);
+
+            onChange(id, {
+              ...(newValue || {}),
+              data_source,
             });
           } else {
             onChange(key, contentValue);
