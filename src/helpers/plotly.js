@@ -47,7 +47,7 @@ export function getProviderData(value) {
       let legendTitle = trace.legendgroup || trace.legendgrouptitle?.text;
       legendTitle = legendTitle ? `${legendTitle.split(' ').join('_')}_` : '';
       const name =
-        key === 'y'
+        key === 'y' && trace.name
           ? `${legendTitle}${trace.name.split(' ').join('_')}`
           : `${legendTitle}${key}`;
       occurences[name] = (occurences[name] || 0) + 1;
