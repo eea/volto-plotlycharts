@@ -230,11 +230,12 @@ export default function Download(props) {
       allSvgs.forEach((svg) => {
         const svgClone = svg.cloneNode(true);
         const svgWidth = parseInt(
-          svgClone.viewBox.baseVal.width || svgClone?.width?.baseVal?.value,
+          svgClone?.viewBox?.baseVal?.width || svgClone?.width?.baseVal?.value,
           10,
         );
         const svgHeight = parseInt(
-          svgClone?.viewBox?.baseVal.height || svgClone?.height?.baseVal?.value,
+          svgClone?.viewBox?.baseVal?.height ||
+            svgClone?.height?.baseVal?.value,
           10,
         );
 
