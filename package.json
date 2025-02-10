@@ -1,6 +1,6 @@
 {
   "name": "@eeacms/volto-plotlycharts",
-  "version": "10.0.15",
+  "version": "11.0.0",
   "description": "Plotly Charts and Editor integration for Volto",
   "main": "src/index.js",
   "author": "European Environment Agency: IDM2 A-Team",
@@ -28,9 +28,9 @@
     "@eeacms/volto-matomo": "*",
     "@plone/scripts": "*",
     "jsoneditor": "10.1.0",
-    "plotly.js": "^2.35.2",
+    "plotly.js": "^2.35.3",
     "react-chart-editor": "0.46.1",
-    "react-colorscales": "github:eea/react-colorscales#1.0.2",
+    "react-colorscales": "github:eea/react-colorscales#2.0.0",
     "react-plotly.js": "2.6.0"
   },
   "devDependencies": {
@@ -44,7 +44,7 @@
     "md5": "^2.3.0"
   },
   "resolutions": {
-    "react-colorscales": "github:eea/react-colorscales#1.0.2"
+    "react-colorscales": "github:eea/react-colorscales#2.0.0"
   },
   "lint-staged": {
     "src/**/*.{js,jsx,ts,tsx,json}": [

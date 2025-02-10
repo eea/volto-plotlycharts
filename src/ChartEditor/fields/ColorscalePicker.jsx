@@ -3,20 +3,7 @@ import PropTypes from 'prop-types';
 import { connectToContainer } from 'react-chart-editor/lib';
 import Field from 'react-chart-editor/lib/components/fields/Field';
 
-import { ColorPicker } from '../widgets';
-
-// const EDITOR_ACTIONS = {
-//   UPDATE_TRACES: 'plotly-editor-update-traces',
-//   ADD_TRACE: 'plotly-editor-add-trace',
-//   DELETE_TRACE: 'plotly-editor-delete-trace',
-//   UPDATE_LAYOUT: 'plotly-editor-update-layout',
-//   DELETE_ANNOTATION: 'plotly-editor-delete-annotation',
-//   DELETE_SHAPE: 'plotly-editor-delete-shape',
-//   DELETE_IMAGE: 'plotly-editor-delete-image',
-//   DELETE_RANGESELECTOR: 'plotly-editor-delete-rangeselector',
-//   DELETE_TRANSFORM: 'plotly-editor-delete-transform',
-//   MOVE_TO: 'plotly-editor-move-to',
-// };
+import { ColorscalePicker } from '../widgets';
 
 export class UnconnectedColorscalePicker extends Component {
   constructor() {
@@ -34,16 +21,16 @@ export class UnconnectedColorscalePicker extends Component {
           }
           return [step, c];
         }),
-        colorscaleType,
       );
-      // TODO: Check why this gives an error
-      // this.context.onUpdate({
-      //   type: EDITOR_ACTIONS.UPDATE_TRACES,
-      //   payload: {
-      //     update: { autocolorscale: false },
-      //     traceIndexes: [this.props.fullContainer.index],
-      //   },
-      // });
+      if (this.props.fullContainer.index !== undefined) {
+        this.context.onUpdate({
+          type: 'plotly-editor-update-traces',
+          payload: {
+            update: { autocolorscale: false },
+            traceIndexes: [this.props.fullContainer.index],
+          },
+        });
+      }
     }
   }
 
@@ -55,7 +42,7 @@ export class UnconnectedColorscalePicker extends Component {
 
     return (
       <Field {...this.props} fieldContainerClassName="field__colorscale">
-        <ColorPicker
+        <ColorscalePicker
           selected={colorscale}
           onColorscaleChange={this.onUpdate}
           initialCategory={this.props.initialCategory}

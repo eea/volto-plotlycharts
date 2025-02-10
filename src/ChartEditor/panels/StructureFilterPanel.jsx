@@ -16,7 +16,7 @@ function getFilterOptions(rows) {
   }));
 }
 
-const FilterPanel = (props) => {
+const StructureFilterPanel = (props) => {
   return (
     <PlotlyPanel
       addAction={{
@@ -141,4 +141,4 @@ const FilterPanel = (props) => {
   );
 };
 
-export default FilterPanel;
+export default StructureFilterPanel;

@@ -8,9 +8,8 @@ import {
   PlotlySection,
   Dropdown,
   TraceRequiredPanel,
-  TextEditor,
-} from 'react-chart-editor';
-import { ColorPicker } from '../fields';
+} from 'react-chart-editor/lib/components';
+import { ColorPicker, TextEditor } from '../fields';
 
 const StyleLegendPanel = (props, { localize: _ }) => (
   <TraceRequiredPanel>
@@ -33,6 +32,11 @@ const StyleLegendPanel = (props, { localize: _ }) => (
         <FontSelector label={_('Typeface')} attr="legend.font.family" />
         <Numeric label={_('Size')} attr="legend.font.size" units="px" />
         <ColorPicker label={_('Color')} attr="legend.font.color" />
+        <Numeric
+          label={_('Indentation')}
+          attr="legend.indentation"
+          units="px"
+        />
       </PlotlySection>
       <PlotlySection name={_('Legend Box')}>
         <Numeric
@@ -55,7 +59,14 @@ const StyleLegendPanel = (props, { localize: _ }) => (
             { label: _('Right'), value: 'right' },
           ]}
         />
-        <Numeric label={_('Position')} showSlider step={0.02} attr="legend.x" />
+        <Numeric
+          label={_('Position')}
+          showSlider
+          step={0.02}
+          min={-1}
+          max={2}
+          attr="legend.x"
+        />
       </PlotlySection>
       <PlotlySection name={_('Vertical Positioning')}>
         <Dropdown
@@ -69,7 +80,14 @@ const StyleLegendPanel = (props, { localize: _ }) => (
             { label: _('Bottom'), value: 'bottom' },
           ]}
         />
-        <Numeric label={_('Position')} showSlider step={0.02} attr="legend.y" />
+        <Numeric
+          label={_('Position')}
+          showSlider
+          step={0.02}
+          min={-1}
+          max={2}
+          attr="legend.y"
+        />
         <Dropdown
           label={_('Text Alignment')}
           clearable={false}

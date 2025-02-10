@@ -1,9 +1,12 @@
+export { default as AxesSelector } from './AxesSelector';
+export { default as AxesCreator } from './AxesCreator';
 export { default as ColorPicker } from './ColorPicker';
 export { default as ColorscalePicker } from './ColorscalePicker';
 export { default as ColorwayPicker } from './ColorwayPicker';
+export { default as HoverColor } from './HoverColor';
 export { default as MarkerColor } from './MarkerColor';
 export { default as MultiColorPicker } from './MultiColorPicker';
-export { default as Numeric } from './Numeric';
-export { default as Radio } from './Radio';
-export { default as VisibilitySelect } from './VisibilitySelect';
+export { default as TextEditor } from './TextEditor';
 export { default as TextInput } from './TextInput';
+export { default as TraceSelector } from './TraceSelector';
+export { default as VisibilitySelect } from './VisibilitySelect';
