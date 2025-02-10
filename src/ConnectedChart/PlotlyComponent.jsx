@@ -1,7 +1,7 @@
 import React from 'react';
 import loadable from '@loadable/component';
 
-const LoadablePlotly = loadable(() => import('react-plotly.js'));
+const Plot = loadable(() => import('react-plotly.js'));
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -85,10 +85,10 @@ const PlotlyComponent = ({
   };
 
   return (
-    <LoadablePlotly
+    <Plot
       data={data}
       layout={layout}
-      frames={frames || []}
+      frames={frames}
       onInitialized={(_, chartEl) => {
         setInitialized(true);
         chartRef.current = chartEl;
@@ -102,6 +102,8 @@ const PlotlyComponent = ({
       onHover={(trace) => handleChartHover(trace, layout)}
       onUnhover={(trace) => handleChartUnhover(trace, layout)}
       style={{
+        width: '100%',
+        height: '100%',
         position: 'relative',
         display: 'block',
         minHeight:

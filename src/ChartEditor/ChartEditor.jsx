@@ -1,14 +1,14 @@
 import React from 'react';
 import { DefaultEditor } from 'react-chart-editor';
 import {
-  GraphCreatePanel,
+  // GraphCreatePanel,
   GraphTransformsPanel,
   GraphSubplotsPanel,
   // StyleLayoutPanel,
-  StyleAxesPanel,
+  // StyleAxesPanel,
   StyleMapsPanel,
   // StyleLegendPanel,
-  StyleNotesPanel,
+  // StyleNotesPanel,
   StyleShapesPanel,
   StyleSlidersPanel,
   StyleImagesPanel,
@@ -20,11 +20,14 @@ import {
 } from 'react-chart-editor';
 
 import {
+  StructureTemplatePanel,
+  StructureFilterPanel,
+  StructureGraphCreatePanel,
   StyleLayoutPanel,
   StyleTracesPanel,
+  StyleAxesPanel,
   StyleLegendPanel,
-  FilterPanel,
-  SettingsPanel,
+  AnnotateNotesPanel,
 } from './panels';
 
 class CustomEditor extends DefaultEditor {
@@ -36,12 +39,19 @@ class CustomEditor extends DefaultEditor {
     return (
       <PanelMenuWrapper menuPanelOrder={this.props.menuPanelOrder}>
         {logo ? logo : null}
-        <GraphCreatePanel group={_('Structure')} name={_('Traces')} />
+        {this.props.isTemplate && (
+          <StructureTemplatePanel
+            {...this.props}
+            group={_('Structure')}
+            name={_('Template')}
+          />
+        )}
+        <StructureGraphCreatePanel group={_('Structure')} name={_('Traces')} />
         <GraphSubplotsPanel group={_('Structure')} name={_('Subplots')} />
         {this.hasTransforms() && (
           <GraphTransformsPanel group={_('Structure')} name={_('Transforms')} />
         )}
-        <FilterPanel
+        <StructureFilterPanel
           {...this.props}
           group={_('Structure')}
           name={_('Filters')}
@@ -70,7 +80,7 @@ class CustomEditor extends DefaultEditor {
         {this.hasColorbars() && (
           <StyleColorbarsPanel group={_('Style')} name={_('Color Bars')} />
         )}
-        <StyleNotesPanel group={_('Annotate')} name={_('Text')} />
+        <AnnotateNotesPanel group={_('Annotate')} name={_('Text')} />
         <StyleShapesPanel group={_('Annotate')} name={_('Shapes')} />
         <StyleImagesPanel group={_('Annotate')} name={_('Images')} />
         {this.hasSliders() && (
@@ -79,11 +89,6 @@ class CustomEditor extends DefaultEditor {
         {this.hasMenus() && (
           <StyleUpdateMenusPanel group={_('Control')} name={_('Menus')} />
         )}
-        <SettingsPanel
-          {...this.props}
-          group={_('Advanced')}
-          name={_('Settings')}
-        />
         {this.props.children ? this.props.children : null}
       </PanelMenuWrapper>
     );

@@ -42,9 +42,9 @@ const getPaneStyle = (active) =>
 const TabPlotlyJSON = forwardRef(({ active, value, setValue }, ref) => {
   const editor = useRef();
   const initialChartData = useRef({
-    data: value.chartData.data || [],
-    layout: value.chartData.layout || { xaxis: {}, yaxis: {} },
-    frames: value.chartData.frames || [],
+    data: value.chartData?.data || [],
+    layout: value.chartData?.layout || { xaxis: {}, yaxis: {} },
+    frames: value.chartData?.frames || [],
   });
   const [init, setInit] = useState(false);
 

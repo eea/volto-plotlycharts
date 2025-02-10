@@ -14,10 +14,10 @@ import { getDataSources } from '@eeacms/volto-plotlycharts/helpers';
 import 'react-chart-editor/lib/react-chart-editor.css';
 
 const LoadablePlotly = loadable.lib(() => import('plotly.js/dist/plotly'));
-const LoadablePlotlyEditor = loadable.lib(() => import('react-chart-editor'));
+const LoadablePlotlyEditor = loadable.lib(() => import('./PlotlyEditor'));
 const LoadableChartEditor = loadable.lib(() => import('./ChartEditor'));
 
-const config = { editable: true };
+const config = { editable: false };
 
 const chartHelp = {
   area: {
@@ -190,13 +190,12 @@ const Edit = (props) => {
                       return (
                         <PlotlyEditor
                           ref={plotlyEl}
-                          divId="gd"
                           config={config}
                           data={data}
                           layout={props.value.chartData?.layout || {}}
                           frames={props.value.chartData?.frames || []}
-                          dataSourceOptions={dataSourceOptions}
                           dataSources={dataSources}
+                          dataSourceOptions={dataSourceOptions}
                           plotly={plotly}
                           onUpdate={(data, layout, frames) => {
                             props.onChangeValue({
@@ -208,7 +207,22 @@ const Edit = (props) => {
                               },
                             });
                           }}
+                          onUpdateValue={(value) => {
+                            props.onChangeValue({
+                              ...props.value,
+                              ...value,
+                            });
+                          }}
                           chartHelp={chartHelp}
+                          isTemplate={props.isTemplate}
+                          fontOptions={[
+                            {
+                              label: 'Roboto, Sans Serif',
+                              value: 'Roboto, sans-serif',
+                            },
+                            { label: 'Serif', value: 'serif' },
+                            { label: 'Monospaced', value: 'monospace' },
+                          ]}
                           showFieldTooltips
                           useResizeHandler
                           advancedTraceTypeSelector

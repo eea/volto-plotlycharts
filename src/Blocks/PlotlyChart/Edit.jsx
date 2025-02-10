@@ -114,18 +114,6 @@ class Edit extends Component {
     });
   }
 
-  // This is the structure of value
-  // value = {
-  //   chartData: {
-  //     data: data || [],
-  //     layout: layout || {},
-  //     frames: frames || [],
-  //   }
-  //   provider_url: provider_url
-  //   json_data: json_data
-  //   use_data_sources: use_data_sources
-  // }
-
   render() {
     const { block, data = {} } = this.props;
     const { visualization = {} } = data;

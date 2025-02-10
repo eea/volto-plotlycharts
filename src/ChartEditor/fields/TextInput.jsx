@@ -4,7 +4,7 @@ import { connectToContainer } from 'react-chart-editor/lib';
 import Field from 'react-chart-editor/lib/components/fields/Field';
 import TextInput from 'react-chart-editor/lib/components/widgets/TextInput';
 
-const UnconnectedTextInput = (props) => {
+export const UnconnectedTextInput = (props) => {
   const { updatePlot, container } = props;
   const { customLink } = container;
 

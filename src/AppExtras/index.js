@@ -1,4 +1,4 @@
-import Jupyter from './Jupyter';
+import MapJaxScript from './MapJaxScript';
 
 export default function applyConfig(config) {
   config.settings.appExtras = [
@@ -6,8 +6,7 @@ export default function applyConfig(config) {
     {
       match: '*',
       ignore: ['/login', '/**/login'],
-      exclude: ['/login', '/**/login'], //deprecated since Volto-17
-      component: Jupyter,
+      component: MapJaxScript,
     },
   ];
 

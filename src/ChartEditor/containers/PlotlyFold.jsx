@@ -39,9 +39,11 @@ export class Fold extends Component {
       name,
       canMoveUp,
       canMoveDown,
-      deleteContainer,
-      moveContainer,
     } = this.props;
+    const moveContainer =
+      this.props.moveContainer || this.context.moveContainer;
+    const deleteContainer =
+      this.props.deleteContainer || this.context.deleteContainer;
 
     const folded = canFold ? this.props.folded : false;
 

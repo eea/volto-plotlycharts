@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { Button, Modal, Grid, Label } from 'semantic-ui-react';
-import { map } from 'lodash';
+import { map, cloneDeep } from 'lodash';
 
 import config from '@plone/volto/registry';
 import { FormFieldWrapper, Icon } from '@plone/volto/components';
 import { pickMetadata } from '@eeacms/volto-embed/helpers';
+import { applyPlotlyDefaults } from '@eeacms/volto-plotlycharts/helpers';
 
 import PlotlyJsonModal from './PlotlyJsonModal';
 import ConnectedChart from '../ConnectedChart';
@@ -15,14 +16,20 @@ import editSVG from '@plone/volto/icons/editing.svg';
 import './style.less';
 
 const PlotlyEditorModal = (props) => {
-  const [value, setValue] = useState(props.value);
+  const [value, setValue] = useState(
+    applyPlotlyDefaults(cloneDeep(props.value)),
+  );
   const [showImportJSON, setShowImportJSON] = useState(false);
 
   const InternalUrlWidget = config.widgets.widget.internal_url;
 
   return (
     <>
-      <Modal open={true} size="fullscreen" className="chart-editor-modal">
+      <Modal
+        open={true}
+        size="fullscreen"
+        className="chart-editor-modal plotly-editor--theme-provider"
+      >
         <Modal.Content scrolling>
           <ChartEditor
             value={value}
@@ -99,20 +106,8 @@ const PlotlyEditorModal = (props) => {
 };
 
 const VisualizationWidget = (props) => {
-  const { id, title, description, error, value } = props;
+  const { id, title, description, error } = props;
   const [showChartEditor, setShowChartEditor] = useState(false);
-
-  // This is the structure of value
-  // value = {
-  //   chartData: {
-  //     data: data || [],
-  //     layout: layout || {},
-  //     frames: frames || [],
-  //   }
-  //   provider_url: provider_url
-  //   json_data: json_data
-  //   use_data_sources: use_data_sources
-  // }
 
   if (__SERVER__) return '';
 
@@ -143,7 +138,7 @@ const VisualizationWidget = (props) => {
           with_enlarge: false,
           with_share: false,
           visualization: {
-            ...(value || {}),
+            ...(props.value || {}),
             ...pickMetadata(props.formData || {}),
           },
         }}
@@ -151,7 +146,7 @@ const VisualizationWidget = (props) => {
       {showChartEditor && (
         <PlotlyEditorModal
           {...props}
-          value={value || {}}
+          value={props.value}
           onClose={() => setShowChartEditor(false)}
         />
       )}

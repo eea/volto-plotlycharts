@@ -14,6 +14,7 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 import addIcon from '@plone/volto/icons/add.svg';
 import editingIcon from '@plone/volto/icons/editing.svg';
+import reloadIcon from '@plone/volto/icons/reload.svg';
 import deleteIcon from '@plone/volto/icons/delete.svg';
 import closeIcon from '@plone/volto/icons/clear.svg';
 
@@ -141,17 +142,31 @@ class Scale extends Component {
           >
             <Colorscale colorscale={selected} onClick={this.onClick} />
             {this.props.editable && (
-              <Icon
-                className="color-customize-icon"
-                name={showCustomizeColor ? closeIcon : editingIcon}
-                size="21px"
-                onClick={() =>
-                  this.setState((prevState) => ({
-                    showCustomizeColor: !prevState.showCustomizeColor,
-                  }))
-                }
-                style={{ cursor: 'pointer', marginLeft: '0.5rem' }}
-              />
+              <>
+                <Icon
+                  className="color-customize-icon"
+                  name={showCustomizeColor ? closeIcon : editingIcon}
+                  size="21px"
+                  onClick={() =>
+                    this.setState((prevState) => ({
+                      showCustomizeColor: !prevState.showCustomizeColor,
+                    }))
+                  }
+                  style={{ cursor: 'pointer', marginLeft: '0.5rem' }}
+                />
+                <Icon
+                  className="color-customize-icon"
+                  name={reloadIcon}
+                  size="21px"
+                  onClick={() => {
+                    this.props.onColorscaleChange(
+                      selected.reverse(),
+                      this.state.selectedColorscaleType,
+                    );
+                  }}
+                  style={{ cursor: 'pointer', marginLeft: '0.5rem' }}
+                />
+              </>
             )}
           </div>
           {this.props.editable && showCustomizeColor && (
@@ -269,9 +284,9 @@ class Scale extends Component {
                     width={colorscalepickerContainerWidth}
                     colorscaleType={this.state.selectedColorscaleType}
                     onColorscaleTypeChange={this.onColorscaleTypeChange}
-                    disableSwatchControls
-                    scaleLength={7}
                     voltoColors={config.settings.plotlyCustomColors}
+                    scaleLength={7}
+                    disableSwatchControls
                   />
                   <Info className="customPickerContainer__info">
                     {description}
