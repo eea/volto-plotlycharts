@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -118,7 +116,18 @@ const StructureGraphCreatePanel = (props, { localize: _, setPanel }) => {
         {_(
           'Note: in vertical orientation, X values are used for binning. If Y values are provided, they are used as inputs to the histogram function which you can configure in the ',
         )}
-        <a onClick={() => setPanel('Style', 'Traces')}>{_('Traces')}</a>
+        <a
+          onClick={() => setPanel('Style', 'Traces')}
+          onKeyPress={(e) => {
+            if (e.key === 'Enter') {
+              setPanel('Style', 'Traces');
+            }
+          }}
+          role="button"
+          tabIndex="0"
+        >
+          {_('Traces')}
+        </a>
         {_(
           ' panel under Style. If Y values are omitted, the histogram function defaults to Count.',
         )}
@@ -127,7 +136,18 @@ const StructureGraphCreatePanel = (props, { localize: _, setPanel }) => {
         {_(
           'Note: in horizontal orientation, Y values are used for binning. If X values are provided, they are used as inputs to the histogram function which you can configure in the ',
         )}
-        <a onClick={() => setPanel('Style', 'Traces')}>{_('Traces')}</a>
+        <a
+          onClick={() => setPanel('Style', 'Traces')}
+          onKeyPress={(e) => {
+            if (e.key === 'Enter') {
+              setPanel('Style', 'Traces');
+            }
+          }}
+          role="button"
+          tabIndex="0"
+        >
+          {_('Traces')}
+        </a>
         {_(
           ' under Style panel. If X values are omitted, the histogram function defaults to Count.',
         )}
@@ -136,7 +156,18 @@ const StructureGraphCreatePanel = (props, { localize: _, setPanel }) => {
         {_(
           'Note: X and Y Values are used for binning. If Z values are provided, they are used as inputs to the histogram function which you can configure in the ',
         )}
-        <a onClick={() => setPanel('Style', 'Traces')}>{_('Traces')}</a>
+        <a
+          onClick={() => setPanel('Style', 'Traces')}
+          onKeyPress={(e) => {
+            if (e.key === 'Enter') {
+              setPanel('Style', 'Traces');
+            }
+          }}
+          role="button"
+          tabIndex="0"
+        >
+          {_('Traces')}
+        </a>
         {_(
           ' under Style panel. If Z values are omitted, the histogram function defaults to Count.',
         )}

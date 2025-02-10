@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import Dropdown from 'react-chart-editor/lib/components/fields/Dropdown';
 import Info from 'react-chart-editor/lib/components/fields/Info';
@@ -201,7 +199,18 @@ class UnconnectedAxesCreator extends Component {
         {controls}
         <Info>
           {_('You can style and position your axes in the ')}
-          <a onClick={() => this.context.setPanel('Structure', 'Subplots')}>
+          <a
+            onClick={(e) => {
+              this.context.setPanel('Structure', 'Subplots');
+            }}
+            onKeyPress={(e) => {
+              if (e.key === 'Enter') {
+                this.context.setPanel('Structure', 'Subplots');
+              }
+            }}
+            role="button"
+            tabIndex="0"
+          >
             {_('Subplots')}
           </a>
           {_(' panel.')}

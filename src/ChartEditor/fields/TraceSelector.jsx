@@ -49,7 +49,9 @@ class TraceSelector extends Component {
   }
 
   toggleGlControls() {
-    this.setState({ showGlControls: !this.state.showGlControls });
+    this.setState((prevState) => ({
+      showGlControls: !prevState.showGlControls,
+    }));
   }
 
   setLocals(props, context) {

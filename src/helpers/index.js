@@ -68,8 +68,8 @@ export function applyPlotlyDefaults(value) {
   return {
     ...v,
     chartData: {
-      data: [...(v.chartData?.data || [])],
-      layout: {
+      data: v.chartData?.data || [],
+      layout: v.chartData?.layout || {
         font: {
           color: 'rgb(61, 82, 101)',
           family: 'Roboto, sans-serif',
@@ -177,16 +177,10 @@ export function applyPlotlyDefaults(value) {
         },
         bargap: 0.33999999999999997,
         ...(v.chartData?.layout || {}),
-        xaxis: {
-          ...cloneDeep(defaults.axis),
-          ...(v.chartData?.layout?.xaxis || {}),
-        },
-        yaxis: {
-          ...cloneDeep(defaults.axis),
-          ...(v.chartData?.layout?.yaxis || {}),
-        },
+        xaxis: cloneDeep(defaults.axis),
+        yaxis: cloneDeep(defaults.axis),
       },
-      frames: [...(v.chartData?.frames || [])],
+      frames: v.chartData?.frames || [],
     },
   };
 }
