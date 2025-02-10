@@ -12,7 +12,6 @@ export class UnconnectedColorPicker extends Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
-      empty: !this.props.fullValue && this.props.handleEmpty,
       colorComponentVisibility: false,
     };
     this.handleVisibilityChange = this.handleVisibilityChange.bind(this);
@@ -26,7 +25,9 @@ export class UnconnectedColorPicker extends Component {
   }
 
   render() {
-    if (this.state.empty) {
+    const empty = !this.props.fullValue && this.props.handleEmpty;
+
+    if (empty) {
       return (
         <Field {...this.props}>
           <div className="js-test-info">
@@ -34,12 +35,10 @@ export class UnconnectedColorPicker extends Component {
             <a
               onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
-                  this.setState({ empty: false });
                   this.props.updatePlot(this.props.defaultColor);
                 }
               }}
               onClick={() => {
-                this.setState({ empty: false });
                 this.props.updatePlot(this.props.defaultColor);
               }}
               role="button"
@@ -55,6 +54,26 @@ export class UnconnectedColorPicker extends Component {
 
     return (
       <Field {...this.props}>
+        {this.props.handleEmpty && (
+          <div className="js-test-info" style={{ marginBottom: '0.5rem' }}>
+            This color can be computed from other parts of the figure by{' '}
+            <a
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  this.props.updatePlot(this.props.defaultColor);
+                }
+              }}
+              onClick={() => {
+                this.props.updatePlot(null);
+              }}
+              role="button"
+              tabIndex={0} // Makes the element focusable
+            >
+              clearing it
+            </a>
+            .
+          </div>
+        )}
         <ColorPicker
           selectedColor={this.props.fullValue}
           onColorChange={this.props.updatePlot}

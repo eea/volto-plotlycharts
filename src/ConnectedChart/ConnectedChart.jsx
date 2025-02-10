@@ -38,7 +38,7 @@ import {
   getDataSources,
   getFigureMetadata,
 } from '@eeacms/volto-plotlycharts/helpers';
-import { Download, Jupyter } from '@eeacms/volto-plotlycharts/Utils';
+import { Download } from '@eeacms/volto-plotlycharts/Utils';
 import PlotlyComponent from './PlotlyComponent';
 
 import '@eeacms/volto-embed/Toolbar/styles.less';
@@ -46,44 +46,10 @@ import '@eeacms/volto-embed/Toolbar/styles.less';
 import { FormField } from 'semantic-ui-react';
 import { injectLazyLibs } from '@plone/volto/helpers/Loadable/Loadable';
 
-function getChartLayout({ hover_format_xy, defaultLayout = {}, layout = {} }) {
+function getChartLayout({ defaultLayout = {}, layout = {} }) {
   return {
     ...defaultLayout,
     ...layout,
-    dragmode: false,
-    font: {
-      family: config.settings.chartLayoutFontFamily || "'Roboto', sans-serif",
-      ...(layout.font || {}),
-    },
-    margin: {
-      l: 80,
-      r: 80,
-      b: 80,
-      t: 100,
-      ...(layout.margin || {}),
-    },
-    // Overwrite xaxis
-    ...(!!layout.xaxis && {
-      xaxis: {
-        ...layout.xaxis,
-        hoverformat:
-          hover_format_xy ||
-          layout.xaxis.hoverformat ||
-          layout.xaxis.tickformat ||
-          '',
-      },
-    }),
-    // Overwrite yaxis
-    ...(!!layout.yaxis && {
-      yaxis: {
-        ...layout.yaxis,
-        hoverformat:
-          hover_format_xy ||
-          layout.yaxis.hoverformat ||
-          layout.yaxis.tickformat ||
-          '',
-      },
-    }),
   };
 }
 
@@ -321,7 +287,6 @@ function ConnectedChart(props) {
 
   return (
     <>
-      <Jupyter {...props} />
       <div className="embed-visualization">
         {!initialized && <ChartSkeleton />}
         <Grid

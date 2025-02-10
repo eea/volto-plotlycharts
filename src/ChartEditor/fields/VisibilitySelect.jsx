@@ -6,8 +6,7 @@ import {
 } from 'react-chart-editor/lib';
 import Field from 'react-chart-editor/lib/components/fields/Field';
 import Dropdown from 'react-chart-editor/lib/components/fields/Dropdown';
-
-import Radio from './Radio';
+import Radio from 'react-chart-editor/lib/components/fields/Radio';
 
 export class UnconnectedVisibilitySelect extends Component {
   constructor(props, context) {

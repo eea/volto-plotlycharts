@@ -5,3 +5,186 @@
 .plotly-json-modal .scrolling.content {
   height: 80vh;
 }
+
+// .infolayer [class^='y'][class$='title'] {
+//   transform: rotate(0deg) translateY(calc(-50% + var(--y-axis-title-font-size, 0) * 1px));
+//   text-anchor: start;
+//   dominant-baseline: hanging;
+// }
+
+.plotly_editor {
+  .plot-container.plotly .svg-container::after {
+    position: absolute;
+    z-index: -1;
+    content: '';
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    border: 1px solid var(--color-border-default);
+    border-left: 0px;
+  }
+}
+
+
+.editor_controls .button {
+  &--delete {
+    background-color: #ff4d4f;
+    border-color: #ff4d4f;
+    color: var(--color-button-primary-base-text);
+    text-shadow: var(--text-shadow-dark-ui);
+  }
+}
+
+.template-selector {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  padding: 0 1rem;
+  background-color: #fff;
+
+  &__title {
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-base);
+    text-transform: capitalize;
+    font-size: var(--font-size-heading-large);
+    margin-bottom: 1.5rem;
+    margin-left: 15px;
+    margin-right: 15px;
+  }
+}
+
+.template-item {
+  width: 90px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  flex-grow: 0;
+  margin-top: var(--spacing-half-unit);
+  color: var(--color-text-base);
+  transition: all 0.15s ease-in-out;
+  position: relative;
+
+  &__image {
+    position: relative;
+    z-index: 2;
+    border: 1px solid var(--color-border-default);
+    width: 60px;
+    height: 60px;
+    border-radius: var(--border-radius);
+    background: var(--color-background-top);
+    box-shadow: 0 2px 9px transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease-in-out;
+
+    &__wrapper {
+      width: 100%;
+    }
+  }
+
+  &__label {
+    font-weight: var(--font-weight-semibold);
+    width: 72px;
+    height: 34px;
+    margin-top: var(--spacing-quarter-unit);
+    color: var(--color-text-base);
+    text-transform: capitalize;
+    font-size: var(--font-size-small);
+    text-align: center;
+  }
+
+  .button--delete {
+    position: absolute;
+    z-index: 2;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 24px;
+    height: 24px;
+    font-size: 12px;
+    padding: 0;
+    border-radius: 50%;
+    top: 0;
+    right: 0;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  &:hover {
+    cursor: pointer;
+
+    .template-item__image {
+      border-color: var(--color-accent);
+    }
+
+    .template-item__label {
+      color: var(--color-accent);
+    }
+
+    .button--delete {
+      opacity: 1;
+      pointer-events: all;
+    }
+  }
+}
+
+.template-group {
+  padding: 0.5rem 0rem;
+
+  &__label {
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-base);
+    text-transform: capitalize;
+    font-size: var(--font-size-text-large);
+    margin-bottom: 0;
+    margin-left: 15px;
+    margin-right: 15px;
+  }
+
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+  }
+}
+
+.plotly-templates,
+.template-selector {
+  &__list {
+    height: 100%;
+
+    &--wrapper {
+      display: flex;
+      column-gap: 0rem;
+      row-gap: 1rem;
+      padding: 1rem;
+      flex-wrap: wrap;
+    }
+  }
+}
+
+.template-selector {
+  &__list {
+    background-color: var(--color-background-light);
+    border-radius: var(--border-radius);
+  }
+}
+
+.plotly-templates-widget.editor_controls {
+  width: 100%;
+}
+
+.plotly-templates {
+  display: flex;
+  flex-flow: column;
+  width: 100%;
+
+  &--header {
+    text-align: right;
+  }
+}

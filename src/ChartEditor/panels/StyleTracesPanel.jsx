@@ -10,7 +10,6 @@ import {
   NumericFraction,
   NumericFractionInverse,
   Radio,
-  TextEditor,
   Text,
   PlotlySection,
   LayoutSection,
@@ -51,6 +50,7 @@ import {
   ColorscalePicker,
   MarkerColor,
   MultiColorPicker,
+  TextEditor,
 } from '../fields';
 
 const allTraceTypes = traceTypes(localize).map(({ value }) => value);
