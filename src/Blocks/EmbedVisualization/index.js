@@ -1,7 +1,12 @@
-import View from './View';
-import Edit from './Edit';
-
 import presentationSVG from '@plone/volto/icons/image.svg';
+import { withLoadOnVisibility } from '@eeacms/volto-plotlycharts/hocs';
+
+const lazyView = withLoadOnVisibility(() =>
+  import(/* webpackChunkName: "Plotly-blocks" */ './View'),
+);
+const lazyEdit = withLoadOnVisibility(() =>
+  import(/* webpackChunkName: "Plotly-blocks" */ './Edit'),
+);
 
 const config = (config) => {
   const visualizationBlockConfig = {
@@ -9,8 +14,8 @@ const config = (config) => {
     title: 'Embed interactive Chart (Plotly)',
     icon: presentationSVG,
     group: 'data_visualizations',
-    view: View,
-    edit: Edit,
+    view: lazyView,
+    edit: lazyEdit,
     restricted: false,
     mostUsed: false,
     sidebarTab: 1,
@@ -23,7 +28,7 @@ const config = (config) => {
         id: 'default',
         title: 'Default',
         isDefault: true,
-        view: View,
+        view: lazyView,
       },
     ],
   };
