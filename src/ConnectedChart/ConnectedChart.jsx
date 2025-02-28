@@ -347,6 +347,7 @@ function ConnectedChart(props) {
                   chartRef={chartRef}
                   history={history}
                   setInitialized={setInitialized}
+                  provider_data={provider_data}
                 />
               </div>
               {initialized && (
@@ -388,6 +389,7 @@ function ConnectedChart(props) {
                     {with_enlarge && (
                       <Enlarge>
                         <PlotlyComponent
+                          provider_data={provider_data}
                           chartRef={chartRef}
                           history={history}
                           {...{
