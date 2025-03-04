@@ -16,8 +16,9 @@ const PlotlyComponent = ({
   frames,
   history,
   setInitialized,
+  provider_data,
 }) => {
-  const handleChartClick = async (trace, layout) => {
+  const handleChartClick = async (trace, layout, provider_data) => {
     const { customLink, clickmode, meta = [] } = layout;
 
     if (customLink && clickmode !== 'none') {
@@ -42,7 +43,6 @@ const PlotlyComponent = ({
         : false;
 
       const shouldComposeLinks = meta.length > 0;
-
       if (type === 'bar' && shouldComposeLinks) {
         if (customLink === 'allLinks') {
           const yIsLabels = y.indexOf(label) > -1;
@@ -59,6 +59,15 @@ const PlotlyComponent = ({
           const correspondingLinkPosition = pointIndex;
           const correspondingLink = meta[correspondingLinkPosition];
           history.push(correspondingLink);
+        }
+      } else if (type === 'sunburst' && shouldComposeLinks) {
+        if (customLink === 'externalLink') {
+          const correspondingLinkIndex = provider_data.id.indexOf(id);
+          const correspondingLink =
+            provider_data.externalLink[correspondingLinkIndex];
+          if (correspondingLink) {
+            window.open(correspondingLink, '_blank');
+          }
         }
       } else if (shouldRedirect) {
         const link = customLink
@@ -98,7 +107,7 @@ const PlotlyComponent = ({
         editable: false,
         responsive: true,
       }}
-      onClick={(trace) => handleChartClick(trace, layout)}
+      onClick={(trace) => handleChartClick(trace, layout, provider_data)}
       onHover={(trace) => handleChartHover(trace, layout)}
       onUnhover={(trace) => handleChartUnhover(trace, layout)}
       style={{
