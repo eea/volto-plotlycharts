@@ -1,5 +1,11 @@
 import VisualizationWidget from './VisualizationWidget';
 import VisualizationViewWidget from './VisualizationViewWidget';
-import PlotlyTemplates from './PlotlyTemplates';
+import PlotlyThemesWidget from './PlotlyThemesWidget';
+import PlotlyTemplatesWidget from './PlotlyTemplatesWidget';
 
-export { VisualizationWidget, VisualizationViewWidget, PlotlyTemplates };
+export {
+  VisualizationWidget,
+  VisualizationViewWidget,
+  PlotlyThemesWidget,
+  PlotlyTemplatesWidget,
+};

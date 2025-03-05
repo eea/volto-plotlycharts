@@ -196,6 +196,7 @@ export function getDataSources(props) {
   return {
     ...(props.provider_data || {}),
     ...(props.data_source || {}),
+    ...(props.dataSources || {}),
   };
 }
 

@@ -1,11 +1,8 @@
-import React, { useState, Component } from 'react';
-import { Button, Modal, Grid } from 'semantic-ui-react';
-import config from '@plone/volto/registry';
-import { SidebarPortal, BlockDataForm, Icon } from '@plone/volto/components';
-import ChartEditor from '@eeacms/volto-plotlycharts/ChartEditor';
-import PlotlyJsonModal from '@eeacms/volto-plotlycharts/Widgets/PlotlyJsonModal';
-
-import editSVG from '@plone/volto/icons/editing.svg';
+import React, { useEffect, useState, Component } from 'react';
+import cx from 'classnames';
+import { Button, Modal } from 'semantic-ui-react';
+import { SidebarPortal, BlockDataForm } from '@plone/volto/components';
+// import PlotlyEditor from '@eeacms/volto-plotlycharts/PlotlyEditor';
 
 import schema from './schema';
 import View from './View';
@@ -14,84 +11,57 @@ import '@eeacms/volto-plotlycharts/less/plotly.less';
 
 const PlotlyEditorModal = (props) => {
   const [value, setValue] = useState(props.value);
-  const [showImportJSON, setShowImportJSON] = useState(false);
+  const [fadeInOut, setFadeInOut] = useState(true);
+  // const [showImportJSON, setShowImportJSON] = useState(false);
 
-  const InternalUrlWidget = config.widgets.widget.internal_url;
+  function onClose() {
+    setFadeInOut(true);
+    setTimeout(() => {
+      props.onClose();
+    }, 300);
+  }
+
+  useEffect(() => {
+    setFadeInOut(false);
+  }, []);
 
   return (
     <>
-      <Modal open={true} size="fullscreen" className="chart-editor-modal">
+      <Modal
+        open={true}
+        size="fullscreen"
+        className={cx('chart-editor-modal plotly-editor--theme-provider', {
+          'fade-in-out': fadeInOut,
+        })}
+      >
         <Modal.Content scrolling>
-          <ChartEditor
+          {/* <PlotlyEditor
+            actions={[
+              {
+                variant: 'primary',
+                // onClick: () => setShowImportJSON(true),
+                children: 'DEV',
+              },
+            ]}
             value={value}
             onChangeValue={(value) => {
               setValue(value);
             }}
-          />
+            onApply={() => {
+              props.onChange(props.id, value);
+              onClose();
+            }}
+            onClose={onClose}
+          /> */}
         </Modal.Content>
-        <Modal.Actions>
-          <Grid>
-            <Grid.Row>
-              <Grid.Column computer={7} tablet={12} verticalAlign="middle">
-                <InternalUrlWidget
-                  title="Select data source"
-                  id="provider-data"
-                  onChange={(_, provider_url) => {
-                    setValue((value) => ({
-                      ...value,
-                      provider_url,
-                      use_data_sources: true,
-                    }));
-                  }}
-                  value={value.provider_url}
-                  showReload={true}
-                />
-              </Grid.Column>
-              <Grid.Column
-                computer={5}
-                tablet={12}
-                verticalAlign="middle"
-                style={{
-                  display: 'inline-flex',
-                  flexFlow: 'row',
-                  justifyContent: 'space-between',
-                }}
-              >
-                <Button
-                  secondary
-                  className="json-btn"
-                  onClick={() => setShowImportJSON(true)}
-                >
-                  <Icon name={editSVG} size="20px" />
-                  JSON
-                </Button>
-                <div style={{ display: 'flex' }}>
-                  <Button floated="right" onClick={props.onClose}>
-                    Close
-                  </Button>
-                  <Button
-                    primary
-                    floated="right"
-                    onClick={() => {
-                      props.onChange(value);
-                      props.onClose();
-                    }}
-                  >
-                    Apply
-                  </Button>
-                </div>
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
-        </Modal.Actions>
       </Modal>
-      {showImportJSON && (
+      {/* {showImportJSON && (
         <PlotlyJsonModal
           value={value}
           onChange={setValue}
           onClose={() => setShowImportJSON(false)}
         />
-      )}
+      )} */}
     </>
   );
 };
@@ -101,7 +71,7 @@ class Edit extends Component {
     super(props);
 
     this.state = {
-      showChartEditor: false,
+      showPlotlyEditor: false,
     };
 
     this.onChange = this.onChange.bind(this);
@@ -127,20 +97,20 @@ class Edit extends Component {
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
-              this.setState({ showChartEditor: true });
+              this.setState({ showPlotlyEditor: true });
             }}
           >
             Open Chart Editor
           </Button>
         </div>
         <View {...this.props} mode="edit" />
-        {this.state.showChartEditor && (
+        {this.state.showPlotlyEditor && (
           <PlotlyEditorModal
             value={visualization}
             onChange={this.onChange}
             onClose={() =>
               this.setState({
-                showChartEditor: false,
+                showPlotlyEditor: false,
               })
             }
           />

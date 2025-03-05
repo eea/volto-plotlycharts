@@ -11,7 +11,10 @@ import {
   downloadSVG,
   getDataSources,
 } from '@eeacms/volto-plotlycharts/helpers';
-import { getProviderData } from '@eeacms/volto-plotlycharts/helpers/plotly';
+// import { getProviderData } from '@eeacms/volto-plotlycharts/helpers/plotly';
+const getProviderData = ({ value }) => {
+  return [null, {}, value];
+};
 
 export default function Download(props) {
   const {

@@ -21,9 +21,11 @@ import {
   Grid,
   GridRow,
   GridColumn,
+  FormField,
 } from 'semantic-ui-react';
 import config from '@plone/volto/registry';
 import { toPublicURL, flattenToAppURL } from '@plone/volto/helpers';
+import { injectLazyLibs } from '@plone/volto/helpers/Loadable/Loadable';
 import { connectToProviderData } from '@eeacms/volto-datablocks/hocs';
 import { updateChartDataFromProvider } from '@eeacms/volto-datablocks/helpers';
 import { connectBlockToVisualization } from '@eeacms/volto-plotlycharts/hocs';
@@ -43,9 +45,6 @@ import PlotlyComponent from './PlotlyComponent';
 
 import '@eeacms/volto-embed/Toolbar/styles.less';
 
-import { FormField } from 'semantic-ui-react';
-import { injectLazyLibs } from '@plone/volto/helpers/Loadable/Loadable';
-
 function getChartLayout({ defaultLayout = {}, layout = {} }) {
   return {
     ...defaultLayout,
@@ -53,11 +52,10 @@ function getChartLayout({ defaultLayout = {}, layout = {} }) {
   };
 }
 
-function getChartData({ data = [], dataSources, use_data_sources }) {
-  const newData =
-    dataSources && use_data_sources
-      ? updateChartDataFromProvider(data, dataSources)
-      : data;
+function getChartData({ data = [], dataSources }) {
+  const newData = dataSources
+    ? updateChartDataFromProvider(data, dataSources)
+    : data;
 
   return map(newData, (trace) => ({
     ...trace,
@@ -124,7 +122,6 @@ function ConnectedChart(props) {
     provider_data,
     provider_metadata,
     loadingVisualization,
-    use_data_sources,
   } = props;
 
   const {
@@ -204,19 +201,11 @@ function ConnectedChart(props) {
         data: getChartData({
           data: viz?.chartData?.data,
           dataSources: filteredDataSources,
-          use_data_sources,
         }),
         frames: viz?.chartData?.frames || [],
       };
     });
-  }, [
-    viz,
-    provider_data,
-    use_data_sources,
-    hover_format_xy,
-    height,
-    filteredDataSources,
-  ]);
+  }, [viz, provider_data, hover_format_xy, height, filteredDataSources]);
 
   useEffect(() => {
     if (visEl.current) {
@@ -431,17 +420,12 @@ export default compose(
   }),
   connect((state, props) => {
     const viz = props.visualization || props.data?.visualization || {};
-    const use_data_sources =
-      props.data?.use_data_sources ?? viz?.use_data_sources ?? true;
     return {
       screen: state.screen,
       viz,
-      use_data_sources,
     };
   }),
   connectToProviderData((props) => {
-    const use_data_sources = props.use_data_sources ?? true;
-    if (!use_data_sources) return {};
     return {
       provider_url: props.viz.provider_url,
     };

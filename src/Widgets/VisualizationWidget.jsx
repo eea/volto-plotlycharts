@@ -1,115 +1,115 @@
-import React, { useState } from 'react';
-import { Button, Modal, Grid, Label } from 'semantic-ui-react';
-import { map, cloneDeep } from 'lodash';
+import React, { useEffect, useState, useRef } from 'react';
+import { map } from 'lodash';
+import cx from 'classnames';
+import loadable from '@loadable/component';
+import { Button, Modal, Label } from 'semantic-ui-react';
 
-import config from '@plone/volto/registry';
-import { FormFieldWrapper, Icon } from '@plone/volto/components';
+import { FormFieldWrapper } from '@plone/volto/components';
+
 import { pickMetadata } from '@eeacms/volto-embed/helpers';
-import { applyPlotlyDefaults } from '@eeacms/volto-plotlycharts/helpers';
 
-import PlotlyJsonModal from './PlotlyJsonModal';
-import ConnectedChart from '../ConnectedChart';
-import ChartEditor from '../ChartEditor';
+import { sanitizeVisualization } from '@eeacms/volto-plotlycharts/hocs';
 
-import editSVG from '@plone/volto/icons/editing.svg';
+import ConnectedChart from '@eeacms/volto-plotlycharts/ConnectedChart';
+import PlotlyEditor from '@eeacms/volto-plotlycharts/PlotlyEditor';
+import { JsonEditor } from '@eeacms/volto-plotlycharts/Utils';
 
-import './style.less';
+const plotlyUtils = loadable.lib(() =>
+  import('@eeacms/volto-plotlycharts/helpers/plotly'),
+);
 
-const PlotlyEditorModal = (props) => {
-  const [value, setValue] = useState(
-    applyPlotlyDefaults(cloneDeep(props.value)),
-  );
+const PlotlyEditorModal = sanitizeVisualization((props) => {
+  const ctx = useRef();
+  const { value, onChangeValue } = props;
+  const [fadeInOut, setFadeInOut] = useState(true);
   const [showImportJSON, setShowImportJSON] = useState(false);
 
-  const InternalUrlWidget = config.widgets.widget.internal_url;
+  function onClose() {
+    setFadeInOut(true);
+    setTimeout(() => {
+      props.onClose();
+    }, 300);
+  }
+
+  useEffect(() => {
+    setFadeInOut(false);
+  }, []);
 
   return (
     <>
       <Modal
         open={true}
         size="fullscreen"
-        className="chart-editor-modal plotly-editor--theme-provider"
+        className={cx('chart-editor-modal plotly-editor--theme-provider', {
+          'fade-in-out': fadeInOut,
+        })}
       >
-        <Modal.Content scrolling>
-          <ChartEditor
+        <Modal.Content scrolling={false}>
+          <PlotlyEditor
+            ref={ctx}
+            actions={[
+              {
+                variant: 'primary',
+                onClick: () => setShowImportJSON(true),
+                children: 'DEV',
+              },
+            ]}
             value={value}
-            onChangeValue={(value) => {
-              setValue(value);
+            onChangeValue={onChangeValue}
+            onApply={() => {
+              props.onChange(props.id, value);
+              onClose();
             }}
+            onClose={onClose}
           />
         </Modal.Content>
-        <Modal.Actions>
-          <Grid>
-            <Grid.Row>
-              <Grid.Column computer={7} tablet={12} verticalAlign="middle">
-                <InternalUrlWidget
-                  title="Select data source"
-                  id="provider-data"
-                  onChange={(_, provider_url) => {
-                    setValue((value) => ({
-                      ...value,
-                      provider_url,
-                      use_data_sources: true,
-                    }));
-                  }}
-                  value={value.provider_url}
-                  showReload={true}
-                />
-              </Grid.Column>
-              <Grid.Column
-                computer={5}
-                tablet={12}
-                verticalAlign="middle"
-                style={{
-                  display: 'inline-flex',
-                  flexFlow: 'row',
-                  justifyContent: 'space-between',
-                }}
-              >
-                <Button
-                  secondary
-                  className="json-btn"
-                  onClick={() => setShowImportJSON(true)}
-                >
-                  <Icon name={editSVG} size="20px" />
-                  JSON
-                </Button>
-                <div style={{ display: 'flex' }}>
-                  <Button floated="right" onClick={props.onClose}>
-                    Close
-                  </Button>
-                  <Button
-                    primary
-                    floated="right"
-                    onClick={() => {
-                      props.onChange(props.id, value);
-                      props.onClose();
-                    }}
-                  >
-                    Apply
-                  </Button>
-                </div>
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
-        </Modal.Actions>
       </Modal>
-      {showImportJSON && (
-        <PlotlyJsonModal
-          value={value}
-          onChange={setValue}
+      {showImportJSON && value.chartData && (
+        <JsonEditor
+          initialValue={value.chartData}
+          options={{
+            mode: 'tree',
+            schema: {
+              type: 'object',
+              properties: {
+                data: {
+                  type: 'array',
+                },
+                layout: {
+                  type: 'object',
+                },
+                frames: {
+                  type: 'array',
+                },
+              },
+              required: ['data', 'layout'],
+              additionalProperties: false,
+            },
+          }}
+          onChange={async (newValue) => {
+            const { getPlotlyDataSources } = await plotlyUtils.load();
+            const [dataSources, update] = getPlotlyDataSources({
+              data: newValue.data,
+              layout: newValue.layout,
+              originalDataSources: value.dataSources,
+            });
+
+            ctx.current.editor().loadDataSources(dataSources, update);
+          }}
           onClose={() => setShowImportJSON(false)}
         />
       )}
     </>
   );
-};
+});
 
 const VisualizationWidget = (props) => {
   const { id, title, description, error } = props;
-  const [showChartEditor, setShowChartEditor] = useState(false);
+  const [showPlotlyEditor, setShowPlotlyEditor] = useState(false);
 
-  if (__SERVER__) return '';
+  useEffect(() => {
+    PlotlyEditor.preload();
+  }, []);
 
   return (
     <FormFieldWrapper {...props} columns={1}>
@@ -120,7 +120,7 @@ const VisualizationWidget = (props) => {
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
-            setShowChartEditor(true);
+            setShowPlotlyEditor(true);
           }}
         >
           Open Chart Editor
@@ -143,11 +143,11 @@ const VisualizationWidget = (props) => {
           },
         }}
       />
-      {showChartEditor && (
+      {showPlotlyEditor && (
         <PlotlyEditorModal
           {...props}
           value={props.value}
-          onClose={() => setShowChartEditor(false)}
+          onClose={() => setShowPlotlyEditor(false)}
         />
       )}
       {map(error, (message) => (

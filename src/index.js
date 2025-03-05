@@ -4,8 +4,10 @@ import { VisualizationView } from './Views';
 import {
   VisualizationWidget,
   VisualizationViewWidget,
-  PlotlyTemplates,
+  PlotlyThemesWidget,
+  PlotlyTemplatesWidget,
 } from './Widgets';
+import PlotlyControlPanel from './Controlpanels/PlotlyControlPanel';
 import { data_visualizations, preview_image } from './middlewares';
 import * as addonReducers from './reducers';
 
@@ -15,7 +17,8 @@ const applyConfig = (config) => {
   config.views.contentTypesViews.visualization = VisualizationView;
   config.widgets.id.visualization = VisualizationWidget;
   config.widgets.views.id.visualization = VisualizationViewWidget;
-  config.widgets.widget.plotly_templates = PlotlyTemplates;
+  config.widgets.widget.plotly_themes = PlotlyThemesWidget;
+  config.widgets.widget.plotly_templates = PlotlyTemplatesWidget;
 
   // Add chart icon to visualization content type in /contents view
   config.settings.contentIcons.visualization = {
@@ -30,12 +33,19 @@ const applyConfig = (config) => {
   config.settings.storeExtenders = [
     ...(config.settings.storeExtenders || []),
     data_visualizations,
-    preview_image,
+    // preview_image,
   ];
   config.addonReducers = {
     ...config.addonReducers,
     ...addonReducers,
   };
+  config.addonRoutes = [
+    ...config.addonRoutes,
+    {
+      path: '/controlpanel/plotly',
+      component: PlotlyControlPanel,
+    },
+  ];
   return [installAppExtras, installBlocks].reduce(
     (acc, apply) => apply(acc),
     config,

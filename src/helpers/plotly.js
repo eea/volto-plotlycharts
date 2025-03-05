@@ -1,64 +1,182 @@
-import { isArray, isString } from 'lodash';
+import { isArray, isEqual, isString } from 'lodash';
+import nestedProperty from 'plotly.js/src/lib/nested_property';
+import {
+  constants,
+  getAdjustedSrcAttr,
+  getAttrsPath,
+  getColumnNames,
+  getSrcAttr,
+  maybeTransposeData,
+} from 'react-chart-editor/lib';
 
-export function getProviderData(value) {
-  const chartData = value.chartData?.data;
-  if (!chartData) {
-    return [{ message: 'No chart data found' }, null, null];
-  }
-  const keys = ['x', 'y', 'z', 'values', 'labels'];
-  const occurences = {};
-  const data = {};
-  chartData.forEach((trace) => {
-    keys.forEach((key) => {
-      const sources = trace[`${key}src`];
-      // Check if the trace has a key and if it's an array
-      if (!trace[key] || !isArray(trace[key])) {
-        return;
-      }
-      // Check if sources is defined and if it's a string
-      if (isString(sources)) {
-        occurences[sources] = (occurences[key] || 0) + 1;
-        data[sources] = [...trace[key]];
-        return;
-      }
-      // Check if sources is defined and if it's an array
-      if (isArray(sources)) {
-        sources.forEach((source, index) => {
-          occurences[source] = (occurences[source] || 0) + 1;
-          if (sources.length > 1) {
-            data[source] = [...trace[key][index]];
-            return;
-          }
-          data[source] = [...trace[key]];
+export function getPlotlyDataSources({ data, layout, originalDataSources }) {
+  const dataSources = {
+    ...originalDataSources,
+  };
+  const update = {
+    layout: {},
+    traces: [],
+  };
+  const unsyncedAttrs = [];
+
+  const attrs = [
+    ...data.reduce((acc, trace, index) => {
+      Object.entries(
+        getAttrsPath(trace, constants.TRACE_SRC_ATTRIBUTES),
+      ).forEach(([attr, value]) => {
+        acc.push({
+          attr,
+          value,
+          index,
+          trace: true,
         });
-        return;
-      }
-      // If sources is not defined, define the data
-      for (const handledKey in data) {
-        if (
-          trace[key].every((value, index) => {
-            return value === data[handledKey][index];
-          })
-        ) {
-          trace[`${key}src`] = handledKey;
-          return;
-        }
-      }
-      let legendTitle = trace.legendgroup || trace.legendgrouptitle?.text;
-      legendTitle = legendTitle ? `${legendTitle.split(' ').join('_')}_` : '';
-      const name =
-        key === 'y' && trace.name
-          ? `${legendTitle}${trace.name.split(' ').join('_')}`
-          : `${legendTitle}${key}`;
-      occurences[name] = (occurences[name] || 0) + 1;
-      if (key === 'y' && trace.name) {
-        data[name] = [...trace[key]];
-        trace[`${key}src`] = name;
-        return;
-      }
-      data[`${name}${occurences[name]}`] = [...trace[key]];
-      trace[`${key}src`] = `${name}${occurences[name]}`;
-    });
+      });
+      return acc;
+    }, []),
+    ...Object.entries(
+      getAttrsPath(layout, constants.LAYOUT_SRC_ATTRIBUTES),
+    ).reduce((acc, [attr, value]) => {
+      acc.push({
+        attr,
+        value,
+        layout: true,
+      });
+      return acc;
+    }, []),
+  ];
+
+  attrs.forEach((_attr) => {
+    const { attr, value, trace, layout, index } = _attr;
+    const container = trace ? data[index] : layout;
+    const srcAttr = getSrcAttr(container, attr);
+    const attrData = maybeTransposeData(value, srcAttr.key, container.type);
+    if (isArray(srcAttr.value)) {
+      srcAttr.value.forEach((key, index) => {
+        dataSources[key] = attrData[index];
+      });
+    }
+    if (isString(srcAttr.value) && srcAttr.value) {
+      dataSources[srcAttr.value] = attrData;
+    }
+    if (!srcAttr.value) {
+      unsyncedAttrs.push(_attr);
+    }
   });
-  return [null, data, value];
+
+  unsyncedAttrs.forEach((_attr) => {
+    const { attr, value, trace, layout, index } = _attr;
+
+    function updateAttr(attr, value) {
+      if (layout && attr.includes('meta.columnNames')) {
+        return;
+      }
+      if (trace && !update.traces[index]) {
+        update.traces[index] = {};
+      }
+      if (trace) {
+        update.traces[index][attr] = value;
+      }
+      if (layout) {
+        update.layout[attr] = value;
+      }
+    }
+
+    const container = trace ? data[index] : layout;
+    const srcAttr = getSrcAttr(container, attr);
+    srcAttr.value = [];
+
+    const inDataSources = (arr) => {
+      let key = null;
+      const found = Object.keys(dataSources).some((k) => {
+        if (isEqual(arr, dataSources[k])) {
+          key = k;
+          return true;
+        }
+        return false;
+      });
+      return [found, key];
+    };
+
+    const generateKey = () => {
+      let k = 1;
+      while (`${attr}_${k}` in dataSources) {
+        k++;
+      }
+      return `${attr}_${k}`;
+    };
+
+    let attrData = maybeTransposeData(value, srcAttr.key, container.type);
+
+    updateAttr(attr, attrData);
+
+    attrData =
+      isArray(attrData) && isArray(attrData[0]) ? attrData : [attrData];
+
+    attrData.forEach((d) => {
+      const [found, key] = inDataSources(d);
+      if (found) {
+        srcAttr.value.push(key);
+      } else {
+        const k = generateKey();
+        dataSources[k] = d;
+        srcAttr.value.push(k);
+      }
+    });
+
+    srcAttr.value = getAdjustedSrcAttr(srcAttr).value;
+    updateAttr(srcAttr.key, srcAttr.value);
+    updateAttr(
+      `meta.columnNames.${attr}`,
+      srcAttr.value
+        ? getColumnNames(
+            typeof srcAttr.value === 'string' ? [srcAttr.value] : srcAttr.value,
+            Object.keys(dataSources).map((name) => ({
+              value: name,
+              label: name,
+            })),
+          )
+        : null,
+    );
+  });
+
+  return [dataSources, update];
+}
+
+export function updateTrace(trace) {
+  return {
+    ...trace,
+    ...(trace.type === 'scatterpolar' &&
+      trace.connectgaps &&
+      trace.mode === 'lines' && {
+        r: [...trace.r, trace.r[0]],
+        theta: [...trace.theta, trace.theta[0]],
+      }),
+  };
+}
+
+export function updateContainerDataSources(
+  container,
+  dataSources,
+  srcAttributes,
+) {
+  const newContainer = { ...container };
+  Object.entries(getAttrsPath(container, srcAttributes)).forEach(([attr]) => {
+    const srcAttr = getSrcAttr(container, attr);
+    if (!srcAttr.value) {
+      return;
+    }
+    let data;
+    if (Array.isArray(srcAttr.value)) {
+      data = srcAttr.value
+        .filter((v) => Array.isArray(dataSources[v]))
+        .map((v) => dataSources[v]);
+    } else {
+      data = dataSources[srcAttr.value] || null;
+    }
+    nestedProperty(newContainer, attr).set(
+      maybeTransposeData(data, srcAttr.key, container.type),
+    );
+  });
+
+  return newContainer;
 }
