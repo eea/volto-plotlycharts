@@ -45,10 +45,10 @@
 }
 
 .infolayer [class^='y'][class$='title'] {
+  dominant-baseline: hanging;
+  text-anchor: start;
   transform: rotate(0deg)
     translateY(calc(-50% + var(--y-axis-title-font-size, 0) * 1px));
-  text-anchor: start;
-  dominant-baseline: hanging;
 }
 
 .connected-dot,
@@ -235,12 +235,12 @@
   .theme-thumbnail {
     width: calc(var(--panel-width) - 2rem);
     min-height: 160px;
-    margin-bottom: 1rem;
-    border-radius: 5px;
-    border: 1.5px solid #c6d4e4;
-    background-color: white;
-    padding: 7px;
     box-sizing: border-box;
+    padding: 7px;
+    border: 1.5px solid #c6d4e4;
+    border-radius: 5px;
+    margin-bottom: 1rem;
+    background-color: white;
 
     &.selected {
       border: 1.5px solid var(--color-accent);
@@ -248,11 +248,11 @@
   }
 
   .theme-thumbnail__title {
-    margin: 0 auto;
-    text-transform: capitalize;
     width: 100%;
-    text-align: center;
+    margin: 0 auto;
     color: #516c8a;
+    text-align: center;
+    text-transform: capitalize;
   }
 }
 
@@ -271,19 +271,19 @@
 }
 
 .ui.modals.dimmer:has(.chart-editor-modal) {
-  padding: 0 !important;
   z-index: 110 !important;
+  padding: 0 !important;
 
   .ui.modal.chart-editor-modal {
+    display: flex !important;
     width: 100% !important;
     height: 100% !important;
-    display: flex !important;
     flex-flow: column !important;
     margin: 0 !important;
 
     .content {
-      max-height: -webkit-fill-available !important;
       height: -webkit-fill-available !important;
+      max-height: -webkit-fill-available !important;
       flex-grow: 1;
       padding: 0;
     }
