@@ -61,11 +61,11 @@ function TemplateSelector(props) {
 
                         onChangeValue({
                           ...value,
-                          ...omit(tmpl, ['data_source']),
+                          ...omit(tmpl, ['dataSources']),
                         });
 
                         if (!dataSourceOptions.length) {
-                          loadDataSources?.(tmpl.data_source || {});
+                          loadDataSources?.(tmpl.dataSources || {});
                         }
                       }}
                     />

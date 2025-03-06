@@ -94,6 +94,8 @@ const PlotlyEditorModal = sanitizeVisualization((props) => {
               originalDataSources: value.dataSources,
             });
 
+            onChangeValue(newValue);
+
             ctx.current.editor().loadDataSources(dataSources, update);
           }}
           onClose={() => setShowImportJSON(false)}

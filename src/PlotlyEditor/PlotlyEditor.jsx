@@ -4,6 +4,7 @@ import React, {
   useMemo,
   useState,
   useRef,
+  useEffect,
 } from 'react';
 import { compose } from 'redux';
 import { isNil, pick, sortBy } from 'lodash';
@@ -94,8 +95,11 @@ const PlotlyEditor = forwardRef((props, ref) => {
       actions,
       value: {
         ...value,
-        data,
-        layout,
+        chartData: {
+          ...(value.chartData || {}),
+          data,
+          layout,
+        },
       },
       themes,
       connectorLoaded,
@@ -117,6 +121,23 @@ const PlotlyEditor = forwardRef((props, ref) => {
   async function onInitialized(...args) {
     const { data, layout, frames } = args[0];
 
+    onChangeValue({
+      ...value,
+      chartData: {
+        data,
+        layout,
+        frames,
+      },
+    });
+
+    if (props.onInitialized) {
+      props.onInitialized(...args);
+    }
+
+    setInitialized(true);
+  }
+
+  useEffect(() => {
     // Load templates and themes
     if (!isTheme && !isTemplate) {
       const api = new Api();
@@ -137,37 +158,29 @@ const PlotlyEditor = forwardRef((props, ref) => {
         });
         setGroupedTemplates(data);
         setThemes(res.themes);
-
-        // Set the first theme as default
-        if ((!layout.template || !layout.template.id) && res.themes.length) {
-          const theme = res.themes[0];
-          editor.current.onUpdate({
-            type: constants.EDITOR_ACTIONS.UPDATE_LAYOUT,
-            payload: {
-              update: {
-                template: pick(theme, ['id', 'data', 'layout']),
-              },
-            },
-          });
-        }
       });
     }
+  }, [isTheme, isTemplate]);
 
-    onChangeValue({
-      ...value,
-      chartData: {
-        data,
-        layout,
-        frames,
-      },
-    });
-
-    if (props.onInitialized) {
-      props.onInitialized(...args);
+  useEffect(() => {
+    if (!initialized) {
+      return;
     }
+    // Set the first theme as default
+    if ((!layout.template || !layout.template.id) && themes.length) {
+      const theme = themes[0];
+      editor.current.onUpdate({
+        type: constants.EDITOR_ACTIONS.UPDATE_LAYOUT,
+        payload: {
+          update: {
+            template: pick(theme, ['id', 'data', 'layout']),
+          },
+        },
+      });
+    }
+  }, [initialized, themes, layout.template]);
 
-    setInitialized(true);
-  }
+  console.log(plotly.makeTemplate({ data, layout }));
 
   return (
     <DefaultPlotlyEditor

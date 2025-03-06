@@ -40,4 +40,34 @@ const sanitizeVisualization = (WrappedComponent) =>
     }
   };
 
+// const sanitizeVisualization = (WrappedComponent) => (props) => {
+//   const [value, setValue] = React.useState({ ...sanitize() });
+
+//   function sanitize(value) {
+//     const v = cloneDeep(value || props.value);
+//     if (!v) return {};
+//     const provider_url = props.provider_url || v.provider_url;
+//     return {
+//       chartData: pick(v.chartData, ['data', 'layout', 'frames']),
+//       dataSources: merge(v.data_source, v.dataSources),
+//       ...(provider_url ? { provider_url } : {}),
+//       ...(v.variation ? { variation: v.variation } : {}),
+//       ...(v.filters ? { filters: v.filters } : {}),
+//       ...(v.id ? { id: v.id } : {}),
+//       ...(v.type ? { type: v.type } : {}),
+//       ...(v.label ? { label: v.label } : {}),
+//     };
+//   }
+
+//   return (
+//     <WrappedComponent
+//       {...props}
+//       value={value}
+//       onChangeValue={(value) => {
+//         setValue(value);
+//       }}
+//     />
+//   );
+// };
+
 export default sanitizeVisualization;

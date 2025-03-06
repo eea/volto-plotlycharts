@@ -112,6 +112,12 @@ const EditTemplate = sanitizeVisualization((props) => {
               originalDataSources: value.dataSources,
             });
 
+            onChangeValue({
+              type: newValue.type,
+              label: newValue.label,
+              chartData: omit(newValue, ['type', 'label']),
+            });
+
             ctx.current.editor().loadDataSources(dataSources, update);
           }}
           onClose={() => setShowImportJSON(false)}
@@ -258,6 +264,22 @@ const PlotlyTemplates = (props, { formData }) => {
             value={{
               ...omit(value[selectedTemplate] || {}, ['visualization']),
               ...(value[selectedTemplate]?.visualization || {}),
+              // TODO: clean this up
+              chartData: {
+                ...(value[selectedTemplate]?.visualization?.chartData || {}),
+                layout: {
+                  ...(value[selectedTemplate]?.visualization?.chartData
+                    ?.layout || {}),
+                  template:
+                    formData.themes.find((theme) => {
+                      return (
+                        theme.id ===
+                        value[selectedTemplate]?.visualization?.chartData
+                          ?.layout?.template?.id
+                      );
+                    }) || formData.themes[0],
+                },
+              },
             }}
             themes={formData.themes}
             onClose={() => setSelectedTemplate(-1)}

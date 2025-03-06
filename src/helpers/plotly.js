@@ -113,6 +113,9 @@ export function getPlotlyDataSources({ data, layout, originalDataSources }) {
       isArray(attrData) && isArray(attrData[0]) ? attrData : [attrData];
 
     attrData.forEach((d) => {
+      if (!d) {
+        return;
+      }
       const [found, key] = inDataSources(d);
       if (found) {
         srcAttr.value.push(key);
