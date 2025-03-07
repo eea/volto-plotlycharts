@@ -192,7 +192,6 @@ const PlotlyEditor = forwardRef((props, ref) => {
       dataSourcesSubset={value.dataSources}
       dataSourceOptions={dataSourceOptions}
       onUpdate={(data, layout, frames) => {
-        console.log('NEW VALUE');
         onChangeValue({
           ...value,
           chartData: {
