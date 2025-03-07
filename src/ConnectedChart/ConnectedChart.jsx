@@ -39,6 +39,7 @@ import {
 import {
   getDataSources,
   getFigureMetadata,
+  getFigurePosition,
 } from '@eeacms/volto-plotlycharts/helpers';
 import { Download } from '@eeacms/volto-plotlycharts/Utils';
 import PlotlyComponent from './PlotlyComponent';
@@ -238,7 +239,11 @@ function ConnectedChart(props) {
       return;
     }
     if (visUrl && !loadingVisualization) {
-      const metadataSection = getFigureMetadata(props.block, viz);
+      const position = getFigurePosition(
+        props.metadata || props.properties,
+        props.block,
+      );
+      const metadataSection = getFigureMetadata(props.block, viz, position);
       if (!metadataSection) return;
 
       props.onInsertBlock(props.block, metadataSection);
