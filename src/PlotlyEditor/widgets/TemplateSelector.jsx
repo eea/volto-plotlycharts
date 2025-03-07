@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { omit, sortBy } from 'lodash';
+import { omit, sortBy, cloneDeep } from 'lodash';
 import { renderTraceIcon } from 'react-chart-editor';
 
 function Template(props) {
@@ -34,6 +34,8 @@ function TemplateSelector(props) {
     onChangeValue,
   } = props;
 
+  console.log(groupedTemplates);
+
   return (
     <div className="template-selector plotly-editor--theme-provider">
       <div className="template-selector__list">
@@ -59,9 +61,11 @@ function TemplateSelector(props) {
                       onSelect={() => {
                         const tmpl = template.visualization || {};
 
+                        console.log(tmpl);
+
                         onChangeValue({
                           ...value,
-                          ...omit(tmpl, ['dataSources']),
+                          ...cloneDeep(omit(tmpl, ['dataSources'])),
                         });
 
                         if (!dataSourceOptions.length) {

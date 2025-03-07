@@ -18,7 +18,6 @@ const Edit = (props) => {
         <div className="embed-visualization edit">
           <ConnectedChart
             {...props}
-            id={props.id}
             mode="edit"
             data={{
               ...data,

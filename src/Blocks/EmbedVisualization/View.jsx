@@ -8,7 +8,7 @@ const View = (props) => {
 
   return (
     <ConnectedChart
-      id={props.id}
+      {...props}
       data={{
         ...data,
         download_button: data.download_button ?? true,

@@ -180,8 +180,6 @@ const PlotlyEditor = forwardRef((props, ref) => {
     }
   }, [initialized, themes, layout.template]);
 
-  console.log(plotly.makeTemplate({ data, layout }));
-
   return (
     <DefaultPlotlyEditor
       ref={editor}
@@ -194,6 +192,7 @@ const PlotlyEditor = forwardRef((props, ref) => {
       dataSourcesSubset={value.dataSources}
       dataSourceOptions={dataSourceOptions}
       onUpdate={(data, layout, frames) => {
+        console.log('NEW VALUE');
         onChangeValue({
           ...value,
           chartData: {
