@@ -1,5 +1,6 @@
 import { cloneDeep } from 'lodash';
 import { v4 as uuid } from 'uuid';
+import { getAllBlocks } from '@plone/volto-slate/utils';
 
 export function downloadDataURL(dataURL, filename) {
   // Create a temporary anchor element
@@ -200,7 +201,24 @@ export function getDataSources(props) {
   };
 }
 
-export function getFigureMetadata(block, metadata) {
+export const getFigurePosition = (metadata, block) => {
+  const blocks = getAllBlocks(metadata, []);
+  const position = blocks
+    .filter((b) =>
+      [
+        'dataFigure',
+        'embed_content',
+        'embed_static_content',
+        'embed_visualization',
+        'plotly_chart',
+      ].includes(b['@type']),
+    )
+    .map((b) => b['id'])
+    .indexOf(block);
+  return position > 0 ? position + 1 : 1;
+};
+
+export function getFigureMetadata(block, metadata, position = 1) {
   const { title, description } = metadata || {};
   const id = `figure-metadata-${block}`;
   const metadataEl = document.getElementById(id);
@@ -233,7 +251,7 @@ export function getFigureMetadata(block, metadata) {
   }
 
   const blocks = [
-    ...(title ? [getBlock('h3-light', `Figure 1. ${title}`)] : []),
+    ...(title ? [getBlock('h3-light', `Figure ${position}. ${title}`)] : []),
     ...(description ? [getBlock('p', description)] : []),
   ];
 
