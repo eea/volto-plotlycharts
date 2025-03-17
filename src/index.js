@@ -37,7 +37,7 @@ const applyConfig = (config) => {
     const installExpressMiddleware = require('./express-middleware').default;
     config = installExpressMiddleware(config);
   }
-  
+
   config.addonReducers = {
     ...config.addonReducers,
     ...addonReducers,

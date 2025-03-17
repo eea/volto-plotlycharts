@@ -26,10 +26,7 @@ function viewMiddleware(req, res, next) {
 
 export default function makeMiddlewares(config) {
   const middleware = express.Router();
-  middleware.all([
-      '**/(@@)?plotly_preview.svg(/*)?',],
-    viewMiddleware,
-  );
+  middleware.all(['**/(@@)?plotly_preview.svg(/*)?'], viewMiddleware);
   middleware.id = 'plotly-middlewares';
 
   config.settings.expressMiddleware.push(middleware);
