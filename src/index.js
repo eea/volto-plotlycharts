@@ -8,7 +8,6 @@ import {
 } from './Widgets';
 import { data_visualizations, preview_image } from './middlewares';
 import * as addonReducers from './reducers';
-import { rssRouteId } from './constants';
 
 import './less/global.less';
 
