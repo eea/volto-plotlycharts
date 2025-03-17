@@ -8,6 +8,7 @@ import {
 } from './Widgets';
 import { data_visualizations, preview_image } from './middlewares';
 import * as addonReducers from './reducers';
+import { rssRouteId } from './constants';
 
 import './less/global.less';
 
@@ -32,6 +33,12 @@ const applyConfig = (config) => {
     data_visualizations,
     preview_image,
   ];
+
+  if (__SERVER__) {
+    const installExpressMiddleware = require('./express-middleware').default;
+    config = installExpressMiddleware(config);
+  }
+  
   config.addonReducers = {
     ...config.addonReducers,
     ...addonReducers,
