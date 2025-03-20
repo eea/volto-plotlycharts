@@ -169,7 +169,7 @@ const StyleLayoutPanel = (props, { localize: _ }) => {
           <Info>
             <p>
               {_(
-                'For Bar chart use "allLinks" for specific clicked sector, "fullLinks" for clicked parent and set link list in Meta Text/Custom data, or insert direct link',
+                'For Bar chart use "allLinks" for specific clicked sector, "fullLinks" for clicked parent and set link list in Meta Text/Custom data, or insert direct link. For sunburst chart use "externalLink" and specify the externalLink in the data source.',
               )}
             </p>
           </Info>
