@@ -7,9 +7,10 @@ import React, {
   useEffect,
 } from 'react';
 import { compose } from 'redux';
-import { isNil, pick, sortBy } from 'lodash';
+import { useLocation } from 'react-router-dom';
+import { cloneDeep, isEqual, isNil, sortBy } from 'lodash';
 import DefaultPlotlyEditor, { constants } from 'react-chart-editor';
-import plotly from 'plotly.js/dist/plotly';
+import plotly from 'plotly.js/dist/plotly-with-meta';
 
 import { Api } from '@plone/volto/helpers';
 
@@ -17,7 +18,7 @@ import { connectToProviderData } from '@eeacms/volto-datablocks/hocs';
 
 import {
   updateTrace,
-  updateContainerDataSources,
+  updateDataSources,
 } from '@eeacms/volto-plotlycharts/helpers/plotly';
 
 import { TemplateSelector } from './widgets';
@@ -25,33 +26,46 @@ import DefaultEditor from './DefaultEditor';
 
 import chartHelp from './chartHelp.json';
 
-const config = { editable: false };
+const config = { editable: false, displayModeBar: false, responsive: true };
 
-const PlotlyEditor = forwardRef((props, ref) => {
+const withValue = (WrappedComponent) => {
+  return forwardRef((props, ref) => {
+    const [value, onChangeValue] = useState(
+      cloneDeep(props.initialValue || props.value),
+    );
+
+    return (
+      <WrappedComponent
+        {...props}
+        ref={ref}
+        value={value}
+        onChangeValue={onChangeValue}
+      />
+    );
+  });
+};
+
+const UnconnectedPlotlyEditor = forwardRef((props, ref) => {
+  const flags = useRef({});
   const editor = useRef();
   const {
+    value,
     actions,
     children,
     isTheme,
     isTemplate,
-    location,
     provider_data,
-    value,
     loadingProviderData: connectorLoading,
-    onChangeValue,
     onApply,
     onClose,
+    onChangeValue,
   } = props;
+  const location = useLocation();
+  const [, forceRender] = useState({});
   const [initialized, setInitialized] = useState(false);
   const [themes, setThemes] = useState([...(props.themes || [])]);
   const [groupedTemplates, setGroupedTemplates] = useState({});
   const connectorLoaded = !isNil(provider_data) && !connectorLoading;
-
-  useImperativeHandle(ref, () => ({
-    editor() {
-      return editor.current;
-    },
-  }));
 
   const dataSources = useMemo(
     () => ({ ...(provider_data || {}), ...(value.dataSources || {}) }),
@@ -68,11 +82,9 @@ const PlotlyEditor = forwardRef((props, ref) => {
   );
 
   const data = useMemo(() => {
-    return (value.chartData.data || []).reduce((acc, trace) => {
-      const updatedTrace = updateContainerDataSources(
-        {
-          ...updateTrace(trace),
-        },
+    return (value.data || []).reduce((acc, trace) => {
+      const updatedTrace = updateDataSources(
+        updateTrace(trace),
         dataSources,
         constants.TRACE_SRC_ATTRIBUTES,
       );
@@ -80,62 +92,58 @@ const PlotlyEditor = forwardRef((props, ref) => {
       acc.push(updatedTrace);
       return acc;
     }, []);
-  }, [value.chartData.data, dataSources]);
+  }, [value.data, dataSources]);
 
   const layout = useMemo(() => {
-    return updateContainerDataSources(
-      value.chartData.layout || {},
+    return updateDataSources(
+      value.layout || {},
       dataSources,
       constants.LAYOUT_SRC_ATTRIBUTES,
     );
-  }, [value.chartData.layout, dataSources]);
+  }, [value.layout, dataSources]);
 
   const ctx = useMemo(
     () => ({
       actions,
+      editor() {
+        return editor.current;
+      },
+      location,
+      themes,
       value: {
         ...value,
-        chartData: {
-          ...(value.chartData || {}),
-          data,
-          layout,
-        },
+        data,
+        layout,
       },
-      themes,
       connectorLoaded,
       connectorLoading,
       onChangeValue,
     }),
     [
       actions,
+      location,
+      themes,
       value,
       data,
       layout,
-      themes,
       connectorLoaded,
       connectorLoading,
       onChangeValue,
     ],
   );
 
-  async function onInitialized(...args) {
-    const { data, layout, frames } = args[0];
-
-    onChangeValue({
-      ...value,
-      chartData: {
-        data,
-        layout,
-        frames,
-      },
-    });
-
+  function onInitialized(...args) {
     if (props.onInitialized) {
       props.onInitialized(...args);
     }
-
     setInitialized(true);
   }
+
+  useImperativeHandle(ref, () => ({
+    editor() {
+      return editor.current;
+    },
+  }));
 
   useEffect(() => {
     // Load templates and themes
@@ -163,20 +171,32 @@ const PlotlyEditor = forwardRef((props, ref) => {
   }, [isTheme, isTemplate]);
 
   useEffect(() => {
-    if (!initialized) {
+    if (!initialized || flags.current.themeSynced || !themes.length) {
       return;
     }
-    // Set the first theme as default
-    if ((!layout.template || !layout.template.id) && themes.length) {
-      const theme = themes[0];
+
+    function updateTemplate(template) {
       editor.current.onUpdate({
         type: constants.EDITOR_ACTIONS.UPDATE_LAYOUT,
         payload: {
           update: {
-            template: pick(theme, ['id', 'data', 'layout']),
+            template,
           },
         },
       });
+      flags.current.themeSynced = true;
+    }
+
+    // Set the first theme as default
+    if (!layout.template && window.location.pathname.endsWith('/add')) {
+      updateTemplate(themes[0]);
+    }
+    // Sync the theme
+    if (layout.template?.id) {
+      const theme = themes.find((t) => t.id === layout.template.id);
+      if (theme && !isEqual(theme, layout.template)) {
+        updateTemplate(theme);
+      }
     }
   }, [initialized, themes, layout.template]);
 
@@ -186,19 +206,16 @@ const PlotlyEditor = forwardRef((props, ref) => {
       plotly={plotly}
       data={data}
       layout={layout}
-      frames={value.chartData.frames || []}
+      frames={value.frames || []}
       config={config}
       dataSources={dataSources}
       dataSourcesSubset={value.dataSources}
       dataSourceOptions={dataSourceOptions}
-      onUpdate={(data, layout, frames) => {
+      onUpdate={(data, layout) => {
         onChangeValue({
           ...value,
-          chartData: {
-            data,
-            layout,
-            frames,
-          },
+          data,
+          layout,
         });
       }}
       onUpdateDataSources={(dataSources) => {
@@ -208,20 +225,18 @@ const PlotlyEditor = forwardRef((props, ref) => {
         });
       }}
       onInitialized={onInitialized}
+      forceRender={() => forceRender({})}
       ctx={ctx}
       divId="gd"
       slots={{
-        ...(initialized &&
-        !isTheme &&
-        !isTemplate &&
-        !value.chartData.data?.length
+        ...(initialized && !isTheme && !isTemplate && !value.data?.length
           ? {
               'grid-and-plot': (
                 <TemplateSelector
                   loadDataSources={editor.current.loadDataSources}
                   groupedTemplates={groupedTemplates}
                   value={value}
-                  dataSourceOptions={dataSourceOptions}
+                  dataSources={dataSources}
                   onChangeValue={onChangeValue}
                 />
               ),
@@ -245,8 +260,7 @@ const PlotlyEditor = forwardRef((props, ref) => {
       <DefaultEditor
         isTheme={isTheme}
         isTemplate={isTemplate}
-        location={location}
-        onApply={onApply}
+        onApply={() => onApply(value)}
         onClose={onClose}
       >
         {children}
@@ -255,8 +269,26 @@ const PlotlyEditor = forwardRef((props, ref) => {
   );
 });
 
-export default compose(
+const ConnectedPlotlyEditor = compose(
+  withValue,
   connectToProviderData((props) => ({
     provider_url: props.value.provider_url,
   })),
-)(PlotlyEditor);
+)(UnconnectedPlotlyEditor);
+
+const PlotlyEditor = forwardRef((props, ref) => {
+  const [value, setValue] = useState(
+    cloneDeep(props.initialValue || props.value),
+  );
+
+  return (
+    <ConnectedPlotlyEditor
+      {...props}
+      ref={ref}
+      value={value}
+      onChangeValue={setValue}
+    />
+  );
+});
+
+export default PlotlyEditor;

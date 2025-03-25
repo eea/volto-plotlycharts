@@ -1,4 +1,4 @@
-import { isArray, isEqual, isString } from 'lodash';
+import { isArray, isEqual, isString, cloneDeep } from 'lodash';
 import nestedProperty from 'plotly.js/src/lib/nested_property';
 import {
   constants,
@@ -6,6 +6,7 @@ import {
   getAttrsPath,
   getColumnNames,
   getSrcAttr,
+  getData,
   maybeTransposeData,
 } from 'react-chart-editor/lib';
 
@@ -145,7 +146,7 @@ export function getPlotlyDataSources({ data, layout, originalDataSources }) {
   return [dataSources, update];
 }
 
-export function updateTrace(trace) {
+export function updateTrace(trace, filters) {
   return {
     ...trace,
     ...(trace.type === 'scatterpolar' &&
@@ -157,27 +158,15 @@ export function updateTrace(trace) {
   };
 }
 
-export function updateContainerDataSources(
-  container,
-  dataSources,
-  srcAttributes,
-) {
-  const newContainer = { ...container };
+export function updateDataSources(container, dataSources, srcAttributes) {
+  const newContainer = cloneDeep(container);
   Object.entries(getAttrsPath(container, srcAttributes)).forEach(([attr]) => {
     const srcAttr = getSrcAttr(container, attr);
     if (!srcAttr.value) {
       return;
     }
-    let data;
-    if (Array.isArray(srcAttr.value)) {
-      data = srcAttr.value
-        .filter((v) => Array.isArray(dataSources[v]))
-        .map((v) => dataSources[v]);
-    } else {
-      data = dataSources[srcAttr.value] || null;
-    }
     nestedProperty(newContainer, attr).set(
-      maybeTransposeData(data, srcAttr.key, container.type),
+      getData(newContainer, srcAttr, dataSources),
     );
   });
 

@@ -37,7 +37,7 @@ const Theme = ({ label, onEdit, onDelete }) => {
   );
 };
 
-const PlotlyThemes = (props) => {
+const ThemesWidget = (props) => {
   const { id, value, onChange } = props;
   const [selectedTheme, setSelectedTheme] = useState(-1);
 
@@ -133,4 +133,4 @@ const PlotlyThemes = (props) => {
   );
 };
 
-export default PlotlyThemes;
+export default ThemesWidget;

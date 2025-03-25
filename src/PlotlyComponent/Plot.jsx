@@ -1,24 +1,21 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import loadable from '@loadable/component';
+import { useHistory } from 'react-router-dom';
 
-const Plot = loadable(() => import('react-plotly.js'));
+const PlotlyComponent = loadable(() => import('react-plotly.js'));
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+const config = { editable: false, displayModeBar: false, responsive: true };
 
 const animationsMS = {
   tree: 1000,
 };
 
-const PlotlyComponent = ({
-  chartRef,
-  data,
-  layout,
-  frames,
-  history,
-  setInitialized,
-  provider_data,
-}) => {
-  const handleChartClick = async (trace, layout, provider_data) => {
+const Plot = forwardRef(({ data, layout, onInitialized }, ref) => {
+  const history = useHistory();
+
+  const handleChartClick = async (trace, layout) => {
     const { customLink, clickmode, meta = [] } = layout;
 
     if (customLink && clickmode !== 'none') {
@@ -43,6 +40,7 @@ const PlotlyComponent = ({
         : false;
 
       const shouldComposeLinks = meta.length > 0;
+
       if (type === 'bar' && shouldComposeLinks) {
         if (customLink === 'allLinks') {
           const yIsLabels = y.indexOf(label) > -1;
@@ -59,15 +57,6 @@ const PlotlyComponent = ({
           const correspondingLinkPosition = pointIndex;
           const correspondingLink = meta[correspondingLinkPosition];
           history.push(correspondingLink);
-        }
-      } else if (type === 'sunburst' && shouldComposeLinks) {
-        if (customLink === 'externalLink') {
-          const correspondingLinkIndex = provider_data.id.indexOf(id);
-          const correspondingLink =
-            provider_data.externalLink[correspondingLinkIndex];
-          if (correspondingLink) {
-            window.open(correspondingLink, '_blank');
-          }
         }
       } else if (shouldRedirect) {
         const link = customLink
@@ -94,33 +83,32 @@ const PlotlyComponent = ({
   };
 
   return (
-    <Plot
+    <PlotlyComponent
       data={data}
       layout={layout}
-      frames={frames}
-      onInitialized={(_, chartEl) => {
-        setInitialized(true);
-        chartRef.current = chartEl;
+      onInitialized={(...args) => {
+        if (ref) {
+          ref.current = args[1];
+        }
+        if (onInitialized) {
+          onInitialized(...args);
+        }
       }}
-      config={{
-        displayModeBar: false,
-        editable: false,
-        responsive: true,
-      }}
-      onClick={(trace) => handleChartClick(trace, layout, provider_data)}
+      config={config}
+      onClick={(trace) => handleChartClick(trace, layout)}
       onHover={(trace) => handleChartHover(trace, layout)}
       onUnhover={(trace) => handleChartUnhover(trace, layout)}
       style={{
         width: '100%',
         height: '100%',
-        position: 'relative',
-        display: 'block',
-        minHeight:
-          !layout.height || layout.height < 10 ? '450px' : `${layout.height}px`,
+        // position: 'relative',
+        // display: 'block',
+        // minHeight:
+        //   !layout.height || layout.height < 10 ? '450px' : `${layout.height}px`,
       }}
       useResizeHandler
     />
   );
-};
+});
 
-export default PlotlyComponent;
+export default Plot;

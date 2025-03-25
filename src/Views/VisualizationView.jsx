@@ -3,7 +3,7 @@ import { Container } from 'semantic-ui-react';
 import { hasBlocksData } from '@plone/volto/helpers';
 import RenderBlocks from '@plone/volto/components/theme/View/RenderBlocks';
 import { pickMetadata } from '@eeacms/volto-embed/helpers';
-import ConnectedChart from '@eeacms/volto-plotlycharts/ConnectedChart';
+import PlotlyComponent from '@eeacms/volto-plotlycharts/PlotlyComponent';
 
 const VisualizationView = (props) => {
   const { content = {} } = props;
@@ -14,7 +14,7 @@ const VisualizationView = (props) => {
         <RenderBlocks {...props} />
       ) : (
         <div className="plotly-chart">
-          <ConnectedChart
+          <PlotlyComponent
             data={{
               with_sources: false,
               with_notes: false,
@@ -22,10 +22,8 @@ const VisualizationView = (props) => {
               download_button: true,
               with_enlarge: true,
               with_share: true,
-              visualization: {
-                ...(props.content.visualization || {}),
-                ...pickMetadata(props.content),
-              },
+              properties: pickMetadata(props.content),
+              visualization: props.content.visualization,
             }}
           />
         </div>

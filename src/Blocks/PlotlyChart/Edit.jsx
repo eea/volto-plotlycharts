@@ -7,8 +7,6 @@ import { SidebarPortal, BlockDataForm } from '@plone/volto/components';
 import schema from './schema';
 import View from './View';
 
-import '@eeacms/volto-plotlycharts/less/plotly.less';
-
 const PlotlyEditorModal = (props) => {
   const [value, setValue] = useState(props.value);
   const [fadeInOut, setFadeInOut] = useState(true);

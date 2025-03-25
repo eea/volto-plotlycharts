@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
+import loadable from '@loadable/component';
 import { toast } from 'react-toastify';
 import { Portal } from 'react-portal';
 import {
-  Button,
   Modal,
   Dropdown,
   DropdownMenu,
@@ -17,6 +17,10 @@ import {
 } from '@eeacms/volto-plotlycharts/helpers/editor';
 
 import 'jsoneditor/dist/jsoneditor.min.css';
+
+const Button = loadable(() =>
+  import('react-chart-editor/lib/components/widgets/Button'),
+);
 
 const JsonEditor = (props) => {
   const { initialValue: dflt, options, onClose, onChange } = props;
@@ -37,7 +41,7 @@ const JsonEditor = (props) => {
           setReady(false);
           setTimeout(() => {
             setReady(true);
-          }, 100);
+          }, 0);
         },
         ...options,
       },
@@ -47,6 +51,7 @@ const JsonEditor = (props) => {
     });
 
     return () => {
+      setReady(false);
       destroyEditor(e);
     };
   }, [dflt, options]);
@@ -104,7 +109,7 @@ const JsonEditor = (props) => {
 
   return (
     <Modal size="fullscreen" open={true} className="json-editor">
-      <Modal.Content scrolling>
+      <Modal.Content>
         <div ref={editorEl} style={{ width: '100%', height: '100%' }} />
         {ready && editorEl.current && (
           <Portal node={editorEl.current.querySelector('.jsoneditor-menu')}>
@@ -134,16 +139,20 @@ const JsonEditor = (props) => {
           </Portal>
         )}
       </Modal.Content>
-      <Modal.Actions>
+      <Modal.Actions
+        className="editor_controls plotly-editor--theme-provider"
+        style={{ width: '100%', justifyContent: 'end' }}
+      >
         <Button
+          variant="secondary"
+          label="close"
           onClick={() => {
             onClose();
           }}
-        >
-          Close
-        </Button>
+        />
         <Button
-          primary
+          variant="primary"
+          label="apply"
           onClick={async () => {
             try {
               const value = await getValue();
@@ -155,9 +164,7 @@ const JsonEditor = (props) => {
               );
             }
           }}
-        >
-          Apply
-        </Button>
+        />
       </Modal.Actions>
     </Modal>
   );

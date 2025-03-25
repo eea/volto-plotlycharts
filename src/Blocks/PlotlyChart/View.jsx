@@ -1,14 +1,12 @@
 import React from 'react';
-import ConnectedChart from '@eeacms/volto-plotlycharts/ConnectedChart';
-
-import '@eeacms/volto-plotlycharts/less/plotly.less';
+import PlotlyComponent from '@eeacms/volto-plotlycharts/PlotlyComponent';
 
 const View = (props) => {
   const { data = {} } = props;
 
   return (
     <div className="plotly-chart">
-      <ConnectedChart
+      <PlotlyComponent
         data={{
           ...data,
           download_button: data.download_button ?? true,

@@ -9,7 +9,7 @@ const HEADERS = [
   'Content-Type',
 ];
 
-function viewMiddleware(req, res, next) {
+function plotly_preview_fn(req, res, next) {
   getAPIResourceWithAuth(req)
     .then((resource) => {
       // Just forward the headers that we need
@@ -24,11 +24,10 @@ function viewMiddleware(req, res, next) {
     .catch(next);
 }
 
-export default function makeMiddlewares(config) {
+export default function plotly_preview() {
   const middleware = express.Router();
-  middleware.all(['**/(@@)?plotly_preview.svg(/*)?'], viewMiddleware);
-  middleware.id = 'plotly-middlewares';
 
-  config.settings.expressMiddleware.push(middleware);
-  return config;
+  middleware.all(['**/(@@)?plotly_preview.svg(/*)?'], plotly_preview_fn);
+  middleware.id = 'plotly-middlewares';
+  return middleware;
 }

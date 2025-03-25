@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
 import { isUndefined } from 'lodash';
-import { withRouter } from 'react-router';
 import { connect, useDispatch } from 'react-redux';
 import { getVisualization } from '@eeacms/volto-plotlycharts/actions';
 
@@ -13,44 +12,44 @@ function connectBlockToVisualization(getConfig = () => ({})) {
   return (WrappedComponent) => {
     return connect((state) => ({
       data_visualizations: state.data_visualizations,
-    }))(
-      withRouter((props) => {
-        const dispatch = useDispatch();
-        const config = useMemo(() => getConfig(props), [props]);
+    }))((props) => {
+      const dispatch = useDispatch();
+      const config = useMemo(() => getConfig(props), [props]);
+      const { viz_url } = config;
+      const { pendingVisualizations, failedVisualizations, data } =
+        props.data_visualizations;
 
-        const vis_url = useMemo(() => config.vis_url, [config.vis_url]);
+      const isPending = pendingVisualizations?.[viz_url] ?? false;
+      const isFailed = failedVisualizations?.[viz_url] ?? false;
+      const content = data?.[viz_url];
 
-        const isPending = vis_url
-          ? props.data_visualizations?.pendingVisualizations?.[vis_url] ?? false
-          : false;
+      const readyToDispatch =
+        !!viz_url && isUndefined(content) && !isPending && !isFailed;
 
-        const isFailed = vis_url
-          ? props.data_visualizations?.failedVisualizations?.[vis_url] ?? false
-          : false;
+      const blockData = useMemo(() => {
+        return {
+          ...props.data,
+          ...(content || {}),
+        };
+      }, [props.data, content]);
 
-        const visualization = vis_url
-          ? props.data_visualizations?.data?.[vis_url]
-          : null;
+      useEffect(() => {
+        if (readyToDispatch) {
+          dispatch(getVisualization(viz_url));
+        }
+      }, [dispatch, readyToDispatch, viz_url]);
 
-        const readyToDispatch =
-          vis_url && isUndefined(visualization) && !isPending && !isFailed;
-
-        useEffect(() => {
-          if (readyToDispatch) {
-            dispatch(getVisualization(vis_url));
+      return (
+        <WrappedComponent
+          {...props}
+          data={blockData}
+          loadingVisualization={
+            !!viz_url && (isPending || isUndefined(content))
           }
-        }, [dispatch, readyToDispatch, vis_url]);
-
-        return (
-          <WrappedComponent
-            {...props}
-            visualization={visualization}
-            loadingVisualization={isPending || isUndefined(visualization)}
-            hasVisUrl={!!vis_url}
-          />
-        );
-      }),
-    );
+          failedVisualization={isFailed}
+        />
+      );
+    });
   };
 }
 

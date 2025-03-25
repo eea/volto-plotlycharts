@@ -1,316 +1,60 @@
-// Axis title
-
-// .infolayer [class^='y'][class$='title'] {
-//   transform: rotate(0deg)
-//     translateY(calc(-50% + var(--y-axis-title-font-size, 0) * 1px));
-//   text-anchor: start;
-//   dominant-baseline: hanging;
-// }
-
-// Editor
-.editor_controls .text-input.width-100 {
-  width: 100%;
-}
-
-.editor_controls .sidebar__item--single.end:last-child {
-  display: flex;
-  flex-flow: column;
-  flex-grow: 1;
-  justify-content: flex-end;
-  margin: 15px auto;
-}
-
-.plotly_editor {
-  .plot-container.plotly .svg-container::after {
-    position: absolute;
-    z-index: -1;
-    width: 100%;
-    height: 100%;
-    border: 1px solid var(--color-border-default);
-    border-left: 0px;
-    content: '';
-    pointer-events: none;
+.svg-container {
+  * {
+    line-height: 1;
   }
 }
 
-.editor_controls .button {
-  &--delete {
-    border-color: #ff4d4f;
-    background-color: #ff4d4f;
-    color: var(--color-button-primary-base-text);
-    text-shadow: var(--text-shadow-dark-ui);
-  }
-}
+.plotly-component {
+  margin-bottom: 1rem;
 
-.panel__content {
-  display: flex;
-  height: 100%;
-  flex-flow: column;
-}
-
-.panel__content .ui.toggle.checkbox input:focus:checked ~ label,
-.panel__content .ui.toggle.checkbox input:checked ~ label {
-  color: #000 !important;
-}
-
-.connected-dot,
-.disconnected-dot,
-.loading-dot {
-  display: inline-block;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-}
-
-.connected-dot {
-  background-color: var(--color-emerald);
-}
-
-.disconnected-dot {
-  background-color: var(--color-sienna);
-}
-
-.loading-dot {
-  background-color: orange;
-}
-
-// Template
-
-.template-item {
-  position: relative;
-  display: flex;
-  width: 90px;
-  flex-direction: column;
-  flex-grow: 0;
-  align-items: center;
-  justify-content: flex-start;
-  margin-top: var(--spacing-half-unit);
-  color: var(--color-text-base);
-  transition: all 0.15s ease-in-out;
-
-  &__image {
-    position: relative;
-    z-index: 2;
-    display: flex;
-    width: 60px;
-    height: 60px;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid var(--color-border-default);
-    border-radius: var(--border-radius);
-    background: var(--color-background-top);
-    box-shadow: 0 2px 9px transparent;
-    transition: all 0.15s ease-in-out;
-
-    &__wrapper {
-      width: 100%;
-    }
+  .svg-container {
+    height: var(--svg-container-height) !important;
   }
 
-  &__label {
-    width: 72px;
-    height: 34px;
-    margin-top: var(--spacing-quarter-unit);
-    color: var(--color-text-base);
-    font-size: var(--font-size-small);
-    font-weight: var(--font-weight-semibold);
-    text-align: center;
-    text-transform: capitalize;
-  }
-
-  .button--delete {
-    position: absolute;
-    z-index: 2;
-    top: 0;
-    right: 0;
-    display: inline-flex;
-    width: 24px;
-    height: 24px;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-    border-radius: 50%;
-    font-size: 12px;
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  &:hover {
-    cursor: pointer;
-
-    .template-item__image {
-      border-color: var(--color-accent);
-    }
-
-    .template-item__label {
-      color: var(--color-accent);
-    }
-
-    .button--delete {
-      opacity: 1;
-      pointer-events: all;
-    }
-  }
-}
-
-.template-group {
-  padding: 0.5rem 0rem;
-
-  &__label {
-    margin-right: 15px;
-    margin-bottom: 0;
-    margin-left: 15px;
-    color: var(--color-text-base);
-    font-size: var(--font-size-text-large);
-    font-weight: var(--font-weight-semibold);
-    text-transform: capitalize;
-  }
-
-  &__list {
-    display: flex;
-    flex-wrap: wrap;
-    row-gap: 1rem;
-  }
-}
-
-.plotly-templates,
-.template-selector {
-  &__list {
-    min-height: 100%;
-
-    &--wrapper {
-      display: flex;
-      flex-wrap: wrap;
-      padding: 1rem;
-      column-gap: 0rem;
-      row-gap: 1rem;
-    }
-  }
-}
-
-.template-selector {
-  position: absolute;
-  z-index: 1000;
-  top: 0;
-  left: 0;
-  overflow: auto;
-  width: 100%;
-  height: 100%;
-  padding: 0 1rem;
-  background-color: #fff;
-
-  &__list {
-    border-radius: var(--border-radius);
-    background-color: var(--color-background-light);
-  }
-
-  &__title {
-    margin-right: 15px;
-    margin-bottom: 1.5rem;
-    margin-left: 15px;
-    color: var(--color-text-base);
-    font-size: var(--font-size-heading-large);
-    font-weight: var(--font-weight-bold);
-    text-transform: capitalize;
-  }
-}
-
-.plotly-templates-widget.editor_controls {
-  width: 100%;
-}
-
-.plotly-templates {
-  display: flex;
-  width: 100%;
-  flex-flow: column;
-
-  &--header {
-    text-align: right;
-  }
-}
-
-// Themes
-.theme-panel--center {
-  margin: 0 auto;
-  cursor: pointer;
-
-  .theme-thumbnail {
-    width: calc(var(--panel-width) - 2rem);
-    min-height: 160px;
-    box-sizing: border-box;
-    padding: 7px;
-    border: 1.5px solid #c6d4e4;
-    border-radius: 5px;
+  .visualization-filters {
     margin-bottom: 1rem;
-    background-color: white;
+  }
 
-    &.selected {
-      border: 1.5px solid var(--color-accent);
+  &:not(.mobile) {
+    &.filters_on_right {
+      .visualization {
+        width: calc(100% - 300px - 1rem);
+      }
+
+      .visualization-filters {
+        width: 300px;
+        float: right;
+        margin-bottom: 0;
+      }
+    }
+
+    &.filters_on_left {
+      .visualization {
+        width: calc(100% - 300px - 1rem);
+        margin-left: calc(300px + 1rem);
+      }
+
+      .visualization-filters {
+        width: 300px;
+        float: left;
+        margin-bottom: 0;
+      }
     }
   }
 
-  .theme-thumbnail__title {
-    width: 100%;
-    margin: 0 auto;
-    color: #516c8a;
-    text-align: center;
-    text-transform: capitalize;
+  .visualization-toolbar {
+    align-items: center;
+    margin-top: 0.5rem;
+    margin-bottom: 0;
   }
 }
 
-// Modals
-.sidebar-container-enter-done {
-  z-index: 1001 !important;
-}
+.enlarge-modal {
+  .content {
+    height: 100%;
 
-.ui.modals.dimmer {
-  opacity: 1;
-  transition: opacity 0.3s ease-in-out;
-}
-
-.ui.modals.dimmer:has(.ui.modal.fade-in-out) {
-  opacity: 0;
-}
-
-.ui.modals.dimmer:has(.chart-editor-modal) {
-  z-index: 110 !important;
-  padding: 0 !important;
-
-  .ui.modal.chart-editor-modal {
-    display: flex !important;
-    width: 100% !important;
-    height: 100% !important;
-    flex-flow: column !important;
-    margin: 0 !important;
-
-    .content {
-      height: -webkit-fill-available !important;
-      max-height: -webkit-fill-available !important;
-      flex-grow: 1;
-      padding: 0;
+    .svg-container {
+      height: 100%;
     }
   }
-}
-
-// JSON Editor
-.jsoneditor-poweredBy {
-  display: none;
-}
-
-.json-editor .scrolling.content {
-  height: 80vh;
-}
-
-.ui.modals.dimmer:has(.json-editor) {
-  justify-content: center !important;
-}
-
-// Others
-.field-wrapper-provider-data .wrapper .ui.input {
-  width: 100%;
-}
-
-.field-provider-data-action-button {
-  border: 1px solid #c7d5d8;
-  cursor: pointer;
 }

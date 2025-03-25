@@ -6,14 +6,6 @@ import PlotlyPanel from 'react-chart-editor/lib/components/containers/PlotlyPane
 
 import { ThemeIcon } from '@eeacms/volto-plotlycharts/Utils';
 
-function getTheme(theme) {
-  return {
-    id: theme.id,
-    data: theme.data,
-    layout: theme.layout,
-  };
-}
-
 const ThemeChosePanel = (props, { ctx, fullLayout, onUpdate }) => {
   const { themes } = ctx;
 
@@ -23,7 +15,7 @@ const ThemeChosePanel = (props, { ctx, fullLayout, onUpdate }) => {
         type: EDITOR_ACTIONS.UPDATE_LAYOUT,
         payload: {
           update: {
-            template: getTheme(theme),
+            template: theme,
           },
         },
       });

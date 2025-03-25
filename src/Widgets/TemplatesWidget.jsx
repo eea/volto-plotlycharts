@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { sortBy, omit } from 'lodash';
 import cx from 'classnames';
@@ -6,9 +6,7 @@ import loadable from '@loadable/component';
 import { Modal } from 'semantic-ui-react';
 import { PlusIcon } from 'plotly-icons';
 
-import { sanitizeVisualization } from '@eeacms/volto-plotlycharts/hocs';
 import PlotlyEditor from '@eeacms/volto-plotlycharts/PlotlyEditor';
-import { JsonEditor } from '@eeacms/volto-plotlycharts/Utils';
 
 const PlotlyButton = loadable(() =>
   import('react-chart-editor/lib/components/widgets/Button'),
@@ -21,11 +19,8 @@ const renderTraceIcon = __CLIENT__
   ? require('react-chart-editor').renderTraceIcon
   : () => null;
 
-const EditTemplate = sanitizeVisualization((props) => {
-  const ctx = useRef();
-  const { value, onChangeValue } = props;
+const EditTemplate = (props) => {
   const [fadeInOut, setFadeInOut] = useState(true);
-  const [showImportJSON, setShowImportJSON] = useState(false);
 
   function onClose() {
     setFadeInOut(true);
@@ -39,93 +34,26 @@ const EditTemplate = sanitizeVisualization((props) => {
   }, []);
 
   return (
-    <>
-      <Modal
-        open={true}
-        size="fullscreen"
-        className={cx(
-          'chart-editor-modal editor_controls plotly-editor--theme-provider',
-          { 'fade-in-out': fadeInOut },
-        )}
-      >
-        <Modal.Content scrolling>
-          <PlotlyEditor
-            ref={ctx}
-            actions={[
-              {
-                variant: 'primary',
-                onClick: () => setShowImportJSON(true),
-                children: 'DEV',
-              },
-            ]}
-            value={value}
-            themes={props.themes}
-            onChangeValue={onChangeValue}
-            onApply={() => {
-              props.onChange(value);
-              onClose();
-            }}
-            onClose={onClose}
-            isTemplate
-          />
-        </Modal.Content>
-      </Modal>
-      {showImportJSON && (
-        <JsonEditor
-          initialValue={{
-            type: value.type,
-            label: value.label,
-            data: value.chartData.data,
-            layout: value.chartData.layout,
-            frames: value.chartData.frames,
+    <Modal
+      open={true}
+      size="fullscreen"
+      className={cx('chart-editor-modal', { 'fade-in-out': fadeInOut })}
+    >
+      <Modal.Content scrolling>
+        <PlotlyEditor
+          value={props.value}
+          themes={props.themes}
+          onApply={(value) => {
+            props.onChange(value);
+            onClose();
           }}
-          options={{
-            mode: 'tree',
-            schema: {
-              type: 'object',
-              properties: {
-                type: {
-                  type: 'object',
-                },
-                label: {
-                  type: 'string',
-                },
-                data: {
-                  type: 'array',
-                },
-                layout: {
-                  type: 'object',
-                },
-                frames: {
-                  type: 'array',
-                },
-              },
-              required: ['type', 'label', 'data', 'layout'],
-              additionalProperties: false,
-            },
-          }}
-          onChange={async (newValue) => {
-            const { getPlotlyDataSources } = await plotlyUtils.load();
-            const [dataSources, update] = getPlotlyDataSources({
-              data: newValue.data,
-              layout: newValue.layout,
-              originalDataSources: value.dataSources,
-            });
-
-            onChangeValue({
-              type: newValue.type,
-              label: newValue.label,
-              chartData: omit(newValue, ['type', 'label']),
-            });
-
-            ctx.current.editor().loadDataSources(dataSources, update);
-          }}
-          onClose={() => setShowImportJSON(false)}
+          onClose={onClose}
+          isTemplate
         />
-      )}
-    </>
+      </Modal.Content>
+    </Modal>
   );
-});
+};
 
 const Template = ({ type, label, onEdit, onDelete }) => {
   const ComplexIcon = useMemo(
@@ -161,7 +89,7 @@ const Template = ({ type, label, onEdit, onDelete }) => {
   );
 };
 
-const PlotlyTemplates = (props, { formData }) => {
+const TemplatesWidget = (props, { formData }) => {
   const { id, value, onChange } = props;
   const [selectedTemplate, setSelectedTemplate] = useState(-1);
 
@@ -264,22 +192,6 @@ const PlotlyTemplates = (props, { formData }) => {
             value={{
               ...omit(value[selectedTemplate] || {}, ['visualization']),
               ...(value[selectedTemplate]?.visualization || {}),
-              // TODO: clean this up
-              chartData: {
-                ...(value[selectedTemplate]?.visualization?.chartData || {}),
-                layout: {
-                  ...(value[selectedTemplate]?.visualization?.chartData
-                    ?.layout || {}),
-                  template:
-                    formData.themes.find((theme) => {
-                      return (
-                        theme.id ===
-                        value[selectedTemplate]?.visualization?.chartData
-                          ?.layout?.template?.id
-                      );
-                    }) || formData.themes[0],
-                },
-              },
             }}
             themes={formData.themes}
             onClose={() => setSelectedTemplate(-1)}
@@ -305,8 +217,8 @@ const PlotlyTemplates = (props, { formData }) => {
   );
 };
 
-PlotlyTemplates.contextTypes = {
+TemplatesWidget.contextTypes = {
   formData: PropTypes.object,
 };
 
-export default PlotlyTemplates;
+export default TemplatesWidget;

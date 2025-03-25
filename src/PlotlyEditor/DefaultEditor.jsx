@@ -24,6 +24,9 @@ import {
 } from 'react-chart-editor';
 import Logo from 'react-chart-editor/lib/components/widgets/Logo';
 
+import JsonEditor from '@eeacms/volto-plotlycharts/Utils/JsonEditor';
+import { getPlotlyDataSources } from '@eeacms/volto-plotlycharts/helpers/plotly';
+
 import {
   GraphThemePanel,
   GraphTemplatePanel,
@@ -58,10 +61,18 @@ const ObjectBrowserButton = withObjectBrowser(
 );
 
 class DefaultEditor extends PlotlyDefaultEditor {
+  constructor(props, context) {
+    super(props, context);
+    this.state = {
+      showImportJSON: false,
+    };
+  }
+
   render() {
     const _ = this.context.localize;
     const {
       actions,
+      editor,
       value,
       connectorLoaded,
       connectorLoading,
@@ -129,11 +140,69 @@ class DefaultEditor extends PlotlyDefaultEditor {
           </SingleSidebarItem>
         ))}
         <SingleSidebarItem>
+          <Button
+            variant="primary"
+            label="JSON"
+            onClick={() => this.setState({ showImportJSON: true })}
+          />
+        </SingleSidebarItem>
+        <SingleSidebarItem>
           <Button variant="primary" label="apply" onClick={onApply} />
         </SingleSidebarItem>
         <SingleSidebarItem>
           <Button variant="secondary" label="close" onClick={onClose} />
         </SingleSidebarItem>
+        {this.state.showImportJSON && (
+          <SingleSidebarItem>
+            <JsonEditor
+              initialValue={{
+                data: value.data,
+                layout: value.layout,
+                // dataSources: value.dataSources,
+              }}
+              options={{
+                mode: 'tree',
+                schema: {
+                  type: 'object',
+                  properties: {
+                    data: {
+                      type: 'array',
+                    },
+                    layout: {
+                      type: 'object',
+                    },
+                    frames: {
+                      type: 'array',
+                    },
+                    // dataSources: {
+                    //   type: 'object',
+                    // },
+                  },
+                  required: ['data', 'layout'],
+                  additionalProperties: false,
+                },
+              }}
+              onChange={(v) => {
+                const newValue = {
+                  ...value,
+                  ...v,
+                };
+
+                const [dataSources, update] = getPlotlyDataSources({
+                  data: newValue.data,
+                  layout: newValue.layout,
+                  originalDataSources: value.dataSources,
+                });
+
+                // console.log('dataSources', dataSources, update);
+
+                onChangeValue({ ...newValue, dataSources });
+                editor().loadDataSources(dataSources, update);
+              }}
+              onClose={() => this.setState({ showImportJSON: false })}
+            />
+          </SingleSidebarItem>
+        )}
         <SingleSidebarItem className="end">
           <Popup
             disabled={!value.provider_url}
