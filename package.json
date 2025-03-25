@@ -25,9 +25,9 @@
     "@eeacms/volto-datablocks"
   ],
   "dependencies": {
+    "@eeacms/volto-datablocks": "*",
     "@eeacms/volto-embed": "*",
     "@eeacms/volto-matomo": "*",
-    "@eeacms/volto-datablocks": "*",
     "@plone/scripts": "*",
     "jsoneditor": "10.1.0",
     "plotly.js": "^2.35.3",

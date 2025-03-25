@@ -8,16 +8,16 @@ import schema from './schema';
 import View from './View';
 
 const PlotlyEditorModal = (props) => {
-  const [value, setValue] = useState(props.value);
+  // const [value, setValue] = useState(props.value);
   const [fadeInOut, setFadeInOut] = useState(true);
   // const [showImportJSON, setShowImportJSON] = useState(false);
 
-  function onClose() {
-    setFadeInOut(true);
-    setTimeout(() => {
-      props.onClose();
-    }, 300);
-  }
+  // function onClose() {
+  //   setFadeInOut(true);
+  //   setTimeout(() => {
+  //     props.onClose();
+  //   }, 300);
+  // }
 
   useEffect(() => {
     setFadeInOut(false);

@@ -1,5 +1,3 @@
-import React from 'react';
-
 const schema = {
   title: 'Embed interactive Chart (Plotly)',
   fieldsets: [
