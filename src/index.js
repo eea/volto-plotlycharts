@@ -32,6 +32,12 @@ const applyConfig = (config) => {
     data_visualizations,
     preview_image,
   ];
+
+  if (__SERVER__) {
+    const installExpressMiddleware = require('./express-middleware').default;
+    config = installExpressMiddleware(config);
+  }
+
   config.addonReducers = {
     ...config.addonReducers,
     ...addonReducers,
