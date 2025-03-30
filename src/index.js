@@ -1,10 +1,11 @@
 import installBlocks from './Blocks';
 import { VisualizationView } from './Views';
 import {
-  VisualizationWidget,
-  VisualizationViewWidget,
-  ThemesWidget,
   TemplatesWidget,
+  ThemesWidget,
+  VisualizationHistoryWidget,
+  VisualizationViewWidget,
+  VisualizationWidget,
 } from './Widgets';
 import PlotlyControlPanel from './Controlpanels/PlotlyControlPanel';
 import { data_visualizations } from './middlewares';
@@ -19,6 +20,11 @@ const applyConfig = (config) => {
   config.widgets.views.id.visualization = VisualizationViewWidget;
   config.widgets.widget.plotly_themes = ThemesWidget;
   config.widgets.widget.plotly_templates = TemplatesWidget;
+
+  config.widgets.views.behavior = {
+    ...(config.widgets.views.behavior || {}),
+    'eea.plotly.visualization': VisualizationHistoryWidget,
+  };
 
   // Add chart icon to visualization content type in /contents view
   config.settings.contentIcons.visualization = {

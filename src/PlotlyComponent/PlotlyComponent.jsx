@@ -302,7 +302,7 @@ const ConnectedPlotlyComponent = compose(
   connectBlockToVisualization(function getConfig(props) {
     const url = flattenToAppURL(props.data?.viz_url);
     const viz = props.data.visualization;
-    const properties = props.data.properties;
+    const properties = props.data.properties || {};
     const currentUrl = viz && flattenToAppURL(properties['@id']);
     const shouldFetchViz = !viz?.error && !!url && (!viz || currentUrl !== url);
     return {

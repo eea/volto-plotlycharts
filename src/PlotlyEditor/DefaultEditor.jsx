@@ -36,7 +36,7 @@ import {
 } from './panels';
 
 const ObjectBrowserButton = withObjectBrowser(
-  ({ value, children, location, openObjectBrowser, onChangeValue }) => {
+  ({ value, children, openObjectBrowser, onChangeValue }) => {
     return (
       <Button
         variant="link"
@@ -205,7 +205,7 @@ class DefaultEditor extends PlotlyDefaultEditor {
         )}
         <SingleSidebarItem className="end">
           <Popup
-            disabled={!value.provider_url}
+            disabled={false}
             className="editor_controls"
             content={
               <>
@@ -238,22 +238,24 @@ class DefaultEditor extends PlotlyDefaultEditor {
               </>
             }
             trigger={
-              <ObjectBrowserButton
-                value={value}
-                location={location}
-                onChangeValue={onChangeValue}
-              >
-                <span
-                  className={cx({
-                    'loading-dot': !!value.provider_url && connectorLoading,
-                    'connected-dot': !!value.provider_url && connectorLoaded,
-                    'disconnected-dot': !value.provider_url,
-                  })}
-                />{' '}
-                {connectorLoading && 'Loading...'}
-                {connectorLoaded && 'Connected'}
-                {!value.provider_url && 'Connector'}
-              </ObjectBrowserButton>
+              <div>
+                <ObjectBrowserButton
+                  value={value}
+                  location={location}
+                  onChangeValue={onChangeValue}
+                >
+                  <span
+                    className={cx({
+                      'loading-dot': !!value.provider_url && connectorLoading,
+                      'connected-dot': !!value.provider_url && connectorLoaded,
+                      'disconnected-dot': !value.provider_url,
+                    })}
+                  />{' '}
+                  {connectorLoading && 'Loading...'}
+                  {connectorLoaded && 'Connected'}
+                  {!value.provider_url && 'Connector'}
+                </ObjectBrowserButton>
+              </div>
             }
             hoverable
           />

@@ -1,11 +1,13 @@
-import VisualizationWidget from './VisualizationWidget';
-import VisualizationViewWidget from './VisualizationViewWidget';
-import ThemesWidget from './ThemesWidget';
 import TemplatesWidget from './TemplatesWidget';
+import ThemesWidget from './ThemesWidget';
+import VisualizationHistoryWidget from './VisualizationHistoryWidget';
+import VisualizationViewWidget from './VisualizationViewWidget';
+import VisualizationWidget from './VisualizationWidget';
 
 export {
-  VisualizationWidget,
-  VisualizationViewWidget,
-  ThemesWidget,
   TemplatesWidget,
+  ThemesWidget,
+  VisualizationHistoryWidget,
+  VisualizationViewWidget,
+  VisualizationWidget,
 };
