@@ -14,6 +14,7 @@ const sanitizeVisualization = (WrappedComponent) =>
         layout: v.chartData?.layout || v.layout || {},
         // frames: v.chartData?.frames || v.frames || [],
         dataSources: merge(v.data_source, v.dataSources),
+        columns: v.columns,
         ...(provider_url ? { provider_url } : {}),
         ...(v.variation ? { variation: v.variation } : {}),
         ...(v.filters ? { filters: v.filters } : {}),

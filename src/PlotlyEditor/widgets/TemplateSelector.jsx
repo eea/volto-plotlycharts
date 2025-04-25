@@ -59,19 +59,30 @@ function TemplateSelector(props) {
                       onSelect={() => {
                         const tmpl = template.visualization || {};
 
+                        const ds = {
+                          ...(dataSources || {}),
+                          ...(tmpl.dataSources || {}),
+                        };
+
+                        const columnsMap = new Map();
+
+                        [
+                          ...(value.columns || []),
+                          ...(tmpl.columns || []),
+                        ].forEach((col) => {
+                          columnsMap.set(col.key, col);
+                        });
+
+                        const columns = Array.from(columnsMap.values());
+
                         onChangeValue({
                           ...value,
                           ...omit(tmpl, ['dataSources']),
-                          dataSources: {
-                            ...(dataSources || {}),
-                            ...(tmpl.dataSources || {}),
-                          },
+                          dataSources: ds,
+                          columns,
                         });
 
-                        loadDataSources?.({
-                          ...(dataSources || {}),
-                          ...(tmpl.dataSources || {}),
-                        });
+                        loadDataSources?.(ds, columns);
                       }}
                     />
                   ))}

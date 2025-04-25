@@ -8,7 +8,7 @@ import React, {
 } from 'react';
 import { compose } from 'redux';
 import { useLocation } from 'react-router-dom';
-import { cloneDeep, isEqual, isNil, sortBy } from 'lodash';
+import { cloneDeep, isEqual, isNil, sortBy, debounce } from 'lodash';
 import DefaultPlotlyEditor, { constants } from 'react-chart-editor';
 import plotly from 'plotly.js/dist/plotly-with-meta';
 
@@ -46,6 +46,7 @@ const withValue = (WrappedComponent) => {
 };
 
 const UnconnectedPlotlyEditor = forwardRef((props, ref) => {
+  const update = useRef({});
   const flags = useRef({});
   const editor = useRef();
   const {
@@ -132,6 +133,16 @@ const UnconnectedPlotlyEditor = forwardRef((props, ref) => {
     ],
   );
 
+  const onUpdate = debounce(() => {
+    if (Object.keys(update).length > 0) {
+      onChangeValue({
+        ...value,
+        ...update.current,
+      });
+      update.current = {};
+    }
+  }, 40);
+
   function onInitialized(...args) {
     if (props.onInitialized) {
       props.onInitialized(...args);
@@ -208,21 +219,25 @@ const UnconnectedPlotlyEditor = forwardRef((props, ref) => {
       layout={layout}
       frames={value.frames || []}
       config={config}
+      columns={value.columns || []}
       dataSources={dataSources}
       dataSourcesSubset={value.dataSources}
       dataSourceOptions={dataSourceOptions}
       onUpdate={(data, layout) => {
-        onChangeValue({
-          ...value,
+        update.current = {
+          ...update.current,
           data,
           layout,
-        });
+        };
+        onUpdate();
       }}
-      onUpdateDataSources={(dataSources) => {
-        onChangeValue({
-          ...value,
+      onUpdateDataSources={(dataSources, columns) => {
+        update.current = {
+          ...update.current,
           dataSources,
-        });
+          columns,
+        };
+        onUpdate();
       }}
       onInitialized={onInitialized}
       forceRender={() => forceRender({})}

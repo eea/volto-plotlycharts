@@ -40,6 +40,17 @@
     color: var(--color-button-primary-base-text);
     text-shadow: var(--text-shadow-dark-ui);
   }
+
+  &--context {
+    border-color: var(--color-button-primary-base-fill);
+    background-color: var(--color-button-primary-base-fill);
+    color: #fff;
+    text-shadow: var(--text-shadow-dark-ui);
+
+    .divider {
+      color: #fff !important;
+    }
+  }
 }
 
 .panel__content {
@@ -118,12 +129,13 @@
     text-transform: capitalize;
   }
 
-  .button--delete {
-    position: absolute;
+  .button--delete,
+  .button--context {
+    position: absolute !important;
     z-index: 2;
     top: 0;
     right: 0;
-    display: inline-flex;
+    display: inline-flex !important;
     width: 24px;
     height: 24px;
     align-items: center;
@@ -146,7 +158,8 @@
       color: var(--color-accent);
     }
 
-    .button--delete {
+    .button--delete,
+    .button--context {
       opacity: 1;
       pointer-events: all;
     }

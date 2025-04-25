@@ -194,10 +194,8 @@ class DefaultEditor extends PlotlyDefaultEditor {
                   originalDataSources: value.dataSources,
                 });
 
-                // console.log('dataSources', dataSources, update);
-
                 onChangeValue({ ...newValue, dataSources });
-                editor().loadDataSources(dataSources, update);
+                editor().loadDataSources(dataSources, [], update);
               }}
               onClose={() => this.setState({ showImportJSON: false })}
             />
@@ -205,7 +203,7 @@ class DefaultEditor extends PlotlyDefaultEditor {
         )}
         <SingleSidebarItem className="end">
           <Popup
-            disabled={false}
+            disabled={!connectorLoaded}
             className="editor_controls"
             content={
               <>

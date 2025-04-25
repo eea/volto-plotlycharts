@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { PlusIcon } from 'plotly-icons';
 import loadable from '@loadable/component';
+import { DropdownMenu, DropdownItem, Dropdown } from 'semantic-ui-react';
 
 import { JsonEditor, ThemeIcon } from '@eeacms/volto-plotlycharts/Utils';
 
@@ -8,7 +9,7 @@ const PlotlyButton = loadable(() =>
   import('react-chart-editor/lib/components/widgets/Button'),
 );
 
-const Theme = ({ label, onEdit, onDelete }) => {
+const Theme = ({ label, onEdit, onDelete, onClone }) => {
   return (
     <div
       role="button"
@@ -23,16 +24,17 @@ const Theme = ({ label, onEdit, onDelete }) => {
         </div>
       </div>
       <div className="template-item__label">{label}</div>
-      <button
-        className="button--delete"
-        onClick={(e) => {
-          onDelete();
-          e.preventDefault();
-          e.stopPropagation();
-        }}
+      <Dropdown
+        className="button--context"
+        text="..."
+        as="button"
+        onClick={(e) => e.preventDefault()}
       >
-        x
-      </button>
+        <DropdownMenu>
+          <DropdownItem text="Delete" onClick={() => onDelete()} />
+          <DropdownItem text="Clone" onClick={() => onClone()} />
+        </DropdownMenu>
+      </Dropdown>
     </div>
   );
 };
@@ -85,6 +87,18 @@ const ThemesWidget = (props) => {
                         newValue.splice(index, 1);
                         onChange(id, newValue);
                         setSelectedTheme(-1);
+                      }}
+                      onClone={() => {
+                        const newValue = [
+                          ...value,
+                          {
+                            ...theme,
+                            id: `${theme.id} (clone)`,
+                            label: `${theme.label} (clone)`,
+                          },
+                        ];
+                        onChange(id, newValue);
+                        setSelectedTheme(newValue.length - 1);
                       }}
                     />
                   </div>

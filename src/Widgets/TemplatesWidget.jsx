@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { sortBy, omit } from 'lodash';
 import cx from 'classnames';
 import loadable from '@loadable/component';
-import { Modal } from 'semantic-ui-react';
+import { Modal, DropdownMenu, DropdownItem, Dropdown } from 'semantic-ui-react';
 import { PlusIcon } from 'plotly-icons';
 
 import PlotlyEditor from '@eeacms/volto-plotlycharts/PlotlyEditor';
@@ -55,7 +55,7 @@ const EditTemplate = (props) => {
   );
 };
 
-const Template = ({ type, label, onEdit, onDelete }) => {
+const Template = ({ type, label, onEdit, onDelete, onClone }) => {
   const ComplexIcon = useMemo(
     () => renderTraceIcon(type.icon || type.value, 'TraceType'),
     [type],
@@ -75,16 +75,17 @@ const Template = ({ type, label, onEdit, onDelete }) => {
         </div>
       </div>
       <div className="template-item__label">{label}</div>
-      <button
-        className="button--delete"
-        onClick={(e) => {
-          onDelete();
-          e.preventDefault();
-          e.stopPropagation();
-        }}
+      <Dropdown
+        className="button--context"
+        text="..."
+        as="button"
+        onClick={(e) => e.preventDefault()}
       >
-        x
-      </button>
+        <DropdownMenu>
+          <DropdownItem text="Delete" onClick={() => onDelete()} />
+          <DropdownItem text="Clone" onClick={() => onClone()} />
+        </DropdownMenu>
+      </Dropdown>
     </div>
   );
 };
@@ -177,6 +178,17 @@ const TemplatesWidget = (props, { formData }) => {
                             newValue.splice(template.index, 1);
                             onChange(id, newValue);
                             setSelectedTemplate(-1);
+                          }}
+                          onClone={() => {
+                            const newValue = [
+                              ...value,
+                              {
+                                ...template,
+                                label: `${template.label} (clone)`,
+                              },
+                            ];
+                            onChange(id, newValue);
+                            setSelectedTemplate(newValue.length - 1);
                           }}
                         />
                       );
