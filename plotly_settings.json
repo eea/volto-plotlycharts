@@ -4,7 +4,10 @@
       "data": {
         "scatter": [
           {
-            "hoverinfo": "x+y"
+            "hoverinfo": "x+y",
+            "marker": {
+              "size": 10
+            }
           }
         ]
       },
@@ -774,7 +777,10 @@
             "data": {
               "scatter": [
                 {
-                  "hoverinfo": "x+y"
+                  "hoverinfo": "x+y",
+                  "marker": {
+                    "size": 10
+                  }
                 }
               ]
             },
@@ -1059,7 +1065,10 @@
             "data": {
               "scatter": [
                 {
-                  "hoverinfo": "x+y"
+                  "hoverinfo": "x+y",
+                  "marker": {
+                    "size": 10
+                  }
                 }
               ]
             },
@@ -1282,6 +1291,9 @@
       "visualization": {
         "data": [
           {
+            "marker": {
+              "color": "#007b6c"
+            },
             "meta": {
               "columnNames": {
                 "transforms": [
@@ -1330,11 +1342,15 @@
               "Barley"
             ],
             "ysrc": "Material",
-            "marker": {
-              "color": "#007b6c"
-            }
+            "hoverlabel": {
+              "namelength": 0
+            },
+            "hovertemplate": "%{y} - $%{x}B exported"
           },
           {
+            "marker": {
+              "color": "#a0e5dc"
+            },
             "meta": {
               "columnNames": {
                 "transforms": [
@@ -1383,8 +1399,9 @@
             ],
             "yaxis": "y2",
             "ysrc": "Material",
-            "marker": {
-              "color": "#a0e5dc"
+            "hovertemplate": "%{y} - $%{x}B exported",
+            "hoverlabel": {
+              "namelength": 0
             }
           }
         ],
@@ -1408,7 +1425,7 @@
               "axref": "x",
               "ayref": "y",
               "showarrow": false,
-              "text": "Romania exports ($B)",
+              "text": "<b>Romania exports ($B)</b>",
               "x": 0,
               "xanchor": "left",
               "xref": "x",
@@ -1419,7 +1436,7 @@
             {
               "axref": "x2",
               "showarrow": false,
-              "text": "EU exports ($B)",
+              "text": "<b>EU exports ($B)</b>",
               "x": 0,
               "xanchor": "left",
               "xref": "x2",
@@ -1439,7 +1456,10 @@
             "data": {
               "scatter": [
                 {
-                  "hoverinfo": "x+y"
+                  "hoverinfo": "x+y",
+                  "marker": {
+                    "size": 10
+                  }
                 }
               ]
             },
@@ -1639,7 +1659,9 @@
             "range": [0, 45.26315789473684],
             "showgrid": true,
             "showticklabels": true,
-            "type": "linear"
+            "type": "linear",
+            "zeroline": true,
+            "zerolinewidth": 1
           },
           "xaxis2": {
             "anchor": "y2",
@@ -1676,12 +1698,12 @@
       }
     },
     {
+      "label": "Grouped Bar",
       "type": {
         "label": "Bar",
         "order": 2,
         "value": "bar"
       },
-      "label": "Grouped Bar",
       "visualization": {
         "data": [
           {
@@ -1767,7 +1789,10 @@
             "data": {
               "scatter": [
                 {
-                  "hoverinfo": "x+y"
+                  "hoverinfo": "x+y",
+                  "marker": {
+                    "size": 10
+                  }
                 }
               ]
             },
@@ -1906,7 +1931,8 @@
                 "nticks": 0,
                 "range": [-1, 6],
                 "rangeslider": {
-                  "visible": false
+                  "visible": false,
+                  "yaxis": {}
                 },
                 "separatethousands": true,
                 "showgrid": true,
@@ -1980,12 +2006,12 @@
       }
     },
     {
+      "label": "Horizontal Grouped Bar",
       "type": {
         "label": "Bar",
         "order": 2,
         "value": "bar"
       },
-      "label": "Horizontal Grouped Bar",
       "visualization": {
         "data": [
           {
@@ -2060,7 +2086,10 @@
             "data": {
               "scatter": [
                 {
-                  "hoverinfo": "x+y"
+                  "hoverinfo": "x+y",
+                  "marker": {
+                    "size": 10
+                  }
                 }
               ]
             },
@@ -2199,7 +2228,8 @@
                 "nticks": 0,
                 "range": [-1, 6],
                 "rangeslider": {
-                  "visible": false
+                  "visible": false,
+                  "yaxis": {}
                 },
                 "separatethousands": true,
                 "showgrid": true,
@@ -2274,12 +2304,12 @@
       }
     },
     {
+      "label": "Stacked Bar",
       "type": {
         "label": "Bar",
         "order": 2,
         "value": "bar"
       },
-      "label": "Stacked Bar",
       "visualization": {
         "data": [
           {
@@ -2287,6 +2317,9 @@
               "namelength": 0
             },
             "hovertemplate": "%{x} %{y} %{data.name} Medals",
+            "marker": {
+              "color": "#007b6c"
+            },
             "meta": {
               "columnNames": {
                 "x": "Nation",
@@ -2300,16 +2333,16 @@
             "x": ["China", "South Korea", "Canada"],
             "xsrc": "Nation",
             "y": [10, 24, 9],
-            "ysrc": "Gold",
-            "marker": {
-              "color": "#007b6c"
-            }
+            "ysrc": "Gold"
           },
           {
             "hoverlabel": {
               "namelength": 0
             },
             "hovertemplate": "%{x} %{y} %{data.name} Medals",
+            "marker": {
+              "color": "#a0e5dc"
+            },
             "meta": {
               "columnNames": {
                 "x": "Nation",
@@ -2322,16 +2355,16 @@
             "x": ["China", "South Korea", "Canada"],
             "xsrc": "Nation",
             "y": [15, 13, 12],
-            "ysrc": "Silver",
-            "marker": {
-              "color": "#a0e5dc"
-            }
+            "ysrc": "Silver"
           },
           {
             "hoverlabel": {
               "namelength": 0
             },
             "hovertemplate": "%{x} %{y} %{data.name} Medals",
+            "marker": {
+              "color": "#004b7f"
+            },
             "meta": {
               "columnNames": {
                 "x": "Nation",
@@ -2344,10 +2377,7 @@
             "x": ["China", "South Korea", "Canada"],
             "xsrc": "Nation",
             "y": [8, 11, "12"],
-            "ysrc": "Bronze",
-            "marker": {
-              "color": "#004b7f"
-            }
+            "ysrc": "Bronze"
           }
         ],
         "dataSources": {
@@ -2380,7 +2410,10 @@
             "data": {
               "scatter": [
                 {
-                  "hoverinfo": "x+y"
+                  "hoverinfo": "x+y",
+                  "marker": {
+                    "size": 10
+                  }
                 }
               ]
             },
@@ -2519,7 +2552,8 @@
                 "nticks": 0,
                 "range": [-1, 6],
                 "rangeslider": {
-                  "visible": false
+                  "visible": false,
+                  "yaxis": {}
                 },
                 "separatethousands": true,
                 "showgrid": true,
@@ -2661,7 +2695,10 @@
             "data": {
               "scatter": [
                 {
-                  "hoverinfo": "x+y"
+                  "hoverinfo": "x+y",
+                  "marker": {
+                    "size": 10
+                  }
                 }
               ]
             },
@@ -2967,7 +3004,10 @@
             "data": {
               "scatter": [
                 {
-                  "hoverinfo": "x+y"
+                  "hoverinfo": "x+y",
+                  "marker": {
+                    "size": 10
+                  }
                 }
               ]
             },
@@ -3182,12 +3222,12 @@
       }
     },
     {
+      "label": "Divergent Horizontal Bar+",
       "type": {
         "label": "Bar",
         "order": 2,
         "value": "bar"
       },
-      "label": "Divergent Horizontal Bar+",
       "visualization": {
         "data": [
           {
@@ -3422,7 +3462,10 @@
             "data": {
               "scatter": [
                 {
-                  "hoverinfo": "x+y"
+                  "hoverinfo": "x+y",
+                  "marker": {
+                    "size": 10
+                  }
                 }
               ]
             },
@@ -3561,7 +3604,8 @@
                 "nticks": 0,
                 "range": [-1, 6],
                 "rangeslider": {
-                  "visible": false
+                  "visible": false,
+                  "yaxis": {}
                 },
                 "separatethousands": true,
                 "showgrid": true,
@@ -3644,152 +3688,141 @@
       }
     },
     {
-      "label": "Multiple Bars",
       "type": {
         "label": "Bar",
         "order": 2,
         "value": "bar"
       },
+      "label": "Multiple Bars",
       "visualization": {
         "data": [
           {
-            "meta": {
-              "columnNames": {
-                "x": "x1",
-                "y": "y1"
-              }
-            },
-            "mode": "markers",
             "orientation": "v",
             "type": "bar",
-            "x": [10, 20, 30, 40],
-            "xaxis": "x",
-            "xsrc": "x1",
-            "y": [20, 10, 40, 30],
-            "ysrc": "y1"
+            "x": ["2010", "2012", "2014", "2016", "2018", "2020", "2022"],
+            "xsrc": "Year",
+            "meta": {
+              "columnNames": {
+                "x": "Year",
+                "y": "Waste/water"
+              }
+            },
+            "y": ["295", "352", "408", "442", "467", "476", "483"],
+            "ysrc": "Waste/water",
+            "hovertemplate": "%{y} kg per capita water/waste for %{x}",
+            "hoverlabel": {
+              "namelength": 0
+            }
           },
           {
-            "meta": {
-              "columnNames": {
-                "x": "x1",
-                "y": "y2"
-              }
-            },
             "orientation": "v",
             "type": "bar",
-            "x": [10, 20, 30, 40],
+            "x": ["2010", "2012", "2014", "2016", "2018", "2020", "2022"],
+            "xsrc": "Year",
+            "meta": {
+              "columnNames": {
+                "x": "Year",
+                "y": "Households"
+              }
+            },
+            "y": ["422", "409", "397", "407", "417", "438", "430"],
+            "ysrc": "Households",
             "xaxis": "x2",
-            "xsrc": "x1",
-            "y": [23, 13, 43, 33],
-            "yaxis": "y",
-            "ysrc": "y2"
+            "yaxis": "y2",
+            "hovertemplate": "%{y} kg per capita households for %{x}",
+            "hoverlabel": {
+              "namelength": 0
+            }
           },
           {
-            "meta": {
-              "columnNames": {
-                "x": "x1",
-                "y": "y3"
-              }
-            },
             "orientation": "v",
             "type": "bar",
-            "x": [10, 20, 30, 40],
+            "x": ["2010", "2012", "2014", "2016", "2018", "2020", "2022"],
+            "xsrc": "Year",
+            "meta": {
+              "columnNames": {
+                "x": "Year",
+                "y": "Manufacturing"
+              }
+            },
+            "y": ["432", "400", "397", "402", "403", "371", "372"],
+            "ysrc": "Manufacturing",
             "xaxis": "x3",
-            "xsrc": "x1",
-            "y": [20, 10, 40, 30],
-            "yaxis": "y",
-            "ysrc": "y3"
+            "yaxis": "y3",
+            "hovertemplate": "%{y} kg per capita manufacturing for %{x}",
+            "hoverlabel": {
+              "namelength": 0
+            }
           },
           {
-            "meta": {
-              "columnNames": {
-                "x": "x1",
-                "y": "y4"
-              }
-            },
             "orientation": "v",
             "type": "bar",
-            "x": [10, 20, 30, 40],
+            "x": ["2010", "2012", "2014", "2016", "2018", "2020", "2022"],
+            "xsrc": "Year",
+            "meta": {
+              "columnNames": {
+                "x": "Year",
+                "y": "Services"
+              }
+            },
+            "y": ["193", "182", "173", "177", "186", "176", "177"],
+            "ysrc": "Services",
             "xaxis": "x4",
-            "xsrc": "x1",
-            "y": [23, 13, 43, 33],
-            "yaxis": "y",
-            "ysrc": "y4"
+            "yaxis": "y4",
+            "hovertemplate": "%{y} kg per capita services for %{x}",
+            "hoverlabel": {
+              "namelength": 0
+            }
           },
           {
+            "orientation": "v",
+            "type": "bar",
+            "x": ["2010", "2012", "2014", "2016", "2018", "2020", "2022"],
+            "xsrc": "Year",
             "meta": {
               "columnNames": {
-                "x": "y1",
-                "y": "x1"
+                "x": "Year",
+                "y": "Energy"
               }
             },
-            "orientation": "h",
-            "type": "bar",
-            "x": [20, 10, 40, 30],
+            "y": ["178", "201", "197", "168", "170", "102", "132"],
+            "ysrc": "Energy",
             "xaxis": "x5",
-            "xsrc": "y1",
-            "y": [10, 20, 30, 40],
-            "yaxis": "y2",
-            "ysrc": "x1"
+            "yaxis": "y5",
+            "hovertemplate": "%{y} kg per capita energy for %{x}",
+            "hoverlabel": {
+              "namelength": 0
+            }
           },
           {
+            "orientation": "v",
+            "type": "bar",
+            "x": ["2010", "2012", "2014", "2016", "2018", "2020", "2022"],
+            "xsrc": "Year",
             "meta": {
               "columnNames": {
-                "x": "y2",
-                "y": "x1"
+                "x": "Year",
+                "y": "Other"
               }
             },
-            "orientation": "h",
-            "type": "bar",
-            "x": [23, 13, 43, 33],
+            "y": ["200", "176", "163", "167", "177", "173", "183"],
+            "ysrc": "Other",
             "xaxis": "x6",
-            "xsrc": "y2",
-            "y": [10, 20, 30, 40],
-            "yaxis": "y2",
-            "ysrc": "x1"
-          },
-          {
-            "meta": {
-              "columnNames": {
-                "x": "y3",
-                "y": "x1"
-              }
-            },
-            "orientation": "h",
-            "type": "bar",
-            "x": [20, 10, 40, 30],
-            "xaxis": "x7",
-            "xsrc": "y3",
-            "y": [10, 20, 30, 40],
-            "yaxis": "y2",
-            "ysrc": "x1"
-          },
-          {
-            "meta": {
-              "columnNames": {
-                "x": "y4",
-                "y": "x1"
-              }
-            },
-            "orientation": "h",
-            "type": "bar",
-            "x": [23, 13, 43, 33],
-            "xaxis": "x8",
-            "xsrc": "y4",
-            "y": [10, 20, 30, 40],
-            "yaxis": "y2",
-            "ysrc": "x1"
+            "yaxis": "y6",
+            "hovertemplate": "%{y} kg per capita other for %{x}",
+            "hoverlabel": {
+              "namelength": 0
+            }
           }
         ],
         "dataSources": {
-          "x1": [10, 20, 30, 40],
-          "x2": [13, 43, 53, 63],
-          "x3": [10, 20, 30, 40],
-          "x4": [13, 43, 53, 63],
-          "y1": [20, 10, 40, 30],
-          "y2": [23, 13, 43, 33],
-          "y3": [20, 10, 40, 30],
-          "y4": [23, 13, 43, 33]
+          "Year": ["2010", "2012", "2014", "2016", "2018", "2020", "2022"],
+          "Waste/water": ["295", "352", "408", "442", "467", "476", "483"],
+          "Households": ["422", "409", "397", "407", "417", "438", "430"],
+          "Manufacturing": ["432", "400", "397", "402", "403", "371", "372"],
+          "Services": ["193", "182", "173", "177", "186", "176", "177"],
+          "Energy": ["178", "201", "197", "168", "170", "102", "132"],
+          "Other": ["200", "176", "163", "167", "177", "173", "183"]
         },
         "frames": [],
         "layout": {
@@ -3800,7 +3833,10 @@
             "data": {
               "scatter": [
                 {
-                  "hoverinfo": "x+y"
+                  "hoverinfo": "x+y",
+                  "marker": {
+                    "size": 10
+                  }
                 }
               ]
             },
@@ -3996,183 +4032,327 @@
           },
           "xaxis": {
             "autorange": true,
-            "domain": [0, 0.25],
-            "range": [5, 45],
+            "domain": [0, 0.3],
+            "range": [-0.5, 6.5],
             "rangeslider": {
               "visible": false,
               "yaxis": {},
               "yaxis2": {},
               "yaxis3": {},
               "yaxis4": {},
-              "yaxis5": {}
+              "yaxis5": {},
+              "yaxis6": {}
             },
             "showgrid": false,
-            "showticklabels": false,
-            "type": "linear",
-            "zeroline": false
-          },
-          "xaxis2": {
-            "autorange": true,
-            "domain": [0.25, 0.5],
-            "overlaying": false,
-            "range": [5, 45],
-            "rangeslider": {
-              "visible": false,
-              "yaxis": {}
-            },
-            "showgrid": false,
-            "showticklabels": false,
-            "type": "linear",
-            "zeroline": false
-          },
-          "xaxis3": {
-            "autorange": true,
-            "domain": [0.5, 0.75],
-            "overlaying": false,
-            "range": [5, 45],
-            "rangeslider": {
-              "visible": false,
-              "yaxis": {}
-            },
-            "showgrid": false,
-            "showticklabels": false,
-            "type": "linear",
-            "zeroline": false
-          },
-          "xaxis4": {
-            "anchor": "y",
-            "autorange": true,
-            "domain": [0.75, 1],
-            "overlaying": false,
-            "range": [5, 45],
-            "rangeslider": {
-              "visible": false,
-              "yaxis": {}
-            },
-            "showgrid": false,
-            "showticklabels": false,
-            "type": "linear",
-            "zeroline": false
-          },
-          "xaxis5": {
-            "autorange": true,
-            "domain": [0, 0.25],
-            "overlaying": false,
-            "range": [0, 42.10526315789474],
-            "rangeslider": {
-              "visible": false
-            },
-            "showgrid": false,
-            "showticklabels": false,
-            "type": "linear",
-            "zeroline": false
-          },
-          "xaxis6": {
-            "autorange": true,
-            "domain": [0.25, 0.5],
-            "overlaying": false,
-            "range": [0, 45.26315789473684],
-            "rangeslider": {
-              "visible": false
-            },
-            "showgrid": false,
-            "showticklabels": false,
-            "type": "linear",
-            "zeroline": false
-          },
-          "xaxis7": {
-            "autorange": true,
-            "domain": [0.5, 0.75],
-            "overlaying": false,
-            "range": [0, 42.10526315789474],
-            "rangeslider": {
-              "visible": false
-            },
-            "showgrid": false,
-            "showticklabels": false,
-            "type": "linear",
-            "zeroline": false
-          },
-          "xaxis8": {
-            "autorange": true,
-            "domain": [0.75, 1],
-            "overlaying": false,
-            "range": [0, 45.26315789473684],
-            "rangeslider": {
-              "visible": false
-            },
-            "showgrid": false,
-            "showticklabels": false,
-            "type": "linear",
-            "zeroline": false
+            "showticklabels": true,
+            "zeroline": false,
+            "type": "category",
+            "title": {
+              "text": "Years"
+            }
           },
           "yaxis": {
             "anchor": "x",
             "autorange": true,
-            "domain": [0, 0.5],
-            "range": [0, 45.26315789473684],
+            "domain": [0.6, 1],
+            "range": [0, 508.42105263157896],
             "rangeslider": {
               "visible": false
             },
+            "showgrid": true,
+            "showticklabels": true,
+            "zeroline": false,
+            "type": "linear"
+          },
+          "autosize": true,
+          "xaxis2": {
             "showgrid": false,
-            "showticklabels": false,
-            "type": "linear",
-            "zeroline": false
+            "showticklabels": true,
+            "zeroline": false,
+            "side": "bottom",
+            "overlaying": false,
+            "type": "category",
+            "range": [-0.5, 6.5],
+            "autorange": true,
+            "domain": [0.35, 0.65],
+            "anchor": "y2",
+            "title": {
+              "text": "Years"
+            }
           },
           "yaxis2": {
-            "autorange": true,
-            "domain": [0.5, 1],
+            "showgrid": true,
+            "showticklabels": true,
+            "zeroline": false,
+            "side": "left",
             "overlaying": false,
-            "range": [5, 45],
-            "rangeslider": {
-              "visible": false
-            },
-            "showgrid": false,
-            "showticklabels": false,
             "type": "linear",
-            "zeroline": false
+            "range": [0, 461.05263157894734],
+            "autorange": true,
+            "domain": [0.61, 1],
+            "anchor": "x2"
+          },
+          "xaxis3": {
+            "showgrid": false,
+            "showticklabels": true,
+            "zeroline": false,
+            "side": "bottom",
+            "overlaying": false,
+            "type": "category",
+            "range": [-0.5, 6.5],
+            "autorange": true,
+            "anchor": "y3",
+            "domain": [0.7, 1],
+            "title": {
+              "text": "Years"
+            }
+          },
+          "yaxis3": {
+            "showgrid": true,
+            "showticklabels": true,
+            "zeroline": false,
+            "side": "left",
+            "overlaying": false,
+            "type": "linear",
+            "range": [0, 454.7368421052632],
+            "autorange": true,
+            "anchor": "x3",
+            "domain": [0.61, 1]
+          },
+          "xaxis4": {
+            "showgrid": false,
+            "showticklabels": true,
+            "zeroline": false,
+            "side": "bottom",
+            "overlaying": false,
+            "type": "category",
+            "range": [-0.5, 6.5],
+            "autorange": true,
+            "anchor": "y4",
+            "domain": [0, 0.3],
+            "title": {
+              "text": "Years"
+            }
+          },
+          "yaxis4": {
+            "showgrid": true,
+            "showticklabels": true,
+            "zeroline": false,
+            "side": "left",
+            "overlaying": false,
+            "type": "linear",
+            "range": [0, 203.1578947368421],
+            "autorange": true,
+            "anchor": "x4",
+            "domain": [0, 0.41]
+          },
+          "xaxis5": {
+            "showgrid": false,
+            "showticklabels": true,
+            "zeroline": false,
+            "side": "bottom",
+            "overlaying": false,
+            "type": "category",
+            "range": [-0.5, 6.5],
+            "autorange": true,
+            "anchor": "y5",
+            "domain": [0.35, 0.65],
+            "title": {
+              "text": "Years"
+            }
+          },
+          "yaxis5": {
+            "showgrid": true,
+            "showticklabels": true,
+            "zeroline": false,
+            "side": "left",
+            "overlaying": false,
+            "type": "linear",
+            "range": [0, 211.57894736842104],
+            "autorange": true,
+            "anchor": "x5",
+            "domain": [0, 0.41]
+          },
+          "xaxis6": {
+            "showgrid": false,
+            "showticklabels": true,
+            "zeroline": false,
+            "side": "bottom",
+            "overlaying": false,
+            "type": "category",
+            "range": [-0.5, 6.5],
+            "autorange": true,
+            "domain": [0.7, 1],
+            "anchor": "y6",
+            "title": {
+              "text": "Years"
+            }
+          },
+          "yaxis6": {
+            "showgrid": true,
+            "showticklabels": true,
+            "zeroline": false,
+            "side": "left",
+            "overlaying": false,
+            "type": "linear",
+            "range": [0, 210.5263157894737],
+            "autorange": true,
+            "domain": [0, 0.4],
+            "anchor": "x6"
+          },
+          "annotations": [
+            {
+              "text": "Water/waste (kg per capita)",
+              "xanchor": "left",
+              "y": 1.02,
+              "x": 0
+            },
+            {
+              "text": "Households (kg per capita)",
+              "xanchor": "left",
+              "x": 0.35,
+              "y": 1.02
+            },
+            {
+              "text": "Manufacturing (kg per capita)",
+              "x": 0.7,
+              "y": 1.02,
+              "xanchor": "left"
+            },
+            {
+              "text": "Services (kg per capita)",
+              "xanchor": "left",
+              "y": 0.42,
+              "x": 0
+            },
+            {
+              "text": "Energy (kg per capita)",
+              "xanchor": "left",
+              "x": 0.35,
+              "y": 0.42
+            },
+            {
+              "text": "Other (kg per capita)",
+              "xanchor": "left",
+              "x": 0.7,
+              "y": 0.42
+            }
+          ]
+        },
+        "columns": [
+          {
+            "key": "Year"
+          },
+          {
+            "key": "Waste/water"
+          },
+          {
+            "key": "Households"
+          },
+          {
+            "key": "Manufacturing"
+          },
+          {
+            "key": "Services"
+          },
+          {
+            "key": "Energy"
+          },
+          {
+            "key": "Other"
           }
-        }
+        ]
       }
     },
     {
-      "label": "Scatter",
+      "label": "Bubble",
       "type": {
         "label": "Scatter",
         "order": 1,
         "value": "scatter"
       },
       "visualization": {
+        "columns": [
+          {
+            "key": "Country"
+          },
+          {
+            "key": "GDP"
+          },
+          {
+            "key": "Population"
+          },
+          {
+            "key": "Average temperature"
+          },
+          {
+            "key": "Area"
+          }
+        ],
         "data": [
           {
             "hoverinfo": "x+y",
             "hoverlabel": {
               "namelength": 0
             },
-            "hovertemplate": "%{x}: %{y} millions",
+            "hovertemplate": "<b>%{text}</b><br>Population %{x} millions<br>\nArea size %{marker.size:,} km2<br>\nGDP \u20ac%{y}B<br>\nAverage temperature %{marker.color}\u00b0C",
             "marker": {
-              "color": "rgb(80, 176, 164)",
+              "color": [
+                "10",
+                "12",
+                "15",
+                "14",
+                "10",
+                "16",
+                "13",
+                "10",
+                "0",
+                "10"
+              ],
+              "colorscale": [
+                [0, "#0083e0"],
+                [0.14, "#0a99ff"],
+                [0.29, "#47b3ff"],
+                [0.43, "#a0d7ff"],
+                [0.57, "#fef6cd"],
+                [0.71, "#fbec9b"],
+                [0.86, "#fad936"],
+                [1, "#fac50d"]
+              ],
+              "colorsrc": "Average temperature",
               "opacity": 0.8,
-              "size": [10, 15, 13, 17, 20, 23, 21, 25, 27, 30],
+              "size": [
+                "238397",
+                "551695",
+                "505990",
+                "301340",
+                "243610",
+                "92212",
+                "377975",
+                "9596961",
+                "17098242",
+                "9833517"
+              ],
+              "sizemin": 10,
               "sizemode": "area",
-              "sizeref": 0.014814814814814815,
-              "sizesrc": "Population"
+              "sizeref": 8443.576296296296,
+              "sizesrc": "Area"
             },
             "meta": {
               "columnNames": {
                 "marker": {
-                  "color": "y",
-                  "size": "Population"
+                  "color": "Average temperature",
+                  "size": "Area"
                 },
-                "x": "Country",
-                "y": "Population"
+                "text": "Country",
+                "x": "Population",
+                "y": "GDP"
               }
             },
             "mode": "markers",
             "name": "Population",
             "opacity": 1,
-            "type": "scatter",
-            "x": [
+            "text": [
               "Romania",
               "France",
               "Spain",
@@ -4184,55 +4364,39 @@
               "Rusia",
               "US"
             ],
-            "xsrc": "Country",
-            "y": [10, 15, 13, 17, 20, 23, 21, 25, 27, 30],
-            "ysrc": "Population"
-          },
-          {
-            "hoverinfo": "none",
-            "hoverlabel": {
-              "namelength": 0
-            },
-            "hovertemplate": "%{x}: \u20ac%{y}B",
-            "marker": {
-              "opacity": 0.8,
-              "size": [1, 2, 4, 10, 3, 15, 5, 4, 2, 5],
-              "sizemode": "area",
-              "sizeref": 0.007407407407407408,
-              "sizesrc": "GDP"
-            },
-            "meta": {
-              "columnNames": {
-                "marker": {
-                  "size": "GDP"
-                },
-                "x": "Country",
-                "y": "GDP"
-              }
-            },
-            "mode": "markers",
-            "name": "GDP",
-            "stackgroup": null,
+            "textsrc": "Country",
             "type": "scatter",
-            "x": [
-              "Romania",
-              "France",
-              "Spain",
-              "Italy",
-              "UK",
-              "Portugal",
-              "Japan",
-              "China",
-              "Rusia",
-              "US"
-            ],
-            "xsrc": "Country",
+            "x": [10, 15, 13, 17, 20, 23, 21, 25, 27, 30],
+            "xsrc": "Population",
             "y": [1, 2, 4, 10, 3, 15, 5, 4, 2, 5],
-            "yaxis": "y2",
             "ysrc": "GDP"
           }
         ],
         "dataSources": {
+          "Area": [
+            "238397",
+            "551695",
+            "505990",
+            "301340",
+            "243610",
+            "92212",
+            "377975",
+            "9596961",
+            "17098242",
+            "9833517"
+          ],
+          "Average temperature": [
+            "10",
+            "12",
+            "15",
+            "14",
+            "10",
+            "16",
+            "13",
+            "10",
+            "0",
+            "10"
+          ],
           "Country": [
             "Romania",
             "France",
@@ -4252,12 +4416,7 @@
         "layout": {
           "annotations": [
             {
-              "text": "Population (millions)"
-            },
-            {
-              "text": "GDP (\u20acB)",
-              "x": 1,
-              "y": 1
+              "text": "GDP (\u20acB)"
             }
           ],
           "autosize": true,
@@ -4275,12 +4434,16 @@
           "margin": {
             "t": 20
           },
-          "showlegend": true,
+          "separators": ".,",
+          "showlegend": false,
           "template": {
             "data": {
               "scatter": [
                 {
-                  "hoverinfo": "x+y"
+                  "hoverinfo": "x+y",
+                  "marker": {
+                    "size": 10
+                  }
                 }
               ]
             },
@@ -4479,27 +4642,19 @@
           },
           "xaxis": {
             "autorange": true,
-            "range": [-0.7068562335716977, 9.838330294500953],
+            "range": [8.779325243648021, 31.64132410242553],
             "showgrid": false,
-            "title": {},
-            "type": "category",
+            "title": {
+              "text": "Poopulation (millions)"
+            },
+            "type": "linear",
             "zeroline": false
           },
           "yaxis": {
             "autorange": true,
-            "range": [0, 33.908894381073125],
+            "range": [0, 15.877905348641837],
             "rangemode": "tozero",
             "title": {},
-            "type": "linear",
-            "zeroline": false
-          },
-          "yaxis2": {
-            "autorange": true,
-            "overlaying": "y",
-            "range": [-0.1443882004056818, 16.973260464711863],
-            "showgrid": false,
-            "showticklabels": true,
-            "side": "right",
             "type": "linear",
             "zeroline": false
           }
@@ -4658,7 +4813,10 @@
             "data": {
               "scatter": [
                 {
-                  "hoverinfo": "x+y"
+                  "hoverinfo": "x+y",
+                  "marker": {
+                    "size": 10
+                  }
                 }
               ]
             },
@@ -5253,7 +5411,10 @@
             "data": {
               "scatter": [
                 {
-                  "hoverinfo": "x+y"
+                  "hoverinfo": "x+y",
+                  "marker": {
+                    "size": 10
+                  }
                 }
               ]
             },
@@ -5540,7 +5701,10 @@
             "data": {
               "scatter": [
                 {
-                  "hoverinfo": "x+y"
+                  "hoverinfo": "x+y",
+                  "marker": {
+                    "size": 10
+                  }
                 }
               ]
             },
@@ -5743,12 +5907,12 @@
       }
     },
     {
-      "label": "Donut",
       "type": {
         "label": "Pie",
         "order": 8,
         "value": "pie"
       },
+      "label": "Donut",
       "visualization": {
         "data": [
           {
@@ -5785,7 +5949,7 @@
         ],
         "dataSources": {
           "labels": ["Apple", "Banana", "Orange", "Grapes", "Mango"],
-          "sum": [100],
+          "sum": ["100"],
           "values": [30, 20, 25, 15, 10]
         },
         "frames": [],
@@ -5815,14 +5979,17 @@
           "mapbox": {
             "style": "open-street-map"
           },
-          "meta": [[100]],
+          "meta": [["100"]],
           "metasrc": ["sum"],
           "showlegend": true,
           "template": {
             "data": {
               "scatter": [
                 {
-                  "hoverinfo": "x+y"
+                  "hoverinfo": "x+y",
+                  "marker": {
+                    "size": 10
+                  }
                 }
               ]
             },
@@ -6022,16 +6189,27 @@
             },
             "x": 0
           }
-        }
+        },
+        "columns": [
+          {
+            "key": "labels"
+          },
+          {
+            "key": "sum"
+          },
+          {
+            "key": "values"
+          }
+        ]
       }
     },
     {
+      "label": "Sunburst",
       "type": {
         "label": "Sunburst",
         "order": 28,
         "value": "sunburst"
       },
-      "label": "Sunburst",
       "visualization": {
         "data": [
           {
@@ -6162,11 +6340,19 @@
           "margin": {
             "t": 20
           },
+          "sunburstcolorway": [
+            "#007B6C",
+            "rgb(0, 75, 127)",
+            "rgb(0, 143, 245)"
+          ],
           "template": {
             "data": {
               "scatter": [
                 {
-                  "hoverinfo": "x+y"
+                  "hoverinfo": "x+y",
+                  "marker": {
+                    "size": 10
+                  }
                 }
               ]
             },
@@ -6305,7 +6491,8 @@
                 "nticks": 0,
                 "range": [-1, 6],
                 "rangeslider": {
-                  "visible": false
+                  "visible": false,
+                  "yaxis": {}
                 },
                 "separatethousands": true,
                 "showgrid": true,
@@ -6363,18 +6550,17 @@
             "subtitle": {
               "text": "Exported products (USD Millions)"
             }
-          },
-          "sunburstcolorway": ["#007B6C", "rgb(0, 75, 127)", "rgb(0, 143, 245)"]
+          }
         }
       }
     },
     {
+      "label": "Treemap",
       "type": {
         "label": "Treemap",
         "order": 29,
         "value": "treemap"
       },
-      "label": "Treemap",
       "visualization": {
         "data": [
           {
@@ -6519,7 +6705,10 @@
             "data": {
               "scatter": [
                 {
-                  "hoverinfo": "x+y"
+                  "hoverinfo": "x+y",
+                  "marker": {
+                    "size": 10
+                  }
                 }
               ]
             },
@@ -6658,7 +6847,8 @@
                 "nticks": 0,
                 "range": [-1, 6],
                 "rangeslider": {
-                  "visible": false
+                  "visible": false,
+                  "yaxis": {}
                 },
                 "separatethousands": true,
                 "showgrid": true,
@@ -6722,13 +6912,24 @@
       }
     },
     {
+      "label": "Dumbbell",
       "type": {
         "label": "Scatter",
         "order": 1,
         "value": "scatter"
       },
-      "label": "Dumbbell",
       "visualization": {
+        "columns": [
+          {
+            "key": "Country"
+          },
+          {
+            "key": "Year"
+          },
+          {
+            "key": "Life Expectancy"
+          }
+        ],
         "data": [
           {
             "hoverlabel": {
@@ -6765,13 +6966,27 @@
                 "marker": {
                   "color": "Year"
                 },
+                "text": "Year",
                 "x": "Life Expectancy",
-                "y": "Country",
-                "text": "Year"
+                "y": "Country"
               }
             },
             "mode": "markers+lines",
             "orientation": "v",
+            "text": [
+              1952,
+              2002,
+              null,
+              1952,
+              2002,
+              null,
+              1952,
+              2002,
+              null,
+              1952,
+              2002
+            ],
+            "textsrc": "Year",
             "type": "scatter",
             "x": [
               65,
@@ -6800,21 +7015,7 @@
               "Italy",
               "Italy"
             ],
-            "ysrc": "Country",
-            "text": [
-              1952,
-              2002,
-              null,
-              1952,
-              2002,
-              null,
-              1952,
-              2002,
-              null,
-              1952,
-              2002
-            ],
-            "textsrc": "Year"
+            "ysrc": "Country"
           }
         ],
         "dataSources": {
@@ -6870,7 +7071,10 @@
             "data": {
               "scatter": [
                 {
-                  "hoverinfo": "x+y"
+                  "hoverinfo": "x+y",
+                  "marker": {
+                    "size": 10
+                  }
                 }
               ]
             },
@@ -7009,7 +7213,8 @@
                 "nticks": 0,
                 "range": [-1, 6],
                 "rangeslider": {
-                  "visible": false
+                  "visible": false,
+                  "yaxis": {}
                 },
                 "separatethousands": true,
                 "showgrid": true,
@@ -7070,7 +7275,7 @@
           },
           "xaxis": {
             "autorange": true,
-            "range": [63.88219636221396, 81.29780363778603],
+            "range": [63.99038439902494, 81.18961560097506],
             "showline": false,
             "title": {
               "text": "Years"
@@ -7080,8 +7285,8 @@
           "yaxis": {
             "autorange": true,
             "range": [-0.21160483175150993, 3.21160483175151],
-            "showline": false,
             "showgrid": false,
+            "showline": false,
             "type": "category"
           }
         }
@@ -7136,7 +7341,10 @@
             "data": {
               "scatter": [
                 {
-                  "hoverinfo": "x+y"
+                  "hoverinfo": "x+y",
+                  "marker": {
+                    "size": 10
+                  }
                 }
               ]
             },
@@ -7339,16 +7547,20 @@
       }
     },
     {
+      "label": "Heatmap",
       "type": {
         "label": "Heatmap",
         "order": 5,
         "value": "heatmap"
       },
-      "label": "Heatmap",
       "visualization": {
         "data": [
           {
             "autocolorscale": false,
+            "colorbar": {
+              "len": 0.5,
+              "thickness": 15
+            },
             "colorscale": [
               [0, "#004b7f"],
               [0.1, "#006bb8"],
@@ -7428,11 +7640,7 @@
               "South America",
               "Oceania",
               "Antartica"
-            ],
-            "colorbar": {
-              "len": 0.5,
-              "thickness": 15
-            }
+            ]
           }
         ],
         "dataSources": {
@@ -7582,7 +7790,10 @@
             "data": {
               "scatter": [
                 {
-                  "hoverinfo": "x+y"
+                  "hoverinfo": "x+y",
+                  "marker": {
+                    "size": 10
+                  }
                 }
               ]
             },
@@ -7721,7 +7932,8 @@
                 "nticks": 0,
                 "range": [-1, 6],
                 "rangeslider": {
-                  "visible": false
+                  "visible": false,
+                  "yaxis": {}
                 },
                 "separatethousands": true,
                 "showgrid": true,
@@ -7796,12 +8008,12 @@
       }
     },
     {
+      "label": "Table",
       "type": {
         "label": "Table",
         "order": 6,
         "value": "table"
       },
-      "label": "Table",
       "visualization": {
         "data": [
           {
@@ -7852,6 +8064,9 @@
               ],
               "valuessrc": ["col_1", "col_2", "col_3", "col_4"]
             },
+            "domain": {
+              "x": [null, 0.95]
+            },
             "header": {
               "align": "center",
               "fill": {
@@ -7888,10 +8103,7 @@
               }
             },
             "mode": "markers",
-            "type": "table",
-            "domain": {
-              "x": [null, 0.95]
-            }
+            "type": "table"
           }
         ],
         "dataSources": {
@@ -7944,7 +8156,10 @@
             "data": {
               "scatter": [
                 {
-                  "hoverinfo": "x+y"
+                  "hoverinfo": "x+y",
+                  "marker": {
+                    "size": 10
+                  }
                 }
               ]
             },
@@ -8083,7 +8298,8 @@
                 "nticks": 0,
                 "range": [-1, 6],
                 "rangeslider": {
-                  "visible": false
+                  "visible": false,
+                  "yaxis": {}
                 },
                 "separatethousands": true,
                 "showgrid": true,
@@ -8396,7 +8612,10 @@
             "data": {
               "scatter": [
                 {
-                  "hoverinfo": "x+y"
+                  "hoverinfo": "x+y",
+                  "marker": {
+                    "size": 10
+                  }
                 }
               ]
             },
@@ -9228,17 +9447,17 @@
       }
     },
     {
+      "label": "Divergent Horizontal Bar",
       "type": {
         "label": "Bar",
-        "value": "bar",
-        "order": 2
+        "order": 2,
+        "value": "bar"
       },
-      "label": "Divergent Horizontal Bar",
       "visualization": {
         "chartData": {
           "data": [],
-          "layout": {},
-          "frames": []
+          "frames": [],
+          "layout": {}
         },
         "data": [
           {
@@ -9371,6 +9590,66 @@
             "ysrc": "Country"
           }
         ],
+        "dataSources": {
+          "Country": [
+            "Austria",
+            "Belgium",
+            "Bulgaria",
+            "Croatia",
+            "Cyprus",
+            "Czech Republic",
+            "Denmark",
+            "Estonia",
+            "Finland",
+            "France",
+            "Germany",
+            "Greece",
+            "Hungary",
+            "Ireland",
+            "Italy",
+            "Latvia",
+            "Lithuania",
+            "Luxembourg",
+            "Malta",
+            "Netherlands",
+            "Poland",
+            "Portugal",
+            "Romania",
+            "Slovakia",
+            "Slovenia",
+            "Spain",
+            "Sweden"
+          ],
+          "Trade Balance": [
+            "4.0",
+            "-10.0",
+            "-2.5",
+            "-3.0",
+            "-5.0",
+            "15.0",
+            "15.0",
+            "-1.0",
+            "2.0",
+            "25.1",
+            "195.0",
+            "-10.0",
+            "5.0",
+            "39.8",
+            "57.2",
+            "-2.0",
+            "-3.0",
+            "-1.5",
+            "-1.0",
+            "-102.6",
+            "-5.0",
+            "-5.0",
+            "-10.0",
+            "2.0",
+            "3.0",
+            "-18.2",
+            "10.0"
+          ]
+        },
         "layout": {
           "annotations": [],
           "autosize": true,
@@ -9382,7 +9661,10 @@
             "data": {
               "scatter": [
                 {
-                  "hoverinfo": "x+y"
+                  "hoverinfo": "x+y",
+                  "marker": {
+                    "size": 10
+                  }
                 }
               ]
             },
@@ -9521,7 +9803,8 @@
                 "nticks": 0,
                 "range": [-1, 6],
                 "rangeslider": {
-                  "visible": false
+                  "visible": false,
+                  "yaxis": {}
                 },
                 "separatethousands": true,
                 "showgrid": true,
@@ -9600,66 +9883,374 @@
             },
             "type": "category"
           }
+        }
+      }
+    },
+    {
+      "label": "Scatter",
+      "type": {
+        "label": "Scatter",
+        "order": 1,
+        "value": "scatter"
+      },
+      "visualization": {
+        "chartData": {
+          "data": [],
+          "frames": [],
+          "layout": {}
         },
+        "columns": [
+          {
+            "key": "Engine Size (L)"
+          },
+          {
+            "key": "CO2 Emissions (g/km)"
+          },
+          {
+            "key": "Trendline"
+          }
+        ],
+        "data": [
+          {
+            "meta": {
+              "columnNames": {
+                "x": "Engine Size (L)",
+                "y": "CO2 Emissions (g/km)"
+              }
+            },
+            "mode": "markers",
+            "orientation": "v",
+            "type": "scatter",
+            "x": [
+              "1.0",
+              "1.2",
+              "1.5",
+              "1.8",
+              "2.0",
+              "2.2",
+              "2.5",
+              "3.0",
+              "3.5",
+              "4.0"
+            ],
+            "xsrc": "Engine Size (L)",
+            "y": [
+              "99",
+              "109",
+              "120",
+              "135",
+              "145",
+              "155",
+              "170",
+              "190",
+              "210",
+              "230"
+            ],
+            "ysrc": "CO2 Emissions (g/km)"
+          },
+          {
+            "connectgaps": true,
+            "meta": {
+              "columnNames": {
+                "x": "Engine Size (L)",
+                "y": "Trendline"
+              }
+            },
+            "mode": "lines",
+            "type": "scatter",
+            "x": [
+              "1.0",
+              "1.2",
+              "1.5",
+              "1.8",
+              "2.0",
+              "2.2",
+              "2.5",
+              "3.0",
+              "3.5",
+              "4.0"
+            ],
+            "xsrc": "Engine Size (L)",
+            "y": [
+              "114.65",
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              "211.82"
+            ],
+            "ysrc": "Trendline"
+          }
+        ],
         "dataSources": {
-          "Trade Balance": [
-            "4.0",
-            "-10.0",
-            "-2.5",
-            "-3.0",
-            "-5.0",
-            "15.0",
-            "15.0",
-            "-1.0",
-            "2.0",
-            "25.1",
-            "195.0",
-            "-10.0",
-            "5.0",
-            "39.8",
-            "57.2",
-            "-2.0",
-            "-3.0",
-            "-1.5",
-            "-1.0",
-            "-102.6",
-            "-5.0",
-            "-5.0",
-            "-10.0",
-            "2.0",
-            "3.0",
-            "-18.2",
-            "10.0"
+          "CO2 Emissions (g/km)": [
+            "99",
+            "109",
+            "120",
+            "135",
+            "145",
+            "155",
+            "170",
+            "190",
+            "210",
+            "230"
           ],
-          "Country": [
-            "Austria",
-            "Belgium",
-            "Bulgaria",
-            "Croatia",
-            "Cyprus",
-            "Czech Republic",
-            "Denmark",
-            "Estonia",
-            "Finland",
-            "France",
-            "Germany",
-            "Greece",
-            "Hungary",
-            "Ireland",
-            "Italy",
-            "Latvia",
-            "Lithuania",
-            "Luxembourg",
-            "Malta",
-            "Netherlands",
-            "Poland",
-            "Portugal",
-            "Romania",
-            "Slovakia",
-            "Slovenia",
-            "Spain",
-            "Sweden"
+          "Engine Size (L)": [
+            "1.0",
+            "1.2",
+            "1.5",
+            "1.8",
+            "2.0",
+            "2.2",
+            "2.5",
+            "3.0",
+            "3.5",
+            "4.0"
+          ],
+          "Trendline": [
+            "114.65",
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            "211.82"
           ]
+        },
+        "layout": {
+          "annotations": [
+            {
+              "text": "CO2 Emissions (g/km)"
+            }
+          ],
+          "autosize": true,
+          "mapbox": {
+            "style": "open-street-map"
+          },
+          "template": {
+            "data": {
+              "scatter": [
+                {
+                  "hoverinfo": "x+y",
+                  "marker": {
+                    "size": 10
+                  }
+                }
+              ]
+            },
+            "id": "eea",
+            "label": "EEA",
+            "layout": {
+              "annotationdefaults": {
+                "align": "center",
+                "showarrow": false,
+                "x": 0,
+                "xanchor": "auto",
+                "xref": "paper",
+                "y": 1,
+                "yanchor": "bottom",
+                "yref": "paper"
+              },
+              "autosize": true,
+              "clickmode": "event",
+              "colorscale": {
+                "diverging": [
+                  [0, "#e56b38"],
+                  [0.07142857142857142, "#ff9933"],
+                  [0.14285714285714285, "#fdaf20"],
+                  [0.21428571428571427, "#fac50d"],
+                  [0.2857142857142857, "#fad936"],
+                  [0.35714285714285715, "#fbec9b"],
+                  [0.42857142857142855, "#fef6cd"],
+                  [0.5, "#f5e0d3"],
+                  [0.5714285714285714, "#c8fff8"],
+                  [0.6428571428571429, "#a0e5dc"],
+                  [0.7142857142857143, "#78cac0"],
+                  [0.7857142857142857, "#50b0a4"],
+                  [0.8571428571428571, "#289588"],
+                  [0.9285714285714286, "#007b6c"],
+                  [1, "#005248"]
+                ],
+                "sequential": [
+                  [0, "#c8fff8"],
+                  [0.16666666666666666, "#a0e5dc"],
+                  [0.3333333333333333, "#78cac0"],
+                  [0.5, "#50b0a4"],
+                  [0.6666666666666666, "#289588"],
+                  [0.8333333333333334, "#007b6c"],
+                  [1, "#005248"]
+                ],
+                "sequentialminus": [
+                  [0, "#005248"],
+                  [0.16666666666666666, "#007b6c"],
+                  [0.3333333333333333, "#289588"],
+                  [0.5, "#50b0a4"],
+                  [0.6666666666666666, "#78cac0"],
+                  [0.8333333333333334, "#a0e5dc"],
+                  [1, "#c8fff8"]
+                ]
+              },
+              "colorway": [
+                "#007B6C",
+                "#50B0A4",
+                "#A0E5DC",
+                "#004B7F",
+                "#008FF5",
+                "#A0D7FF",
+                "#FF9933",
+                "#FDAF20",
+                "#FDEC9B",
+                "#DFD6E7",
+                "#E7BC91"
+              ],
+              "dragmode": "pan",
+              "font": {
+                "color": "rgb(61, 82, 101)",
+                "family": "Roboto, sans-serif",
+                "size": 14
+              },
+              "hoverlabel": {
+                "bgcolor": "rgba(255,255,255,1)",
+                "bordercolor": "rgba(0, 0, 0, 1)",
+                "font": {
+                  "family": "Roboto, sans-serif",
+                  "size": 14
+                }
+              },
+              "hovermode": "closest",
+              "legend": {
+                "font": {
+                  "size": 14
+                },
+                "indentation": 0,
+                "orientation": "v",
+                "title": {
+                  "font": {
+                    "size": 16
+                  }
+                },
+                "traceorder": "normal",
+                "valign": "middle",
+                "x": 1.02,
+                "xanchor": "left",
+                "y": 1,
+                "yanchor": "top"
+              },
+              "margin": {
+                "b": 0,
+                "l": 0,
+                "pad": 0,
+                "r": 0,
+                "t": 58
+              },
+              "paper_bgcolor": "rgba(255, 255, 255, 0)",
+              "plot_bgcolor": "rgba(255, 255, 255, 0)",
+              "separators": ".,",
+              "showlegend": false,
+              "title": {
+                "font": {
+                  "size": 20
+                },
+                "pad": {
+                  "t": 1
+                },
+                "subtitle": {
+                  "font": {
+                    "size": 14
+                  }
+                },
+                "x": 0,
+                "y": 1
+              },
+              "xaxis": {
+                "automargin": true,
+                "autorange": true,
+                "exponentformat": "none",
+                "gridcolor": "rgb(230, 231, 232)",
+                "gridwidth": 1,
+                "linecolor": "rgb(128, 130, 133)",
+                "mirror": false,
+                "nticks": 0,
+                "range": [-1, 6],
+                "rangeslider": {
+                  "visible": false,
+                  "yaxis": {}
+                },
+                "separatethousands": true,
+                "showgrid": true,
+                "showline": false,
+                "showspikes": false,
+                "showticklabels": true,
+                "tickcolor": "rgb(116, 118, 120)",
+                "ticklabelstandoff": 5,
+                "ticklen": 10,
+                "tickmode": "auto",
+                "tickwidth": 1,
+                "title": {
+                  "font": {
+                    "size": 14
+                  },
+                  "standoff": 10
+                },
+                "zeroline": true,
+                "zerolinecolor": "rgb(128, 130, 133)",
+                "zerolinewidth": 1
+              },
+              "yaxis": {
+                "automargin": true,
+                "autorange": true,
+                "exponentformat": "none",
+                "gridcolor": "rgb(230, 231, 232)",
+                "gridwidth": 1,
+                "linecolor": "rgb(128, 130, 133)",
+                "mirror": false,
+                "nticks": 0,
+                "range": [-1, 4],
+                "separatethousands": true,
+                "showgrid": true,
+                "showline": false,
+                "showspikes": false,
+                "showticklabels": true,
+                "tickcolor": "rgb(116, 118, 120)",
+                "ticklabelstandoff": 5,
+                "ticklen": 10,
+                "tickmode": "auto",
+                "tickwidth": 1,
+                "title": {
+                  "font": {
+                    "size": 14
+                  },
+                  "standoff": 0
+                },
+                "zeroline": true,
+                "zerolinecolor": "rgb(128, 130, 133)",
+                "zerolinewidth": 1
+              }
+            }
+          },
+          "xaxis": {
+            "autorange": true,
+            "range": [0.814298766560073, 4.185701233439927],
+            "rangemode": "normal",
+            "showgrid": false,
+            "title": {
+              "text": "Engine Size (L)"
+            },
+            "type": "linear"
+          },
+          "yaxis": {
+            "autorange": true,
+            "range": [0, 245.1541406407415],
+            "rangemode": "tozero",
+            "type": "linear"
+          }
         }
       }
     }

@@ -9,10 +9,10 @@ const Edit = (props) => {
 
   return (
     <>
-      {!data.viz_url && (
+      {!data.vis_url && (
         <Message>Please select a visualization from block editor.</Message>
       )}
-      {!!data.viz_url && (
+      {!!data.vis_url && (
         <div className="embed-visualization edit">
           <PlotlyComponent
             {...props}

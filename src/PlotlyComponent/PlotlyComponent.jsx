@@ -54,7 +54,7 @@ function UnconnectedPlotlyComponent(props) {
     onSelectBlock,
     onDeleteBlock,
   } = props;
-  const { height, viz_url, with_metadata_section = true } = props.data;
+  const { height, vis_url, with_metadata_section = true } = props.data;
   const [initialized, setInitialized] = useState(false);
   const [filtersState, setFiltersState] = useState([]);
   const [mobile, setMobile] = useState(false);
@@ -189,7 +189,7 @@ function UnconnectedPlotlyComponent(props) {
       }
       return;
     }
-    if (viz_url && !loadingVisualization) {
+    if (vis_url && !loadingVisualization) {
       const position = getFigurePosition(metadata || properties, block);
       const metadataSection = getFigureMetadata(
         block,
@@ -205,7 +205,7 @@ function UnconnectedPlotlyComponent(props) {
     metadata,
     properties,
     mode,
-    viz_url,
+    vis_url,
     with_metadata_section,
     loadingVisualization,
     onInsertBlock,
@@ -300,13 +300,13 @@ function UnconnectedPlotlyComponent(props) {
 
 const ConnectedPlotlyComponent = compose(
   connectBlockToVisualization(function getConfig(props) {
-    const url = flattenToAppURL(props.data?.viz_url);
+    const url = flattenToAppURL(props.data?.vis_url);
     const viz = props.data.visualization;
     const properties = props.data.properties || {};
     const currentUrl = viz && flattenToAppURL(properties['@id']);
     const shouldFetchViz = !viz?.error && !!url && (!viz || currentUrl !== url);
     return {
-      viz_url: shouldFetchViz ? url : null,
+      vis_url: shouldFetchViz ? url : null,
     };
   }),
   connectToProviderData(function getConfig(props) {

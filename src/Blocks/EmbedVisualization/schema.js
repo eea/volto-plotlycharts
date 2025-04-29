@@ -4,7 +4,7 @@ const schema = {
     {
       id: 'default',
       title: 'Default',
-      fields: ['viz_url', 'height', 'with_metadata_section'],
+      fields: ['vis_url', 'height', 'with_metadata_section'],
     },
     {
       id: 'toolbar',
@@ -25,7 +25,7 @@ const schema = {
   ],
 
   properties: {
-    viz_url: {
+    vis_url: {
       widget: 'internal_url',
       title: 'Visualization',
     },
@@ -83,7 +83,7 @@ const schema = {
     },
   },
 
-  required: ['viz_url'],
+  required: ['vis_url'],
 };
 
 export default schema;
