@@ -133,15 +133,19 @@ const UnconnectedPlotlyEditor = forwardRef((props, ref) => {
     ],
   );
 
-  const onUpdate = debounce(() => {
-    if (Object.keys(update).length > 0) {
-      onChangeValue({
-        ...value,
-        ...update.current,
-      });
-      update.current = {};
-    }
-  }, 40);
+  const onUpdate = useMemo(
+    () =>
+      debounce(() => {
+        if (Object.keys(update).length > 0) {
+          onChangeValue({
+            ...value,
+            ...update.current,
+          });
+          update.current = {};
+        }
+      }, 40),
+    [value, onChangeValue],
+  );
 
   function onInitialized(...args) {
     if (props.onInitialized) {
@@ -210,6 +214,14 @@ const UnconnectedPlotlyEditor = forwardRef((props, ref) => {
       }
     }
   }, [initialized, themes, layout.template]);
+
+  // Clean up
+
+  useEffect(() => {
+    return () => {
+      onUpdate.cancel();
+    };
+  }, [onUpdate]);
 
   return (
     <DefaultPlotlyEditor

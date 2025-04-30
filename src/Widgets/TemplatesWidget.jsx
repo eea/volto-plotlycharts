@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { sortBy, omit } from 'lodash';
 import cx from 'classnames';
 import loadable from '@loadable/component';
-import { Modal, DropdownMenu, DropdownItem, Dropdown } from 'semantic-ui-react';
+import { Modal, Popup, Menu } from 'semantic-ui-react';
 import { PlusIcon } from 'plotly-icons';
 
 import PlotlyEditor from '@eeacms/volto-plotlycharts/PlotlyEditor';
@@ -56,6 +56,7 @@ const EditTemplate = (props) => {
 };
 
 const Template = ({ type, label, onEdit, onDelete, onClone }) => {
+  const [open, setOpen] = useState(false);
   const ComplexIcon = useMemo(
     () => renderTraceIcon(type.icon || type.value, 'TraceType'),
     [type],
@@ -75,17 +76,50 @@ const Template = ({ type, label, onEdit, onDelete, onClone }) => {
         </div>
       </div>
       <div className="template-item__label">{label}</div>
-      <Dropdown
-        className="button--context"
-        text="..."
-        as="button"
-        onClick={(e) => e.preventDefault()}
-      >
-        <DropdownMenu>
-          <DropdownItem text="Delete" onClick={() => onDelete()} />
-          <DropdownItem text="Clone" onClick={() => onClone()} />
-        </DropdownMenu>
-      </Dropdown>
+      <Popup
+        on="click"
+        onClose={() => setOpen(false)}
+        onOpen={() => setOpen(true)}
+        open={open}
+        position="bottom left"
+        className="template-item__popup"
+        pinned
+        flowing
+        hoverable
+        trigger={
+          <button
+            className={cx('button--context', { active: open })}
+            onClick={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+            }}
+          >
+            ...
+          </button>
+        }
+        content={
+          <Menu vertical>
+            <Menu.Item
+              onClick={(e) => {
+                onDelete();
+                setOpen(false);
+                e.stopPropagation();
+              }}
+            >
+              Delete
+            </Menu.Item>
+            <Menu.Item
+              onClick={(e) => {
+                onClone();
+                setOpen(false);
+                e.stopPropagation();
+              }}
+            >
+              Clone
+            </Menu.Item>
+          </Menu>
+        }
+      />
     </div>
   );
 };
@@ -132,10 +166,9 @@ const TemplatesWidget = (props, { formData }) => {
                   type: { label: 'Scatter', order: 1, value: 'scatter' },
                   label: `Template ${value.length + 1}`,
                   visualization: {
-                    chartData: {
-                      data: [],
-                      layout: {},
-                      frames: [],
+                    data: [],
+                    layout: {
+                      template: formData.themes[0],
                     },
                   },
                 },

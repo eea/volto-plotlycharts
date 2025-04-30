@@ -129,6 +129,20 @@
     text-transform: capitalize;
   }
 
+  &__popup.ui.popup {
+    padding: 0;
+
+    .ui.vertical.menu {
+      border: none !important;
+      width: auto;
+
+      .item {
+        border: none !important;
+        font-size: 1rem;
+      }
+    }
+  }
+
   .button--delete,
   .button--context {
     position: absolute !important;
@@ -145,6 +159,11 @@
     font-size: 12px;
     opacity: 0;
     pointer-events: none;
+  }
+
+  .button--context.active {
+    opacity: 1;
+    pointer-events: all;
   }
 
   &:hover {

@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
+import cx from 'classnames';
 import { PlusIcon } from 'plotly-icons';
 import loadable from '@loadable/component';
-import { DropdownMenu, DropdownItem, Dropdown } from 'semantic-ui-react';
+import { Popup, Menu } from 'semantic-ui-react';
 
 import { JsonEditor, ThemeIcon } from '@eeacms/volto-plotlycharts/Utils';
 
@@ -10,6 +11,8 @@ const PlotlyButton = loadable(() =>
 );
 
 const Theme = ({ label, onEdit, onDelete, onClone }) => {
+  const [open, setOpen] = useState(false);
+
   return (
     <div
       role="button"
@@ -24,17 +27,50 @@ const Theme = ({ label, onEdit, onDelete, onClone }) => {
         </div>
       </div>
       <div className="template-item__label">{label}</div>
-      <Dropdown
-        className="button--context"
-        text="..."
-        as="button"
-        onClick={(e) => e.preventDefault()}
-      >
-        <DropdownMenu>
-          <DropdownItem text="Delete" onClick={() => onDelete()} />
-          <DropdownItem text="Clone" onClick={() => onClone()} />
-        </DropdownMenu>
-      </Dropdown>
+      <Popup
+        on="click"
+        onClose={() => setOpen(false)}
+        onOpen={() => setOpen(true)}
+        open={open}
+        position="bottom left"
+        className="template-item__popup"
+        pinned
+        flowing
+        hoverable
+        trigger={
+          <button
+            className={cx('button--context', { active: open })}
+            onClick={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+            }}
+          >
+            ...
+          </button>
+        }
+        content={
+          <Menu vertical>
+            <Menu.Item
+              onClick={(e) => {
+                onDelete();
+                setOpen(false);
+                e.stopPropagation();
+              }}
+            >
+              Delete
+            </Menu.Item>
+            <Menu.Item
+              onClick={(e) => {
+                onClone();
+                setOpen(false);
+                e.stopPropagation();
+              }}
+            >
+              Clone
+            </Menu.Item>
+          </Menu>
+        }
+      />
     </div>
   );
 };
