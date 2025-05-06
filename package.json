@@ -29,7 +29,7 @@
     "@eeacms/volto-embed": "*",
     "@eeacms/volto-matomo": "*",
     "@plone/scripts": "*",
-    "jsoneditor": "10.1.0",
+    "jsoneditor": "10.2.0",
     "plotly.js": "^2.35.3",
     "react-chart-editor": "github:eea/react-chart-editor#0.46.2",
     "react-colorscales": "github:eea/react-colorscales#2.0.2",

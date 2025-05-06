@@ -23,7 +23,7 @@ const Button = loadable(() =>
 );
 
 const JsonEditor = (props) => {
-  const { initialValue: dflt, options, onClose, onChange } = props;
+  const { initialValue: dflt, options, menu, onClose, onChange } = props;
   const editor = useRef();
   const editorEl = useRef();
   const [ready, setReady] = useState(false);
@@ -136,6 +136,7 @@ const JsonEditor = (props) => {
                 <DropdownItem text="Export json" onClick={exportJson} />
               </DropdownMenu>
             </Dropdown>
+            {menu}
           </Portal>
         )}
       </Modal.Content>

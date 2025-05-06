@@ -283,6 +283,7 @@ function UnconnectedPlotlyComponent(props) {
       )}
       {initialized && (
         <Toolbar
+          el={el}
           chartData={{
             data,
             layout,

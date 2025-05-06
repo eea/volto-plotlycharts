@@ -64,6 +64,7 @@ class DefaultEditor extends PlotlyDefaultEditor {
   constructor(props, context) {
     super(props, context);
     this.state = {
+      autoSource: true,
       showImportJSON: false,
     };
   }
@@ -158,7 +159,6 @@ class DefaultEditor extends PlotlyDefaultEditor {
               initialValue={{
                 data: value.data,
                 layout: value.layout,
-                // dataSources: value.dataSources,
               }}
               options={{
                 mode: 'tree',
@@ -174,28 +174,49 @@ class DefaultEditor extends PlotlyDefaultEditor {
                     frames: {
                       type: 'array',
                     },
-                    // dataSources: {
-                    //   type: 'object',
-                    // },
                   },
                   required: ['data', 'layout'],
                   additionalProperties: false,
                 },
               }}
+              menu={
+                <span style={{ display: 'inline-block', margin: '8px 20px' }}>
+                  <input
+                    type="checkbox"
+                    id="auto-source"
+                    name="auto-source"
+                    style={{
+                      marginRight: '0.5rem',
+                      accentColor: '#00FF00',
+                    }}
+                    checked={this.state.autoSource}
+                    onChange={(e) => {
+                      this.setState({ autoSource: e.target.checked });
+                    }}
+                  />
+                  <label for="auto-source">
+                    Automatically extract data sources
+                  </label>
+                </span>
+              }
               onChange={(v) => {
                 const newValue = {
                   ...value,
                   ...v,
                 };
 
-                const [dataSources, update] = getPlotlyDataSources({
-                  data: newValue.data,
-                  layout: newValue.layout,
-                  originalDataSources: value.dataSources,
-                });
+                if (!this.state.autoSource) {
+                  onChangeValue({ ...newValue });
+                } else {
+                  const [dataSources, update] = getPlotlyDataSources({
+                    data: newValue.data,
+                    layout: newValue.layout,
+                    originalDataSources: value.dataSources,
+                  });
 
-                onChangeValue({ ...newValue, dataSources });
-                editor().loadDataSources(dataSources, [], update);
+                  onChangeValue({ ...newValue, dataSources });
+                  editor().loadDataSources(dataSources, [], update);
+                }
               }}
               onClose={() => this.setState({ showImportJSON: false })}
             />

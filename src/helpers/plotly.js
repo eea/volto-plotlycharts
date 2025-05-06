@@ -165,9 +165,10 @@ export function updateDataSources(container, dataSources, srcAttributes) {
     if (!srcAttr.value) {
       return;
     }
-    nestedProperty(newContainer, attr).set(
-      getData(newContainer, srcAttr, dataSources),
-    );
+    const data = getData(newContainer, srcAttr, dataSources);
+    if (data) {
+      nestedProperty(newContainer, attr).set(data);
+    }
   });
 
   return newContainer;

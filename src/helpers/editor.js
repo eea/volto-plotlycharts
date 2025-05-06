@@ -35,7 +35,11 @@ export async function initEditor({ el, editor, dflt, options, onInit }) {
 
   editor.current = new JSONEditor(container, _options, dflt);
 
-  if (onInit) onInit();
+  if (onInit) {
+    requestAnimationFrame(() => {
+      onInit();
+    });
+  }
 }
 
 export function destroyEditor(editor) {
