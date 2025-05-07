@@ -1,5 +1,19 @@
 import { trackLink } from '@eeacms/volto-matomo/utils';
-import { downloadDataURL } from './index';
+
+function downloadDataURL(dataURL, filename) {
+  // Create a temporary anchor element
+  const a = document.createElement('a');
+  a.href = dataURL;
+  a.download = filename;
+
+  // Simulate a click event to trigger the download
+  const clickEvent = new MouseEvent('click', {
+    view: window,
+    bubbles: true,
+    cancelable: false,
+  });
+  a.dispatchEvent(clickEvent);
+}
 
 function getHeaders(headers, onlySectionHeader = false) {
   let str = '';
@@ -180,6 +194,7 @@ const spreadCoreMetadata = (core_metadata) => {
 export {
   convertToCSV,
   convertMatrixToCSV,
+  downloadDataURL,
   exportCSVFile,
   spreadCoreMetadata,
   renameKey,
