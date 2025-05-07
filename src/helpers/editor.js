@@ -33,11 +33,13 @@ export async function initEditor({ el, editor, dflt, options, onInit }) {
     ...options,
   };
 
-  editor.current = new JSONEditor(container, _options);
-  // set initial json
-  editor.current.set(dflt);
+  editor.current = new JSONEditor(container, _options, dflt);
 
-  if (onInit) onInit();
+  if (onInit) {
+    requestAnimationFrame(() => {
+      onInit();
+    });
+  }
 }
 
 export function destroyEditor(editor) {

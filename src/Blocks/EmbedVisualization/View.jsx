@@ -1,21 +1,22 @@
 import React from 'react';
-import ConnectedChart from '@eeacms/volto-plotlycharts/ConnectedChart';
-
-import '@eeacms/volto-plotlycharts/less/visualization.less';
+import PlotlyComponent from '@eeacms/volto-plotlycharts/PlotlyComponent';
 
 const View = (props) => {
   const { data = {} } = props;
 
   return (
-    <ConnectedChart
-      {...props}
-      data={{
-        ...data,
-        download_button: data.download_button ?? true,
-        has_data_query_by_context: data.has_data_query_by_context ?? true,
-        with_sources: true,
-      }}
-    />
+    <div className="embed-visualization view">
+      <PlotlyComponent
+        {...props}
+        mode={props.mode || 'view'}
+        data={{
+          ...data,
+          download_button: data.download_button ?? true,
+          has_data_query_by_context: data.has_data_query_by_context ?? true,
+          with_sources: true,
+        }}
+      />
+    </div>
   );
 };
 

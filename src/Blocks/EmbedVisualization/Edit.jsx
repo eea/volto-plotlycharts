@@ -1,10 +1,8 @@
 import React from 'react';
 import { Message } from 'semantic-ui-react';
 import { SidebarPortal, BlockDataForm } from '@plone/volto/components';
-import ConnectedChart from '@eeacms/volto-plotlycharts/ConnectedChart';
+import PlotlyComponent from '@eeacms/volto-plotlycharts/PlotlyComponent';
 import schema from './schema';
-
-import '@eeacms/volto-plotlycharts/less/visualization.less';
 
 const Edit = (props) => {
   const { data, block, onChangeBlock } = props;
@@ -16,7 +14,7 @@ const Edit = (props) => {
       )}
       {!!data.vis_url && (
         <div className="embed-visualization edit">
-          <ConnectedChart
+          <PlotlyComponent
             {...props}
             mode="edit"
             data={{

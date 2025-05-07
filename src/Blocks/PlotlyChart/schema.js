@@ -1,5 +1,3 @@
-import React from 'react';
-
 const sourceSchema = {
   title: 'Source',
 
@@ -30,11 +28,6 @@ const schema = {
 
   fieldsets: [
     {
-      id: 'default',
-      title: 'Default',
-      fields: ['hover_format_xy'],
-    },
-    {
       id: 'sources',
       title: 'Sources',
       fields: ['chartSources', 'with_sources', 'download_button'],
@@ -47,23 +40,6 @@ const schema = {
   ],
 
   properties: {
-    hover_format_xy: {
-      type: 'string',
-      title: 'Hover format',
-      placeholder: '',
-      description: (
-        <>
-          See{' '}
-          <a
-            target="_blank"
-            rel="noopener noreferrer"
-            href="https://github.com/d3/d3-3.x-api-reference/blob/master/Formatting.md#d3_format"
-          >
-            D3 format documentation
-          </a>
-        </>
-      ),
-    },
     chartSources: {
       widget: 'object_list',
       title: 'Sources',

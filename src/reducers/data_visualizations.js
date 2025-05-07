@@ -17,12 +17,8 @@ const initialState = {
 };
 
 export default function data_providers(state = initialState, action = {}) {
-  const use_data_sources = action.use_data_sources;
   const path = action.path
-    ? action.path.replace(
-        `/@${use_data_sources ? 'visualization-layout' : 'visualization'}`,
-        '',
-      )
+    ? action.path.replace('/@visualization', '')
     : undefined;
   const pendingVisualizations = { ...state.pendingVisualizations };
   const failedVisualizations = { ...state.failedVisualizations };
@@ -49,7 +45,7 @@ export default function data_providers(state = initialState, action = {}) {
         error: null,
         data: {
           ...state.data,
-          [path]: action.result.visualization,
+          [path]: action.result,
         },
         loaded: true,
         loading: false,
