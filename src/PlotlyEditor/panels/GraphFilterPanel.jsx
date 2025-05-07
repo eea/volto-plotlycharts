@@ -1,13 +1,13 @@
 import PropTypes from 'prop-types';
 import { isArray, uniq } from 'lodash';
 // Containers
-import PlotlyPanel from 'react-chart-editor/lib/components/containers/PlotlyPanel';
-import PlotlyFold from 'react-chart-editor/lib/components/containers/PlotlyFold';
+import PlotlyPanel from '@eeacms/react-chart-editor/lib/components/containers/PlotlyPanel';
+import PlotlyFold from '@eeacms/react-chart-editor/lib/components/containers/PlotlyFold';
 // Widgets
-import Dropdown from 'react-chart-editor/lib/components/widgets/Dropdown';
-import TextInput from 'react-chart-editor/lib/components/widgets/TextInput';
+import Dropdown from '@eeacms/react-chart-editor/lib/components/widgets/Dropdown';
+import TextInput from '@eeacms/react-chart-editor/lib/components/widgets/TextInput';
 // Field
-import Field from 'react-chart-editor/lib/components/fields/Field';
+import Field from '@eeacms/react-chart-editor/lib/components/fields/Field';
 
 function getFilterOptions(rows) {
   if (!isArray(rows)) return [];

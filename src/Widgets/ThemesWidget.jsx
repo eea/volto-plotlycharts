@@ -7,7 +7,7 @@ import { Popup, Menu } from 'semantic-ui-react';
 import { JsonEditor, ThemeIcon } from '@eeacms/volto-plotlycharts/Utils';
 
 const PlotlyButton = loadable(() =>
-  import('react-chart-editor/lib/components/widgets/Button'),
+  import('@eeacms/react-chart-editor/lib/components/widgets/Button'),
 );
 
 const Theme = ({ label, onEdit, onDelete, onClone }) => {

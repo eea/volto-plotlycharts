@@ -9,14 +9,14 @@ import { PlusIcon } from 'plotly-icons';
 import PlotlyEditor from '@eeacms/volto-plotlycharts/PlotlyEditor';
 
 const PlotlyButton = loadable(() =>
-  import('react-chart-editor/lib/components/widgets/Button'),
+  import('@eeacms/react-chart-editor/lib/components/widgets/Button'),
 );
 const plotlyUtils = loadable.lib(() =>
   import('@eeacms/volto-plotlycharts/helpers/plotly'),
 );
 
 const renderTraceIcon = __CLIENT__
-  ? require('react-chart-editor').renderTraceIcon
+  ? require('@eeacms/react-chart-editor').renderTraceIcon
   : () => null;
 
 const EditTemplate = (props) => {

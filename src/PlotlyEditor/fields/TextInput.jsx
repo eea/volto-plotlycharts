@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connectToContainer } from 'react-chart-editor/lib';
-import Field from 'react-chart-editor/lib/components/fields/Field';
-import TextInput from 'react-chart-editor/lib/components/widgets/TextInput';
+import { connectToContainer } from '@eeacms/react-chart-editor/lib';
+import Field from '@eeacms/react-chart-editor/lib/components/fields/Field';
+import TextInput from '@eeacms/react-chart-editor/lib/components/widgets/TextInput';
 
 export const UnconnectedTextInput = (props) => {
   const { updatePlot, container } = props;

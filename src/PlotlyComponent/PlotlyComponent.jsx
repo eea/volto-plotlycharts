@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { mapKeys, isArray, uniqBy, sortBy, isNil } from 'lodash';
 import cx from 'classnames';
 import { FormField } from 'semantic-ui-react';
-import { constants } from 'react-chart-editor';
+import { constants } from '@eeacms/react-chart-editor';
 import { injectLazyLibs } from '@plone/volto/helpers/Loadable/Loadable';
 import { flattenToAppURL } from '@plone/volto/helpers';
 import { VisibilitySensor } from '@eeacms/volto-datablocks/components';

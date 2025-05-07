@@ -8,7 +8,7 @@ import {
   getSrcAttr,
   getData,
   maybeTransposeData,
-} from 'react-chart-editor/lib';
+} from '@eeacms/react-chart-editor/lib';
 
 export function getPlotlyDataSources({ data, layout, originalDataSources }) {
   const dataSources = {

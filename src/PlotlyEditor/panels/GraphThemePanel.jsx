@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
-import PlotlyPanel from 'react-chart-editor/lib/components/containers/PlotlyPanel';
-import PlotlyFold from 'react-chart-editor/lib/components/containers/PlotlyFold';
-import Field from 'react-chart-editor/lib/components/fields/Field';
-import TextInput from 'react-chart-editor/lib/components/widgets/TextInput';
+import PlotlyPanel from '@eeacms/react-chart-editor/lib/components/containers/PlotlyPanel';
+import PlotlyFold from '@eeacms/react-chart-editor/lib/components/containers/PlotlyFold';
+import Field from '@eeacms/react-chart-editor/lib/components/fields/Field';
+import TextInput from '@eeacms/react-chart-editor/lib/components/widgets/TextInput';
 
 const GraphThemePanel = (props, context) => {
   const { value, onChangeValue } = context.ctx;

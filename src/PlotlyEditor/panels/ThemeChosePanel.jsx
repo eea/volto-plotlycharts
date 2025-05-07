@@ -1,8 +1,8 @@
 import { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import { EDITOR_ACTIONS } from 'react-chart-editor';
-import PlotlyPanel from 'react-chart-editor/lib/components/containers/PlotlyPanel';
+import { EDITOR_ACTIONS } from '@eeacms/react-chart-editor';
+import PlotlyPanel from '@eeacms/react-chart-editor/lib/components/containers/PlotlyPanel';
 
 import { ThemeIcon } from '@eeacms/volto-plotlycharts/Utils';
 

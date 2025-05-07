@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { omit, sortBy } from 'lodash';
-import { renderTraceIcon } from 'react-chart-editor';
+import { renderTraceIcon } from '@eeacms/react-chart-editor';
 
 function Template(props) {
   const { type, label, onSelect } = props;

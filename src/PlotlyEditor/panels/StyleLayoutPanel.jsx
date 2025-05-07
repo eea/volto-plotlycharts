@@ -17,9 +17,9 @@ import {
   Flaglist,
   Radio,
   Info,
-} from 'react-chart-editor';
-import { HoverColor } from 'react-chart-editor/lib/components/fields/derived';
-import DataSelector from 'react-chart-editor/lib/components/fields/DataSelector';
+} from '@eeacms/react-chart-editor';
+import { HoverColor } from '@eeacms/react-chart-editor/lib/components/fields/derived';
+import DataSelector from '@eeacms/react-chart-editor/lib/components/fields/DataSelector';
 
 import { TextInput } from '../fields';
 

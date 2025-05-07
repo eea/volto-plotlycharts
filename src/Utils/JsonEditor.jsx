@@ -19,7 +19,7 @@ import {
 import 'jsoneditor/dist/jsoneditor.min.css';
 
 const Button = loadable(() =>
-  import('react-chart-editor/lib/components/widgets/Button'),
+  import('@eeacms/react-chart-editor/lib/components/widgets/Button'),
 );
 
 const JsonEditor = (props) => {

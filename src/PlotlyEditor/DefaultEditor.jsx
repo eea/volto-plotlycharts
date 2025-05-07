@@ -21,8 +21,8 @@ import {
   StyleTracesPanel,
   StyleColorbarsPanel,
   StyleUpdateMenusPanel,
-} from 'react-chart-editor';
-import Logo from 'react-chart-editor/lib/components/widgets/Logo';
+} from '@eeacms/react-chart-editor';
+import Logo from '@eeacms/react-chart-editor/lib/components/widgets/Logo';
 
 import JsonEditor from '@eeacms/volto-plotlycharts/Utils/JsonEditor';
 import { getPlotlyDataSources } from '@eeacms/volto-plotlycharts/helpers/plotly';

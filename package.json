@@ -25,14 +25,13 @@
     "@eeacms/volto-datablocks"
   ],
   "dependencies": {
+    "@eeacms/react-chart-editor": "0.47.1",
     "@eeacms/volto-datablocks": "*",
     "@eeacms/volto-embed": "*",
     "@eeacms/volto-matomo": "*",
     "@plone/scripts": "*",
     "jsoneditor": "10.2.0",
     "plotly.js": "^2.35.3",
-    "react-chart-editor": "github:eea/react-chart-editor#0.46.2",
-    "react-colorscales": "github:eea/react-colorscales#2.0.2",
     "react-plotly.js": "2.6.0"
   },
   "devDependencies": {

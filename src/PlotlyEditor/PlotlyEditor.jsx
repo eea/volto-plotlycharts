@@ -9,7 +9,7 @@ import React, {
 import { compose } from 'redux';
 import { useLocation } from 'react-router-dom';
 import { cloneDeep, isEqual, isNil, sortBy, debounce } from 'lodash';
-import DefaultPlotlyEditor, { constants } from 'react-chart-editor';
+import DefaultPlotlyEditor, { constants } from '@eeacms/react-chart-editor';
 import plotly from 'plotly.js/dist/plotly-with-meta';
 
 import { Api } from '@plone/volto/helpers';

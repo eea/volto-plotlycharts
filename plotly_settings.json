@@ -146,8 +146,7 @@
           "nticks": 0,
           "range": [-1, 6],
           "rangeslider": {
-            "visible": false,
-            "yaxis": {}
+            "visible": false
           },
           "separatethousands": true,
           "showgrid": true,
@@ -180,248 +179,6 @@
           "nticks": 0,
           "range": [-1, 4],
           "separatethousands": true,
-          "showgrid": true,
-          "showline": false,
-          "showspikes": false,
-          "showticklabels": true,
-          "tickcolor": "rgb(116, 118, 120)",
-          "ticklabelstandoff": 5,
-          "ticklen": 10,
-          "tickmode": "auto",
-          "tickwidth": 1,
-          "title": {
-            "font": {
-              "size": 14
-            },
-            "standoff": 0
-          },
-          "zeroline": true,
-          "zerolinecolor": "rgb(128, 130, 133)",
-          "zerolinewidth": 1
-        }
-      }
-    },
-    {
-      "data": {
-        "scatter": [
-          {
-            "connectgaps": true,
-            "hoverlabel": {
-              "namelength": -1
-            },
-            "hovertemplate": "%{y}%",
-            "marker": {
-              "color": "rgb(0, 75, 127)"
-            },
-            "mode": "markers+lines"
-          },
-          {
-            "connectgaps": true,
-            "hoverlabel": {
-              "namelength": -1
-            },
-            "hovertemplate": "%{y}%",
-            "marker": {
-              "color": "rgb(188, 190, 192)"
-            },
-            "mode": "markers+lines"
-          },
-          {
-            "connectgaps": true,
-            "hoverlabel": {
-              "namelength": -1
-            },
-            "hovertemplate": "%{y}%",
-            "marker": {
-              "color": "rgb(0, 75, 127)"
-            },
-            "mode": "markers+lines"
-          },
-          {
-            "connectgaps": true,
-            "hoverlabel": {
-              "namelength": -1
-            },
-            "hovertemplate": "%{y}%",
-            "marker": {
-              "color": "rgb(21, 193, 40)"
-            },
-            "mode": "markers+lines"
-          },
-          {
-            "hoverinfo": "none",
-            "marker": {
-              "color": "rgb(0, 75, 127)",
-              "line": {
-                "color": "rgb(0, 75, 127)",
-                "width": 3
-              },
-              "size": 22,
-              "symbol": "circle-open-dot"
-            },
-            "mode": "markers+text",
-            "showlegend": false,
-            "textposition": "top left",
-            "texttemplate": "%{y}%"
-          }
-        ]
-      },
-      "id": "soer_indicator",
-      "label": "SOER Indicator",
-      "layout": {
-        "annotationdefaults": {
-          "align": "center",
-          "showarrow": false,
-          "x": 0,
-          "xanchor": "auto",
-          "xref": "paper",
-          "y": 1,
-          "yanchor": "auto",
-          "yref": "paper"
-        },
-        "autosize": true,
-        "clickmode": "event",
-        "colorscale": {
-          "diverging": [
-            [0, "#e56b38"],
-            [0.07142857142857142, "#ff9933"],
-            [0.14285714285714285, "#fdaf20"],
-            [0.21428571428571427, "#fac50d"],
-            [0.2857142857142857, "#fad936"],
-            [0.35714285714285715, "#fbec9b"],
-            [0.42857142857142855, "#fef6cd"],
-            [0.5, "#f5e0d3"],
-            [0.5714285714285714, "#c8fff8"],
-            [0.6428571428571429, "#a0e5dc"],
-            [0.7142857142857143, "#78cac0"],
-            [0.7857142857142857, "#50b0a4"],
-            [0.8571428571428571, "#289588"],
-            [0.9285714285714286, "#007b6c"],
-            [1, "#005248"]
-          ],
-          "sequential": [
-            [0, "#c8fff8"],
-            [0.16666666666666666, "#a0e5dc"],
-            [0.3333333333333333, "#78cac0"],
-            [0.5, "#50b0a4"],
-            [0.6666666666666666, "#289588"],
-            [0.8333333333333334, "#007b6c"],
-            [1, "#005248"]
-          ],
-          "sequentialminus": [
-            [0, "#005248"],
-            [0.16666666666666666, "#007b6c"],
-            [0.3333333333333333, "#289588"],
-            [0.5, "#50b0a4"],
-            [0.6666666666666666, "#78cac0"],
-            [0.8333333333333334, "#a0e5dc"],
-            [1, "#c8fff8"]
-          ]
-        },
-        "colorway": ["#004B7F", "#BCBEC0", "#004B7F"],
-        "dragmode": "pan",
-        "font": {
-          "color": "rgb(61, 82, 101)",
-          "family": "Roboto, sans-serif",
-          "size": 14
-        },
-        "hoverlabel": {
-          "bgcolor": "rgba(255,255,255,1)",
-          "bordercolor": "rgba(0, 0, 0, 1)",
-          "font": {
-            "family": "Roboto, sans-serif",
-            "size": 14
-          },
-          "namelength": -1
-        },
-        "hovermode": "x unified",
-        "legend": {
-          "font": {
-            "size": 14
-          },
-          "orientation": "h",
-          "title": {
-            "font": {
-              "size": 17
-            }
-          },
-          "traceorder": "normal",
-          "valign": "middle",
-          "x": 0,
-          "xanchor": "left",
-          "y": -0.1,
-          "yanchor": "top"
-        },
-        "margin": {
-          "b": 0,
-          "l": 0,
-          "pad": 0,
-          "r": 0,
-          "t": 36
-        },
-        "paper_bgcolor": "rgba(255, 255, 255, 0)",
-        "plot_bgcolor": "rgba(255, 255, 255, 0)",
-        "separators": ".",
-        "showlegend": true,
-        "title": {
-          "automargin": true,
-          "font": {
-            "size": 14
-          },
-          "subtitle": {
-            "font": {
-              "size": 14
-            }
-          },
-          "x": 0,
-          "y": 1
-        },
-        "xaxis": {
-          "automargin": true,
-          "autorange": true,
-          "dtick": 2,
-          "exponentformat": "none",
-          "gridcolor": "rgb(230, 231, 232)",
-          "gridwidth": 1,
-          "linecolor": "rgb(128, 130, 133)",
-          "mirror": false,
-          "nticks": 0,
-          "range": [-1, 6],
-          "rangeslider": {
-            "visible": false
-          },
-          "separatethousands": false,
-          "showgrid": false,
-          "showline": false,
-          "showspikes": false,
-          "showticklabels": true,
-          "tickcolor": "rgb(116, 118, 120)",
-          "ticklabelstandoff": 5,
-          "ticklen": 10,
-          "tickmode": "auto",
-          "tickwidth": 1,
-          "title": {
-            "font": {
-              "size": 14
-            },
-            "standoff": 0
-          },
-          "zeroline": true,
-          "zerolinecolor": "rgb(128, 130, 133)",
-          "zerolinewidth": 1
-        },
-        "yaxis": {
-          "automargin": true,
-          "autorange": true,
-          "exponentformat": "none",
-          "gridcolor": "rgb(230, 231, 232)",
-          "gridwidth": 1,
-          "linecolor": "rgb(128, 130, 133)",
-          "mirror": false,
-          "nticks": 0,
-          "range": [-1, 4],
-          "rangemode": "tozero",
-          "separatethousands": false,
           "showgrid": true,
           "showline": false,
           "showspikes": false,
@@ -706,12 +463,12 @@
   ],
   "templates": [
     {
-      "label": "Vertical Bar",
       "type": {
         "label": "Bar",
         "order": 2,
         "value": "bar"
       },
+      "label": "Vertical Bar",
       "visualization": {
         "data": [
           {
@@ -919,8 +676,7 @@
                 "nticks": 0,
                 "range": [-1, 6],
                 "rangeslider": {
-                  "visible": false,
-                  "yaxis": {}
+                  "visible": false
                 },
                 "separatethousands": true,
                 "showgrid": true,
@@ -990,16 +746,24 @@
             "range": [0, 3294.7368421052633],
             "type": "linear"
           }
-        }
+        },
+        "columns": [
+          {
+            "key": "Material"
+          },
+          {
+            "key": "Value"
+          }
+        ]
       }
     },
     {
-      "label": "Horizontal Bar",
       "type": {
         "label": "Bar",
         "order": 2,
         "value": "bar"
       },
+      "label": "Horizontal Bar",
       "visualization": {
         "data": [
           {
@@ -1207,8 +971,7 @@
                 "nticks": 0,
                 "range": [-1, 6],
                 "rangeslider": {
-                  "visible": false,
-                  "yaxis": {}
+                  "visible": false
                 },
                 "separatethousands": true,
                 "showgrid": true,
@@ -1278,7 +1041,15 @@
             "showgrid": false,
             "type": "category"
           }
-        }
+        },
+        "columns": [
+          {
+            "key": "Material"
+          },
+          {
+            "key": "Value"
+          }
+        ]
       }
     },
     {
@@ -1291,6 +1062,10 @@
       "visualization": {
         "data": [
           {
+            "hoverlabel": {
+              "namelength": 0
+            },
+            "hovertemplate": "%{y} - $%{x}B exported",
             "marker": {
               "color": "#007b6c"
             },
@@ -1341,13 +1116,13 @@
               "Iron Ore",
               "Barley"
             ],
-            "ysrc": "Material",
+            "ysrc": "Material"
+          },
+          {
             "hoverlabel": {
               "namelength": 0
             },
-            "hovertemplate": "%{y} - $%{x}B exported"
-          },
-          {
+            "hovertemplate": "%{y} - $%{x}B exported",
             "marker": {
               "color": "#a0e5dc"
             },
@@ -1398,15 +1173,10 @@
               "Barley"
             ],
             "yaxis": "y2",
-            "ysrc": "Material",
-            "hovertemplate": "%{y} - $%{x}B exported",
-            "hoverlabel": {
-              "namelength": 0
-            }
+            "ysrc": "Material"
           }
         ],
         "dataSources": {
-          "EU exports": ["3130", "860", "1500", "500", "600", "300", "400"],
           "Material": [
             "Wheat",
             "Sunflower Seeds",
@@ -1416,6 +1186,7 @@
             "Iron Ore",
             "Barley"
           ],
+          "EU exports": ["3130", "860", "1500", "500", "600", "300", "400"],
           "Romania exports": [43, 23, 41, 2, 41, 11, 23]
         },
         "frames": [],
@@ -1598,8 +1369,7 @@
                 "nticks": 0,
                 "range": [-1, 6],
                 "rangeslider": {
-                  "visible": false,
-                  "yaxis": {}
+                  "visible": false
                 },
                 "separatethousands": true,
                 "showgrid": true,
@@ -1694,16 +1464,27 @@
             "type": "category",
             "zeroline": true
           }
-        }
+        },
+        "columns": [
+          {
+            "key": "Material"
+          },
+          {
+            "key": "EU exports"
+          },
+          {
+            "key": "Romania exports"
+          }
+        ]
       }
     },
     {
-      "label": "Grouped Bar",
       "type": {
         "label": "Bar",
         "order": 2,
         "value": "bar"
       },
+      "label": "Grouped Bar",
       "visualization": {
         "data": [
           {
@@ -1756,8 +1537,8 @@
         ],
         "dataSources": {
           "Gender": ["Male", "Female"],
-          "Percentage - No Smoker": [62.6, 82.5],
-          "Percentage - Smoker": ["37.4", "17.5"]
+          "Percentage - Smoker": ["37.4", "17.5"],
+          "Percentage - No Smoker": [62.6, 82.5]
         },
         "frames": [],
         "layout": {
@@ -1931,8 +1712,7 @@
                 "nticks": 0,
                 "range": [-1, 6],
                 "rangeslider": {
-                  "visible": false,
-                  "yaxis": {}
+                  "visible": false
                 },
                 "separatethousands": true,
                 "showgrid": true,
@@ -2002,16 +1782,27 @@
             "range": [0, 86.84210526315789],
             "type": "linear"
           }
-        }
+        },
+        "columns": [
+          {
+            "key": "Gender"
+          },
+          {
+            "key": "Percentage - Smoker"
+          },
+          {
+            "key": "Percentage - No Smoker"
+          }
+        ]
       }
     },
     {
-      "label": "Horizontal Grouped Bar",
       "type": {
         "label": "Bar",
         "order": 2,
         "value": "bar"
       },
+      "label": "Horizontal Grouped Bar",
       "visualization": {
         "data": [
           {
@@ -2064,8 +1855,8 @@
         ],
         "dataSources": {
           "Gender": ["Male", "Female"],
-          "Percentage - No Smoker": ["62.6", "82.5"],
-          "Percentage - Smoker": ["37.4", "17.5"]
+          "Percentage - Smoker": ["37.4", "17.5"],
+          "Percentage - No Smoker": ["62.6", "82.5"]
         },
         "frames": [],
         "layout": {
@@ -2228,8 +2019,7 @@
                 "nticks": 0,
                 "range": [-1, 6],
                 "rangeslider": {
-                  "visible": false,
-                  "yaxis": {}
+                  "visible": false
                 },
                 "separatethousands": true,
                 "showgrid": true,
@@ -2300,16 +2090,27 @@
             "showgrid": false,
             "type": "category"
           }
-        }
+        },
+        "columns": [
+          {
+            "key": "Gender"
+          },
+          {
+            "key": "Percentage - Smoker"
+          },
+          {
+            "key": "Percentage - No Smoker"
+          }
+        ]
       }
     },
     {
-      "label": "Stacked Bar",
       "type": {
         "label": "Bar",
         "order": 2,
         "value": "bar"
       },
+      "label": "Stacked Bar",
       "visualization": {
         "data": [
           {
@@ -2381,10 +2182,10 @@
           }
         ],
         "dataSources": {
-          "Bronze": [8, 11, "12"],
-          "Gold": [10, 24, 9],
           "Nation": ["China", "South Korea", "Canada"],
-          "Silver": [15, 13, 12]
+          "Bronze": [8, 11, "12"],
+          "Silver": [15, 13, 12],
+          "Gold": [10, 24, 9]
         },
         "frames": [],
         "layout": {
@@ -2552,8 +2353,7 @@
                 "nticks": 0,
                 "range": [-1, 6],
                 "rangeslider": {
-                  "visible": false,
-                  "yaxis": {}
+                  "visible": false
                 },
                 "separatethousands": true,
                 "showgrid": true,
@@ -2623,16 +2423,30 @@
             "range": [0, 50.526315789473685],
             "type": "linear"
           }
-        }
+        },
+        "columns": [
+          {
+            "key": "Nation"
+          },
+          {
+            "key": "Bronze"
+          },
+          {
+            "key": "Silver"
+          },
+          {
+            "key": "Gold"
+          }
+        ]
       }
     },
     {
-      "label": "Histogram",
       "type": {
         "label": "Histogram",
         "order": 17,
         "value": "histogram"
       },
+      "label": "Histogram",
       "visualization": {
         "data": [
           {
@@ -2837,8 +2651,7 @@
                 "nticks": 0,
                 "range": [-1, 6],
                 "rangeslider": {
-                  "visible": false,
-                  "yaxis": {}
+                  "visible": false
                 },
                 "separatethousands": true,
                 "showgrid": true,
@@ -2908,16 +2721,24 @@
             "range": [0, 12.631578947368421],
             "type": "linear"
           }
-        }
+        },
+        "columns": [
+          {
+            "key": "age"
+          },
+          {
+            "key": "individuals"
+          }
+        ]
       }
     },
     {
-      "label": "Divergent Vertical Bar",
       "type": {
         "label": "Bar",
         "order": 2,
         "value": "bar"
       },
+      "label": "Divergent Vertical Bar",
       "visualization": {
         "data": [
           {
@@ -2961,9 +2782,6 @@
           }
         ],
         "dataSources": {
-          "Average temperature": [
-            -5, 1, 2, -3, -8, 5, 2, 10, 2, 5, 9, -10, -2, 2
-          ],
           "Country": [
             "Cyprus",
             "Czech Republic",
@@ -2979,6 +2797,9 @@
             "Latvia",
             "Lithuania",
             "Luxembourg"
+          ],
+          "Average temperature": [
+            -5, 1, 2, -3, -8, 5, 2, 10, 2, 5, 9, -10, -2, 2
           ]
         },
         "frames": [],
@@ -3146,8 +2967,7 @@
                 "nticks": 0,
                 "range": [-1, 6],
                 "rangeslider": {
-                  "visible": false,
-                  "yaxis": {}
+                  "visible": false
                 },
                 "separatethousands": true,
                 "showgrid": true,
@@ -3218,16 +3038,24 @@
             "showticklabels": true,
             "type": "linear"
           }
-        }
+        },
+        "columns": [
+          {
+            "key": "Country"
+          },
+          {
+            "key": "Average temperature"
+          }
+        ]
       }
     },
     {
-      "label": "Divergent Horizontal Bar+",
       "type": {
         "label": "Bar",
         "order": 2,
         "value": "bar"
       },
+      "label": "Divergent Horizontal Bar+",
       "visualization": {
         "data": [
           {
@@ -3604,8 +3432,7 @@
                 "nticks": 0,
                 "range": [-1, 6],
                 "rangeslider": {
-                  "visible": false,
-                  "yaxis": {}
+                  "visible": false
                 },
                 "separatethousands": true,
                 "showgrid": true,
@@ -3684,7 +3511,15 @@
             },
             "type": "category"
           }
-        }
+        },
+        "columns": [
+          {
+            "key": "Country"
+          },
+          {
+            "key": "Trade Balance"
+          }
+        ]
       }
     },
     {
@@ -3695,137 +3530,199 @@
       },
       "label": "Multiple Bars",
       "visualization": {
+        "columns": [
+          {
+            "key": "Year"
+          },
+          {
+            "key": "Waste/water"
+          },
+          {
+            "key": "Households"
+          },
+          {
+            "key": "Manufacturing"
+          },
+          {
+            "key": "Services"
+          },
+          {
+            "key": "Energy"
+          },
+          {
+            "key": "Other"
+          }
+        ],
         "data": [
           {
-            "orientation": "v",
-            "type": "bar",
-            "x": ["2010", "2012", "2014", "2016", "2018", "2020", "2022"],
-            "xsrc": "Year",
+            "hoverlabel": {
+              "namelength": 0
+            },
+            "hovertemplate": "%{y} kg per capita water/waste for %{x}",
             "meta": {
               "columnNames": {
                 "x": "Year",
                 "y": "Waste/water"
               }
             },
-            "y": ["295", "352", "408", "442", "467", "476", "483"],
-            "ysrc": "Waste/water",
-            "hovertemplate": "%{y} kg per capita water/waste for %{x}",
-            "hoverlabel": {
-              "namelength": 0
-            }
-          },
-          {
             "orientation": "v",
             "type": "bar",
             "x": ["2010", "2012", "2014", "2016", "2018", "2020", "2022"],
             "xsrc": "Year",
+            "y": ["295", "352", "408", "442", "467", "476", "483"],
+            "ysrc": "Waste/water"
+          },
+          {
+            "hoverlabel": {
+              "namelength": 0
+            },
+            "hovertemplate": "%{y} kg per capita households for %{x}",
             "meta": {
               "columnNames": {
                 "x": "Year",
                 "y": "Households"
               }
             },
-            "y": ["422", "409", "397", "407", "417", "438", "430"],
-            "ysrc": "Households",
-            "xaxis": "x2",
-            "yaxis": "y2",
-            "hovertemplate": "%{y} kg per capita households for %{x}",
-            "hoverlabel": {
-              "namelength": 0
-            }
-          },
-          {
             "orientation": "v",
             "type": "bar",
             "x": ["2010", "2012", "2014", "2016", "2018", "2020", "2022"],
+            "xaxis": "x2",
             "xsrc": "Year",
+            "y": ["422", "409", "397", "407", "417", "438", "430"],
+            "yaxis": "y2",
+            "ysrc": "Households"
+          },
+          {
+            "hoverlabel": {
+              "namelength": 0
+            },
+            "hovertemplate": "%{y} kg per capita manufacturing for %{x}",
             "meta": {
               "columnNames": {
                 "x": "Year",
                 "y": "Manufacturing"
               }
             },
-            "y": ["432", "400", "397", "402", "403", "371", "372"],
-            "ysrc": "Manufacturing",
-            "xaxis": "x3",
-            "yaxis": "y3",
-            "hovertemplate": "%{y} kg per capita manufacturing for %{x}",
-            "hoverlabel": {
-              "namelength": 0
-            }
-          },
-          {
             "orientation": "v",
             "type": "bar",
             "x": ["2010", "2012", "2014", "2016", "2018", "2020", "2022"],
+            "xaxis": "x3",
             "xsrc": "Year",
+            "y": ["432", "400", "397", "402", "403", "371", "372"],
+            "yaxis": "y3",
+            "ysrc": "Manufacturing"
+          },
+          {
+            "hoverlabel": {
+              "namelength": 0
+            },
+            "hovertemplate": "%{y} kg per capita services for %{x}",
             "meta": {
               "columnNames": {
                 "x": "Year",
                 "y": "Services"
               }
             },
-            "y": ["193", "182", "173", "177", "186", "176", "177"],
-            "ysrc": "Services",
-            "xaxis": "x4",
-            "yaxis": "y4",
-            "hovertemplate": "%{y} kg per capita services for %{x}",
-            "hoverlabel": {
-              "namelength": 0
-            }
-          },
-          {
             "orientation": "v",
             "type": "bar",
             "x": ["2010", "2012", "2014", "2016", "2018", "2020", "2022"],
+            "xaxis": "x4",
             "xsrc": "Year",
+            "y": ["193", "182", "173", "177", "186", "176", "177"],
+            "yaxis": "y4",
+            "ysrc": "Services"
+          },
+          {
+            "hoverlabel": {
+              "namelength": 0
+            },
+            "hovertemplate": "%{y} kg per capita energy for %{x}",
             "meta": {
               "columnNames": {
                 "x": "Year",
                 "y": "Energy"
               }
             },
-            "y": ["178", "201", "197", "168", "170", "102", "132"],
-            "ysrc": "Energy",
-            "xaxis": "x5",
-            "yaxis": "y5",
-            "hovertemplate": "%{y} kg per capita energy for %{x}",
-            "hoverlabel": {
-              "namelength": 0
-            }
-          },
-          {
             "orientation": "v",
             "type": "bar",
             "x": ["2010", "2012", "2014", "2016", "2018", "2020", "2022"],
+            "xaxis": "x5",
             "xsrc": "Year",
+            "y": ["178", "201", "197", "168", "170", "102", "132"],
+            "yaxis": "y5",
+            "ysrc": "Energy"
+          },
+          {
+            "hoverlabel": {
+              "namelength": 0
+            },
+            "hovertemplate": "%{y} kg per capita other for %{x}",
             "meta": {
               "columnNames": {
                 "x": "Year",
                 "y": "Other"
               }
             },
-            "y": ["200", "176", "163", "167", "177", "173", "183"],
-            "ysrc": "Other",
+            "orientation": "v",
+            "type": "bar",
+            "x": ["2010", "2012", "2014", "2016", "2018", "2020", "2022"],
             "xaxis": "x6",
+            "xsrc": "Year",
+            "y": ["200", "176", "163", "167", "177", "173", "183"],
             "yaxis": "y6",
-            "hovertemplate": "%{y} kg per capita other for %{x}",
-            "hoverlabel": {
-              "namelength": 0
-            }
+            "ysrc": "Other"
           }
         ],
         "dataSources": {
-          "Year": ["2010", "2012", "2014", "2016", "2018", "2020", "2022"],
-          "Waste/water": ["295", "352", "408", "442", "467", "476", "483"],
+          "Energy": ["178", "201", "197", "168", "170", "102", "132"],
           "Households": ["422", "409", "397", "407", "417", "438", "430"],
           "Manufacturing": ["432", "400", "397", "402", "403", "371", "372"],
+          "Other": ["200", "176", "163", "167", "177", "173", "183"],
           "Services": ["193", "182", "173", "177", "186", "176", "177"],
-          "Energy": ["178", "201", "197", "168", "170", "102", "132"],
-          "Other": ["200", "176", "163", "167", "177", "173", "183"]
+          "Waste/water": ["295", "352", "408", "442", "467", "476", "483"],
+          "Year": ["2010", "2012", "2014", "2016", "2018", "2020", "2022"]
         },
         "frames": [],
         "layout": {
+          "annotations": [
+            {
+              "text": "Water/waste (kg per capita)",
+              "x": 0,
+              "xanchor": "left",
+              "y": 1.02
+            },
+            {
+              "text": "Households (kg per capita)",
+              "x": 0.35,
+              "xanchor": "left",
+              "y": 1.02
+            },
+            {
+              "text": "Manufacturing (kg per capita)",
+              "x": 0.7,
+              "xanchor": "left",
+              "y": 1.02
+            },
+            {
+              "text": "Services (kg per capita)",
+              "x": 0,
+              "xanchor": "left",
+              "y": 0.42
+            },
+            {
+              "text": "Energy (kg per capita)",
+              "x": 0.35,
+              "xanchor": "left",
+              "y": 0.42
+            },
+            {
+              "text": "Other (kg per capita)",
+              "x": 0.7,
+              "xanchor": "left",
+              "y": 0.42
+            }
+          ],
+          "autosize": true,
           "mapbox": {
             "style": "open-street-map"
           },
@@ -3975,8 +3872,7 @@
                 "nticks": 0,
                 "range": [-1, 6],
                 "rangeslider": {
-                  "visible": false,
-                  "yaxis": {}
+                  "visible": false
                 },
                 "separatethousands": true,
                 "showgrid": true,
@@ -4045,11 +3941,86 @@
             },
             "showgrid": false,
             "showticklabels": true,
-            "zeroline": false,
-            "type": "category",
             "title": {
               "text": "Years"
-            }
+            },
+            "type": "category",
+            "zeroline": false
+          },
+          "xaxis2": {
+            "anchor": "y2",
+            "autorange": true,
+            "domain": [0.35, 0.65],
+            "overlaying": false,
+            "range": [-0.5, 6.5],
+            "showgrid": false,
+            "showticklabels": true,
+            "side": "bottom",
+            "title": {
+              "text": "Years"
+            },
+            "type": "category",
+            "zeroline": false
+          },
+          "xaxis3": {
+            "anchor": "y3",
+            "autorange": true,
+            "domain": [0.7, 1],
+            "overlaying": false,
+            "range": [-0.5, 6.5],
+            "showgrid": false,
+            "showticklabels": true,
+            "side": "bottom",
+            "title": {
+              "text": "Years"
+            },
+            "type": "category",
+            "zeroline": false
+          },
+          "xaxis4": {
+            "anchor": "y4",
+            "autorange": true,
+            "domain": [0, 0.3],
+            "overlaying": false,
+            "range": [-0.5, 6.5],
+            "showgrid": false,
+            "showticklabels": true,
+            "side": "bottom",
+            "title": {
+              "text": "Years"
+            },
+            "type": "category",
+            "zeroline": false
+          },
+          "xaxis5": {
+            "anchor": "y5",
+            "autorange": true,
+            "domain": [0.35, 0.65],
+            "overlaying": false,
+            "range": [-0.5, 6.5],
+            "showgrid": false,
+            "showticklabels": true,
+            "side": "bottom",
+            "title": {
+              "text": "Years"
+            },
+            "type": "category",
+            "zeroline": false
+          },
+          "xaxis6": {
+            "anchor": "y6",
+            "autorange": true,
+            "domain": [0.7, 1],
+            "overlaying": false,
+            "range": [-0.5, 6.5],
+            "showgrid": false,
+            "showticklabels": true,
+            "side": "bottom",
+            "title": {
+              "text": "Years"
+            },
+            "type": "category",
+            "zeroline": false
           },
           "yaxis": {
             "anchor": "x",
@@ -4061,207 +4032,70 @@
             },
             "showgrid": true,
             "showticklabels": true,
-            "zeroline": false,
-            "type": "linear"
-          },
-          "autosize": true,
-          "xaxis2": {
-            "showgrid": false,
-            "showticklabels": true,
-            "zeroline": false,
-            "side": "bottom",
-            "overlaying": false,
-            "type": "category",
-            "range": [-0.5, 6.5],
-            "autorange": true,
-            "domain": [0.35, 0.65],
-            "anchor": "y2",
-            "title": {
-              "text": "Years"
-            }
+            "type": "linear",
+            "zeroline": false
           },
           "yaxis2": {
-            "showgrid": true,
-            "showticklabels": true,
-            "zeroline": false,
-            "side": "left",
-            "overlaying": false,
-            "type": "linear",
-            "range": [0, 461.05263157894734],
+            "anchor": "x2",
             "autorange": true,
             "domain": [0.61, 1],
-            "anchor": "x2"
-          },
-          "xaxis3": {
-            "showgrid": false,
-            "showticklabels": true,
-            "zeroline": false,
-            "side": "bottom",
             "overlaying": false,
-            "type": "category",
-            "range": [-0.5, 6.5],
-            "autorange": true,
-            "anchor": "y3",
-            "domain": [0.7, 1],
-            "title": {
-              "text": "Years"
-            }
+            "range": [0, 461.0526315789474],
+            "showgrid": true,
+            "showticklabels": true,
+            "side": "left",
+            "type": "linear",
+            "zeroline": false
           },
           "yaxis3": {
+            "anchor": "x3",
+            "autorange": true,
+            "domain": [0.61, 1],
+            "overlaying": false,
+            "range": [0, 454.7368421052632],
             "showgrid": true,
             "showticklabels": true,
-            "zeroline": false,
             "side": "left",
-            "overlaying": false,
             "type": "linear",
-            "range": [0, 454.7368421052632],
-            "autorange": true,
-            "anchor": "x3",
-            "domain": [0.61, 1]
-          },
-          "xaxis4": {
-            "showgrid": false,
-            "showticklabels": true,
-            "zeroline": false,
-            "side": "bottom",
-            "overlaying": false,
-            "type": "category",
-            "range": [-0.5, 6.5],
-            "autorange": true,
-            "anchor": "y4",
-            "domain": [0, 0.3],
-            "title": {
-              "text": "Years"
-            }
+            "zeroline": false
           },
           "yaxis4": {
+            "anchor": "x4",
+            "autorange": true,
+            "domain": [0, 0.41],
+            "overlaying": false,
+            "range": [0, 203.1578947368421],
             "showgrid": true,
             "showticklabels": true,
-            "zeroline": false,
             "side": "left",
-            "overlaying": false,
             "type": "linear",
-            "range": [0, 203.1578947368421],
-            "autorange": true,
-            "anchor": "x4",
-            "domain": [0, 0.41]
-          },
-          "xaxis5": {
-            "showgrid": false,
-            "showticklabels": true,
-            "zeroline": false,
-            "side": "bottom",
-            "overlaying": false,
-            "type": "category",
-            "range": [-0.5, 6.5],
-            "autorange": true,
-            "anchor": "y5",
-            "domain": [0.35, 0.65],
-            "title": {
-              "text": "Years"
-            }
+            "zeroline": false
           },
           "yaxis5": {
+            "anchor": "x5",
+            "autorange": true,
+            "domain": [0, 0.41],
+            "overlaying": false,
+            "range": [0, 211.57894736842104],
             "showgrid": true,
             "showticklabels": true,
-            "zeroline": false,
             "side": "left",
-            "overlaying": false,
             "type": "linear",
-            "range": [0, 211.57894736842104],
-            "autorange": true,
-            "anchor": "x5",
-            "domain": [0, 0.41]
-          },
-          "xaxis6": {
-            "showgrid": false,
-            "showticklabels": true,
-            "zeroline": false,
-            "side": "bottom",
-            "overlaying": false,
-            "type": "category",
-            "range": [-0.5, 6.5],
-            "autorange": true,
-            "domain": [0.7, 1],
-            "anchor": "y6",
-            "title": {
-              "text": "Years"
-            }
+            "zeroline": false
           },
           "yaxis6": {
-            "showgrid": true,
-            "showticklabels": true,
-            "zeroline": false,
-            "side": "left",
-            "overlaying": false,
-            "type": "linear",
-            "range": [0, 210.5263157894737],
+            "anchor": "x6",
             "autorange": true,
             "domain": [0, 0.4],
-            "anchor": "x6"
-          },
-          "annotations": [
-            {
-              "text": "Water/waste (kg per capita)",
-              "xanchor": "left",
-              "y": 1.02,
-              "x": 0
-            },
-            {
-              "text": "Households (kg per capita)",
-              "xanchor": "left",
-              "x": 0.35,
-              "y": 1.02
-            },
-            {
-              "text": "Manufacturing (kg per capita)",
-              "x": 0.7,
-              "y": 1.02,
-              "xanchor": "left"
-            },
-            {
-              "text": "Services (kg per capita)",
-              "xanchor": "left",
-              "y": 0.42,
-              "x": 0
-            },
-            {
-              "text": "Energy (kg per capita)",
-              "xanchor": "left",
-              "x": 0.35,
-              "y": 0.42
-            },
-            {
-              "text": "Other (kg per capita)",
-              "xanchor": "left",
-              "x": 0.7,
-              "y": 0.42
-            }
-          ]
-        },
-        "columns": [
-          {
-            "key": "Year"
-          },
-          {
-            "key": "Waste/water"
-          },
-          {
-            "key": "Households"
-          },
-          {
-            "key": "Manufacturing"
-          },
-          {
-            "key": "Services"
-          },
-          {
-            "key": "Energy"
-          },
-          {
-            "key": "Other"
+            "overlaying": false,
+            "range": [0, 210.5263157894737],
+            "showgrid": true,
+            "showticklabels": true,
+            "side": "left",
+            "type": "linear",
+            "zeroline": false
           }
-        ]
+        }
       }
     },
     {
@@ -4582,8 +4416,7 @@
                 "nticks": 0,
                 "range": [-1, 6],
                 "rangeslider": {
-                  "visible": false,
-                  "yaxis": {}
+                  "visible": false
                 },
                 "separatethousands": true,
                 "showgrid": true,
@@ -4662,12 +4495,12 @@
       }
     },
     {
-      "label": "Line",
       "type": {
         "label": "Line",
         "order": 3,
         "value": "line"
       },
+      "label": "Line",
       "visualization": {
         "data": [
           {
@@ -4955,8 +4788,7 @@
                 "nticks": 0,
                 "range": [-1, 6],
                 "rangeslider": {
-                  "visible": false,
-                  "yaxis": {}
+                  "visible": false
                 },
                 "separatethousands": true,
                 "showgrid": true,
@@ -5017,26 +4849,37 @@
           },
           "xaxis": {
             "autorange": true,
-            "range": [2010.3477421671605, 2022.6522578328395],
+            "range": [2010.2533274179236, 2022.7466725820764],
             "showgrid": false,
             "type": "linear"
           },
           "yaxis": {
             "autorange": true,
-            "range": [0, 9.568421052631578],
+            "range": [0, 9.644317532838379],
             "rangemode": "tozero",
             "type": "linear"
           }
-        }
+        },
+        "columns": [
+          {
+            "key": "country_trend"
+          },
+          {
+            "key": "eu_trend"
+          },
+          {
+            "key": "year"
+          }
+        ]
       }
     },
     {
-      "label": "Area",
       "type": {
         "label": "Area",
         "order": 4,
         "value": "area"
       },
+      "label": "Area",
       "visualization": {
         "data": [
           {
@@ -5319,6 +5162,17 @@
           }
         ],
         "dataSources": {
+          "Year": [
+            "1952",
+            "1960",
+            "1970",
+            "1980",
+            "1990",
+            "2000",
+            "2010",
+            "2020",
+            "2024"
+          ],
           "Africa": [
             "230",
             "280",
@@ -5385,17 +5239,6 @@
             "410",
             "425",
             "430"
-          ],
-          "Year": [
-            "1952",
-            "1960",
-            "1970",
-            "1980",
-            "1990",
-            "2000",
-            "2010",
-            "2020",
-            "2024"
           ]
         },
         "frames": [],
@@ -5553,8 +5396,7 @@
                 "nticks": 0,
                 "range": [-1, 6],
                 "rangeslider": {
-                  "visible": false,
-                  "yaxis": {}
+                  "visible": false
                 },
                 "separatethousands": true,
                 "showgrid": true,
@@ -5624,16 +5466,42 @@
             "range": [0, 8341.057894736843],
             "type": "linear"
           }
-        }
+        },
+        "columns": [
+          {
+            "key": "Year"
+          },
+          {
+            "key": "Africa"
+          },
+          {
+            "key": "Antartica"
+          },
+          {
+            "key": "Asia"
+          },
+          {
+            "key": "Europe"
+          },
+          {
+            "key": "North America"
+          },
+          {
+            "key": "Oceania"
+          },
+          {
+            "key": "South America"
+          }
+        ]
       }
     },
     {
-      "label": "Pie Combo",
       "type": {
         "label": "Pie",
         "order": 8,
         "value": "pie"
       },
+      "label": "Pie Combo",
       "visualization": {
         "data": [
           {
@@ -5843,8 +5711,7 @@
                 "nticks": 0,
                 "range": [-1, 6],
                 "rangeslider": {
-                  "visible": false,
-                  "yaxis": {}
+                  "visible": false
                 },
                 "separatethousands": true,
                 "showgrid": true,
@@ -5903,7 +5770,15 @@
               "text": "Exported fruits in America ($B)"
             }
           }
-        }
+        },
+        "columns": [
+          {
+            "key": "labels"
+          },
+          {
+            "key": "values"
+          }
+        ]
       }
     },
     {
@@ -5914,6 +5789,17 @@
       },
       "label": "Donut",
       "visualization": {
+        "columns": [
+          {
+            "key": "labels"
+          },
+          {
+            "key": "sum"
+          },
+          {
+            "key": "values"
+          }
+        ],
         "data": [
           {
             "direction": "clockwise",
@@ -6128,8 +6014,7 @@
                 "nticks": 0,
                 "range": [-1, 6],
                 "rangeslider": {
-                  "visible": false,
-                  "yaxis": {}
+                  "visible": false
                 },
                 "separatethousands": true,
                 "showgrid": true,
@@ -6189,27 +6074,16 @@
             },
             "x": 0
           }
-        },
-        "columns": [
-          {
-            "key": "labels"
-          },
-          {
-            "key": "sum"
-          },
-          {
-            "key": "values"
-          }
-        ]
+        }
       }
     },
     {
-      "label": "Sunburst",
       "type": {
         "label": "Sunburst",
         "order": 28,
         "value": "sunburst"
       },
+      "label": "Sunburst",
       "visualization": {
         "data": [
           {
@@ -6308,10 +6182,6 @@
             "Mineral Raw Materials",
             "Mineral Raw Materials"
           ],
-          "Export Value (USD Millions)": [
-            5990, 1900, 2500, 3130, 860, 1500, 500, 600, 400, 700, 200, 300,
-            450, 800, 600, 350
-          ],
           "Product": [
             "Agricultural Raw Materials",
             "Forestry Products",
@@ -6329,6 +6199,10 @@
             "Gold",
             "Coal",
             "Aluminum Ore"
+          ],
+          "Export Value (USD Millions)": [
+            5990, 1900, 2500, 3130, 860, 1500, 500, 600, 400, 700, 200, 300,
+            450, 800, 600, 350
           ]
         },
         "frames": [],
@@ -6491,8 +6365,7 @@
                 "nticks": 0,
                 "range": [-1, 6],
                 "rangeslider": {
-                  "visible": false,
-                  "yaxis": {}
+                  "visible": false
                 },
                 "separatethousands": true,
                 "showgrid": true,
@@ -6551,16 +6424,27 @@
               "text": "Exported products (USD Millions)"
             }
           }
-        }
+        },
+        "columns": [
+          {
+            "key": "Category"
+          },
+          {
+            "key": "Product"
+          },
+          {
+            "key": "Export Value (USD Millions)"
+          }
+        ]
       }
     },
     {
-      "label": "Treemap",
       "type": {
         "label": "Treemap",
         "order": 29,
         "value": "treemap"
       },
+      "label": "Treemap",
       "visualization": {
         "data": [
           {
@@ -6655,24 +6539,6 @@
             "Mineral Raw Materials",
             "Mineral Raw Materials"
           ],
-          "Export Value (USD Millions)": [
-            "5990",
-            "1900",
-            "2500",
-            "3130",
-            "860",
-            "1500",
-            "500",
-            "600",
-            "400",
-            "700",
-            "200",
-            "300",
-            "450",
-            "800",
-            "600",
-            "350"
-          ],
           "Product": [
             "Agricultural Raw Materials",
             "Forestry Products",
@@ -6690,6 +6556,24 @@
             "Gold",
             "Coal",
             "Aluminum Ore"
+          ],
+          "Export Value (USD Millions)": [
+            "5990",
+            "1900",
+            "2500",
+            "3130",
+            "860",
+            "1500",
+            "500",
+            "600",
+            "400",
+            "700",
+            "200",
+            "300",
+            "450",
+            "800",
+            "600",
+            "350"
           ]
         },
         "frames": [],
@@ -6847,8 +6731,7 @@
                 "nticks": 0,
                 "range": [-1, 6],
                 "rangeslider": {
-                  "visible": false,
-                  "yaxis": {}
+                  "visible": false
                 },
                 "separatethousands": true,
                 "showgrid": true,
@@ -6908,7 +6791,18 @@
             }
           },
           "treemapcolorway": ["#007B6C", "rgb(0, 75, 127)", "rgb(0, 143, 245)"]
-        }
+        },
+        "columns": [
+          {
+            "key": "Category"
+          },
+          {
+            "key": "Product"
+          },
+          {
+            "key": "Export Value (USD Millions)"
+          }
+        ]
       }
     },
     {
@@ -7293,12 +7187,12 @@
       }
     },
     {
-      "label": "Pie",
       "type": {
         "label": "Pie",
         "order": 8,
         "value": "pie"
       },
+      "label": "Pie",
       "visualization": {
         "data": [
           {
@@ -7483,8 +7377,7 @@
                 "nticks": 0,
                 "range": [-1, 6],
                 "rangeslider": {
-                  "visible": false,
-                  "yaxis": {}
+                  "visible": false
                 },
                 "separatethousands": true,
                 "showgrid": true,
@@ -7543,16 +7436,24 @@
               "text": "Exported fruits in America ($B)"
             }
           }
-        }
+        },
+        "columns": [
+          {
+            "key": "labels"
+          },
+          {
+            "key": "values"
+          }
+        ]
       }
     },
     {
-      "label": "Heatmap",
       "type": {
         "label": "Heatmap",
         "order": 5,
         "value": "heatmap"
       },
+      "label": "Heatmap",
       "visualization": {
         "data": [
           {
@@ -7644,6 +7545,29 @@
           }
         ],
         "dataSources": {
+          "Continent": [
+            "Asia",
+            "Africa",
+            "Europe",
+            "North America",
+            "South America",
+            "Oceania",
+            "Antartica"
+          ],
+          "Month": [
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "May",
+            "Jun",
+            "Jul",
+            "Aug",
+            "Sep",
+            "Oct",
+            "Nov",
+            "Dec"
+          ],
           "Africa": [
             "25.00",
             "26.00",
@@ -7686,15 +7610,6 @@
             "12",
             "7"
           ],
-          "Continent": [
-            "Asia",
-            "Africa",
-            "Europe",
-            "North America",
-            "South America",
-            "Oceania",
-            "Antartica"
-          ],
           "Europe": [
             "0.00",
             "2.00",
@@ -7708,20 +7623,6 @@
             "12.00",
             "7.00",
             "2.00"
-          ],
-          "Month": [
-            "Jan",
-            "Feb",
-            "Mar",
-            "Apr",
-            "May",
-            "Jun",
-            "Jul",
-            "Aug",
-            "Sep",
-            "Oct",
-            "Nov",
-            "Dec"
           ],
           "North America": [
             "-5",
@@ -7932,8 +7833,7 @@
                 "nticks": 0,
                 "range": [-1, 6],
                 "rangeslider": {
-                  "visible": false,
-                  "yaxis": {}
+                  "visible": false
                 },
                 "separatethousands": true,
                 "showgrid": true,
@@ -8004,16 +7904,45 @@
             "ticks": "",
             "type": "category"
           }
-        }
+        },
+        "columns": [
+          {
+            "key": "Continent"
+          },
+          {
+            "key": "Month"
+          },
+          {
+            "key": "Africa"
+          },
+          {
+            "key": "Antartica"
+          },
+          {
+            "key": "Asia"
+          },
+          {
+            "key": "Europe"
+          },
+          {
+            "key": "North America"
+          },
+          {
+            "key": "Oceania"
+          },
+          {
+            "key": "South America"
+          }
+        ]
       }
     },
     {
-      "label": "Table",
       "type": {
         "label": "Table",
         "order": 6,
         "value": "table"
       },
+      "label": "Table",
       "visualization": {
         "data": [
           {
@@ -8107,6 +8036,7 @@
           }
         ],
         "dataSources": {
+          "headers": ["Col 1", "Col 2", "Col 3", "Col 4"],
           "col_1": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
           "col_2": [
             "Y-100",
@@ -8143,8 +8073,7 @@
             "A-800",
             "A-900",
             "A-1000"
-          ],
-          "headers": ["Col 1", "Col 2", "Col 3", "Col 4"]
+          ]
         },
         "frames": [],
         "layout": {
@@ -8298,8 +8227,7 @@
                 "nticks": 0,
                 "range": [-1, 6],
                 "rangeslider": {
-                  "visible": false,
-                  "yaxis": {}
+                  "visible": false
                 },
                 "separatethousands": true,
                 "showgrid": true,
@@ -8353,16 +8281,33 @@
               }
             }
           }
-        }
+        },
+        "columns": [
+          {
+            "key": "headers"
+          },
+          {
+            "key": "col_1"
+          },
+          {
+            "key": "col_2"
+          },
+          {
+            "key": "col_3"
+          },
+          {
+            "key": "col_4"
+          }
+        ]
       }
     },
     {
-      "label": "Tile Map",
       "type": {
         "label": "Tile Map",
         "order": 20,
         "value": "scattermapbox"
       },
+      "label": "Tile Map",
       "visualization": {
         "data": [
           {
@@ -8754,8 +8699,7 @@
                 "nticks": 0,
                 "range": [-1, 6],
                 "rangeslider": {
-                  "visible": false,
-                  "yaxis": {}
+                  "visible": false
                 },
                 "separatethousands": true,
                 "showgrid": true,
@@ -8814,21 +8758,64 @@
               "text": "Fire incidents over 10 years in EU capitals"
             }
           }
-        }
+        },
+        "columns": [
+          {
+            "key": "City"
+          },
+          {
+            "key": "Fire incidents"
+          },
+          {
+            "key": "lat"
+          },
+          {
+            "key": "lon"
+          }
+        ]
       }
     },
     {
-      "label": "SOER Indicator",
       "type": {
         "label": "Line",
         "order": 3,
         "value": "line"
       },
+      "label": "SOER Indicator",
       "visualization": {
+        "columns": [
+          {
+            "key": "country_gdp"
+          },
+          {
+            "key": "country_performance"
+          },
+          {
+            "key": "country_performance_text"
+          },
+          {
+            "key": "eu_gdp"
+          },
+          {
+            "key": "eu_performance"
+          },
+          {
+            "key": "target"
+          },
+          {
+            "key": "years"
+          },
+          {
+            "key": "years_range"
+          }
+        ],
         "data": [
           {
+            "connectgaps": true,
+            "hovertemplate": "%{y}%",
             "marker": {
-              "color": "rgb(0, 75, 127)"
+              "color": "rgb(0, 75, 127)",
+              "size": 6
             },
             "meta": {
               "columnNames": {
@@ -8891,8 +8878,11 @@
             "ysrc": "country_performance"
           },
           {
+            "connectgaps": true,
+            "hovertemplate": "%{y}%",
             "marker": {
-              "color": "rgb(188, 190, 192)"
+              "color": "rgb(188, 190, 192)",
+              "size": 6
             },
             "meta": {
               "columnNames": {
@@ -8939,6 +8929,8 @@
             "ysrc": "eu_performance"
           },
           {
+            "connectgaps": true,
+            "hovertemplate": "%{y}%",
             "line": {
               "dash": "dash"
             },
@@ -8981,6 +8973,8 @@
             "ysrc": "country_gdp"
           },
           {
+            "connectgaps": true,
+            "hovertemplate": "%{y}%",
             "line": {
               "dash": "dash"
             },
@@ -9023,6 +9017,7 @@
             "ysrc": "eu_gdp"
           },
           {
+            "hoverinfo": "none",
             "marker": {
               "color": "rgb(0, 75, 127)",
               "line": {
@@ -9040,7 +9035,10 @@
             },
             "mode": "markers+text",
             "name": "Target",
+            "showlegend": false,
             "stackgroup": null,
+            "textposition": "top left",
+            "texttemplate": "%{y}%",
             "type": "scatter",
             "x": [
               "2012",
@@ -9065,24 +9063,24 @@
             ],
             "xsrc": "years",
             "y": [
-              "",
-              "",
-              "",
-              "",
-              "",
-              "",
-              "",
-              "",
-              "",
-              "",
-              "",
-              "",
-              "",
-              "",
-              "",
-              "",
-              "",
-              "",
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
               "25"
             ],
             "ysrc": "target"
@@ -9129,24 +9127,24 @@
             "9.09"
           ],
           "target": [
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
             "25"
           ],
           "years": [
@@ -9175,76 +9173,33 @@
         "frames": [],
         "layout": {
           "autosize": true,
+          "hovermode": "x unified",
+          "legend": {
+            "orientation": "h",
+            "x": 0,
+            "y": -0.1
+          },
           "mapbox": {
             "style": "open-street-map"
           },
+          "margin": {
+            "t": 36
+          },
+          "separators": ".",
+          "showlegend": true,
           "template": {
             "data": {
               "scatter": [
                 {
-                  "connectgaps": true,
-                  "hoverlabel": {
-                    "namelength": -1
-                  },
-                  "hovertemplate": "%{y}%",
+                  "hoverinfo": "x+y",
                   "marker": {
-                    "color": "rgb(0, 75, 127)"
-                  },
-                  "mode": "markers+lines"
-                },
-                {
-                  "connectgaps": true,
-                  "hoverlabel": {
-                    "namelength": -1
-                  },
-                  "hovertemplate": "%{y}%",
-                  "marker": {
-                    "color": "rgb(188, 190, 192)"
-                  },
-                  "mode": "markers+lines"
-                },
-                {
-                  "connectgaps": true,
-                  "hoverlabel": {
-                    "namelength": -1
-                  },
-                  "hovertemplate": "%{y}%",
-                  "marker": {
-                    "color": "rgb(0, 75, 127)"
-                  },
-                  "mode": "markers+lines"
-                },
-                {
-                  "connectgaps": true,
-                  "hoverlabel": {
-                    "namelength": -1
-                  },
-                  "hovertemplate": "%{y}%",
-                  "marker": {
-                    "color": "rgb(21, 193, 40)"
-                  },
-                  "mode": "markers+lines"
-                },
-                {
-                  "hoverinfo": "none",
-                  "marker": {
-                    "color": "rgb(0, 75, 127)",
-                    "line": {
-                      "color": "rgb(0, 75, 127)",
-                      "width": 3
-                    },
-                    "size": 22,
-                    "symbol": "circle-open-dot"
-                  },
-                  "mode": "markers+text",
-                  "showlegend": false,
-                  "textposition": "top left",
-                  "texttemplate": "%{y}%"
+                    "size": 10
+                  }
                 }
               ]
             },
-            "id": "soer_indicator",
-            "label": "SOER Indicator",
+            "id": "eea",
+            "label": "EEA",
             "layout": {
               "annotationdefaults": {
                 "align": "center",
@@ -9253,7 +9208,7 @@
                 "xanchor": "auto",
                 "xref": "paper",
                 "y": 1,
-                "yanchor": "auto",
+                "yanchor": "bottom",
                 "yref": "paper"
               },
               "autosize": true,
@@ -9295,7 +9250,19 @@
                   [1, "#c8fff8"]
                 ]
               },
-              "colorway": ["#004B7F", "#BCBEC0", "#004B7F"],
+              "colorway": [
+                "#007B6C",
+                "#50B0A4",
+                "#A0E5DC",
+                "#004B7F",
+                "#008FF5",
+                "#A0D7FF",
+                "#FF9933",
+                "#FDAF20",
+                "#FDEC9B",
+                "#DFD6E7",
+                "#E7BC91"
+              ],
               "dragmode": "pan",
               "font": {
                 "color": "rgb(61, 82, 101)",
@@ -9308,25 +9275,25 @@
                 "font": {
                   "family": "Roboto, sans-serif",
                   "size": 14
-                },
-                "namelength": -1
+                }
               },
-              "hovermode": "x unified",
+              "hovermode": "closest",
               "legend": {
                 "font": {
                   "size": 14
                 },
-                "orientation": "h",
+                "indentation": 0,
+                "orientation": "v",
                 "title": {
                   "font": {
-                    "size": 17
+                    "size": 16
                   }
                 },
                 "traceorder": "normal",
                 "valign": "middle",
-                "x": 0,
+                "x": 1.02,
                 "xanchor": "left",
-                "y": -0.1,
+                "y": 1,
                 "yanchor": "top"
               },
               "margin": {
@@ -9334,16 +9301,18 @@
                 "l": 0,
                 "pad": 0,
                 "r": 0,
-                "t": 36
+                "t": 58
               },
               "paper_bgcolor": "rgba(255, 255, 255, 0)",
               "plot_bgcolor": "rgba(255, 255, 255, 0)",
-              "separators": ".",
-              "showlegend": true,
+              "separators": ".,",
+              "showlegend": false,
               "title": {
-                "automargin": true,
                 "font": {
-                  "size": 14
+                  "size": 20
+                },
+                "pad": {
+                  "t": 1
                 },
                 "subtitle": {
                   "font": {
@@ -9356,7 +9325,6 @@
               "xaxis": {
                 "automargin": true,
                 "autorange": true,
-                "dtick": 2,
                 "exponentformat": "none",
                 "gridcolor": "rgb(230, 231, 232)",
                 "gridwidth": 1,
@@ -9367,8 +9335,8 @@
                 "rangeslider": {
                   "visible": false
                 },
-                "separatethousands": false,
-                "showgrid": false,
+                "separatethousands": true,
+                "showgrid": true,
                 "showline": false,
                 "showspikes": false,
                 "showticklabels": true,
@@ -9381,7 +9349,7 @@
                   "font": {
                     "size": 14
                   },
-                  "standoff": 0
+                  "standoff": 10
                 },
                 "zeroline": true,
                 "zerolinecolor": "rgb(128, 130, 133)",
@@ -9397,8 +9365,7 @@
                 "mirror": false,
                 "nticks": 0,
                 "range": [-1, 4],
-                "rangemode": "tozero",
-                "separatethousands": false,
+                "separatethousands": true,
                 "showgrid": true,
                 "showline": false,
                 "showspikes": false,
@@ -9421,23 +9388,37 @@
             }
           },
           "title": {
+            "font": {
+              "size": 14
+            },
             "subtitle": {
+              "font": {
+                "size": 14
+              },
               "text": "Relative value (%)"
             },
             "text": "<b>Percentage of total Lorem ipsum dolor sit amet</b>",
-            "x": 0
+            "x": 0,
+            "yanchor": "top"
           },
           "xaxis": {
             "autorange": true,
-            "range": [2010.7426780200244, 2031.2573219799756],
+            "range": [2010.483374037197, 2031.516625962803],
+            "separatethousands": false,
+            "showgrid": false,
             "tickmode": "auto",
             "tickvals": [2012, 2021],
             "tickvalssrc": "years_range",
+            "title": {
+              "standoff": 0
+            },
             "type": "linear"
           },
           "yaxis": {
             "autorange": true,
-            "range": [0, 26.7940940486549],
+            "range": [0, 26.785714285714285],
+            "rangemode": "tozero",
+            "separatethousands": false,
             "title": {
               "text": ""
             },
@@ -9454,11 +9435,14 @@
         "value": "bar"
       },
       "visualization": {
-        "chartData": {
-          "data": [],
-          "frames": [],
-          "layout": {}
-        },
+        "columns": [
+          {
+            "key": "Country"
+          },
+          {
+            "key": "Trade Balance"
+          }
+        ],
         "data": [
           {
             "hoverinfo": "none",
@@ -9803,8 +9787,7 @@
                 "nticks": 0,
                 "range": [-1, 6],
                 "rangeslider": {
-                  "visible": false,
-                  "yaxis": {}
+                  "visible": false
                 },
                 "separatethousands": true,
                 "showgrid": true,
@@ -9894,11 +9877,6 @@
         "value": "scatter"
       },
       "visualization": {
-        "chartData": {
-          "data": [],
-          "frames": [],
-          "layout": {}
-        },
         "columns": [
           {
             "key": "Engine Size (L)"

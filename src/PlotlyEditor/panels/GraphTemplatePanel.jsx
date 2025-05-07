@@ -1,10 +1,10 @@
 import { findIndex } from 'lodash';
 import PropTypes from 'prop-types';
-import PlotlyPanel from 'react-chart-editor/lib/components/containers/PlotlyPanel';
-import PlotlyFold from 'react-chart-editor/lib/components/containers/PlotlyFold';
-import { UnconnectedDropdown } from 'react-chart-editor/lib/components/fields/Dropdown';
-import Field from 'react-chart-editor/lib/components/fields/Field';
-import TextInput from 'react-chart-editor/lib/components/widgets/TextInput';
+import PlotlyPanel from '@eeacms/react-chart-editor/lib/components/containers/PlotlyPanel';
+import PlotlyFold from '@eeacms/react-chart-editor/lib/components/containers/PlotlyFold';
+import { UnconnectedDropdown } from '@eeacms/react-chart-editor/lib/components/fields/Dropdown';
+import Field from '@eeacms/react-chart-editor/lib/components/fields/Field';
+import TextInput from '@eeacms/react-chart-editor/lib/components/widgets/TextInput';
 
 const GraphTemplatePanel = (props, context) => {
   const { localize: _, traceTypesConfig } = context;
