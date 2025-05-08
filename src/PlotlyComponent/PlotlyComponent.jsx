@@ -114,7 +114,7 @@ function UnconnectedPlotlyComponent(props) {
               target: filter.field,
             },
           },
-          value: filter.data.value,
+          value: filter.data?.value || null,
         });
       });
 
@@ -239,7 +239,7 @@ function UnconnectedPlotlyComponent(props) {
               dataSources['filtersOrder'],
             );
             return (
-              <FormField key={filter.field || index}>
+              <FormField key={index}>
                 <label>{filter.label}</label>
                 <Select
                   options={options}
