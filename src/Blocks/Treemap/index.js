@@ -1,6 +1,12 @@
 import tableSVG from '@plone/volto/icons/table.svg';
-import TreemapView from './View';
-import TreemapEdit from './Edit';
+import { withLoadOnVisibility } from '@eeacms/volto-plotlycharts/hocs';
+
+const lazyView = withLoadOnVisibility(() =>
+  import(/* webpackChunkName: "Plotly-blocks" */ './View'),
+);
+const lazyEdit = withLoadOnVisibility(() =>
+  import(/* webpackChunkName: "Plotly-blocks" */ './Edit'),
+);
 
 const config = (config) => {
   config.blocks.blocksConfig.treemapChart = {
@@ -8,8 +14,8 @@ const config = (config) => {
     title: 'Treemap',
     icon: tableSVG,
     group: 'data_visualizations',
-    view: TreemapView,
-    edit: TreemapEdit,
+    view: lazyView,
+    edit: lazyEdit,
     restricted: true,
     mostUsed: false,
     sidebarTab: 1,
