@@ -1,5 +1,8 @@
-import { getAPIResourceWithAuth } from '@plone/volto/helpers';
+import superagent from 'superagent';
+import config from '@plone/volto/registry';
+import { addHeadersFactory } from '@plone/volto/helpers/Proxy/Proxy';
 import express from 'express';
+import qs from 'qs';
 
 const HEADERS = [
   'Accept-Ranges',
@@ -8,6 +11,35 @@ const HEADERS = [
   'Content-Range',
   'Content-Type',
 ];
+
+const getAPIResourceWithAuth = (req) =>
+  new Promise((resolve, reject) => {
+    const { settings } = config;
+    const APISUFIX = settings.legacyTraverse ? '' : '/++api++';
+
+    let apiPath = '';
+    if (settings.internalApiPath && __SERVER__) {
+      apiPath = settings.internalApiPath;
+    } else if (__DEVELOPMENT__ && settings.devProxyToApiPath) {
+      apiPath = settings.devProxyToApiPath;
+    } else {
+      apiPath = settings.apiPath;
+    }
+    const request = superagent
+      .get(
+        `${apiPath}${__DEVELOPMENT__ ? '' : APISUFIX}${req.path}?${qs.stringify(
+          req.query,
+        )}`,
+      )
+      .maxResponseSize(settings.maxResponseSize)
+      .responseType('blob');
+    const authToken = req.universalCookies.get('auth_token');
+    if (authToken) {
+      request.set('Authorization', `Bearer ${authToken}`);
+    }
+    request.use(addHeadersFactory(req));
+    request.then(resolve).catch(reject);
+  });
 
 function plotly_preview_fn(req, res, next) {
   getAPIResourceWithAuth(req)
