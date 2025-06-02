@@ -157,6 +157,10 @@ const ThemesWidget = (props) => {
                   label: {
                     type: 'string',
                   },
+                  hidden: {
+                    type: 'boolean',
+                    default: false,
+                  },
                   data: {
                     type: 'object',
                   },

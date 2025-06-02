@@ -204,64 +204,38 @@
       "data": {
         "scatter": [
           {
-            "connectgaps": true,
             "hoverlabel": {
               "namelength": -1
             },
-            "hovertemplate": "%{y}%",
             "line": {
-              "color": "rgb(0, 75, 127)",
               "width": 8
-            },
-            "marker": {
-              "color": "rgb(0, 75, 127)"
             },
             "mode": "lines+text",
             "textfont": {
               "size": 40,
               "weight": "bold"
             },
-            "textposition": "middle right"
+            "textposition": "top right"
           },
           {
-            "connectgaps": true,
             "hoverlabel": {
               "namelength": -1
-            },
-            "hovertemplate": "%{y}%",
-            "marker": {
-              "color": "rgb(188, 190, 192)"
             },
             "mode": "markers+lines",
             "visible": false
           },
           {
-            "connectgaps": true,
             "hoverlabel": {
               "namelength": -1
             },
-            "hovertemplate": "%{y}%",
             "line": {
-              "color": "rgb(0, 75, 127)",
               "width": 5
-            },
-            "marker": {
-              "color": "rgb(0, 75, 127)",
-              "line": {
-                "color": "rgb(0, 75, 127)",
-                "width": 5
-              }
             },
             "mode": "lines"
           },
           {
-            "connectgaps": true,
             "hoverlabel": {
               "namelength": -1
-            },
-            "hovertemplate": "%{y}%",
-            "marker": {
-              "color": "rgb(21, 193, 40)"
             },
             "mode": "markers+lines",
             "visible": false
@@ -269,16 +243,12 @@
           {
             "hoverinfo": "none",
             "marker": {
-              "color": "rgb(0, 75, 127)",
               "line": {
-                "color": "rgb(0, 75, 127)",
                 "width": 8
               },
-              "size": 30,
-              "symbol": "circle-open-dot"
+              "size": 30
             },
             "mode": "markers+text",
-            "showlegend": true,
             "texttemplate": ""
           }
         ]
@@ -286,88 +256,14 @@
       "id": "soer_miniature",
       "label": "SOER Miniature",
       "layout": {
-        "annotationdefaults": {
-          "align": "center",
-          "showarrow": false,
-          "x": 0,
-          "xanchor": "auto",
-          "xref": "paper",
-          "y": 1,
-          "yanchor": "auto",
-          "yref": "paper"
-        },
-        "autosize": true,
-        "clickmode": "event",
-        "colorscale": {
-          "diverging": [
-            [0, "#e56b38"],
-            [0.07142857142857142, "#ff9933"],
-            [0.14285714285714285, "#fdaf20"],
-            [0.21428571428571427, "#fac50d"],
-            [0.2857142857142857, "#fad936"],
-            [0.35714285714285715, "#fbec9b"],
-            [0.42857142857142855, "#fef6cd"],
-            [0.5, "#f5e0d3"],
-            [0.5714285714285714, "#c8fff8"],
-            [0.6428571428571429, "#a0e5dc"],
-            [0.7142857142857143, "#78cac0"],
-            [0.7857142857142857, "#50b0a4"],
-            [0.8571428571428571, "#289588"],
-            [0.9285714285714286, "#007b6c"],
-            [1, "#005248"]
-          ],
-          "sequential": [
-            [0, "#c8fff8"],
-            [0.16666666666666666, "#a0e5dc"],
-            [0.3333333333333333, "#78cac0"],
-            [0.5, "#50b0a4"],
-            [0.6666666666666666, "#289588"],
-            [0.8333333333333334, "#007b6c"],
-            [1, "#005248"]
-          ],
-          "sequentialminus": [
-            [0, "#005248"],
-            [0.16666666666666666, "#007b6c"],
-            [0.3333333333333333, "#289588"],
-            [0.5, "#50b0a4"],
-            [0.6666666666666666, "#78cac0"],
-            [0.8333333333333334, "#a0e5dc"],
-            [1, "#c8fff8"]
-          ]
-        },
-        "colorway": ["#004B7F", "#BCBEC0", "#004B7F"],
-        "dragmode": "pan",
         "font": {
-          "color": "rgb(61, 82, 101)",
-          "family": "Roboto, sans-serif",
           "size": 36
         },
         "hoverlabel": {
-          "bgcolor": "rgba(255,255,255,1)",
-          "bordercolor": "rgba(0, 0, 0, 1)",
           "font": {
-            "family": "Roboto, sans-serif",
             "size": 30
           },
           "namelength": -1
-        },
-        "hovermode": "x unified",
-        "legend": {
-          "font": {
-            "size": 14
-          },
-          "orientation": "h",
-          "title": {
-            "font": {
-              "size": 14
-            }
-          },
-          "traceorder": "normal",
-          "valign": "middle",
-          "x": 0,
-          "xanchor": "left",
-          "y": -0.1,
-          "yanchor": "top"
         },
         "margin": {
           "b": 0,
@@ -376,9 +272,6 @@
           "r": 0,
           "t": 125
         },
-        "paper_bgcolor": "rgba(255, 255, 255, 0)",
-        "plot_bgcolor": "rgba(255, 255, 255, 0)",
-        "separators": ".",
         "showlegend": false,
         "title": {
           "automargin": true,
@@ -394,82 +287,49 @@
           "y": 1
         },
         "xaxis": {
-          "automargin": true,
-          "autorange": true,
           "dtick": 4,
-          "exponentformat": "none",
-          "gridcolor": "rgb(230, 231, 232)",
-          "gridwidth": 1,
-          "linecolor": "rgb(128, 130, 133)",
-          "mirror": false,
-          "nticks": 0,
-          "range": [-1, 6],
-          "rangeslider": {
-            "visible": false
-          },
-          "separatethousands": false,
-          "showgrid": false,
-          "showline": false,
-          "showspikes": false,
-          "showticklabels": true,
-          "tickcolor": "rgb(116, 118, 120)",
-          "ticklabelstandoff": 5,
-          "ticklen": 10,
           "tickmode": "array",
-          "tickwidth": 1,
           "title": {
             "font": {
               "size": 20
             },
             "standoff": 0
-          },
-          "zeroline": true,
-          "zerolinecolor": "rgb(128, 130, 133)",
-          "zerolinewidth": 1
+          }
         },
         "yaxis": {
-          "automargin": true,
-          "autorange": false,
-          "exponentformat": "none",
-          "gridcolor": "rgb(230, 231, 232)",
+          "autorange": true,
           "gridwidth": 4,
-          "linecolor": "rgb(128, 130, 133)",
-          "mirror": false,
-          "nticks": 0,
-          "range": [0, 30],
-          "rangemode": "tozero",
-          "separatethousands": false,
-          "showgrid": true,
-          "showline": false,
-          "showspikes": false,
+          "range": [-1, 4],
           "showticklabels": false,
-          "tickcolor": "rgb(116, 118, 120)",
           "ticklabelstandoff": 0,
           "ticklen": 1,
-          "tickmode": "auto",
-          "tickwidth": 1,
           "title": {
             "font": {
               "size": 30
             },
             "standoff": 0
-          },
-          "zeroline": true,
-          "zerolinecolor": "rgb(128, 130, 133)",
-          "zerolinewidth": 1
+          }
         }
       }
     }
   ],
   "templates": [
     {
+      "label": "Vertical Bar",
       "type": {
         "label": "Bar",
         "order": 2,
         "value": "bar"
       },
-      "label": "Vertical Bar",
       "visualization": {
+        "columns": [
+          {
+            "key": "Material"
+          },
+          {
+            "key": "Value"
+          }
+        ],
         "data": [
           {
             "hoverinfo": "none",
@@ -746,7 +606,17 @@
             "range": [0, 3294.7368421052633],
             "type": "linear"
           }
-        },
+        }
+      }
+    },
+    {
+      "label": "Horizontal Bar",
+      "type": {
+        "label": "Bar",
+        "order": 2,
+        "value": "bar"
+      },
+      "visualization": {
         "columns": [
           {
             "key": "Material"
@@ -754,17 +624,7 @@
           {
             "key": "Value"
           }
-        ]
-      }
-    },
-    {
-      "type": {
-        "label": "Bar",
-        "order": 2,
-        "value": "bar"
-      },
-      "label": "Horizontal Bar",
-      "visualization": {
+        ],
         "data": [
           {
             "hoverinfo": "none",
@@ -1041,25 +901,28 @@
             "showgrid": false,
             "type": "category"
           }
-        },
-        "columns": [
-          {
-            "key": "Material"
-          },
-          {
-            "key": "Value"
-          }
-        ]
+        }
       }
     },
     {
+      "label": "Split Bar",
       "type": {
         "label": "Bar",
         "order": 2,
         "value": "bar"
       },
-      "label": "Split Bar",
       "visualization": {
+        "columns": [
+          {
+            "key": "Material"
+          },
+          {
+            "key": "EU exports"
+          },
+          {
+            "key": "Romania exports"
+          }
+        ],
         "data": [
           {
             "hoverlabel": {
@@ -1177,6 +1040,7 @@
           }
         ],
         "dataSources": {
+          "EU exports": ["3130", "860", "1500", "500", "600", "300", "400"],
           "Material": [
             "Wheat",
             "Sunflower Seeds",
@@ -1186,7 +1050,6 @@
             "Iron Ore",
             "Barley"
           ],
-          "EU exports": ["3130", "860", "1500", "500", "600", "300", "400"],
           "Romania exports": [43, 23, 41, 2, 41, 11, 23]
         },
         "frames": [],
@@ -1464,28 +1327,28 @@
             "type": "category",
             "zeroline": true
           }
-        },
-        "columns": [
-          {
-            "key": "Material"
-          },
-          {
-            "key": "EU exports"
-          },
-          {
-            "key": "Romania exports"
-          }
-        ]
+        }
       }
     },
     {
+      "label": "Grouped Bar",
       "type": {
         "label": "Bar",
         "order": 2,
         "value": "bar"
       },
-      "label": "Grouped Bar",
       "visualization": {
+        "columns": [
+          {
+            "key": "Gender"
+          },
+          {
+            "key": "Percentage - Smoker"
+          },
+          {
+            "key": "Percentage - No Smoker"
+          }
+        ],
         "data": [
           {
             "hoverinfo": "none",
@@ -1537,8 +1400,8 @@
         ],
         "dataSources": {
           "Gender": ["Male", "Female"],
-          "Percentage - Smoker": ["37.4", "17.5"],
-          "Percentage - No Smoker": [62.6, 82.5]
+          "Percentage - No Smoker": [62.6, 82.5],
+          "Percentage - Smoker": ["37.4", "17.5"]
         },
         "frames": [],
         "layout": {
@@ -1782,7 +1645,17 @@
             "range": [0, 86.84210526315789],
             "type": "linear"
           }
-        },
+        }
+      }
+    },
+    {
+      "label": "Horizontal Grouped Bar",
+      "type": {
+        "label": "Bar",
+        "order": 2,
+        "value": "bar"
+      },
+      "visualization": {
         "columns": [
           {
             "key": "Gender"
@@ -1793,17 +1666,7 @@
           {
             "key": "Percentage - No Smoker"
           }
-        ]
-      }
-    },
-    {
-      "type": {
-        "label": "Bar",
-        "order": 2,
-        "value": "bar"
-      },
-      "label": "Horizontal Grouped Bar",
-      "visualization": {
+        ],
         "data": [
           {
             "hoverinfo": "none",
@@ -1855,8 +1718,8 @@
         ],
         "dataSources": {
           "Gender": ["Male", "Female"],
-          "Percentage - Smoker": ["37.4", "17.5"],
-          "Percentage - No Smoker": ["62.6", "82.5"]
+          "Percentage - No Smoker": ["62.6", "82.5"],
+          "Percentage - Smoker": ["37.4", "17.5"]
         },
         "frames": [],
         "layout": {
@@ -2090,28 +1953,31 @@
             "showgrid": false,
             "type": "category"
           }
-        },
-        "columns": [
-          {
-            "key": "Gender"
-          },
-          {
-            "key": "Percentage - Smoker"
-          },
-          {
-            "key": "Percentage - No Smoker"
-          }
-        ]
+        }
       }
     },
     {
+      "label": "Stacked Bar",
       "type": {
         "label": "Bar",
         "order": 2,
         "value": "bar"
       },
-      "label": "Stacked Bar",
       "visualization": {
+        "columns": [
+          {
+            "key": "Nation"
+          },
+          {
+            "key": "Bronze"
+          },
+          {
+            "key": "Silver"
+          },
+          {
+            "key": "Gold"
+          }
+        ],
         "data": [
           {
             "hoverlabel": {
@@ -2182,10 +2048,10 @@
           }
         ],
         "dataSources": {
-          "Nation": ["China", "South Korea", "Canada"],
           "Bronze": [8, 11, "12"],
-          "Silver": [15, 13, 12],
-          "Gold": [10, 24, 9]
+          "Gold": [10, 24, 9],
+          "Nation": ["China", "South Korea", "Canada"],
+          "Silver": [15, 13, 12]
         },
         "frames": [],
         "layout": {
@@ -2423,31 +2289,25 @@
             "range": [0, 50.526315789473685],
             "type": "linear"
           }
-        },
-        "columns": [
-          {
-            "key": "Nation"
-          },
-          {
-            "key": "Bronze"
-          },
-          {
-            "key": "Silver"
-          },
-          {
-            "key": "Gold"
-          }
-        ]
+        }
       }
     },
     {
+      "label": "Histogram",
       "type": {
         "label": "Histogram",
         "order": 17,
         "value": "histogram"
       },
-      "label": "Histogram",
       "visualization": {
+        "columns": [
+          {
+            "key": "age"
+          },
+          {
+            "key": "individuals"
+          }
+        ],
         "data": [
           {
             "cumulative": {
@@ -2721,25 +2581,25 @@
             "range": [0, 12.631578947368421],
             "type": "linear"
           }
-        },
-        "columns": [
-          {
-            "key": "age"
-          },
-          {
-            "key": "individuals"
-          }
-        ]
+        }
       }
     },
     {
+      "label": "Divergent Vertical Bar",
       "type": {
         "label": "Bar",
         "order": 2,
         "value": "bar"
       },
-      "label": "Divergent Vertical Bar",
       "visualization": {
+        "columns": [
+          {
+            "key": "Country"
+          },
+          {
+            "key": "Average temperature"
+          }
+        ],
         "data": [
           {
             "autocolorscale": false,
@@ -2782,6 +2642,9 @@
           }
         ],
         "dataSources": {
+          "Average temperature": [
+            -5, 1, 2, -3, -8, 5, 2, 10, 2, 5, 9, -10, -2, 2
+          ],
           "Country": [
             "Cyprus",
             "Czech Republic",
@@ -2797,9 +2660,6 @@
             "Latvia",
             "Lithuania",
             "Luxembourg"
-          ],
-          "Average temperature": [
-            -5, 1, 2, -3, -8, 5, 2, 10, 2, 5, 9, -10, -2, 2
           ]
         },
         "frames": [],
@@ -3038,25 +2898,25 @@
             "showticklabels": true,
             "type": "linear"
           }
-        },
-        "columns": [
-          {
-            "key": "Country"
-          },
-          {
-            "key": "Average temperature"
-          }
-        ]
+        }
       }
     },
     {
+      "label": "Divergent Horizontal Bar+",
       "type": {
         "label": "Bar",
         "order": 2,
         "value": "bar"
       },
-      "label": "Divergent Horizontal Bar+",
       "visualization": {
+        "columns": [
+          {
+            "key": "Country"
+          },
+          {
+            "key": "Trade Balance"
+          }
+        ],
         "data": [
           {
             "hoverinfo": "none",
@@ -3511,24 +3371,16 @@
             },
             "type": "category"
           }
-        },
-        "columns": [
-          {
-            "key": "Country"
-          },
-          {
-            "key": "Trade Balance"
-          }
-        ]
+        }
       }
     },
     {
+      "label": "Multiple Bars",
       "type": {
         "label": "Bar",
         "order": 2,
         "value": "bar"
       },
-      "label": "Multiple Bars",
       "visualization": {
         "columns": [
           {
@@ -4495,13 +4347,24 @@
       }
     },
     {
+      "label": "Line",
       "type": {
         "label": "Line",
         "order": 3,
         "value": "line"
       },
-      "label": "Line",
       "visualization": {
+        "columns": [
+          {
+            "key": "country_trend"
+          },
+          {
+            "key": "eu_trend"
+          },
+          {
+            "key": "year"
+          }
+        ],
         "data": [
           {
             "meta": {
@@ -4859,28 +4722,43 @@
             "rangemode": "tozero",
             "type": "linear"
           }
-        },
-        "columns": [
-          {
-            "key": "country_trend"
-          },
-          {
-            "key": "eu_trend"
-          },
-          {
-            "key": "year"
-          }
-        ]
+        }
       }
     },
     {
+      "label": "Area",
       "type": {
         "label": "Area",
         "order": 4,
         "value": "area"
       },
-      "label": "Area",
       "visualization": {
+        "columns": [
+          {
+            "key": "Year"
+          },
+          {
+            "key": "Africa"
+          },
+          {
+            "key": "Antartica"
+          },
+          {
+            "key": "Asia"
+          },
+          {
+            "key": "Europe"
+          },
+          {
+            "key": "North America"
+          },
+          {
+            "key": "Oceania"
+          },
+          {
+            "key": "South America"
+          }
+        ],
         "data": [
           {
             "hoverinfo": "none",
@@ -5162,17 +5040,6 @@
           }
         ],
         "dataSources": {
-          "Year": [
-            "1952",
-            "1960",
-            "1970",
-            "1980",
-            "1990",
-            "2000",
-            "2010",
-            "2020",
-            "2024"
-          ],
           "Africa": [
             "230",
             "280",
@@ -5239,6 +5106,17 @@
             "410",
             "425",
             "430"
+          ],
+          "Year": [
+            "1952",
+            "1960",
+            "1970",
+            "1980",
+            "1990",
+            "2000",
+            "2010",
+            "2020",
+            "2024"
           ]
         },
         "frames": [],
@@ -5466,43 +5344,25 @@
             "range": [0, 8341.057894736843],
             "type": "linear"
           }
-        },
-        "columns": [
-          {
-            "key": "Year"
-          },
-          {
-            "key": "Africa"
-          },
-          {
-            "key": "Antartica"
-          },
-          {
-            "key": "Asia"
-          },
-          {
-            "key": "Europe"
-          },
-          {
-            "key": "North America"
-          },
-          {
-            "key": "Oceania"
-          },
-          {
-            "key": "South America"
-          }
-        ]
+        }
       }
     },
     {
+      "label": "Pie Combo",
       "type": {
         "label": "Pie",
         "order": 8,
         "value": "pie"
       },
-      "label": "Pie Combo",
       "visualization": {
+        "columns": [
+          {
+            "key": "labels"
+          },
+          {
+            "key": "values"
+          }
+        ],
         "data": [
           {
             "direction": "clockwise",
@@ -5770,24 +5630,16 @@
               "text": "Exported fruits in America ($B)"
             }
           }
-        },
-        "columns": [
-          {
-            "key": "labels"
-          },
-          {
-            "key": "values"
-          }
-        ]
+        }
       }
     },
     {
+      "label": "Donut",
       "type": {
         "label": "Pie",
         "order": 8,
         "value": "pie"
       },
-      "label": "Donut",
       "visualization": {
         "columns": [
           {
@@ -6078,13 +5930,24 @@
       }
     },
     {
+      "label": "Sunburst",
       "type": {
         "label": "Sunburst",
         "order": 28,
         "value": "sunburst"
       },
-      "label": "Sunburst",
       "visualization": {
+        "columns": [
+          {
+            "key": "Category"
+          },
+          {
+            "key": "Product"
+          },
+          {
+            "key": "Export Value (USD Millions)"
+          }
+        ],
         "data": [
           {
             "branchvalues": "total",
@@ -6182,6 +6045,10 @@
             "Mineral Raw Materials",
             "Mineral Raw Materials"
           ],
+          "Export Value (USD Millions)": [
+            5990, 1900, 2500, 3130, 860, 1500, 500, 600, 400, 700, 200, 300,
+            450, 800, 600, 350
+          ],
           "Product": [
             "Agricultural Raw Materials",
             "Forestry Products",
@@ -6199,10 +6066,6 @@
             "Gold",
             "Coal",
             "Aluminum Ore"
-          ],
-          "Export Value (USD Millions)": [
-            5990, 1900, 2500, 3130, 860, 1500, 500, 600, 400, 700, 200, 300,
-            450, 800, 600, 350
           ]
         },
         "frames": [],
@@ -6424,7 +6287,17 @@
               "text": "Exported products (USD Millions)"
             }
           }
-        },
+        }
+      }
+    },
+    {
+      "label": "Treemap",
+      "type": {
+        "label": "Treemap",
+        "order": 29,
+        "value": "treemap"
+      },
+      "visualization": {
         "columns": [
           {
             "key": "Category"
@@ -6435,17 +6308,7 @@
           {
             "key": "Export Value (USD Millions)"
           }
-        ]
-      }
-    },
-    {
-      "type": {
-        "label": "Treemap",
-        "order": 29,
-        "value": "treemap"
-      },
-      "label": "Treemap",
-      "visualization": {
+        ],
         "data": [
           {
             "branchvalues": "total",
@@ -6539,24 +6402,6 @@
             "Mineral Raw Materials",
             "Mineral Raw Materials"
           ],
-          "Product": [
-            "Agricultural Raw Materials",
-            "Forestry Products",
-            "Mineral Raw Materials",
-            "Wheat",
-            "Sunflower Seeds",
-            "Corn",
-            "Rapeseed",
-            "Timber",
-            "Wood Pulp",
-            "Paper",
-            "Wooden Furniture",
-            "Iron Ore",
-            "Copper Ore",
-            "Gold",
-            "Coal",
-            "Aluminum Ore"
-          ],
           "Export Value (USD Millions)": [
             "5990",
             "1900",
@@ -6574,6 +6419,24 @@
             "800",
             "600",
             "350"
+          ],
+          "Product": [
+            "Agricultural Raw Materials",
+            "Forestry Products",
+            "Mineral Raw Materials",
+            "Wheat",
+            "Sunflower Seeds",
+            "Corn",
+            "Rapeseed",
+            "Timber",
+            "Wood Pulp",
+            "Paper",
+            "Wooden Furniture",
+            "Iron Ore",
+            "Copper Ore",
+            "Gold",
+            "Coal",
+            "Aluminum Ore"
           ]
         },
         "frames": [],
@@ -6791,18 +6654,7 @@
             }
           },
           "treemapcolorway": ["#007B6C", "rgb(0, 75, 127)", "rgb(0, 143, 245)"]
-        },
-        "columns": [
-          {
-            "key": "Category"
-          },
-          {
-            "key": "Product"
-          },
-          {
-            "key": "Export Value (USD Millions)"
-          }
-        ]
+        }
       }
     },
     {
@@ -7107,8 +6959,7 @@
                 "nticks": 0,
                 "range": [-1, 6],
                 "rangeslider": {
-                  "visible": false,
-                  "yaxis": {}
+                  "visible": false
                 },
                 "separatethousands": true,
                 "showgrid": true,
@@ -7187,13 +7038,21 @@
       }
     },
     {
+      "label": "Pie",
       "type": {
         "label": "Pie",
         "order": 8,
         "value": "pie"
       },
-      "label": "Pie",
       "visualization": {
+        "columns": [
+          {
+            "key": "labels"
+          },
+          {
+            "key": "values"
+          }
+        ],
         "data": [
           {
             "direction": "clockwise",
@@ -7436,25 +7295,46 @@
               "text": "Exported fruits in America ($B)"
             }
           }
-        },
-        "columns": [
-          {
-            "key": "labels"
-          },
-          {
-            "key": "values"
-          }
-        ]
+        }
       }
     },
     {
+      "label": "Heatmap",
       "type": {
         "label": "Heatmap",
         "order": 5,
         "value": "heatmap"
       },
-      "label": "Heatmap",
       "visualization": {
+        "columns": [
+          {
+            "key": "Continent"
+          },
+          {
+            "key": "Month"
+          },
+          {
+            "key": "Africa"
+          },
+          {
+            "key": "Antartica"
+          },
+          {
+            "key": "Asia"
+          },
+          {
+            "key": "Europe"
+          },
+          {
+            "key": "North America"
+          },
+          {
+            "key": "Oceania"
+          },
+          {
+            "key": "South America"
+          }
+        ],
         "data": [
           {
             "autocolorscale": false,
@@ -7545,29 +7425,6 @@
           }
         ],
         "dataSources": {
-          "Continent": [
-            "Asia",
-            "Africa",
-            "Europe",
-            "North America",
-            "South America",
-            "Oceania",
-            "Antartica"
-          ],
-          "Month": [
-            "Jan",
-            "Feb",
-            "Mar",
-            "Apr",
-            "May",
-            "Jun",
-            "Jul",
-            "Aug",
-            "Sep",
-            "Oct",
-            "Nov",
-            "Dec"
-          ],
           "Africa": [
             "25.00",
             "26.00",
@@ -7610,6 +7467,15 @@
             "12",
             "7"
           ],
+          "Continent": [
+            "Asia",
+            "Africa",
+            "Europe",
+            "North America",
+            "South America",
+            "Oceania",
+            "Antartica"
+          ],
           "Europe": [
             "0.00",
             "2.00",
@@ -7623,6 +7489,20 @@
             "12.00",
             "7.00",
             "2.00"
+          ],
+          "Month": [
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "May",
+            "Jun",
+            "Jul",
+            "Aug",
+            "Sep",
+            "Oct",
+            "Nov",
+            "Dec"
           ],
           "North America": [
             "-5",
@@ -7904,46 +7784,34 @@
             "ticks": "",
             "type": "category"
           }
-        },
-        "columns": [
-          {
-            "key": "Continent"
-          },
-          {
-            "key": "Month"
-          },
-          {
-            "key": "Africa"
-          },
-          {
-            "key": "Antartica"
-          },
-          {
-            "key": "Asia"
-          },
-          {
-            "key": "Europe"
-          },
-          {
-            "key": "North America"
-          },
-          {
-            "key": "Oceania"
-          },
-          {
-            "key": "South America"
-          }
-        ]
+        }
       }
     },
     {
+      "label": "Table",
       "type": {
         "label": "Table",
         "order": 6,
         "value": "table"
       },
-      "label": "Table",
       "visualization": {
+        "columns": [
+          {
+            "key": "headers"
+          },
+          {
+            "key": "col_1"
+          },
+          {
+            "key": "col_2"
+          },
+          {
+            "key": "col_3"
+          },
+          {
+            "key": "col_4"
+          }
+        ],
         "data": [
           {
             "cells": {
@@ -8036,7 +7904,6 @@
           }
         ],
         "dataSources": {
-          "headers": ["Col 1", "Col 2", "Col 3", "Col 4"],
           "col_1": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
           "col_2": [
             "Y-100",
@@ -8073,7 +7940,8 @@
             "A-800",
             "A-900",
             "A-1000"
-          ]
+          ],
+          "headers": ["Col 1", "Col 2", "Col 3", "Col 4"]
         },
         "frames": [],
         "layout": {
@@ -8281,34 +8149,31 @@
               }
             }
           }
-        },
-        "columns": [
-          {
-            "key": "headers"
-          },
-          {
-            "key": "col_1"
-          },
-          {
-            "key": "col_2"
-          },
-          {
-            "key": "col_3"
-          },
-          {
-            "key": "col_4"
-          }
-        ]
+        }
       }
     },
     {
+      "label": "Tile Map",
       "type": {
         "label": "Tile Map",
         "order": 20,
         "value": "scattermapbox"
       },
-      "label": "Tile Map",
       "visualization": {
+        "columns": [
+          {
+            "key": "City"
+          },
+          {
+            "key": "Fire incidents"
+          },
+          {
+            "key": "lat"
+          },
+          {
+            "key": "lon"
+          }
+        ],
         "data": [
           {
             "hoverinfo": "none",
@@ -8758,30 +8623,16 @@
               "text": "Fire incidents over 10 years in EU capitals"
             }
           }
-        },
-        "columns": [
-          {
-            "key": "City"
-          },
-          {
-            "key": "Fire incidents"
-          },
-          {
-            "key": "lat"
-          },
-          {
-            "key": "lon"
-          }
-        ]
+        }
       }
     },
     {
+      "label": "SOER Indicator",
       "type": {
         "label": "Line",
         "order": 3,
         "value": "line"
       },
-      "label": "SOER Indicator",
       "visualization": {
         "columns": [
           {
@@ -9435,6 +9286,11 @@
         "value": "bar"
       },
       "visualization": {
+        "chartData": {
+          "data": [],
+          "frames": [],
+          "layout": {}
+        },
         "columns": [
           {
             "key": "Country"
@@ -9877,6 +9733,11 @@
         "value": "scatter"
       },
       "visualization": {
+        "chartData": {
+          "data": [],
+          "frames": [],
+          "layout": {}
+        },
         "columns": [
           {
             "key": "Engine Size (L)"
@@ -10158,8 +10019,7 @@
                 "nticks": 0,
                 "range": [-1, 6],
                 "rangeslider": {
-                  "visible": false,
-                  "yaxis": {}
+                  "visible": false
                 },
                 "separatethousands": true,
                 "showgrid": true,
