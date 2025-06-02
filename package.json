@@ -30,6 +30,7 @@
     "@eeacms/volto-embed": "*",
     "@eeacms/volto-matomo": "*",
     "@plone/scripts": "*",
+    "handsontable": "^15.2.0",
     "jsoneditor": "10.2.0",
     "plotly.js": "^2.35.3",
     "react-plotly.js": "2.6.0"

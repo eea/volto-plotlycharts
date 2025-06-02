@@ -26,25 +26,30 @@ const ThemeChosePanel = (props, { ctx, fullLayout, onUpdate }) => {
   return (
     <PlotlyPanel {...props} style={{ height: '100%' }}>
       <div className="theme-panel--center">
-        {themes.map((theme) => (
-          <div
-            role="button"
-            tabIndex={0}
-            key={theme.id}
-            className={cx('theme-thumbnail', {
-              selected: fullLayout.template?.id === theme.id,
-            })}
-            onKeyDown={() => {}}
-            onClick={() => {
-              setTheme(theme);
-            }}
-          >
-            <div className="theme-thumbnail__image">
-              <ThemeIcon size={200} />
+        {themes.map((theme) => {
+          if (theme.hidden) {
+            return null;
+          }
+          return (
+            <div
+              role="button"
+              tabIndex={0}
+              key={theme.id}
+              className={cx('theme-thumbnail', {
+                selected: fullLayout.template?.id === theme.id,
+              })}
+              onKeyDown={() => {}}
+              onClick={() => {
+                setTheme(theme);
+              }}
+            >
+              <div className="theme-thumbnail__image">
+                <ThemeIcon size={200} />
+              </div>
+              <div className="theme-thumbnail__title">{theme.label}</div>
             </div>
-            <div className="theme-thumbnail__title">{theme.label}</div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </PlotlyPanel>
   );
