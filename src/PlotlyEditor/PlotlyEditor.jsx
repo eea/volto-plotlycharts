@@ -165,7 +165,7 @@ const UnconnectedPlotlyEditor = forwardRef((props, ref) => {
     import('plotly.js/dist/plotly-with-meta').then((plotlyModule) => {
       setPlotly(plotlyModule.default);
     });
-    
+
     // Load templates and themes
     if (!isTheme && !isTemplate) {
       const api = new Api();

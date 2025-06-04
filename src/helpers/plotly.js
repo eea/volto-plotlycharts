@@ -1,13 +1,4 @@
 import { isArray, isEqual, isString, cloneDeep } from 'lodash';
-let nestedProperty = null;
-
-const getNestedProperty = async () => {
-  if (!nestedProperty) {
-    const module = await import('plotly.js/src/lib/nested_property');
-    nestedProperty = module.default;
-  }
-  return nestedProperty;
-};
 import {
   constants,
   getAdjustedSrcAttr,
@@ -17,6 +8,15 @@ import {
   getData,
   maybeTransposeData,
 } from '@eeacms/react-chart-editor/lib';
+let nestedProperty = null;
+
+const getNestedProperty = async () => {
+  if (!nestedProperty) {
+    const module = await import('plotly.js/src/lib/nested_property');
+    nestedProperty = module.default;
+  }
+  return nestedProperty;
+};
 
 export function getPlotlyDataSources({ data, layout, originalDataSources }) {
   const dataSources = {
@@ -168,7 +168,7 @@ export function updateTrace(trace, filters) {
 
 export function updateDataSources(container, dataSources, srcAttributes) {
   const newContainer = cloneDeep(container);
-  
+
   Object.entries(getAttrsPath(container, srcAttributes)).forEach(([attr]) => {
     const srcAttr = getSrcAttr(container, attr);
     if (!srcAttr.value) {

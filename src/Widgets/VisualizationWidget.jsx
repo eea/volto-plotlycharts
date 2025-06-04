@@ -10,7 +10,9 @@ import { pickMetadata } from '@eeacms/volto-embed/helpers';
 import PlotlyComponent from '@eeacms/volto-plotlycharts/PlotlyComponent';
 import loadable from '@loadable/component';
 
-const PlotlyEditor = loadable(() => import('@eeacms/volto-plotlycharts/PlotlyEditor'));
+const PlotlyEditor = loadable(() =>
+  import('@eeacms/volto-plotlycharts/PlotlyEditor'),
+);
 
 const PlotlyEditorModal = (props) => {
   const [fadeInOut, setFadeInOut] = useState(true);
