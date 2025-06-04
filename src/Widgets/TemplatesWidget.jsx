@@ -6,7 +6,7 @@ import loadable from '@loadable/component';
 import { Modal, Popup, Menu } from 'semantic-ui-react';
 import { PlusIcon } from 'plotly-icons';
 
-import PlotlyEditor from '@eeacms/volto-plotlycharts/PlotlyEditor';
+const PlotlyEditor = loadable(() => import('@eeacms/volto-plotlycharts/PlotlyEditor'));
 
 const PlotlyButton = loadable(() =>
   import('@eeacms/react-chart-editor/lib/components/widgets/Button'),

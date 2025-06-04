@@ -10,7 +10,6 @@ import { compose } from 'redux';
 import { useLocation } from 'react-router-dom';
 import { cloneDeep, isEqual, isNil, sortBy, debounce } from 'lodash';
 import DefaultPlotlyEditor, { constants } from '@eeacms/react-chart-editor';
-import plotly from 'plotly.js/dist/plotly-with-meta';
 
 import { Api } from '@plone/volto/helpers';
 
@@ -66,6 +65,7 @@ const UnconnectedPlotlyEditor = forwardRef((props, ref) => {
   const [initialized, setInitialized] = useState(false);
   const [themes, setThemes] = useState([...(props.themes || [])]);
   const [groupedTemplates, setGroupedTemplates] = useState({});
+  const [plotly, setPlotly] = useState(null);
   const connectorLoaded = !isNil(provider_data) && !connectorLoading;
 
   const dataSources = useMemo(
@@ -161,6 +161,11 @@ const UnconnectedPlotlyEditor = forwardRef((props, ref) => {
   }));
 
   useEffect(() => {
+    // Lazy load plotly.js
+    import('plotly.js/dist/plotly-with-meta').then((plotlyModule) => {
+      setPlotly(plotlyModule.default);
+    });
+    
     // Load templates and themes
     if (!isTheme && !isTemplate) {
       const api = new Api();
@@ -222,6 +227,10 @@ const UnconnectedPlotlyEditor = forwardRef((props, ref) => {
       onUpdate.cancel();
     };
   }, [onUpdate]);
+
+  if (!plotly) {
+    return <div>Loading Chart Editor...</div>;
+  }
 
   return (
     <DefaultPlotlyEditor
