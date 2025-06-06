@@ -38,6 +38,7 @@ function getFilterOptions(rows, rowsOrder = null) {
 }
 
 function UnconnectedPlotlyComponent(props) {
+  console.log('heree');
   const container = useRef();
   const el = useRef();
   const Select = props.reactSelect.default;
@@ -54,6 +55,7 @@ function UnconnectedPlotlyComponent(props) {
     onSelectBlock,
     onDeleteBlock,
   } = props;
+  console.log('here props data in plotly component', props.data);
   const { height, vis_url, with_metadata_section = true } = props.data;
   const [initialized, setInitialized] = useState(false);
   const [filtersState, setFiltersState] = useState([]);
