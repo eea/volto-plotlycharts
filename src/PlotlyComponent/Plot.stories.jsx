@@ -103,18 +103,6 @@ export default {
         },
       },
     },
-    has_data_query_by_context: {
-      control: 'boolean',
-      description: 'Use queries from context (current page)',
-      table: {
-        type: {
-          summary: 'boolean',
-        },
-        defaultValue: {
-          summary: 'true',
-        },
-      },
-    },
   },
 };
 
@@ -184,7 +172,6 @@ const MockToolbar = ({ toolbarProps }) => {
   );
 };
 
-// Wrapper component that includes both Plot and Mock Toolbar
 const PlotWithToolbar = (args) => {
   const { data, layout, ...toolbarProps } = args;
 
@@ -214,7 +201,6 @@ export const Playground = Template.bind({});
 //   },
 // };
 Playground.args = {
-  // Boolean controls with default values from schema
   with_notes: true,
   with_sources: true,
   with_more_info: true,
