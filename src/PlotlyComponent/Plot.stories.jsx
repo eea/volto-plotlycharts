@@ -1,5 +1,6 @@
 import React from 'react';
 import Plot from './Plot';
+import 'remixicon/fonts/remixicon.css';
 
 export default {
   title: 'VoltoPlotlyCharts/Plot',
@@ -120,13 +121,11 @@ export default {
 // Mock toolbar component for Storybook (no external dependencies)
 const MockToolbar = ({ toolbarProps }) => {
   const buttonStyle = {
-    padding: '8px 12px',
-    margin: '4px',
-    border: '1px solid #ccc',
-    borderRadius: '4px',
-    backgroundColor: '#f8f9fa',
-    cursor: 'pointer',
-    fontSize: '12px',
+    display: 'inline-flex',
+    alignItems: 'center',
+    color: '#3d5265',
+    border: 'none',
+    backgroundColor: 'transparent',
   };
 
   return (
@@ -135,12 +134,22 @@ const MockToolbar = ({ toolbarProps }) => {
         display: 'flex',
         justifyContent: 'space-between',
         padding: '10px',
-        borderTop: '1px solid #eee',
-        backgroundColor: '#f8f9fa',
       }}
     >
-      <div style={{ display: 'flex' }}>
-        {toolbarProps.with_notes && <button style={buttonStyle}>Notes</button>}
+      <div>
+        {toolbarProps.with_notes && (
+          <button
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              color: '#3d5265',
+              border: 'none',
+              backgroundColor: 'transparent',
+            }}
+          >
+            Notes
+          </button>
+        )}
         {toolbarProps.with_sources && (
           <button style={buttonStyle}>Sources</button>
         )}
@@ -150,11 +159,25 @@ const MockToolbar = ({ toolbarProps }) => {
       </div>
       <div style={{ display: 'flex' }}>
         {toolbarProps.download_button && (
-          <button style={buttonStyle}>Download</button>
+          <button style={buttonStyle}>
+            <i className="ri-download-fill" style={{ marginRight: '5px' }}></i>
+            Download
+          </button>
         )}
-        {toolbarProps.with_share && <button style={buttonStyle}>Share</button>}
+        {toolbarProps.with_share && (
+          <button style={buttonStyle}>
+            <i className="ri-share-fill" style={{ marginRight: '5px' }}></i>
+            Share
+          </button>
+        )}
         {toolbarProps.with_enlarge && (
-          <button style={buttonStyle}>Enlarge</button>
+          <button style={buttonStyle}>
+            <i
+              className="ri-fullscreen-line"
+              style={{ marginRight: '5px' }}
+            ></i>
+            Enlarge
+          </button>
         )}
       </div>
     </div>
@@ -198,7 +221,6 @@ Playground.args = {
   download_button: true,
   with_share: true,
   with_enlarge: true,
-  has_data_query_by_context: true,
   data: [
     {
       hoverinfo: 'y',
