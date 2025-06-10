@@ -5,15 +5,200 @@ export default {
   title: 'VoltoPlotlyCharts/Plot',
   component: Plot,
   argTypes: {
-    data: { control: 'object' },
-    layout: { control: 'object' },
+    data: {
+      control: 'object',
+      description: 'Plotly chart data configuration',
+      table: {
+        type: {
+          summary: 'object',
+        },
+        defaultValue: {
+          summary: '[]',
+        },
+      },
+    },
+    layout: {
+      control: 'object',
+      description: 'Plotly chart layout configuration',
+      table: {
+        type: {
+          summary: 'object',
+        },
+        defaultValue: {
+          summary: '{}',
+        },
+      },
+    },
+    // Boolean controls from EmbedVisualization schema
+    with_notes: {
+      control: 'boolean',
+      description: 'Show notes section below the chart',
+      table: {
+        type: {
+          summary: 'boolean',
+        },
+        defaultValue: {
+          summary: 'true',
+        },
+      },
+    },
+    with_sources: {
+      control: 'boolean',
+      description: 'Show sources section from page Data provenance',
+      table: {
+        type: {
+          summary: 'boolean',
+        },
+        defaultValue: {
+          summary: 'true',
+        },
+      },
+    },
+    with_more_info: {
+      control: 'boolean',
+      description: 'Show more info section',
+      table: {
+        type: {
+          summary: 'boolean',
+        },
+        defaultValue: {
+          summary: 'true',
+        },
+      },
+    },
+    download_button: {
+      control: 'boolean',
+      description: 'Show download button in toolbar',
+      table: {
+        type: {
+          summary: 'boolean',
+        },
+        defaultValue: {
+          summary: 'true',
+        },
+      },
+    },
+    with_share: {
+      control: 'boolean',
+      description: 'Show share button in toolbar',
+      table: {
+        type: {
+          summary: 'boolean',
+        },
+        defaultValue: {
+          summary: 'true',
+        },
+      },
+    },
+    with_enlarge: {
+      control: 'boolean',
+      description: 'Show enlarge button in toolbar',
+      table: {
+        type: {
+          summary: 'boolean',
+        },
+        defaultValue: {
+          summary: 'true',
+        },
+      },
+    },
+    has_data_query_by_context: {
+      control: 'boolean',
+      description: 'Use queries from context (current page)',
+      table: {
+        type: {
+          summary: 'boolean',
+        },
+        defaultValue: {
+          summary: 'true',
+        },
+      },
+    },
   },
 };
 
-const Template = (args) => <Plot {...args} onInitialized={() => {}} />;
+// Mock toolbar component for Storybook (no external dependencies)
+const MockToolbar = ({ toolbarProps }) => {
+  const buttonStyle = {
+    padding: '8px 12px',
+    margin: '4px',
+    border: '1px solid #ccc',
+    borderRadius: '4px',
+    backgroundColor: '#f8f9fa',
+    cursor: 'pointer',
+    fontSize: '12px',
+  };
+
+  return (
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        padding: '10px',
+        borderTop: '1px solid #eee',
+        backgroundColor: '#f8f9fa',
+      }}
+    >
+      <div style={{ display: 'flex' }}>
+        {toolbarProps.with_notes && <button style={buttonStyle}>Notes</button>}
+        {toolbarProps.with_sources && (
+          <button style={buttonStyle}>Sources</button>
+        )}
+        {toolbarProps.with_more_info && (
+          <button style={buttonStyle}>More Info</button>
+        )}
+      </div>
+      <div style={{ display: 'flex' }}>
+        {toolbarProps.download_button && (
+          <button style={buttonStyle}>Download</button>
+        )}
+        {toolbarProps.with_share && <button style={buttonStyle}>Share</button>}
+        {toolbarProps.with_enlarge && (
+          <button style={buttonStyle}>Enlarge</button>
+        )}
+      </div>
+    </div>
+  );
+};
+
+// Wrapper component that includes both Plot and Mock Toolbar
+const PlotWithToolbar = (args) => {
+  const { data, layout, ...toolbarProps } = args;
+
+  return (
+    <div style={{ border: '1px solid #ddd', borderRadius: '4px' }}>
+      <div style={{ height: '400px', padding: '10px' }}>
+        <Plot data={data} layout={layout} onInitialized={() => {}} />
+      </div>
+      <MockToolbar toolbarProps={toolbarProps} />
+    </div>
+  );
+};
+
+const Template = (args) => <PlotWithToolbar {...args} />;
 
 export const Playground = Template.bind({});
+// Playground.parameters = {
+//   controls: {
+//     expanded: true,
+//     hideNoControlsWarning: true,
+//   },
+//   docs: {
+//     controls: {
+//       sort: 'alpha',
+//       expanded: true,
+//     },
+//   },
+// };
 Playground.args = {
+  // Boolean controls with default values from schema
+  with_notes: true,
+  with_sources: true,
+  with_more_info: true,
+  download_button: true,
+  with_share: true,
+  with_enlarge: true,
+  has_data_query_by_context: true,
   data: [
     {
       hoverinfo: 'y',
