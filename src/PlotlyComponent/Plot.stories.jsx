@@ -188,18 +188,18 @@ const PlotWithToolbar = (args) => {
 const Template = (args) => <PlotWithToolbar {...args} />;
 
 export const Playground = Template.bind({});
-// Playground.parameters = {
-//   controls: {
-//     expanded: true,
-//     hideNoControlsWarning: true,
-//   },
-//   docs: {
-//     controls: {
-//       sort: 'alpha',
-//       expanded: true,
-//     },
-//   },
-// };
+Playground.parameters = {
+  controls: {
+    expanded: true,
+    hideNoControlsWarning: true,
+  },
+  docs: {
+    controls: {
+      sort: 'alpha',
+      expanded: true,
+    },
+  },
+};
 Playground.args = {
   with_notes: true,
   with_sources: true,
