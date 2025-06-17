@@ -30,7 +30,6 @@ export default {
         },
       },
     },
-    // Boolean controls from EmbedVisualization schema
     with_notes: {
       control: 'boolean',
       description: 'Show notes section below the chart',
@@ -106,7 +105,6 @@ export default {
   },
 };
 
-// Mock toolbar component for Storybook (no external dependencies)
 const MockToolbar = ({ toolbarProps }) => {
   const buttonStyle = {
     display: 'inline-flex',
@@ -187,8 +185,8 @@ const PlotWithToolbar = (args) => {
 
 const Template = (args) => <PlotWithToolbar {...args} />;
 
-export const Playground = Template.bind({});
-Playground.parameters = {
+export const Default = Template.bind({});
+Default.parameters = {
   controls: {
     expanded: true,
     hideNoControlsWarning: true,
@@ -200,7 +198,7 @@ Playground.parameters = {
     },
   },
 };
-Playground.args = {
+Default.args = {
   with_notes: true,
   with_sources: true,
   with_more_info: true,
