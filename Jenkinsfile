@@ -374,6 +374,41 @@ pipeline {
       }
     }
 
+       stage('Storybook') {
+           when {
+            expression {
+              env.GITHUB_COMMENT.contains("@eea-jenkins build all") || env.GITHUB_COMMENT.contains("@eea-jenkins build storybook")
+              }
+           }
+
+          steps {
+            node(label: 'docker') {
+              script {
+                  env.NODEJS_HOME = "${tool 'NodeJS18'}"
+                  env.PATH="${env.NODEJS_HOME}/bin:${env.PATH}"
+
+                  sh '''rm -rf eea-storybook'''
+
+                  sh '''git clone --branch develop https://github.com/eea/eea-storybook.git'''
+
+                  withCredentials([string(credentialsId: 'eea-storybook-chromatica', variable: 'CHROMATICA_TOKEN')]) {
+                    def RETURN_STATUS = sh(script: '''cd eea-storybook; npm install -g mrs-developer chromatic; make develop; cd src/addons/$GIT_NAME; git fetch origin pull/${CHANGE_ID}/head:PR-${CHANGE_ID}; git checkout PR-${CHANGE_ID}; cd ../../..; yarn install; yarn build-storybook; if [ $? -eq 0 ]; then set -o pipefail; npx chromatic --no-interactive --exit-zero-on-changes --project-token=$CHROMATICA_TOKEN -d docs/ | tee chromatic.log; else exit 1; fi''', returnStatus: true)
+                    if ( RETURN_STATUS == 0 ) {
+                      def STORY_URL = sh(script: '''grep "View your Storybook" eea-storybook/chromatic.log | sed "s/.*https/https/" ''', returnStdout: true).trim()
+                      pullRequest.comment("### :heavy_check_mark: Storybook:\n${STORY_URL}\n\n:rocket: @${GITHUB_COMMENT_AUTHOR}")
+                    }
+                    else {
+                       pullRequest.comment("### :x: Storybook build FAILED\nCheck ${BUILD_URL} for details\n\n:fire: @${GITHUB_COMMENT_AUTHOR}")
+                       currentBuild.result = 'FAILURE'
+                       error("Storybook build FAILED")
+                    }
+                   }
+                   sh '''rm -rf eea-storybook'''
+              }
+             }
+          }
+       }
+
     stage('Pull Request') {
       when {
         not {
