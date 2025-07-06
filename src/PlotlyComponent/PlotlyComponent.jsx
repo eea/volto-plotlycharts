@@ -267,7 +267,10 @@ function UnconnectedPlotlyComponent(props) {
             initialized
               ? {
                   '--svg-container-height': `${
-                    height || el.current?._fullLayout?.height
+                    height ||
+                    el.current?._fullLayout?.height ||
+                    layout.height ||
+                    450
                   }px`,
                 }
               : {}

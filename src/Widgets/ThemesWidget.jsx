@@ -148,29 +148,29 @@ const ThemesWidget = (props) => {
             initialValue={value[selectedTheme] || {}}
             options={{
               mode: 'tree',
-              schema: {
-                type: 'object',
-                properties: {
-                  id: {
-                    type: 'string',
-                  },
-                  label: {
-                    type: 'string',
-                  },
-                  hidden: {
-                    type: 'boolean',
-                    default: false,
-                  },
-                  data: {
-                    type: 'object',
-                  },
-                  layout: {
-                    type: 'object',
-                  },
-                },
-                required: ['id', 'label', 'data', 'layout'],
-                additionalProperties: false,
-              },
+              // schema: {
+              //   type: 'object',
+              //   properties: {
+              //     id: {
+              //       type: 'string',
+              //     },
+              //     label: {
+              //       type: 'string',
+              //     },
+              //     hidden: {
+              //       type: 'boolean',
+              //       default: false,
+              //     },
+              //     data: {
+              //       type: 'object',
+              //     },
+              //     layout: {
+              //       type: 'object',
+              //     },
+              //   },
+              //   required: ['id', 'label', 'data', 'layout'],
+              //   additionalProperties: false,
+              // },
             }}
             onChange={(theme) => {
               const newValue = [...value];
