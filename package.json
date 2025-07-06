@@ -1,6 +1,6 @@
 {
   "name": "@eeacms/volto-plotlycharts",
-  "version": "12.0.6",
+  "version": "12.0.7",
   "description": "Plotly Charts and Editor integration for Volto",
   "main": "src/index.js",
   "author": "European Environment Agency: IDM2 A-Team",
