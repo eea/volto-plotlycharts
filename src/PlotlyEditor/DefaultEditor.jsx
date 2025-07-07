@@ -162,22 +162,22 @@ class DefaultEditor extends PlotlyDefaultEditor {
               }}
               options={{
                 mode: 'tree',
-                schema: {
-                  type: 'object',
-                  properties: {
-                    data: {
-                      type: 'array',
-                    },
-                    layout: {
-                      type: 'object',
-                    },
-                    frames: {
-                      type: 'array',
-                    },
-                  },
-                  required: ['data', 'layout'],
-                  additionalProperties: false,
-                },
+                // schema: {
+                //   type: 'object',
+                //   properties: {
+                //     data: {
+                //       type: 'array',
+                //     },
+                //     layout: {
+                //       type: 'object',
+                //     },
+                //     frames: {
+                //       type: 'array',
+                //     },
+                //   },
+                //   required: ['data', 'layout'],
+                //   additionalProperties: false,
+                // },
               }}
               menu={
                 <span style={{ display: 'inline-block', margin: '8px 20px' }}>
