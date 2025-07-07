@@ -124,12 +124,33 @@ function UnconnectedPlotlyComponent(props) {
   }, [value.data, dataSources, filters]);
 
   const layout = useMemo(() => {
-    return updateDataSources(
+    const baseLayout = updateDataSources(
       value.layout || {},
       dataSources,
       constants.LAYOUT_SRC_ATTRIBUTES,
     );
-  }, [value.layout, dataSources]);
+
+    // Adjust legend position for mobile
+    if (mobile && baseLayout.showlegend !== false) {
+      return {
+        ...baseLayout,
+        legend: {
+          ...baseLayout.legend,
+          y: -0.3,
+          yanchor: 'top',
+          orientation: 'h',
+          x: 0.5,
+          xanchor: 'center',
+        },
+        margin: {
+          ...baseLayout.margin,
+          b: 100,
+        },
+      };
+    }
+
+    return baseLayout;
+  }, [value.layout, dataSources, mobile]);
 
   const toolbarData = useMemo(() => {
     return {
