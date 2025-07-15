@@ -9,13 +9,7 @@ const schema = {
     {
       id: 'toolbar',
       title: 'Toolbar',
-      fields: [
-        'with_notes',
-        'with_more_info',
-        'download_button',
-        'with_share',
-        'with_enlarge',
-      ],
+      fields: ['with_notes', 'with_more_info', 'with_share', 'with_enlarge'],
     },
     {
       id: 'data_query',
@@ -51,11 +45,6 @@ const schema = {
     },
     with_more_info: {
       title: 'Show more info',
-      type: 'boolean',
-      defaultValue: true,
-    },
-    download_button: {
-      title: 'Show download button',
       type: 'boolean',
       defaultValue: true,
     },
