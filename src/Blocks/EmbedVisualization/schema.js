@@ -9,12 +9,7 @@ const schema = {
     {
       id: 'toolbar',
       title: 'Toolbar',
-      fields: [
-        'with_notes',
-        'with_more_info',
-        'with_share',
-        'with_enlarge',
-      ],
+      fields: ['with_notes', 'with_more_info', 'with_share', 'with_enlarge'],
     },
     {
       id: 'data_query',
