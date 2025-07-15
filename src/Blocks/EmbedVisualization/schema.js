@@ -12,7 +12,6 @@ const schema = {
       fields: [
         'with_notes',
         'with_more_info',
-        'download_button',
         'with_share',
         'with_enlarge',
       ],
@@ -51,11 +50,6 @@ const schema = {
     },
     with_more_info: {
       title: 'Show more info',
-      type: 'boolean',
-      defaultValue: true,
-    },
-    download_button: {
-      title: 'Show download button',
       type: 'boolean',
       defaultValue: true,
     },
