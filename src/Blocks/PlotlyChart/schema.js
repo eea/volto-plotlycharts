@@ -30,7 +30,7 @@ const schema = {
     {
       id: 'sources',
       title: 'Sources',
-      fields: ['chartSources', 'with_sources', 'download_button'],
+      fields: ['chartSources', 'with_sources'],
     },
     {
       id: 'data_query',
@@ -44,11 +44,6 @@ const schema = {
       widget: 'object_list',
       title: 'Sources',
       schema: sourceSchema,
-    },
-    download_button: {
-      title: 'Toggle download',
-      type: 'boolean',
-      defaultValue: true,
     },
     with_sources: {
       title: 'Toggle sources',
