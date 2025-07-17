@@ -8,6 +8,9 @@ import { toPublicURL } from '@plone/volto/helpers';
 import {
   convertToCSV,
   exportCSVFile,
+  exportZipFile,
+  groupDataByDataset,
+  processTraceData,
   spreadCoreMetadata,
 } from '@eeacms/volto-plotlycharts/helpers/csvString';
 
@@ -40,7 +43,179 @@ export default function Download(props) {
 
   const [open, setOpen] = React.useState(false);
 
-  const handleDownloadData = () => {
+  const handleDownloadData = async () => {
+    const datasets = groupDataByDataset(chartData);
+    const datasetKeys = Object.keys(datasets);
+    
+    // Check if we have any datasets with traces that have transforms
+    const hasTransforms = Object.values(datasets).some(dataset => 
+      dataset.data.some(trace => trace.transforms && trace.transforms.length > 0)
+    );
+    
+    // If only one dataset and no transforms, use original behavior
+    if (datasetKeys.length === 1 && datasetKeys[0] === 'default' && !hasTransforms) {
+      handleDownloadSingleCSV();
+      return;
+    }
+    
+    try {
+      const JSZip = (await import('jszip')).default;
+      const zip = new JSZip();
+      
+      // Add individual CSV files for each dataset (always apply transforms and merge traces)
+      for (const [datasetKey, datasetData] of Object.entries(datasets)) {
+        const csvData = generateCSVForDataset(datasetData);
+        const fileName = `${datasetData.name || 'data'}.csv`;
+        zip.file(fileName, csvData);
+      }
+      
+      // Add the complete CSV with all data (original behavior)
+      const completeCSVData = generateOriginalCSV();
+      zip.file('all_data.csv', completeCSVData);
+      
+      const zipBlob = await zip.generateAsync({ type: 'blob' });
+      const zipArrayBuffer = await zipBlob.arrayBuffer();
+      exportZipFile(zipArrayBuffer, title);
+    } catch (error) {
+      console.error('Error creating ZIP file:', error);
+      handleDownloadSingleCSV();
+    }
+  };
+
+  const generateCSVForDataset = (datasetData) => {
+    let array = [];
+    let data_provenance_array = [];
+    let other_organisation_array = [];
+    let temporal_coverage_array = [];
+    let geo_coverage_array = [];
+    let publisher_array = [];
+
+    let readme = provider_metadata?.readme ? [provider_metadata?.readme] : [];
+
+    // Always apply transforms and merge traces for dataset processing
+    let combinedData = [];
+    
+    datasetData.data.forEach(trace => {
+      const traceData = processTraceData(trace, dataSources);
+      combinedData = combinedData.concat(traceData);
+    });
+    
+    // If no processed data from traces, fall back to original data sources
+    if (combinedData.length === 0) {
+      Object.entries(dataSources).forEach(([key, items]) => {
+        items.forEach((item, index) => {
+          if (!array[index]) array[index] = {};
+          array[index][key] = item;
+        });
+      });
+    } else {
+      // Merge processed data from all traces
+      const uniqueKeys = new Set();
+      combinedData.forEach(row => {
+        Object.keys(row).forEach(key => {
+          if (row[key] !== null && row[key] !== undefined) {
+            uniqueKeys.add(key);
+          }
+        });
+      });
+      
+      combinedData.forEach((row, index) => {
+        if (!array[index]) array[index] = {};
+        uniqueKeys.forEach(key => {
+          if (row[key] !== null && row[key] !== undefined) {
+            array[index][key] = row[key];
+          }
+        });
+      });
+    }
+
+    const hasDataProvenance = core_metadata.data_provenance?.length > 0;
+    const hasOtherOrganisation = core_metadata.other_organisations?.length > 0;
+    const hasTemporalCoverage = core_metadata.temporal_coverage?.length > 0;
+    const hasGeoCoverage = core_metadata.geo_coverage?.length > 0;
+    const hasPublisher = core_metadata.publisher?.length > 0;
+
+    if (
+      hasDataProvenance ||
+      hasOtherOrganisation ||
+      hasTemporalCoverage ||
+      hasGeoCoverage ||
+      hasPublisher
+    ) {
+      Object.entries(spreadCoreMetadata(core_metadata)).forEach(
+        ([key, items]) => {
+          items.forEach((item, index) => {
+            if (key.includes('data_provenance') || key.includes('Sources')) {
+              if (!data_provenance_array[index])
+                data_provenance_array[index] = {};
+              data_provenance_array[index][key] = item;
+            }
+            if (
+              key.includes('other_organisation') ||
+              key.includes('Other organisations involved')
+            ) {
+              if (!other_organisation_array[index])
+                other_organisation_array[index] = {};
+              other_organisation_array[index][key] = item;
+            }
+            if (
+              key.includes('temporal_coverage') ||
+              key.includes('Temporal coverage')
+            ) {
+              if (!temporal_coverage_array[index])
+                temporal_coverage_array[index] = {};
+              temporal_coverage_array[index][key] = item;
+            }
+            if (
+              key.includes('geo_coverage') ||
+              key.includes('Geographical coverage')
+            ) {
+              if (!geo_coverage_array[index]) geo_coverage_array[index] = {};
+              geo_coverage_array[index][key] = item;
+            }
+            if (key.includes('publisher') || key.includes('Publisher')) {
+              if (!publisher_array[index]) publisher_array[index] = {};
+              publisher_array[index][key] = item;
+            }
+          });
+        },
+      );
+    }
+
+    const data_csv = convertToCSV(array, readme);
+
+    const data_provenance_csv = hasDataProvenance
+      ? convertToCSV(data_provenance_array, [], true)
+      : '';
+    const other_organisation_csv = hasOtherOrganisation
+      ? convertToCSV(other_organisation_array, [], true)
+      : '';
+    const temporal_coverage_csv = hasTemporalCoverage
+      ? convertToCSV(temporal_coverage_array, [], true)
+      : '';
+    const geo_coverage_csv = hasGeoCoverage
+      ? convertToCSV(geo_coverage_array, [], true)
+      : '';
+    const publisher_csv = hasPublisher
+      ? convertToCSV(publisher_array, [], true)
+      : '';
+
+    const download_source_csv = convertToCSV(
+      [{ 'Downloaded from: ': url_source }],
+      [],
+      true,
+    );
+
+    return download_source_csv +
+      publisher_csv +
+      other_organisation_csv +
+      data_provenance_csv +
+      geo_coverage_csv +
+      temporal_coverage_csv +
+      data_csv;
+  };
+
+  const generateOriginalCSV = () => {
     let array = [];
     let data_provenance_array = [];
     let other_organisation_array = [];
@@ -134,15 +309,18 @@ export default function Download(props) {
       true,
     );
 
-    const csv =
-      download_source_csv +
+    return download_source_csv +
       publisher_csv +
       other_organisation_csv +
       data_provenance_csv +
       geo_coverage_csv +
       temporal_coverage_csv +
       data_csv;
-    exportCSVFile(csv, title);
+  };
+
+  const handleDownloadSingleCSV = () => {
+    const csvData = generateOriginalCSV();
+    exportCSVFile(csvData, title);
   };
 
   const handleDownloadImage = async (type) => {

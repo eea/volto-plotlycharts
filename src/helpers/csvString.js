@@ -138,10 +138,10 @@ const renameKey = (key) => {
 const spreadCoreMetadata = (core_metadata) => {
   //filter requested metadata and insert head titles
   let spread_metadata = {};
-  Object.keys(core_metadata).forEach((key, index) => {
+  Object.keys(core_metadata).forEach((key) => {
     if (core_metadata[key]?.length > 0) {
-      core_metadata[key].forEach((item, jIndex) => {
-        Object.keys(item).forEach((subkey, subindex) => {
+      core_metadata[key].forEach((item) => {
+        Object.keys(item).forEach((subkey) => {
           if (subkey !== '@id' && subkey !== 'value') {
             if (!spread_metadata[`${renameKey(key)}`]) {
               spread_metadata[`${renameKey(key)}`] = [' '];
@@ -191,11 +191,254 @@ const spreadCoreMetadata = (core_metadata) => {
   return spread_metadata;
 };
 
+function exportZipFile(zipData, title = 'data') {
+  let fileTitle = title.toLowerCase().replace(' ', '_');
+  let exportedFilename = fileTitle.includes('.zip')
+    ? fileTitle
+    : fileTitle + '.zip';
+  
+  trackLink({
+    href: window.location.href + exportedFilename,
+    linkType: 'download',
+  });
+
+  let blob = new Blob([zipData], { type: 'application/zip' });
+  if (navigator.msSaveBlob) {
+    navigator.msSaveBlob(blob, exportedFilename);
+  } else {
+    downloadDataURL(URL.createObjectURL(blob), exportedFilename);
+  }
+}
+
+function groupDataByDataset(chartData) {
+  const datasets = {};
+  
+  if (!chartData.data || !Array.isArray(chartData.data)) {
+    return { default: chartData };
+  }
+  
+  chartData.data.forEach((trace) => {
+    const dataset = trace.dataset || 'default';
+    
+    if (!datasets[dataset]) {
+      datasets[dataset] = {
+        data: [],
+        layout: chartData.layout,
+        dataSources: {},
+        name: dataset // Use dataset ID as name
+      };
+    }
+    datasets[dataset].data.push(trace);
+  });
+  
+  return datasets;
+}
+
+function processTraceData(trace, dataSources) {
+  let processedData = [];
+  
+  // Collect all columns used by the trace
+  const usedColumns = new Set();
+  
+  if (trace.x && trace.xsrc && dataSources[trace.xsrc]) {
+    usedColumns.add(trace.xsrc);
+  }
+  if (trace.y && trace.ysrc && dataSources[trace.ysrc]) {
+    usedColumns.add(trace.ysrc);
+  }
+  if (trace.z && trace.zsrc && dataSources[trace.zsrc]) {
+    usedColumns.add(trace.zsrc);
+  }
+  
+  // Add columns from transforms
+  if (trace.transforms && Array.isArray(trace.transforms)) {
+    trace.transforms.forEach(transform => {
+      if (transform.targetsrc && dataSources[transform.targetsrc]) {
+        usedColumns.add(transform.targetsrc);
+      }
+    });
+  }
+  
+  // If no specific columns found, use all available data sources
+  if (usedColumns.size === 0) {
+    Object.keys(dataSources).forEach(key => {
+      if (Array.isArray(dataSources[key])) {
+        usedColumns.add(key);
+      }
+    });
+  }
+  
+  const maxLength = Math.max(...Array.from(usedColumns).map(col => 
+    dataSources[col] ? dataSources[col].length : 0
+  ));
+  
+  // Create initial data structure
+  for (let i = 0; i < maxLength; i++) {
+    const row = {};
+    usedColumns.forEach(col => {
+      if (dataSources[col] && dataSources[col][i] !== undefined) {
+        row[col] = dataSources[col][i];
+      }
+    });
+    processedData.push(row);
+  }
+  
+  // Apply transforms if they exist
+  if (trace.transforms && Array.isArray(trace.transforms)) {
+    trace.transforms.forEach(transform => {
+      processedData = applyTransform(processedData, transform);
+    });
+  }
+  
+  return processedData;
+}
+
+function applyTransform(data, transform) {
+  if (!transform.type || !transform.targetsrc) {
+    return data;
+  }
+  
+  switch (transform.type) {
+    case 'filter':
+      return applyFilterTransform(data, transform);
+    case 'sort':
+      return applySortTransform(data, transform);
+    case 'aggregate':
+      return applyAggregateTransform(data, transform);
+    case 'split':
+      return applySplitTransform(data, transform);
+    default:
+      return data;
+  }
+}
+
+function applyFilterTransform(data, transform) {
+  if (transform.value === null || transform.value === undefined) {
+    return data;
+  }
+  
+  const operation = transform.operation || '=';
+  const targetCol = transform.targetsrc;
+  
+  return data.filter(row => {
+    const value = row[targetCol];
+    
+    switch (operation) {
+      case '=':
+        return value === transform.value;
+      case '!=':
+        return value !== transform.value;
+      case '>':
+        return value > transform.value;
+      case '<':
+        return value < transform.value;
+      case '>=':
+        return value >= transform.value;
+      case '<=':
+        return value <= transform.value;
+      case 'contains':
+        return String(value).includes(String(transform.value));
+      default:
+        return value === transform.value;
+    }
+  });
+}
+
+function applySortTransform(data, transform) {
+  const targetCol = transform.targetsrc;
+  const order = transform.order || 'ascending';
+  
+  return [...data].sort((a, b) => {
+    const aVal = a[targetCol];
+    const bVal = b[targetCol];
+    
+    let comparison = 0;
+    if (aVal > bVal) comparison = 1;
+    else if (aVal < bVal) comparison = -1;
+    
+    return order === 'ascending' ? comparison : -comparison;
+  });
+}
+
+function applyAggregateTransform(data, transform) {
+  if (!transform.groups || !transform.aggregations) {
+    return data;
+  }
+  
+  const groups = {};
+  
+  // Group data by the specified column
+  data.forEach(row => {
+    const groupKey = row[transform.groups];
+    if (!groups[groupKey]) {
+      groups[groupKey] = [];
+    }
+    groups[groupKey].push(row);
+  });
+  
+  // Apply aggregations
+  const aggregatedData = [];
+  
+  Object.keys(groups).forEach(groupKey => {
+    const groupData = groups[groupKey];
+    const aggregatedRow = { [transform.groups]: groupKey };
+    
+    transform.aggregations.forEach(agg => {
+      const values = groupData.map(row => row[agg.target]).filter(v => v !== null && v !== undefined);
+      
+      switch (agg.func) {
+        case 'avg':
+          aggregatedRow[agg.target] = values.reduce((sum, val) => sum + val, 0) / values.length;
+          break;
+        case 'sum':
+          aggregatedRow[agg.target] = values.reduce((sum, val) => sum + val, 0);
+          break;
+        case 'min':
+          aggregatedRow[agg.target] = Math.min(...values);
+          break;
+        case 'max':
+          aggregatedRow[agg.target] = Math.max(...values);
+          break;
+        case 'count':
+          aggregatedRow[agg.target] = values.length;
+          break;
+        default:
+          aggregatedRow[agg.target] = values[0];
+      }
+    });
+    
+    aggregatedData.push(aggregatedRow);
+  });
+  
+  return aggregatedData;
+}
+
+function applySplitTransform(data, transform) {
+  if (!transform.groups) {
+    return data;
+  }
+  
+  // Split transform divides data into groups based on unique values
+  // For CSV export, we'll preserve the grouping information
+  return data.map(row => ({
+    ...row,
+    _split_group: row[transform.groups]
+  }));
+}
+
 export {
   convertToCSV,
   convertMatrixToCSV,
   downloadDataURL,
   exportCSVFile,
+  exportZipFile,
+  groupDataByDataset,
+  processTraceData,
+  applyTransform,
+  applyFilterTransform,
+  applySortTransform,
+  applyAggregateTransform,
+  applySplitTransform,
   spreadCoreMetadata,
   renameKey,
 };
