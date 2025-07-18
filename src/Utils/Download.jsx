@@ -46,33 +46,35 @@ export default function Download(props) {
   const handleDownloadData = async () => {
     const datasets = groupDataByDataset(chartData);
     const datasetKeys = Object.keys(datasets);
-    
+
     // Check if there's actual dataset information
-    const hasDatasetInfo = chartData.data && chartData.data.some(trace => 
-      trace.dataset && trace.dataset !== 'default'
-    );
-    
+    const hasDatasetInfo =
+      chartData.data &&
+      chartData.data.some(
+        (trace) => trace.dataset && trace.dataset !== 'default',
+      );
+
     // If no dataset information exists, download only the complete CSV
     if (!hasDatasetInfo) {
       handleDownloadSingleCSV();
       return;
     }
-    
+
     try {
       const JSZip = (await import('jszip')).default;
       const zip = new JSZip();
-      
+
       // Add individual CSV files for each dataset (always apply transforms and merge traces)
       for (const [datasetKey, datasetData] of Object.entries(datasets)) {
         const csvData = generateCSVForDataset(datasetData);
         const fileName = `${datasetData.name || 'data'}.csv`;
         zip.file(fileName, csvData);
       }
-      
+
       // Add the complete CSV with all data (original behavior)
       const completeCSVData = generateOriginalCSV();
       zip.file('all_data.csv', completeCSVData);
-      
+
       const zipBlob = await zip.generateAsync({ type: 'blob' });
       const zipArrayBuffer = await zipBlob.arrayBuffer();
       exportZipFile(zipArrayBuffer, title);
@@ -94,12 +96,12 @@ export default function Download(props) {
 
     // Always apply transforms and merge traces for dataset processing
     let combinedData = [];
-    
-    datasetData.data.forEach(trace => {
+
+    datasetData.data.forEach((trace) => {
       const traceData = processTraceData(trace, dataSources);
       combinedData = combinedData.concat(traceData);
     });
-    
+
     // If no processed data from traces, fall back to original data sources
     if (combinedData.length === 0) {
       Object.entries(dataSources).forEach(([key, items]) => {
@@ -111,17 +113,17 @@ export default function Download(props) {
     } else {
       // Merge processed data from all traces
       const uniqueKeys = new Set();
-      combinedData.forEach(row => {
-        Object.keys(row).forEach(key => {
+      combinedData.forEach((row) => {
+        Object.keys(row).forEach((key) => {
           if (row[key] !== null && row[key] !== undefined) {
             uniqueKeys.add(key);
           }
         });
       });
-      
+
       combinedData.forEach((row, index) => {
         if (!array[index]) array[index] = {};
-        uniqueKeys.forEach(key => {
+        uniqueKeys.forEach((key) => {
           if (row[key] !== null && row[key] !== undefined) {
             array[index][key] = row[key];
           }
@@ -206,13 +208,15 @@ export default function Download(props) {
       true,
     );
 
-    return download_source_csv +
+    return (
+      download_source_csv +
       publisher_csv +
       other_organisation_csv +
       data_provenance_csv +
       geo_coverage_csv +
       temporal_coverage_csv +
-      data_csv;
+      data_csv
+    );
   };
 
   const generateOriginalCSV = () => {
@@ -309,13 +313,15 @@ export default function Download(props) {
       true,
     );
 
-    return download_source_csv +
+    return (
+      download_source_csv +
       publisher_csv +
       other_organisation_csv +
       data_provenance_csv +
       geo_coverage_csv +
       temporal_coverage_csv +
-      data_csv;
+      data_csv
+    );
   };
 
   const handleDownloadSingleCSV = () => {
