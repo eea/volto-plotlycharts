@@ -1,4 +1,5 @@
 import { trackLink } from '@eeacms/volto-matomo/utils';
+import { getPlotlyDataSources } from './plotly';
 
 function downloadDataURL(dataURL, filename) {
   // Create a temporary anchor element
@@ -240,15 +241,19 @@ function processTraceData(trace, dataSources) {
   // Collect all columns used by the trace
   const usedColumns = new Set();
 
-  if (trace.x && trace.xsrc && dataSources[trace.xsrc]) {
-    usedColumns.add(trace.xsrc);
-  }
-  if (trace.y && trace.ysrc && dataSources[trace.ysrc]) {
-    usedColumns.add(trace.ysrc);
-  }
-  if (trace.z && trace.zsrc && dataSources[trace.zsrc]) {
-    usedColumns.add(trace.zsrc);
-  }
+  // Use getPlotlyDataSources to dynamically extract all data sources from the trace
+  const [extractedDataSources] = getPlotlyDataSources({
+    data: [trace],
+    layout: {},
+    originalDataSources: dataSources
+  });
+
+  // Add all extracted data source keys to usedColumns
+  Object.keys(extractedDataSources).forEach(key => {
+    if (dataSources[key]) {
+      usedColumns.add(key);
+    }
+  });
 
   // Add columns from transforms
   if (trace.transforms && Array.isArray(trace.transforms)) {
