@@ -47,13 +47,13 @@ export default function Download(props) {
     const datasets = groupDataByDataset(chartData);
     const datasetKeys = Object.keys(datasets);
     
-    // Check if we have any datasets with traces that have transforms
-    const hasTransforms = Object.values(datasets).some(dataset => 
-      dataset.data.some(trace => trace.transforms && trace.transforms.length > 0)
+    // Check if there's actual dataset information
+    const hasDatasetInfo = chartData.data && chartData.data.some(trace => 
+      trace.dataset && trace.dataset !== 'default'
     );
     
-    // If only one dataset and no transforms, use original behavior
-    if (datasetKeys.length === 1 && datasetKeys[0] === 'default' && !hasTransforms) {
+    // If no dataset information exists, download only the complete CSV
+    if (!hasDatasetInfo) {
       handleDownloadSingleCSV();
       return;
     }
