@@ -245,11 +245,11 @@ function processTraceData(trace, dataSources) {
   const [extractedDataSources] = getPlotlyDataSources({
     data: [trace],
     layout: {},
-    originalDataSources: dataSources
+    originalDataSources: dataSources,
   });
 
   // Add all extracted data source keys to usedColumns
-  Object.keys(extractedDataSources).forEach(key => {
+  Object.keys(extractedDataSources).forEach((key) => {
     if (dataSources[key]) {
       usedColumns.add(key);
     }
