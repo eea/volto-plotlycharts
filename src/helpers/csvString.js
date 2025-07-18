@@ -242,6 +242,7 @@ async function processTraceData(trace, dataSources) {
   const usedColumns = new Set();
 
   // Use getPlotlyDataSources to dynamically extract all data sources from the trace
+<<<<<<< HEAD
   // Only call this in browser context to avoid SSR issues
   if (typeof window !== 'undefined') {
     // Dynamic import to avoid SSR issues
@@ -270,6 +271,20 @@ async function processTraceData(trace, dataSources) {
 
     console.log('Used columns for trace:', Array.from(usedColumns));
   }
+=======
+  const [extractedDataSources] = getPlotlyDataSources({
+    data: [trace],
+    layout: {},
+    originalDataSources: dataSources,
+  });
+
+  // Add all extracted data source keys to usedColumns
+  Object.keys(extractedDataSources).forEach((key) => {
+    if (dataSources[key]) {
+      usedColumns.add(key);
+    }
+  });
+>>>>>>> c6e4094968b66d970207696d92c353dafb2d53e7
 
   // Add columns from transforms
   if (trace.transforms && Array.isArray(trace.transforms)) {
