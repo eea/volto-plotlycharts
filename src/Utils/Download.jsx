@@ -66,7 +66,7 @@ export default function Download(props) {
 
       // Add individual CSV files for each dataset (always apply transforms and merge traces)
       for (const [datasetKey, datasetData] of Object.entries(datasets)) {
-        const csvData = generateCSVForDataset(datasetData);
+        const csvData = await generateCSVForDataset(datasetData);
         const fileName = `${datasetData.name || 'data'}.csv`;
         zip.file(fileName, csvData);
       }
@@ -84,7 +84,7 @@ export default function Download(props) {
     }
   };
 
-  const generateCSVForDataset = (datasetData) => {
+  const generateCSVForDataset = async (datasetData) => {
     let array = [];
     let data_provenance_array = [];
     let other_organisation_array = [];
@@ -97,13 +97,15 @@ export default function Download(props) {
     // Always apply transforms and merge traces for dataset processing
     let combinedData = [];
 
-    datasetData.data.forEach((trace) => {
-      const traceData = processTraceData(trace, dataSources);
-      combinedData = combinedData.concat(traceData);
-    });
+    // Collect all trace data separately
+    const allTraceData = [];
+    for (const trace of datasetData.data) {
+      const traceData = await processTraceData(trace, dataSources);
+      allTraceData.push(traceData);
+    }
 
     // If no processed data from traces, fall back to original data sources
-    if (combinedData.length === 0) {
+    if (allTraceData.length === 0 || allTraceData.every(data => data.length === 0)) {
       Object.entries(dataSources).forEach(([key, items]) => {
         items.forEach((item, index) => {
           if (!array[index]) array[index] = {};
@@ -111,24 +113,24 @@ export default function Download(props) {
         });
       });
     } else {
-      // Merge processed data from all traces
-      const uniqueKeys = new Set();
-      combinedData.forEach((row) => {
-        Object.keys(row).forEach((key) => {
-          if (row[key] !== null && row[key] !== undefined) {
-            uniqueKeys.add(key);
+      // Find the maximum length across all traces
+      const maxLength = Math.max(...allTraceData.map(data => data.length));
+      
+      // Merge data from all traces row by row
+      for (let i = 0; i < maxLength; i++) {
+        if (!array[i]) array[i] = {};
+        
+        // For each trace, merge its data at row i
+        allTraceData.forEach(traceData => {
+          if (traceData[i]) {
+            Object.keys(traceData[i]).forEach(key => {
+              if (traceData[i][key] !== null && traceData[i][key] !== undefined) {
+                array[i][key] = traceData[i][key];
+              }
+            });
           }
         });
-      });
-
-      combinedData.forEach((row, index) => {
-        if (!array[index]) array[index] = {};
-        uniqueKeys.forEach((key) => {
-          if (row[key] !== null && row[key] !== undefined) {
-            array[index][key] = row[key];
-          }
-        });
-      });
+      }
     }
 
     const hasDataProvenance = core_metadata.data_provenance?.length > 0;
