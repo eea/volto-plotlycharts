@@ -64,7 +64,7 @@ export default function Download(props) {
       const zip = new JSZip();
 
       // Add individual CSV files for each dataset
-      for (const [datasetKey, datasetData] of Object.entries(datasets)) {
+      for (const [_, datasetData] of Object.entries(datasets)) {
         const csvData = await generateCSVForDataset(datasetData);
         const fileName = `${datasetData.name || 'data'}.csv`;
         zip.file(fileName, csvData);
