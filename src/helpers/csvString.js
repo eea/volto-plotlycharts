@@ -1,5 +1,4 @@
 import { trackLink } from '@eeacms/volto-matomo/utils';
-import nestedProperty from 'plotly.js/src/lib/nested_property';
 
 function downloadDataURL(dataURL, filename) {
   // Create a temporary anchor element
@@ -248,27 +247,18 @@ async function processTraceData(trace, dataSources) {
     const { getAttrsPath, constants, getSrcAttr } = await import(
       '@eeacms/react-chart-editor/lib'
     );
-    console.log({ trace }, { constants }, { dataSources });
 
     // Get all data attributes from constants.TRACE_SRC_ATTRIBUTES
     const traceDataAttrs = getAttrsPath(trace, constants.TRACE_SRC_ATTRIBUTES);
-    console.log('Trace data attributes:', traceDataAttrs);
 
     // For each data attribute, get the corresponding src attribute using getSrcAttr
     Object.entries(traceDataAttrs).forEach(([dataAttrPath, dataValue]) => {
-      // dataAttrPath is the path to the data (e.g., 'x', 'marker.color')
-      // Use getSrcAttr to get the source attribute for this data path
       const srcAttr = getSrcAttr(trace, dataAttrPath);
 
       if (srcAttr && srcAttr.value && dataSources[srcAttr.value]) {
         usedColumns.add(srcAttr.value);
-        console.log(
-          `Found source: ${dataAttrPath} -> ${srcAttr.key} -> ${srcAttr.value}`,
-        );
       }
     });
-
-    console.log('Used columns for trace:', Array.from(usedColumns));
   }
 
   // Add columns from transforms
@@ -295,13 +285,6 @@ async function processTraceData(trace, dataSources) {
     ),
   );
 
-  // Create initial data structure
-  console.log(
-    'Creating rows with maxLength:',
-    maxLength,
-    'usedColumns:',
-    Array.from(usedColumns),
-  );
   for (let i = 0; i < maxLength; i++) {
     const row = {};
     usedColumns.forEach((col) => {
@@ -311,7 +294,6 @@ async function processTraceData(trace, dataSources) {
     });
     processedData.push(row);
   }
-  console.log('ProcessedData before transforms:', processedData);
 
   // Ensure all rows have the same columns (fill missing columns with empty values)
   const allColumns = new Set();
@@ -334,7 +316,6 @@ async function processTraceData(trace, dataSources) {
     });
   }
 
-  console.log('Final processedData:', processedData);
   return processedData;
 }
 
