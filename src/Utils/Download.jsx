@@ -45,7 +45,6 @@ export default function Download(props) {
 
   const handleDownloadData = async () => {
     const datasets = groupDataByDataset(chartData);
-    const datasetKeys = Object.keys(datasets);
 
     // Check if there's actual dataset information
     const hasDatasetInfo =
@@ -79,7 +78,6 @@ export default function Download(props) {
       const zipArrayBuffer = await zipBlob.arrayBuffer();
       exportZipFile(zipArrayBuffer, title);
     } catch (error) {
-      console.error('Error creating ZIP file:', error);
       handleDownloadSingleCSV();
     }
   };
@@ -93,10 +91,6 @@ export default function Download(props) {
     let publisher_array = [];
 
     let readme = provider_metadata?.readme ? [provider_metadata?.readme] : [];
-
-    // Always apply transforms and merge traces for dataset processing
-    let combinedData = [];
-
     // Collect all trace data separately
     const allTraceData = [];
     for (const trace of datasetData.data) {
