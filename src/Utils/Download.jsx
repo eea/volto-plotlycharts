@@ -63,16 +63,16 @@ export default function Download(props) {
       const JSZip = (await import('jszip')).default;
       const zip = new JSZip();
 
-      // Add individual CSV files for each dataset (always apply transforms and merge traces)
+      // Add individual CSV files for each dataset
       for (const [datasetKey, datasetData] of Object.entries(datasets)) {
         const csvData = await generateCSVForDataset(datasetData);
         const fileName = `${datasetData.name || 'data'}.csv`;
         zip.file(fileName, csvData);
       }
 
-      // Add the complete CSV with all data (original behavior)
+      // Add the complete CSV with all data
       const completeCSVData = generateOriginalCSV();
-      zip.file('all_data.csv', completeCSVData);
+      zip.file(`${title}.csv`, completeCSVData);
 
       const zipBlob = await zip.generateAsync({ type: 'blob' });
       const zipArrayBuffer = await zipBlob.arrayBuffer();
@@ -110,14 +110,11 @@ export default function Download(props) {
         });
       });
     } else {
-      // Find the maximum length across all traces
       const maxLength = Math.max(...allTraceData.map((data) => data.length));
 
-      // Merge data from all traces row by row
       for (let i = 0; i < maxLength; i++) {
         if (!array[i]) array[i] = {};
 
-        // For each trace, merge its data at row i
         allTraceData.forEach((traceData) => {
           if (traceData[i]) {
             Object.keys(traceData[i]).forEach((key) => {
