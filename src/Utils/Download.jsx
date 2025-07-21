@@ -105,7 +105,10 @@ export default function Download(props) {
     }
 
     // If no processed data from traces, fall back to original data sources
-    if (allTraceData.length === 0 || allTraceData.every(data => data.length === 0)) {
+    if (
+      allTraceData.length === 0 ||
+      allTraceData.every((data) => data.length === 0)
+    ) {
       Object.entries(dataSources).forEach(([key, items]) => {
         items.forEach((item, index) => {
           if (!array[index]) array[index] = {};
@@ -114,17 +117,20 @@ export default function Download(props) {
       });
     } else {
       // Find the maximum length across all traces
-      const maxLength = Math.max(...allTraceData.map(data => data.length));
-      
+      const maxLength = Math.max(...allTraceData.map((data) => data.length));
+
       // Merge data from all traces row by row
       for (let i = 0; i < maxLength; i++) {
         if (!array[i]) array[i] = {};
-        
+
         // For each trace, merge its data at row i
-        allTraceData.forEach(traceData => {
+        allTraceData.forEach((traceData) => {
           if (traceData[i]) {
-            Object.keys(traceData[i]).forEach(key => {
-              if (traceData[i][key] !== null && traceData[i][key] !== undefined) {
+            Object.keys(traceData[i]).forEach((key) => {
+              if (
+                traceData[i][key] !== null &&
+                traceData[i][key] !== undefined
+              ) {
                 array[i][key] = traceData[i][key];
               }
             });
