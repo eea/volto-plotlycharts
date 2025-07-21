@@ -32,7 +32,7 @@
     "@plone/scripts": "*",
     "handsontable": "^15.2.0",
     "jsoneditor": "10.2.0",
-    "jszip": "*",
+    "jszip": "3.10.1",
     "plotly.js": "^2.35.3",
     "react-plotly.js": "2.6.0"
   },
