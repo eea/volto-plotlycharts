@@ -240,26 +240,21 @@ async function processTraceData(trace, dataSources) {
   // Collect all columns used by the trace
   const usedColumns = new Set();
 
-  // Use getPlotlyDataSources to dynamically extract all data sources from the trace
-  // Only call this in browser context to avoid SSR issues
-  if (typeof window !== 'undefined') {
-    // Dynamic import to avoid SSR issues
-    const { getAttrsPath, constants, getSrcAttr } = await import(
-      '@eeacms/react-chart-editor/lib'
-    );
+  const { getAttrsPath, constants, getSrcAttr } = await import(
+    '@eeacms/react-chart-editor/lib'
+  );
 
-    // Get all data attributes from constants.TRACE_SRC_ATTRIBUTES
-    const traceDataAttrs = getAttrsPath(trace, constants.TRACE_SRC_ATTRIBUTES);
+  // Get all data attributes from constants.TRACE_SRC_ATTRIBUTES
+  const traceDataAttrs = getAttrsPath(trace, constants.TRACE_SRC_ATTRIBUTES);
 
-    // For each data attribute, get the corresponding src attribute using getSrcAttr
-    Object.entries(traceDataAttrs).forEach(([dataAttrPath, dataValue]) => {
-      const srcAttr = getSrcAttr(trace, dataAttrPath);
+  // For each data attribute, get the corresponding src attribute using getSrcAttr
+  Object.entries(traceDataAttrs).forEach(([dataAttrPath, dataValue]) => {
+    const srcAttr = getSrcAttr(trace, dataAttrPath);
 
-      if (srcAttr && srcAttr.value && dataSources[srcAttr.value]) {
-        usedColumns.add(srcAttr.value);
-      }
-    });
-  }
+    if (srcAttr && srcAttr.value && dataSources[srcAttr.value]) {
+      usedColumns.add(srcAttr.value);
+    }
+  });
 
   // Add columns from transforms
   if (trace.transforms && Array.isArray(trace.transforms)) {
