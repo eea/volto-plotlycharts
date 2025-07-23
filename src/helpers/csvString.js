@@ -218,9 +218,8 @@ function groupDataByDataset(chartData) {
   }
 
   chartData.data.forEach((trace) => {
-    const dataset = trace.dataset || 'default';
-
-    if (!datasets[dataset]) {
+    const dataset = trace?.dataset;
+    if (dataset && !datasets[dataset]) {
       datasets[dataset] = {
         data: [],
         layout: chartData.layout,
@@ -228,7 +227,7 @@ function groupDataByDataset(chartData) {
         name: dataset, // Use dataset ID as name
       };
     }
-    datasets[dataset].data.push(trace);
+    if (dataset) datasets[dataset].data.push(trace);
   });
 
   return datasets;
