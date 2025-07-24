@@ -1,6 +1,6 @@
 {
   "name": "@eeacms/volto-plotlycharts",
-  "version": "13.0.0",
+  "version": "13.0.1",
   "description": "Plotly Charts and Editor integration for Volto",
   "main": "src/index.js",
   "author": "European Environment Agency: IDM2 A-Team",
@@ -34,7 +34,8 @@
     "jsoneditor": "10.2.0",
     "jszip": "3.10.1",
     "plotly.js": "^2.35.3",
-    "react-plotly.js": "2.6.0"
+    "react-plotly.js": "2.6.0",
+    "remixicon": "4.6.0"
   },
   "devDependencies": {
     "@cypress/code-coverage": "^3.10.0",
