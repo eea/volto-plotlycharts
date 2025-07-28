@@ -10,6 +10,8 @@ import {
 } from '@eeacms/volto-embed/Toolbar';
 import Download from './Download';
 
+import '@eeacms/volto-embed/Toolbar/styles.less';
+
 const Toolbar = (props) => {
   const el = useRef();
   const [mobile, setMobile] = useState(false);

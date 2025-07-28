@@ -3,7 +3,7 @@ import Plot from './Plot';
 import 'remixicon/fonts/remixicon.css';
 
 export default {
-  title: 'VoltoPlotlyCharts/Plot',
+  title: 'PlotlyCharts/Plot',
   component: Plot,
   argTypes: {
     data: {
