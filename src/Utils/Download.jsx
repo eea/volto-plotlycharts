@@ -160,7 +160,7 @@ export default function Download(props) {
 
     // If no dataset information exists, download only the complete CSV
     if (!hasDatasetInfo) {
-      handleDownloadSingleCSV();
+      await handleDownloadSingleCSV();
       return;
     }
 
@@ -176,14 +176,14 @@ export default function Download(props) {
       }
 
       // Add the complete CSV with all data
-      const completeCSVData = generateOriginalCSV();
+      const completeCSVData = await generateOriginalCSV();
       zip.file(`${title}.csv`, completeCSVData);
 
       const zipBlob = await zip.generateAsync({ type: 'blob' });
       const zipArrayBuffer = await zipBlob.arrayBuffer();
       exportZipFile(zipArrayBuffer, title);
     } catch (error) {
-      handleDownloadSingleCSV();
+      await handleDownloadSingleCSV();
     }
   };
 
@@ -235,24 +235,66 @@ export default function Download(props) {
     return generateFinalCSV(array, readme, metadataFlags, metadataArrays);
   };
 
-  const generateOriginalCSV = () => {
+  const generateOriginalCSV = async () => {
     let array = [];
     let readme = provider_metadata?.readme ? [provider_metadata?.readme] : [];
 
-    Object.entries(dataSources).forEach(([key, items]) => {
-      items.forEach((item, index) => {
-        if (!array[index]) array[index] = {};
-        array[index][key] = item;
+    // Check if dataSources has any data
+    const hasDataSources =
+      dataSources &&
+      Object.keys(dataSources).some(
+        (key) => Array.isArray(dataSources[key]) && dataSources[key].length > 0,
+      );
+
+    if (hasDataSources) {
+      // Use existing dataSources logic
+      Object.entries(dataSources).forEach(([key, items]) => {
+        items.forEach((item, index) => {
+          if (!array[index]) array[index] = {};
+          array[index][key] = item;
+        });
       });
-    });
+    } else if (chartData?.data && Array.isArray(chartData.data)) {
+      // Extract data from traces when dataSources is empty
+      const allTraceData = [];
+      for (const trace of chartData.data) {
+        const traceData = await processTraceData(trace, dataSources || {});
+        allTraceData.push(traceData);
+      }
+
+      // Process all trace data
+      if (
+        allTraceData.length > 0 &&
+        !allTraceData.every((data) => data.length === 0)
+      ) {
+        const maxLength = Math.max(...allTraceData.map((data) => data.length));
+
+        for (let i = 0; i < maxLength; i++) {
+          if (!array[i]) array[i] = {};
+
+          allTraceData.forEach((traceData) => {
+            if (traceData[i]) {
+              Object.keys(traceData[i]).forEach((key) => {
+                if (
+                  traceData[i][key] !== null &&
+                  traceData[i][key] !== undefined
+                ) {
+                  array[i][key] = traceData[i][key];
+                }
+              });
+            }
+          });
+        }
+      }
+    }
 
     const metadataFlags = getMetadataFlags();
     const metadataArrays = processMetadataArrays(metadataFlags);
     return generateFinalCSV(array, readme, metadataFlags, metadataArrays);
   };
 
-  const handleDownloadSingleCSV = () => {
-    const csvData = generateOriginalCSV();
+  const handleDownloadSingleCSV = async () => {
+    const csvData = await generateOriginalCSV();
     exportCSVFile(csvData, title);
   };
 
