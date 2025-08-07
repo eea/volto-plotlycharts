@@ -326,17 +326,6 @@ async function processTraceData(trace, dataSources) {
       }
     });
 
-    // If no data found in standard attributes, try common plotly data attributes
-    if (dataColumns.size === 0) {
-      const commonAttributes = ['x', 'y', 'z', 'text', 'hovertext'];
-      commonAttributes.forEach((attr) => {
-        if (trace[attr] && Array.isArray(trace[attr])) {
-          dataColumns.add(attr);
-          traceDataValues[attr] = trace[attr];
-        }
-      });
-    }
-
     if (dataColumns.size > 0) {
       const maxLength = Math.max(
         ...Array.from(dataColumns).map((col) =>
@@ -355,14 +344,6 @@ async function processTraceData(trace, dataSources) {
           processedData.push(row);
         }
       }
-    }
-
-    // Add trace metadata if available
-    if (processedData.length > 0) {
-      processedData.forEach((row) => {
-        if (trace.name) row.trace_name = trace.name;
-        if (trace.type) row.trace_type = trace.type;
-      });
     }
   }
 
