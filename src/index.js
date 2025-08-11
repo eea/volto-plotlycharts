@@ -65,8 +65,8 @@ const applyConfig = (config) => {
     },
   ];
 
-  config.settings.loadables.reactChartEditorLib = loadable.lib(
-    () => import('@eeacms/react-chart-editor/lib'),
+  config.settings.loadables.reactChartEditorLib = loadable.lib(() =>
+    import('@eeacms/react-chart-editor/lib'),
   );
 
   return [installBlocks].reduce((acc, apply) => apply(acc), config);
