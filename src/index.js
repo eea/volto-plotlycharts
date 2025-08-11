@@ -1,3 +1,5 @@
+import loadable from '@loadable/component';
+
 import installBlocks from './Blocks';
 import { VisualizationView } from './Views';
 import {
@@ -62,6 +64,10 @@ const applyConfig = (config) => {
       component: PlotlyControlPanel,
     },
   ];
+
+  config.settings.loadables.reactChartEditorLib = loadable.lib(
+    () => import('@eeacms/react-chart-editor/lib'),
+  );
 
   return [installBlocks].reduce((acc, apply) => apply(acc), config);
 };
