@@ -64,6 +64,7 @@ export const generateOriginalCSV = (
 
   const metadataFlags = getMetadataFlags(core_metadata);
   const metadataArrays = processMetadataArrays(core_metadata, metadataFlags);
+
   return generateFinalCSV(
     array,
     readme,
@@ -73,7 +74,7 @@ export const generateOriginalCSV = (
   );
 };
 
-const getMetadataFlags = (core_metadata) => ({
+export const getMetadataFlags = (core_metadata) => ({
   hasDataProvenance: core_metadata.data_provenance?.length > 0,
   hasOtherOrganisation: core_metadata.other_organisations?.length > 0,
   hasTemporalCoverage: core_metadata.temporal_coverage?.length > 0,
@@ -81,7 +82,7 @@ const getMetadataFlags = (core_metadata) => ({
   hasPublisher: core_metadata.publisher?.length > 0,
 });
 
-const processMetadataArrays = (core_metadata, metadataFlags) => {
+export const processMetadataArrays = (core_metadata, metadataFlags) => {
   const arrays = {
     data_provenance_array: [],
     other_organisation_array: [],
@@ -191,6 +192,7 @@ export const generateCSVForDataset = (
 
   const metadataFlags = getMetadataFlags(core_metadata);
   const metadataArrays = processMetadataArrays(metadataFlags);
+
   return generateFinalCSV(
     array,
     readme,

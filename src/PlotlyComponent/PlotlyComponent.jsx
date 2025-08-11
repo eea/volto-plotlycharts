@@ -22,9 +22,12 @@ import { Toolbar } from '@eeacms/volto-plotlycharts/Utils';
 import Plot from './Plot';
 import Placeholder from './Placeholder';
 import {
-  // generateCSVForDataset,
-  generateOriginalCSV,
+  getMetadataFlags,
+  processMetadataArrays,
 } from '@eeacms/volto-plotlycharts/Utils/utils';
+
+// generateCSVForDataset,
+// generateOriginalCSV,
 
 function getFilterOptions(rows, rowsOrder = null) {
   if (!isArray(rows)) return [];
@@ -303,16 +306,60 @@ function UnconnectedPlotlyComponent(props) {
         />
       )}
 
-      <WithChartEditorLibEmbedData {...props} />
+      <WithChartEditorLibEmbedData
+        {...props}
+        data={toolbarData}
+        provider_metadata={provider_metadata}
+      />
     </div>
   );
 }
 
+function prepareEmbedData(dataSources, provider_metadata, core_metadata) {
+  let array = [];
+  Object.entries(dataSources).forEach(([key, items]) => {
+    items.forEach((item, index) => {
+      if (!array[index]) array[index] = {};
+      array[index][key] = item;
+    });
+  });
+
+  let readme = provider_metadata?.readme ? [provider_metadata?.readme] : [];
+  const metadataFlags = getMetadataFlags(core_metadata);
+  const metadataArrays = processMetadataArrays(core_metadata, metadataFlags);
+
+  return { array, readme, metadataArrays, metadataFlags };
+}
+
+function Table({ rows }) {
+  const stableKeys = Object.keys(rows?.[0] || {});
+
+  return (
+    <table className="embed-data-table">
+      <thead>
+        <tr>
+          {stableKeys.map((key) => (
+            <th key={key}>{key}</th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {rows.map((row, index) => (
+          <tr key={index}>
+            {stableKeys.map((key) => (
+              <td key={key}>{row[key]}</td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+}
+
 function EmbedData(props) {
-  console.log(props);
   const { provider_metadata } = props; // reactChartEditorLib,
   const { dataSources = {} } = props.data?.visualization || {};
-  const url_source = 'https://example.com';
+
   const {
     data_provenance,
     other_organisations,
@@ -329,25 +376,55 @@ function EmbedData(props) {
     geo_coverage: geo_coverage?.geolocation,
   };
 
-  const completeCSVData = generateOriginalCSV(
+  const embedData = prepareEmbedData(
     dataSources,
     provider_metadata,
-    url_source,
     core_metadata,
   );
-
-  // const csvData = generateCSVForDataset(
-  //   dataSources,
-  //   datasetData,
-  //   provider_metadata,
-  //   core_metadata,
-  //   url_source,
-  //   reactChartEditorLib,
-  // );
+  const { array, readme, metadataArrays, metadataFlags } = embedData;
 
   //eslint-disable-next-line no-console
-  console.log({ completeCSVData });
-  return null;
+  console.log(embedData);
+
+  return (
+    <div style={{ display: 'none' }}>
+      <h3>Embed Data</h3>
+      <Table rows={array} />
+
+      {metadataFlags.hasDataProvenance && (
+        <>
+          <h4>Data Provenance</h4>
+          <Table rows={metadataArrays.publisher_array} />
+        </>
+      )}
+      {metadataFlags.hasOtherOrganisation && (
+        <>
+          <h4>Other Organisations</h4>
+          <Table rows={metadataArrays.publisher_array} />
+        </>
+      )}
+      {metadataFlags.hasTemporalCoverage && (
+        <>
+          <h4>Temporal Coverage</h4>
+          <Table rows={metadataArrays.publisher_array} />
+        </>
+      )}
+      {metadataFlags.hasGeoCoverage && (
+        <>
+          <h4>Geographical Coverage</h4>
+          <Table rows={metadataArrays.publisher_array} />
+        </>
+      )}
+      {metadataFlags.hasPublisher && (
+        <>
+          <h4>Publisher</h4>
+          <Table rows={metadataArrays.publisher_array} />
+        </>
+      )}
+
+      <div>{readme}</div>
+    </div>
+  );
 }
 
 const WithChartEditorLibEmbedData = injectLazyLibs(['reactChartEditorLib'])(
