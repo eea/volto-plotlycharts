@@ -37,6 +37,7 @@ function Download(props) {
     publisher,
     geo_coverage: geo_coverage?.geolocation,
   };
+  console.log({ 'download props': props });
 
   const { dataSources } = props.data?.visualization || {};
 

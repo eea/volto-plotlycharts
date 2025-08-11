@@ -21,6 +21,10 @@ import {
 import { Toolbar } from '@eeacms/volto-plotlycharts/Utils';
 import Plot from './Plot';
 import Placeholder from './Placeholder';
+import {
+  // generateCSVForDataset,
+  generateOriginalCSV,
+} from '@eeacms/volto-plotlycharts/Utils/utils';
 
 function getFilterOptions(rows, rowsOrder = null) {
   if (!isArray(rows)) return [];
@@ -298,9 +302,57 @@ function UnconnectedPlotlyComponent(props) {
           enlargeContent={<Plot data={data} layout={layout} />}
         />
       )}
+
+      <WithChartEditorLibEmbedData {...props} />
     </div>
   );
 }
+
+function EmbedData(props) {
+  console.log(props);
+  const { provider_metadata } = props; // reactChartEditorLib,
+  const { dataSources = {} } = props.data?.visualization || {};
+  const url_source = 'https://example.com';
+  const {
+    data_provenance,
+    other_organisations,
+    temporal_coverage,
+    publisher,
+    geo_coverage,
+  } = props.data?.properties || {};
+
+  const core_metadata = {
+    data_provenance: data_provenance?.data,
+    other_organisations,
+    temporal_coverage: temporal_coverage?.temporal,
+    publisher,
+    geo_coverage: geo_coverage?.geolocation,
+  };
+
+  const completeCSVData = generateOriginalCSV(
+    dataSources,
+    provider_metadata,
+    url_source,
+    core_metadata,
+  );
+
+  // const csvData = generateCSVForDataset(
+  //   dataSources,
+  //   datasetData,
+  //   provider_metadata,
+  //   core_metadata,
+  //   url_source,
+  //   reactChartEditorLib,
+  // );
+
+  //eslint-disable-next-line no-console
+  console.log({ completeCSVData });
+  return null;
+}
+
+const WithChartEditorLibEmbedData = injectLazyLibs(['reactChartEditorLib'])(
+  EmbedData,
+);
 
 const ConnectedPlotlyComponent = compose(
   connectBlockToVisualization(function getConfig(props) {
