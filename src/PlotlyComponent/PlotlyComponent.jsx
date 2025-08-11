@@ -383,9 +383,6 @@ function EmbedData(props) {
   );
   const { array, readme, metadataArrays, metadataFlags } = embedData;
 
-  //eslint-disable-next-line no-console
-  console.log(embedData);
-
   return (
     <div style={{ display: 'none' }}>
       <h3>Embed Data</h3>
