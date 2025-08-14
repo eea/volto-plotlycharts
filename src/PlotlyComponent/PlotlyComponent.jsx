@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { mapKeys, isArray, uniqBy, sortBy, isNil } from 'lodash';
 import cx from 'classnames';
 import { FormField } from 'semantic-ui-react';
-import { constants } from '@eeacms/react-chart-editor';
+// import { constants } from '@eeacms/react-chart-editor';
 import { injectLazyLibs } from '@plone/volto/helpers/Loadable/Loadable';
 import { flattenToAppURL } from '@plone/volto/helpers';
 import { VisibilitySensor } from '@eeacms/volto-datablocks/components';
@@ -45,6 +45,8 @@ function getFilterOptions(rows, rowsOrder = null) {
 }
 
 function UnconnectedPlotlyComponent(props) {
+  const { reactChartEditor } = props;
+  const { constants } = reactChartEditor;
   const container = useRef();
   const el = useRef();
   const Select = props.reactSelect.default;
@@ -128,7 +130,7 @@ function UnconnectedPlotlyComponent(props) {
       acc.push(updatedTrace);
       return acc;
     }, []);
-  }, [value.data, dataSources, filters]);
+  }, [value.data, dataSources, filters, constants.TRACE_SRC_ATTRIBUTES]);
 
   const layout = useMemo(() => {
     return updateDataSources(
@@ -136,7 +138,7 @@ function UnconnectedPlotlyComponent(props) {
       dataSources,
       constants.LAYOUT_SRC_ATTRIBUTES,
     );
-  }, [value.layout, dataSources]);
+  }, [value.layout, dataSources, constants.LAYOUT_SRC_ATTRIBUTES]);
 
   const toolbarData = useMemo(() => {
     return {
@@ -449,7 +451,7 @@ const ConnectedPlotlyComponent = compose(
     selfProvided:
       props.data.visualization?.provider_url === props.data.properties?.['@id'],
   })),
-  injectLazyLibs(['reactSelect']),
+  injectLazyLibs(['reactSelect', 'reactChartEditor']),
 )(UnconnectedPlotlyComponent);
 
 export default function PlotlyComponent(props) {

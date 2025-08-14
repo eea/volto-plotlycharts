@@ -1,3 +1,4 @@
+import { injectLazyLibs } from '@plone/volto/helpers/Loadable/Loadable';
 import { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { sortBy, omit } from 'lodash';
@@ -8,16 +9,16 @@ import { PlusIcon } from 'plotly-icons';
 
 import PlotlyEditor from '@eeacms/volto-plotlycharts/PlotlyEditor';
 
-const PlotlyButton = loadable(() =>
-  import('@eeacms/react-chart-editor/lib/components/widgets/Button'),
+const PlotlyButton = loadable(
+  () => import('@eeacms/react-chart-editor/lib/components/widgets/Button'),
 );
-const plotlyUtils = loadable.lib(() =>
-  import('@eeacms/volto-plotlycharts/helpers/plotly'),
+const plotlyUtils = loadable.lib(
+  () => import('@eeacms/volto-plotlycharts/helpers/plotly'),
 );
 
-const renderTraceIcon = __CLIENT__
-  ? require('@eeacms/react-chart-editor').renderTraceIcon
-  : () => null;
+// const renderTraceIcon = __CLIENT__
+//   ? require('@eeacms/react-chart-editor').renderTraceIcon
+//   : () => null;
 
 const EditTemplate = (props) => {
   const [fadeInOut, setFadeInOut] = useState(true);
@@ -55,11 +56,19 @@ const EditTemplate = (props) => {
   );
 };
 
-const Template = ({ type, label, onEdit, onDelete, onClone }) => {
+const Template = ({
+  type,
+  label,
+  onEdit,
+  onDelete,
+  onClone,
+  reactChartEditor,
+}) => {
+  const { renderTraceIcon } = reactChartEditor;
   const [open, setOpen] = useState(false);
   const ComplexIcon = useMemo(
     () => renderTraceIcon(type.icon || type.value, 'TraceType'),
-    [type],
+    [type, renderTraceIcon],
   );
 
   return (
@@ -266,4 +275,4 @@ TemplatesWidget.contextTypes = {
   formData: PropTypes.object,
 };
 
-export default TemplatesWidget;
+export default injectLazyLibs(['reactChartEditor'])(TemplatesWidget);

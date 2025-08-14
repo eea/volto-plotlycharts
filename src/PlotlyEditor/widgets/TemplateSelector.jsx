@@ -1,9 +1,11 @@
 import PropTypes from 'prop-types';
 import { omit, sortBy } from 'lodash';
-import { renderTraceIcon } from '@eeacms/react-chart-editor';
+import { injectLazyLibs } from '@plone/volto/helpers/Loadable/Loadable';
+// import { renderTraceIcon } from '@eeacms/react-chart-editor';
 
 function Template(props) {
   const { type, label, onSelect } = props;
+  const { renderTraceIcon } = props.reactChartEditorLib;
 
   const ComplexIcon = renderTraceIcon(type.icon || type.value, 'TraceType');
 
@@ -99,5 +101,8 @@ function TemplateSelector(props) {
 TemplateSelector.contextTypes = {
   ctx: PropTypes.object,
 };
+const InjectedTemplateSelector = injectLazyLibs(['react-chart-editor'])(
+  TemplateSelector,
+);
 
-export default TemplateSelector;
+export default InjectedTemplateSelector;
