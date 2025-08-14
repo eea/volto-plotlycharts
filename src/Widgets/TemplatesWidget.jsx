@@ -9,11 +9,11 @@ import { PlusIcon } from 'plotly-icons';
 
 import PlotlyEditor from '@eeacms/volto-plotlycharts/PlotlyEditor';
 
-const PlotlyButton = loadable(
-  () => import('@eeacms/react-chart-editor/lib/components/widgets/Button'),
+const PlotlyButton = loadable(() =>
+  import('@eeacms/react-chart-editor/lib/components/widgets/Button'),
 );
-const plotlyUtils = loadable.lib(
-  () => import('@eeacms/volto-plotlycharts/helpers/plotly'),
+const plotlyUtils = loadable.lib(() =>
+  import('@eeacms/volto-plotlycharts/helpers/plotly'),
 );
 
 // const renderTraceIcon = __CLIENT__
