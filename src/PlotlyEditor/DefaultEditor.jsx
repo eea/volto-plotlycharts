@@ -70,8 +70,6 @@ class DefaultEditor extends PlotlyDefaultEditor {
   }
 
   render() {
-    console.log('DefaultEditor render');
-    console.log(GraphThemePanel);
     const _ = this.context.localize;
     const {
       actions,

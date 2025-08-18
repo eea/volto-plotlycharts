@@ -303,7 +303,7 @@ const UnconnectedPlotlyEditor = forwardRef((props, ref) => {
 });
 
 const ConnectedPlotlyEditor = compose(
-  injectLazyLibs(['reactChartEditor']),
+  injectLazyLibs(['reactChartEditor', 'plotlyLib']),
   withValue,
   connectToProviderData((props) => ({
     provider_url: props.value.provider_url,
