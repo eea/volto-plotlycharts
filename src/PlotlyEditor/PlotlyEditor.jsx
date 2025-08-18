@@ -47,7 +47,7 @@ const withValue = (WrappedComponent) => {
 };
 
 const UnconnectedPlotlyEditor = forwardRef((props, ref) => {
-  const { DefaultPlotlyEditor, constants } = props.reactChartEditor;
+  const { default: DefaultPlotlyEditor, constants } = props.reactChartEditor;
   const plotly = props.plotlyLib?.default || props.plotlyLib;
   const { TRACE_SRC_ATTRIBUTES, LAYOUT_SRC_ATTRIBUTES, EDITOR_ACTIONS } =
     constants;
