@@ -3,10 +3,6 @@ import PlotlyComponent from '@eeacms/volto-plotlycharts/PlotlyComponent';
 
 const View = (props) => {
   const { data = {} } = props;
-  console.log('View props:', props);
-  if (__SERVER__) {
-    console.log('searver');
-  }
 
   return (
     <div className="embed-visualization view">
