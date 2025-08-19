@@ -25,7 +25,7 @@
     "@eeacms/volto-datablocks"
   ],
   "dependencies": {
-    "@eeacms/react-chart-editor": "0.47.4",
+    "@eeacms/react-chart-editor": "0.47.5",
     "@eeacms/volto-datablocks": "*",
     "@eeacms/volto-embed": "*",
     "@eeacms/volto-matomo": "*",
