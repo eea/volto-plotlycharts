@@ -272,18 +272,11 @@ function UnconnectedPlotlyComponent(props) {
       {!loadingProviderData && (
         <div
           className="visualization"
-          style={
-            initialized
-              ? {
-                  '--svg-container-height': `${
-                    height ||
-                    el.current?._fullLayout?.height ||
-                    layout.height ||
-                    450
-                  }px`,
-                }
-              : {}
-          }
+          style={{
+            '--svg-container-height': `${
+              height || layout._height || layout.height || 450
+            }px`,
+          }}
         >
           <Plot
             ref={el}

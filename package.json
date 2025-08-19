@@ -1,6 +1,6 @@
 {
   "name": "@eeacms/volto-plotlycharts",
-  "version": "13.0.2",
+  "version": "13.0.3",
   "description": "Plotly Charts and Editor integration for Volto",
   "main": "src/index.js",
   "author": "European Environment Agency: IDM2 A-Team",
@@ -25,7 +25,7 @@
     "@eeacms/volto-datablocks"
   ],
   "dependencies": {
-    "@eeacms/react-chart-editor": "0.47.4",
+    "@eeacms/react-chart-editor": "0.47.5",
     "@eeacms/volto-datablocks": "*",
     "@eeacms/volto-embed": "*",
     "@eeacms/volto-matomo": "*",
