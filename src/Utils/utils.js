@@ -191,7 +191,7 @@ export const generateCSVForDataset = (
   }
 
   const metadataFlags = getMetadataFlags(core_metadata);
-  const metadataArrays = processMetadataArrays(metadataFlags);
+  const metadataArrays = processMetadataArrays(core_metadata, metadataFlags);
 
   return generateFinalCSV(
     array,
