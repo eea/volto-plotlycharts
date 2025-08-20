@@ -385,7 +385,7 @@ function EmbedData(props) {
   const { array, readme, metadataArrays, metadataFlags } = embedData;
 
   return (
-    <div style={{}}>
+    <div style={{ display: 'none' }}>
       <h3>Embed Data</h3>
       <Table rows={array} />
 

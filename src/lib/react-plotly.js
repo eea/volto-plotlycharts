@@ -288,7 +288,7 @@ PlotlyComponent.propTypes = {
 };
 
 eventNames.forEach((eventName) => {
-  PlotlyComponent.propTypes['on' + eventName] = PropTypes.func;
+  PlotlyComponent.propTypes['on' + eventName] = PropTypes.func; // eslint-disable-line
 });
 
 PlotlyComponent.defaultProps = {
