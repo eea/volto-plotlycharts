@@ -1,13 +1,6 @@
 function Placeholder() {
   return (
-    <div
-      className="plotly-placeholder"
-      style={{
-        display: 'flex',
-        justifyContent: 'center',
-        padding: '1rem 0',
-      }}
-    >
+    <div className="plotly-placeholder">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 240 240"

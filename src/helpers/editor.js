@@ -5,7 +5,7 @@ import { Toast } from '@plone/volto/components';
 import loadable from '@loadable/component';
 
 const LoadableJsonEditor = loadable.lib(() =>
-  import('jsoneditor/dist/jsoneditor'),
+  import('jsoneditor/dist/jsoneditor.min'),
 );
 
 const jsoneditor = __CLIENT__ && LoadableJsonEditor;

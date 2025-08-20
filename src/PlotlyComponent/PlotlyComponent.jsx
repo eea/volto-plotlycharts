@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { mapKeys, isArray, uniqBy, sortBy, isNil } from 'lodash';
 import cx from 'classnames';
 import { FormField } from 'semantic-ui-react';
-import { constants } from '@eeacms/react-chart-editor';
+// import { constants } from '@eeacms/react-chart-editor';
 import { injectLazyLibs } from '@plone/volto/helpers/Loadable/Loadable';
 import { flattenToAppURL } from '@plone/volto/helpers';
 import { VisibilitySensor } from '@eeacms/volto-datablocks/components';
@@ -21,6 +21,13 @@ import {
 import { Toolbar } from '@eeacms/volto-plotlycharts/Utils';
 import Plot from './Plot';
 import Placeholder from './Placeholder';
+import {
+  getMetadataFlags,
+  processMetadataArrays,
+} from '@eeacms/volto-plotlycharts/Utils/utils';
+
+// generateCSVForDataset,
+// generateOriginalCSV,
 
 function getFilterOptions(rows, rowsOrder = null) {
   if (!isArray(rows)) return [];
@@ -38,6 +45,8 @@ function getFilterOptions(rows, rowsOrder = null) {
 }
 
 function UnconnectedPlotlyComponent(props) {
+  const { reactChartEditor } = props;
+  const { constants } = reactChartEditor;
   const container = useRef();
   const el = useRef();
   const Select = props.reactSelect.default;
@@ -121,7 +130,7 @@ function UnconnectedPlotlyComponent(props) {
       acc.push(updatedTrace);
       return acc;
     }, []);
-  }, [value.data, dataSources, filters]);
+  }, [value.data, dataSources, filters, constants.TRACE_SRC_ATTRIBUTES]);
 
   const layout = useMemo(() => {
     return updateDataSources(
@@ -129,7 +138,7 @@ function UnconnectedPlotlyComponent(props) {
       dataSources,
       constants.LAYOUT_SRC_ATTRIBUTES,
     );
-  }, [value.layout, dataSources]);
+  }, [value.layout, dataSources, constants.LAYOUT_SRC_ATTRIBUTES]);
 
   const toolbarData = useMemo(() => {
     return {
@@ -228,9 +237,6 @@ function UnconnectedPlotlyComponent(props) {
         mobile,
       })}
     >
-      {(loadingVisualization || loadingProviderData || !initialized) && (
-        <Placeholder />
-      )}
       {initialized && filters.length > 0 && (
         <div className="visualization-filters">
           {filters.map((filter, index) => {
@@ -260,23 +266,32 @@ function UnconnectedPlotlyComponent(props) {
           })}
         </div>
       )}
-      {!loadingProviderData && (
-        <div
-          className="visualization"
-          style={{
-            '--svg-container-height': `${
-              height || layout._height || layout.height || 450
-            }px`,
-          }}
-        >
-          <Plot
-            ref={el}
-            data={data}
-            layout={layout}
-            onInitialized={onInitialized}
-          />
-        </div>
-      )}
+      <div
+        className={cx('visualization-wrapper', {
+          loading: loadingVisualization || loadingProviderData || !initialized,
+        })}
+      >
+        {(loadingVisualization || loadingProviderData || !initialized) && (
+          <Placeholder />
+        )}
+        {!loadingProviderData && (
+          <div
+            className="visualization"
+            style={{
+              '--svg-container-height': `${
+                height || layout._height || layout.height || 450
+              }px`,
+            }}
+          >
+            <Plot
+              ref={el}
+              data={data}
+              layout={layout}
+              onInitialized={onInitialized}
+            />
+          </div>
+        )}
+      </div>
       {initialized && (
         <Toolbar
           el={el}
@@ -291,9 +306,128 @@ function UnconnectedPlotlyComponent(props) {
           enlargeContent={<Plot data={data} layout={layout} />}
         />
       )}
+
+      <WithChartEditorLibEmbedData
+        {...props}
+        data={toolbarData}
+        provider_metadata={provider_metadata}
+      />
     </div>
   );
 }
+
+function prepareEmbedData(dataSources, provider_metadata, core_metadata) {
+  let array = [];
+  Object.entries(dataSources).forEach(([key, items]) => {
+    items.forEach((item, index) => {
+      if (!array[index]) array[index] = {};
+      array[index][key] = item;
+    });
+  });
+
+  let readme = provider_metadata?.readme ? [provider_metadata?.readme] : [];
+  const metadataFlags = getMetadataFlags(core_metadata);
+  const metadataArrays = processMetadataArrays(core_metadata, metadataFlags);
+
+  return { array, readme, metadataArrays, metadataFlags };
+}
+
+function Table({ rows }) {
+  const stableKeys = Object.keys(rows?.[0] || {});
+
+  return (
+    <table className="embed-data-table">
+      <thead>
+        <tr>
+          {stableKeys.map((key) => (
+            <th key={key}>{key}</th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {rows.map((row, index) => (
+          <tr key={index}>
+            {stableKeys.map((key) => (
+              <td key={key}>{row[key]}</td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+}
+
+function EmbedData(props) {
+  const { provider_metadata } = props; // reactChartEditorLib,
+  const { dataSources = {} } = props.data?.visualization || {};
+
+  const {
+    data_provenance,
+    other_organisations,
+    temporal_coverage,
+    publisher,
+    geo_coverage,
+  } = props.data?.properties || {};
+
+  const core_metadata = {
+    data_provenance: data_provenance?.data,
+    other_organisations,
+    temporal_coverage: temporal_coverage?.temporal,
+    publisher,
+    geo_coverage: geo_coverage?.geolocation,
+  };
+
+  const embedData = prepareEmbedData(
+    dataSources,
+    provider_metadata,
+    core_metadata,
+  );
+  const { array, readme, metadataArrays, metadataFlags } = embedData;
+
+  return (
+    <div style={{ display: 'none' }}>
+      <h3>Embed Data</h3>
+      <Table rows={array} />
+
+      {metadataFlags.hasDataProvenance && (
+        <>
+          <h4>Data Provenance</h4>
+          <Table rows={metadataArrays.data_provenance_array} />
+        </>
+      )}
+      {metadataFlags.hasOtherOrganisation && (
+        <>
+          <h4>Other Organisations</h4>
+          <Table rows={metadataArrays.other_organisation_array} />
+        </>
+      )}
+      {metadataFlags.hasTemporalCoverage && (
+        <>
+          <h4>Temporal Coverage</h4>
+          <Table rows={metadataArrays.temporal_coverage_array} />
+        </>
+      )}
+      {metadataFlags.hasGeoCoverage && (
+        <>
+          <h4>Geographical Coverage</h4>
+          <Table rows={metadataArrays.geo_coverage_array} />
+        </>
+      )}
+      {metadataFlags.hasPublisher && (
+        <>
+          <h4>Publisher</h4>
+          <Table rows={metadataArrays.publisher_array} />
+        </>
+      )}
+
+      <div>{readme}</div>
+    </div>
+  );
+}
+
+const WithChartEditorLibEmbedData = injectLazyLibs(['reactChartEditorLib'])(
+  EmbedData,
+);
 
 const ConnectedPlotlyComponent = compose(
   connectBlockToVisualization(function getConfig(props) {
@@ -316,12 +450,20 @@ const ConnectedPlotlyComponent = compose(
     selfProvided:
       props.data.visualization?.provider_url === props.data.properties?.['@id'],
   })),
-  injectLazyLibs(['reactSelect']),
+  injectLazyLibs(['reactSelect', 'reactChartEditor']),
 )(UnconnectedPlotlyComponent);
 
 export default function PlotlyComponent(props) {
   return (
-    <VisibilitySensor Placeholder={Placeholder}>
+    <VisibilitySensor
+      Placeholder={() => {
+        return (
+          <div className="visualization-wrapper loading">
+            <Placeholder />
+          </div>
+        );
+      }}
+    >
       <ConnectedPlotlyComponent {...props} />
     </VisibilitySensor>
   );
