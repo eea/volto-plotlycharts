@@ -2,7 +2,6 @@ import { injectLazyLibs } from '@plone/volto/helpers/Loadable/Loadable';
 import React from 'react';
 import cx from 'classnames';
 import { cloneDeep } from 'lodash';
-import loadable from '@loadable/component';
 import { useLocation } from 'react-router-dom';
 import { Popup } from 'semantic-ui-react';
 import { toPublicURL } from '@plone/volto/helpers';
