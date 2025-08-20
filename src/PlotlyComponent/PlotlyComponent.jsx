@@ -392,25 +392,25 @@ function EmbedData(props) {
       {metadataFlags.hasDataProvenance && (
         <>
           <h4>Data Provenance</h4>
-          <Table rows={metadataArrays.publisher_array} />
+          <Table rows={metadataArrays.data_provenance_array} />
         </>
       )}
       {metadataFlags.hasOtherOrganisation && (
         <>
           <h4>Other Organisations</h4>
-          <Table rows={metadataArrays.publisher_array} />
+          <Table rows={metadataArrays.other_organisation_array} />
         </>
       )}
       {metadataFlags.hasTemporalCoverage && (
         <>
           <h4>Temporal Coverage</h4>
-          <Table rows={metadataArrays.publisher_array} />
+          <Table rows={metadataArrays.temporal_coverage_array} />
         </>
       )}
       {metadataFlags.hasGeoCoverage && (
         <>
           <h4>Geographical Coverage</h4>
-          <Table rows={metadataArrays.publisher_array} />
+          <Table rows={metadataArrays.geo_coverage_array} />
         </>
       )}
       {metadataFlags.hasPublisher && (
