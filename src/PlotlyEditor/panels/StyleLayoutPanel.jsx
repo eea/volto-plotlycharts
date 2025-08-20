@@ -18,7 +18,10 @@ import {
   Radio,
   Info,
 } from '@eeacms/react-chart-editor';
-import { HoverColor } from '@eeacms/react-chart-editor/lib/components/fields/derived';
+import {
+  HoverColor,
+  NumericHeight,
+} from '@eeacms/react-chart-editor/lib/components/fields/derived';
 import DataSelector from '@eeacms/react-chart-editor/lib/components/fields/DataSelector';
 
 import { TextInput } from '../fields';
@@ -253,6 +256,7 @@ const StyleLayoutPanel = (props, { localize: _ }) => (
         <Numeric label={_('Fixed Width')} attr="width" units="px" />
         <Numeric label={_('Fixed height')} attr="height" units="px" />
       </SizeVisibilitySelect>
+      <NumericHeight label={_('Fixed height')} attr="_height" units="px" />
       <Numeric label={_('Top')} attr="margin.t" units="px" />
       <Numeric label={_('Bottom')} attr="margin.b" units="px" />
       <Numeric label={_('Left')} attr="margin.l" units="px" />

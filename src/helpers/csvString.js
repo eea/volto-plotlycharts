@@ -233,15 +233,13 @@ function groupDataByDataset(chartData) {
   return datasets;
 }
 
-async function processTraceData(trace, dataSources) {
+function processTraceData(trace, dataSources, reactChartEditorLib) {
   let processedData = [];
 
   // Collect all columns used by the trace
   const usedColumns = new Set();
 
-  const { getAttrsPath, constants, getSrcAttr } = await import(
-    '@eeacms/react-chart-editor/lib'
-  );
+  const { getAttrsPath, constants, getSrcAttr } = reactChartEditorLib;
 
   // Get all data attributes from constants.TRACE_SRC_ATTRIBUTES
   const traceDataAttrs = getAttrsPath(trace, constants.TRACE_SRC_ATTRIBUTES);

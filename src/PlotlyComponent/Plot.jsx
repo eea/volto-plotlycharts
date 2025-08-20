@@ -2,7 +2,9 @@ import React, { forwardRef } from 'react';
 import loadable from '@loadable/component';
 import { useHistory } from 'react-router-dom';
 
-const PlotlyComponent = loadable(() => import('react-plotly.js'));
+const PlotlyComponent = loadable(() =>
+  import('@eeacms/volto-plotlycharts/lib/react-plotly'),
+);
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 

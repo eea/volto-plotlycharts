@@ -9,8 +9,7 @@ import React, {
 import { compose } from 'redux';
 import { useLocation } from 'react-router-dom';
 import { cloneDeep, isEqual, isNil, sortBy, debounce } from 'lodash';
-import DefaultPlotlyEditor, { constants } from '@eeacms/react-chart-editor';
-import plotly from 'plotly.js/dist/plotly-with-meta';
+import { injectLazyLibs } from '@plone/volto/helpers/Loadable/Loadable';
 
 import { Api } from '@plone/volto/helpers';
 
@@ -46,6 +45,11 @@ const withValue = (WrappedComponent) => {
 };
 
 const UnconnectedPlotlyEditor = forwardRef((props, ref) => {
+  const { default: DefaultPlotlyEditor, constants } = props.reactChartEditor;
+  const plotly = props.plotlyLib?.default || props.plotlyLib;
+  const { TRACE_SRC_ATTRIBUTES, LAYOUT_SRC_ATTRIBUTES, EDITOR_ACTIONS } =
+    constants;
+
   const update = useRef({});
   const flags = useRef({});
   const editor = useRef();
@@ -87,21 +91,21 @@ const UnconnectedPlotlyEditor = forwardRef((props, ref) => {
       const updatedTrace = updateDataSources(
         updateTrace(trace),
         dataSources,
-        constants.TRACE_SRC_ATTRIBUTES,
+        TRACE_SRC_ATTRIBUTES,
       );
 
       acc.push(updatedTrace);
       return acc;
     }, []);
-  }, [value.data, dataSources]);
+  }, [value.data, dataSources, TRACE_SRC_ATTRIBUTES]);
 
   const layout = useMemo(() => {
     return updateDataSources(
       value.layout || {},
       dataSources,
-      constants.LAYOUT_SRC_ATTRIBUTES,
+      LAYOUT_SRC_ATTRIBUTES,
     );
-  }, [value.layout, dataSources]);
+  }, [value.layout, dataSources, LAYOUT_SRC_ATTRIBUTES]);
 
   const ctx = useMemo(
     () => ({
@@ -192,7 +196,7 @@ const UnconnectedPlotlyEditor = forwardRef((props, ref) => {
 
     function updateTemplate(template) {
       editor.current.onUpdate({
-        type: constants.EDITOR_ACTIONS.UPDATE_LAYOUT,
+        type: EDITOR_ACTIONS.UPDATE_LAYOUT,
         payload: {
           update: {
             template,
@@ -213,7 +217,7 @@ const UnconnectedPlotlyEditor = forwardRef((props, ref) => {
         updateTemplate(theme);
       }
     }
-  }, [initialized, themes, layout.template]);
+  }, [initialized, themes, layout.template, EDITOR_ACTIONS.UPDATE_LAYOUT]);
 
   // Clean up
 
@@ -297,6 +301,7 @@ const UnconnectedPlotlyEditor = forwardRef((props, ref) => {
 });
 
 const ConnectedPlotlyEditor = compose(
+  injectLazyLibs(['reactChartEditor', 'plotlyLib']),
   withValue,
   connectToProviderData((props) => ({
     provider_url: props.value.provider_url,

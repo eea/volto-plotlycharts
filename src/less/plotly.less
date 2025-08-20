@@ -8,10 +8,29 @@
   overflow-x: auto;
 }
 
+.visualization-wrapper {
+  position: relative;
+
+  &.loading {
+    height: 80px;
+  }
+
+  .plotly-placeholder {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: flex;
+    justify-content: center;
+    padding: '1rem 0';
+    transform: translate(-50%, -50%);
+  }
+}
+
 .plotly-component {
   margin-bottom: 1rem;
 
-  .svg-container {
+  .visualization,
+  .js-plotly-plot {
     height: var(--svg-container-height) !important;
   }
 

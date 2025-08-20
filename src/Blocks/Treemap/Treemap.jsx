@@ -9,11 +9,8 @@ import config from '@plone/volto/registry';
 import { connectToProviderData } from '@eeacms/volto-datablocks/hocs';
 import { VisibilitySensor } from '@eeacms/volto-datablocks/components';
 
-const LoadablePlotly = loadable(() =>
-  import(
-    /* webpackChunkName: "bise-react-plotly" */
-    'react-plotly.js'
-  ),
+const PlotlyComponent = loadable(() =>
+  import('@eeacms/volto-plotlycharts/lib/react-plotly'),
 );
 
 /*
@@ -55,7 +52,7 @@ function Treemap(props) {
     <div className="treemap-chart">
       <VisibilitySensor>
         <div className="visualization">
-          <LoadablePlotly
+          <PlotlyComponent
             data={traces}
             layout={layout}
             frames={[]}
