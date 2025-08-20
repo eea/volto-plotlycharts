@@ -72,5 +72,5 @@ export function onPasteEditor(editor) {
   try {
     editor.current.repair();
     editor.current.format();
-  } catch { }
+  } catch {}
 }
