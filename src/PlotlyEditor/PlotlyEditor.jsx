@@ -9,8 +9,6 @@ import React, {
 import { compose } from 'redux';
 import { useLocation } from 'react-router-dom';
 import { cloneDeep, isEqual, isNil, sortBy, debounce } from 'lodash';
-// import DefaultPlotlyEditor, { constants } from '@eeacms/react-chart-editor';
-// import plotly from 'plotly.js/dist/plotly-with-meta';
 import { injectLazyLibs } from '@plone/volto/helpers/Loadable/Loadable';
 
 import { Api } from '@plone/volto/helpers';

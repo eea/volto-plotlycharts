@@ -72,7 +72,6 @@ const applyConfig = (config) => {
       import('@eeacms/react-chart-editor/lib'),
     ),
     plotlyLib: loadable.lib(() => import('plotly.js/dist/plotly-with-meta')),
-    Plotly: loadable.lib(() => import('plotly.js/dist/plotly.min')),
   };
 
   return [installBlocks].reduce((acc, apply) => apply(acc), config);

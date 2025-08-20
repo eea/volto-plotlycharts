@@ -13,8 +13,6 @@ import {
 } from '@eeacms/volto-plotlycharts/helpers/csvString';
 import { generateOriginalCSV, generateCSVForDataset } from './utils';
 
-const Plotly = loadable.lib(() => import('plotly.js/dist/plotly.min'));
-
 function Download(props) {
   const location = useLocation();
   const { chartData, filters, provider_metadata, reactChartEditorLib } = props;
@@ -104,7 +102,7 @@ function Download(props) {
   };
 
   const handleDownloadImage = async (type) => {
-    const plotly = (await Plotly.load()).default;
+    const plotly = props.plotlyLib?.default || props.plotlyLib;
 
     const container = document.createElement('div');
     container.id = '__plotly_download_container__';
@@ -306,5 +304,7 @@ function Download(props) {
   );
 }
 
-const WithLibsDownload = injectLazyLibs(['reactChartEditorLib'])(Download);
+const WithLibsDownload = injectLazyLibs(['reactChartEditorLib', 'plotlyLib'])(
+  Download,
+);
 export default WithLibsDownload;

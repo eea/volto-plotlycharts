@@ -237,9 +237,6 @@ function UnconnectedPlotlyComponent(props) {
         mobile,
       })}
     >
-      {(loadingVisualization || loadingProviderData || !initialized) && (
-        <Placeholder />
-      )}
       {initialized && filters.length > 0 && (
         <div className="visualization-filters">
           {filters.map((filter, index) => {
@@ -269,23 +266,32 @@ function UnconnectedPlotlyComponent(props) {
           })}
         </div>
       )}
-      {!loadingProviderData && (
-        <div
-          className="visualization"
-          style={{
-            '--svg-container-height': `${
-              height || layout._height || layout.height || 450
-            }px`,
-          }}
-        >
-          <Plot
-            ref={el}
-            data={data}
-            layout={layout}
-            onInitialized={onInitialized}
-          />
-        </div>
-      )}
+      <div
+        className={cx('visualization-wrapper', {
+          loading: loadingVisualization || loadingProviderData || !initialized,
+        })}
+      >
+        {(loadingVisualization || loadingProviderData || !initialized) && (
+          <Placeholder />
+        )}
+        {!loadingProviderData && (
+          <div
+            className="visualization"
+            style={{
+              '--svg-container-height': `${
+                height || layout._height || layout.height || 450
+              }px`,
+            }}
+          >
+            <Plot
+              ref={el}
+              data={data}
+              layout={layout}
+              onInitialized={onInitialized}
+            />
+          </div>
+        )}
+      </div>
       {initialized && (
         <Toolbar
           el={el}
@@ -449,7 +455,15 @@ const ConnectedPlotlyComponent = compose(
 
 export default function PlotlyComponent(props) {
   return (
-    <VisibilitySensor Placeholder={Placeholder}>
+    <VisibilitySensor
+      Placeholder={() => {
+        return (
+          <div className="visualization-wrapper loading">
+            <Placeholder />
+          </div>
+        );
+      }}
+    >
       <ConnectedPlotlyComponent {...props} />
     </VisibilitySensor>
   );

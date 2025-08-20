@@ -25,7 +25,7 @@
     "@eeacms/volto-datablocks"
   ],
   "dependencies": {
-    "@eeacms/react-chart-editor": "0.47.5",
+    "@eeacms/react-chart-editor": "0.47.6",
     "@eeacms/volto-datablocks": "*",
     "@eeacms/volto-embed": "*",
     "@eeacms/volto-matomo": "*",
@@ -34,7 +34,6 @@
     "jsoneditor": "10.2.0",
     "jszip": "3.10.1",
     "plotly.js": "^2.35.3",
-    "react-plotly.js": "2.6.0",
     "remixicon": "4.6.0"
   },
   "devDependencies": {
