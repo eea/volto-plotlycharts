@@ -1,10 +1,6 @@
-import React, { forwardRef } from 'react';
-import loadable from '@loadable/component';
+import React, { forwardRef, useMemo } from 'react';
+import { injectLazyLibs } from '@plone/volto/helpers/Loadable/Loadable';
 import { useHistory } from 'react-router-dom';
-
-const PlotlyComponent = loadable(() =>
-  import('@eeacms/volto-plotlycharts/lib/react-plotly'),
-);
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -14,8 +10,16 @@ const animationsMS = {
   tree: 1000,
 };
 
-const Plot = forwardRef(({ data, layout, onInitialized }, ref) => {
+const Plot = forwardRef((props, ref) => {
   const history = useHistory();
+  const { data, layout, onInitialized } = props;
+  const plotly = props.plotlyMinLib?.default || props.plotlyMinLib;
+  const plotlyComponentFactory =
+    props.plotlyComponentFactory?.default || props.plotlyComponentFactory;
+
+  const PlotlyComponent = useMemo(() => {
+    return plotlyComponentFactory(plotly);
+  }, [plotlyComponentFactory, plotly]);
 
   const handleChartClick = async (trace, layout) => {
     const { customLink, clickmode, meta = [] } = layout;
@@ -113,4 +117,4 @@ const Plot = forwardRef(({ data, layout, onInitialized }, ref) => {
   );
 });
 
-export default Plot;
+export default injectLazyLibs(['plotlyMinLib', 'plotlyComponentFactory'])(Plot);
