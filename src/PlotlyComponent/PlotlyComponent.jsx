@@ -455,15 +455,7 @@ const ConnectedPlotlyComponent = compose(
 
 export default function PlotlyComponent(props) {
   return (
-    <VisibilitySensor
-      Placeholder={() => {
-        return (
-          <div className="visualization-wrapper loading">
-            <Placeholder />
-          </div>
-        );
-      }}
-    >
+    <VisibilitySensor>
       <ConnectedPlotlyComponent {...props} />
     </VisibilitySensor>
   );

@@ -2,16 +2,12 @@
  * The most basic connected block chart
  */
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import { compose } from 'redux';
-import loadable from '@loadable/component';
+import { injectLazyLibs } from '@plone/volto/helpers/Loadable/Loadable';
 import config from '@plone/volto/registry';
 import { connectToProviderData } from '@eeacms/volto-datablocks/hocs';
 import { VisibilitySensor } from '@eeacms/volto-datablocks/components';
-
-const PlotlyComponent = loadable(() =>
-  import('@eeacms/volto-plotlycharts/lib/react-plotly'),
-);
 
 /*
  * @param { object } data The chart data, layout,  extra config, etc.
@@ -20,6 +16,14 @@ const PlotlyComponent = loadable(() =>
  *
  */
 function Treemap(props) {
+  const plotly = props.plotlyMinLib?.default || props.plotlyMinLib;
+  const plotlyComponentFactory =
+    props.plotlyComponentFactory?.default || props.plotlyComponentFactory;
+
+  const PlotlyComponent = useMemo(() => {
+    return plotlyComponentFactory(plotly);
+  }, [plotlyComponentFactory, plotly]);
+
   const layout = {
     autosize: true,
     dragmode: false,
@@ -75,6 +79,7 @@ function Treemap(props) {
 }
 
 export default compose(
+  injectLazyLibs(['plotlyMinLib', 'plotlyComponentFactory']),
   connectToProviderData((props) => ({
     provider_url: props.data.url || props.data.provider_url,
   })),
