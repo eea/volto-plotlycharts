@@ -5,7 +5,7 @@ import { injectLazyLibs } from '@plone/volto/helpers/Loadable/Loadable';
 
 function Template(props) {
   const { type, label, onSelect } = props;
-  const { renderTraceIcon } = props.reactChartEditorLib;
+  const { renderTraceIcon } = props.reactChartEditor;
 
   const ComplexIcon = renderTraceIcon(type.icon || type.value, 'TraceType');
 
@@ -101,7 +101,7 @@ function TemplateSelector(props) {
 TemplateSelector.contextTypes = {
   ctx: PropTypes.object,
 };
-const InjectedTemplateSelector = injectLazyLibs(['react-chart-editor'])(
+const InjectedTemplateSelector = injectLazyLibs(['reactChartEditor'])(
   TemplateSelector,
 );
 
