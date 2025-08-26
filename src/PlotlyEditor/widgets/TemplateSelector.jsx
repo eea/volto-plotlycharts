@@ -101,7 +101,7 @@ function TemplateSelector(props) {
 TemplateSelector.contextTypes = {
   ctx: PropTypes.object,
 };
-const InjectedTemplateSelector = injectLazyLibs(['react-chart-editor'])(
+const InjectedTemplateSelector = injectLazyLibs(['reactChartEditor'])(
   TemplateSelector,
 );
 
