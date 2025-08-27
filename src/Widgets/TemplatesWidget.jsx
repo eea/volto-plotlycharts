@@ -16,10 +16,6 @@ const plotlyUtils = loadable.lib(() =>
   import('@eeacms/volto-plotlycharts/helpers/plotly'),
 );
 
-// const renderTraceIcon = __CLIENT__
-//   ? require('@eeacms/react-chart-editor').renderTraceIcon
-//   : () => null;
-
 const EditTemplate = (props) => {
   const [fadeInOut, setFadeInOut] = useState(true);
 
@@ -62,9 +58,9 @@ const Template = ({
   onEdit,
   onDelete,
   onClone,
-  reactChartEditor,
+  reactChartEditorLib,
 }) => {
-  const { renderTraceIcon } = reactChartEditor;
+  const { renderTraceIcon } = reactChartEditorLib;
   const [open, setOpen] = useState(false);
   const ComplexIcon = useMemo(
     () => renderTraceIcon(type.icon || type.value, 'TraceType'),
@@ -134,7 +130,7 @@ const Template = ({
 };
 
 const TemplatesWidget = (props, { formData }) => {
-  const { id, value, onChange } = props;
+  const { id, value, onChange, reactChartEditorLib } = props;
   const [selectedTemplate, setSelectedTemplate] = useState(-1);
 
   const groupedTemplates = useMemo(() => {
@@ -209,6 +205,7 @@ const TemplatesWidget = (props, { formData }) => {
                           key={`${type}-${template.label}-${template.index}`}
                           type={type}
                           visualization={template.visualization}
+                          reactChartEditorLib={reactChartEditorLib}
                           label={
                             template.label || `Template ${template.index + 1}`
                           }
@@ -275,4 +272,4 @@ TemplatesWidget.contextTypes = {
   formData: PropTypes.object,
 };
 
-export default injectLazyLibs(['reactChartEditor'])(TemplatesWidget);
+export default injectLazyLibs(['reactChartEditorLib'])(TemplatesWidget);
