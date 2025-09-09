@@ -5,6 +5,7 @@ import PlotlyFold from '@eeacms/react-chart-editor/lib/components/containers/Plo
 import { UnconnectedDropdown } from '@eeacms/react-chart-editor/lib/components/fields/Dropdown';
 import Field from '@eeacms/react-chart-editor/lib/components/fields/Field';
 import TextInput from '@eeacms/react-chart-editor/lib/components/widgets/TextInput';
+import CheckboxGroup from '@eeacms/react-chart-editor/lib/components/widgets/CheckboxGroup';
 
 const GraphTemplatePanel = (props, context) => {
   const { localize: _, traceTypesConfig } = context;
@@ -43,6 +44,19 @@ const GraphTemplatePanel = (props, context) => {
               onChangeValue({
                 ...value,
                 label,
+              });
+            }}
+          />
+        </Field>
+        <Field>
+          <CheckboxGroup
+            options={[
+              { label: 'Hidden', value: value.hidden, checked: value.hidden },
+            ]}
+            onChange={(newOptions) => {
+              onChangeValue({
+                ...value,
+                hidden: newOptions[0].checked,
               });
             }}
           />

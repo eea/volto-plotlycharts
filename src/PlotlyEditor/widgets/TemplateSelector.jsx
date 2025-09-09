@@ -51,42 +51,47 @@ function TemplateSelector(props) {
               <div className="template-group" key={type.value}>
                 <p className="template-group__label">{type.label}</p>
                 <div className="template-group__list">
-                  {templates.map((template) => (
-                    <Template
-                      key={`${type}-${template.index}`}
-                      {...props}
-                      type={type}
-                      label={template.label || `Template ${template.index + 1}`}
-                      onSelect={() => {
-                        const tmpl = template.visualization || {};
+                  {templates.map(
+                    (template) =>
+                      !template.hidden && (
+                        <Template
+                          key={`${type}-${template.index}`}
+                          {...props}
+                          type={type}
+                          label={
+                            template.label || `Template ${template.index + 1}`
+                          }
+                          onSelect={() => {
+                            const tmpl = template.visualization || {};
 
-                        const ds = {
-                          ...(dataSources || {}),
-                          ...(tmpl.dataSources || {}),
-                        };
+                            const ds = {
+                              ...(dataSources || {}),
+                              ...(tmpl.dataSources || {}),
+                            };
 
-                        const columnsMap = new Map();
+                            const columnsMap = new Map();
 
-                        [
-                          ...(value.columns || []),
-                          ...(tmpl.columns || []),
-                        ].forEach((col) => {
-                          columnsMap.set(col.key, col);
-                        });
+                            [
+                              ...(value.columns || []),
+                              ...(tmpl.columns || []),
+                            ].forEach((col) => {
+                              columnsMap.set(col.key, col);
+                            });
 
-                        const columns = Array.from(columnsMap.values());
+                            const columns = Array.from(columnsMap.values());
 
-                        onChangeValue({
-                          ...value,
-                          ...omit(tmpl, ['dataSources']),
-                          dataSources: ds,
-                          columns,
-                        });
+                            onChangeValue({
+                              ...value,
+                              ...omit(tmpl, ['dataSources']),
+                              dataSources: ds,
+                              columns,
+                            });
 
-                        loadDataSources?.(ds, columns);
-                      }}
-                    />
-                  ))}
+                            loadDataSources?.(ds, columns);
+                          }}
+                        />
+                      ),
+                  )}
                 </div>
               </div>
             );
