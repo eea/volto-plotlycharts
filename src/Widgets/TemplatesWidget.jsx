@@ -55,8 +55,11 @@ const EditTemplate = (props) => {
 const Template = ({
   type,
   label,
+  hidden,
   onEdit,
   onDelete,
+  onHide,
+  onShow,
   onClone,
   reactChartEditorLib,
 }) => {
@@ -71,7 +74,7 @@ const Template = ({
     <div
       role="button"
       tabIndex={0}
-      className="template-item"
+      className={cx('template-item', { hidden })}
       onClick={onEdit}
       onKeyDown={() => {}}
     >
@@ -121,6 +124,18 @@ const Template = ({
               }}
             >
               Clone
+            </Menu.Item>
+            <Menu.Item
+              onClick={(e) => {
+                if (hidden) {
+                  onShow();
+                } else {
+                  onHide();
+                }
+                e.stopPropagation();
+              }}
+            >
+              {hidden ? 'Show' : 'Hide'}
             </Menu.Item>
           </Menu>
         }
@@ -205,6 +220,7 @@ const TemplatesWidget = (props, { formData }) => {
                           key={`${type}-${template.label}-${template.index}`}
                           type={type}
                           visualization={template.visualization}
+                          hidden={template.hidden}
                           reactChartEditorLib={reactChartEditorLib}
                           label={
                             template.label || `Template ${template.index + 1}`
@@ -217,6 +233,16 @@ const TemplatesWidget = (props, { formData }) => {
                             newValue.splice(template.index, 1);
                             onChange(id, newValue);
                             setSelectedTemplate(-1);
+                          }}
+                          onHide={() => {
+                            const newValue = [...value];
+                            newValue[template.index].hidden = true;
+                            onChange(id, newValue);
+                          }}
+                          onShow={() => {
+                            const newValue = [...value];
+                            newValue[template.index].hidden = false;
+                            onChange(id, newValue);
                           }}
                           onClone={() => {
                             const newValue = [
