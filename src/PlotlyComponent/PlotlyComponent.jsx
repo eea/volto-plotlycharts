@@ -44,6 +44,12 @@ function getFilterOptions(rows, rowsOrder = null) {
   );
 }
 
+function stripHtml(html) {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, 'text/html');
+  return doc.body.textContent || '';
+}
+
 function UnconnectedPlotlyComponent(props) {
   const { reactChartEditor } = props;
   const { constants } = reactChartEditor;
@@ -236,6 +242,7 @@ function UnconnectedPlotlyComponent(props) {
         [variation]: filters.length > 0 && variation,
         mobile,
       })}
+      data-chart-id={block}
     >
       {initialized && filters.length > 0 && (
         <div className="visualization-filters">
@@ -358,8 +365,9 @@ function Table({ rows }) {
 }
 
 function EmbedData(props) {
-  const { provider_metadata } = props; // reactChartEditorLib,
-  const { dataSources = {} } = props.data?.visualization || {};
+  const { provider_metadata, content, block } = props; // reactChartEditorLib,
+  const visualization = props.data?.visualization || {};
+  const { dataSources = {}, layout } = visualization;
 
   const {
     data_provenance,
@@ -385,8 +393,23 @@ function EmbedData(props) {
   const { array, readme, metadataArrays, metadataFlags } = embedData;
 
   return (
-    <div style={{ display: 'none' }}>
-      <h3>Embed Data</h3>
+    <div className="figure-data-table" data-for-chart-id={block}>
+      <h3 className="page-title">{content.title}</h3>
+      {!!layout.title?.text && (
+        <h4 className="chart-title">{stripHtml(layout.title.text)}</h4>
+      )}
+      {!!layout.title?.subtitle?.text && (
+        <h4 className="chart-sub-title">
+          {stripHtml(layout.title.subtitle.text)}
+        </h4>
+      )}
+      {!!layout.xaxis?.title?.text && (
+        <p className="x-axis-label">{stripHtml(layout.xaxis.title.text)}</p>
+      )}
+      {!!layout.yaxis?.title?.text && (
+        <p className="y-axis-label">{stripHtml(layout.yaxis.title.text)}</p>
+      )}
+
       <Table rows={array} />
 
       {metadataFlags.hasDataProvenance && (

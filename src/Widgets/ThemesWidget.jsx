@@ -10,14 +10,22 @@ const PlotlyButton = loadable(() =>
   import('@eeacms/react-chart-editor/lib/components/widgets/Button'),
 );
 
-const Theme = ({ label, onEdit, onDelete, onClone }) => {
+const Theme = ({
+  label,
+  hidden,
+  onEdit,
+  onDelete,
+  onHide,
+  onShow,
+  onClone,
+}) => {
   const [open, setOpen] = useState(false);
 
   return (
     <div
       role="button"
       tabIndex={0}
-      className="template-item"
+      className={cx('template-item', { hidden })}
       onClick={onEdit}
       onKeyDown={() => {}}
     >
@@ -67,6 +75,18 @@ const Theme = ({ label, onEdit, onDelete, onClone }) => {
               }}
             >
               Clone
+            </Menu.Item>
+            <Menu.Item
+              onClick={(e) => {
+                if (hidden) {
+                  onShow();
+                } else {
+                  onHide();
+                }
+                e.stopPropagation();
+              }}
+            >
+              {hidden ? 'Show' : 'Hide'}
             </Menu.Item>
           </Menu>
         }
@@ -123,6 +143,16 @@ const ThemesWidget = (props) => {
                         newValue.splice(index, 1);
                         onChange(id, newValue);
                         setSelectedTheme(-1);
+                      }}
+                      onHide={() => {
+                        const newValue = [...value];
+                        newValue[index].hidden = true;
+                        onChange(id, newValue);
+                      }}
+                      onShow={() => {
+                        const newValue = [...value];
+                        newValue[index].hidden = false;
+                        onChange(id, newValue);
                       }}
                       onClone={() => {
                         const newValue = [

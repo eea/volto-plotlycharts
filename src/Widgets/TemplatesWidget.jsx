@@ -278,7 +278,12 @@ const TemplatesWidget = (props, { formData }) => {
                   acc.push({
                     type: newTemplate.type,
                     label: newTemplate.label,
-                    visualization: omit(newTemplate, ['type', 'label']),
+                    hidden: newTemplate.hidden,
+                    visualization: omit(newTemplate, [
+                      'type',
+                      'label',
+                      'hidden',
+                    ]),
                   });
                 } else {
                   acc.push(template);
