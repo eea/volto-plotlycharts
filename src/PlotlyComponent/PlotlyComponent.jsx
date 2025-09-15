@@ -393,7 +393,11 @@ function EmbedData(props) {
   const { array, readme, metadataArrays, metadataFlags } = embedData;
 
   return (
-    <div className="figure-data-table" data-for-chart-id={block}>
+    <div
+      className="figure-data-table"
+      data-for-chart-id={block}
+      style={{ display: 'none' }}
+    >
       <h3 className="page-title">{content.title}</h3>
       {!!layout.title?.text && (
         <h4 className="chart-title">{stripHtml(layout.title.text)}</h4>
