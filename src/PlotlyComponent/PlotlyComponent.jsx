@@ -399,18 +399,18 @@ function EmbedData(props) {
       style={{ display: 'none' }}
     >
       <h3 className="page-title">{content.title}</h3>
-      {!!layout.title?.text && (
+      {!!layout?.title?.text && (
         <h4 className="chart-title">{stripHtml(layout.title.text)}</h4>
       )}
-      {!!layout.title?.subtitle?.text && (
+      {!!layout?.title?.subtitle?.text && (
         <h4 className="chart-sub-title">
           {stripHtml(layout.title.subtitle.text)}
         </h4>
       )}
-      {!!layout.xaxis?.title?.text && (
+      {!!layout?.xaxis?.title?.text && (
         <p className="x-axis-label">{stripHtml(layout.xaxis.title.text)}</p>
       )}
-      {!!layout.yaxis?.title?.text && (
+      {!!layout?.yaxis?.title?.text && (
         <p className="y-axis-label">{stripHtml(layout.yaxis.title.text)}</p>
       )}
 
