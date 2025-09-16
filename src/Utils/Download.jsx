@@ -79,6 +79,8 @@ function Download(props) {
         provider_metadata,
         url_source,
         core_metadata,
+        chartData,
+        reactChartEditorLib,
       );
       zip.file(`${title}.csv`, completeCSVData);
 
@@ -96,6 +98,8 @@ function Download(props) {
       provider_metadata,
       url_source,
       core_metadata,
+      chartData,
+      reactChartEditorLib,
     );
     exportCSVFile(csvData, title);
   };

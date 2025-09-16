@@ -51,16 +51,62 @@ export const generateOriginalCSV = (
   provider_metadata,
   url_source,
   core_metadata,
+  chartData,
+  reactChartEditorLib,
 ) => {
   let array = [];
   let readme = provider_metadata?.readme ? [provider_metadata?.readme] : [];
-
-  Object.entries(dataSources).forEach(([key, items]) => {
-    items.forEach((item, index) => {
-      if (!array[index]) array[index] = {};
-      array[index][key] = item;
+  const hasDataSources =
+    dataSources &&
+    Object.keys(dataSources).some(
+      (key) => Array.isArray(dataSources[key]) && dataSources[key].length > 0,
+    );
+  console.log({ hasDataSources }, chartData?.data);
+  if (hasDataSources) {
+    Object.entries(dataSources).forEach(([key, items]) => {
+      items.forEach((item, index) => {
+        if (!array[index]) array[index] = {};
+        array[index][key] = item;
+      });
     });
-  });
+  } else if (chartData?.data && Array.isArray(chartData.data)) {
+    // Extract data from traces when dataSources is empty
+    const allTraceData = [];
+    for (const trace of chartData.data) {
+      const traceData = processTraceData(
+        trace,
+        dataSources || {},
+        reactChartEditorLib,
+      );
+      allTraceData.push(traceData);
+    }
+    console.log({ allTraceData });
+    // Process all trace data
+    if (
+      allTraceData.length > 0 &&
+      !allTraceData.every((data) => data.length === 0)
+    ) {
+      const maxLength = Math.max(...allTraceData.map((data) => data.length));
+
+      for (let i = 0; i < maxLength; i++) {
+        if (!array[i]) array[i] = {};
+
+        allTraceData.forEach((traceData) => {
+          if (traceData[i]) {
+            Object.keys(traceData[i]).forEach((key) => {
+              if (
+                traceData[i][key] !== null &&
+                traceData[i][key] !== undefined
+              ) {
+                array[i][key] = traceData[i][key];
+              }
+            });
+          }
+        });
+      }
+    }
+    console.log({ array });
+  }
 
   const metadataFlags = getMetadataFlags(core_metadata);
   const metadataArrays = processMetadataArrays(core_metadata, metadataFlags);
