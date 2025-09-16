@@ -85,7 +85,10 @@ export const generateOriginalCSV = (
       allTraceData.length > 0 &&
       !allTraceData.every((data) => data.length === 0)
     ) {
-      const maxLength = allTraceData.length > 0 ? Math.max(...allTraceData.map((data) => data.length)) : 0;
+      const maxLength =
+        allTraceData.length > 0
+          ? Math.max(...allTraceData.map((data) => data.length))
+          : 0;
 
       for (let i = 0; i < maxLength; i++) {
         if (!array[i]) array[i] = {};
