@@ -61,7 +61,7 @@ export const generateOriginalCSV = (
     Object.keys(dataSources).some(
       (key) => Array.isArray(dataSources[key]) && dataSources[key].length > 0,
     );
-  console.log({ hasDataSources }, chartData?.data);
+
   if (hasDataSources) {
     Object.entries(dataSources).forEach(([key, items]) => {
       items.forEach((item, index) => {
@@ -80,7 +80,6 @@ export const generateOriginalCSV = (
       );
       allTraceData.push(traceData);
     }
-    console.log({ allTraceData });
     // Process all trace data
     if (
       allTraceData.length > 0 &&
@@ -105,7 +104,6 @@ export const generateOriginalCSV = (
         });
       }
     }
-    console.log({ array });
   }
 
   const metadataFlags = getMetadataFlags(core_metadata);
