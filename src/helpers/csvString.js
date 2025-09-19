@@ -240,67 +240,105 @@ function processTraceData(trace, dataSources, reactChartEditorLib) {
   const usedColumns = new Set();
 
   const { getAttrsPath, constants, getSrcAttr } = reactChartEditorLib;
+  const hasDataSources =
+    dataSources &&
+    Object.keys(dataSources).some(
+      (key) => Array.isArray(dataSources[key]) && dataSources[key].length > 0,
+    );
+  if (hasDataSources) {
+    // Get all data attributes from constants.TRACE_SRC_ATTRIBUTES
+    const traceDataAttrs = getAttrsPath(trace, constants.TRACE_SRC_ATTRIBUTES);
 
-  // Get all data attributes from constants.TRACE_SRC_ATTRIBUTES
-  const traceDataAttrs = getAttrsPath(trace, constants.TRACE_SRC_ATTRIBUTES);
+    // For each data attribute, get the corresponding src attribute using getSrcAttr
+    Object.entries(traceDataAttrs).forEach(([dataAttrPath, dataValue]) => {
+      const srcAttr = getSrcAttr(trace, dataAttrPath);
 
-  // For each data attribute, get the corresponding src attribute using getSrcAttr
-  Object.entries(traceDataAttrs).forEach(([dataAttrPath, dataValue]) => {
-    const srcAttr = getSrcAttr(trace, dataAttrPath);
+      if (srcAttr && srcAttr.value && dataSources[srcAttr.value]) {
+        usedColumns.add(srcAttr.value);
+      }
+    });
 
-    if (srcAttr && srcAttr.value && dataSources[srcAttr.value]) {
-      usedColumns.add(srcAttr.value);
+    // Add columns from transforms
+    if (trace.transforms && Array.isArray(trace.transforms)) {
+      trace.transforms.forEach((transform) => {
+        if (transform.targetsrc && dataSources[transform.targetsrc]) {
+          usedColumns.add(transform.targetsrc);
+        }
+      });
     }
-  });
 
-  // Add columns from transforms
-  if (trace.transforms && Array.isArray(trace.transforms)) {
-    trace.transforms.forEach((transform) => {
-      if (transform.targetsrc && dataSources[transform.targetsrc]) {
-        usedColumns.add(transform.targetsrc);
+    // If no specific columns found, use all available data sources
+    if (usedColumns.size === 0) {
+      Object.keys(dataSources).forEach((key) => {
+        if (Array.isArray(dataSources[key])) {
+          usedColumns.add(key);
+        }
+      });
+    }
+
+    const maxLength = Math.max(
+      ...Array.from(usedColumns).map((col) =>
+        dataSources[col] ? dataSources[col].length : 0,
+      ),
+    );
+
+    for (let i = 0; i < maxLength; i++) {
+      const row = {};
+      usedColumns.forEach((col) => {
+        if (dataSources[col] && dataSources[col][i] !== undefined) {
+          row[col] = dataSources[col][i];
+        }
+      });
+      processedData.push(row);
+    }
+
+    // Ensure all rows have the same columns (fill missing columns with empty values)
+    const allColumns = new Set();
+    processedData.forEach((row) => {
+      Object.keys(row).forEach((col) => allColumns.add(col));
+    });
+
+    processedData.forEach((row) => {
+      allColumns.forEach((col) => {
+        if (!(col in row)) {
+          row[col] = '';
+        }
+      });
+    });
+  } else {
+    const traceDataAttrs = getAttrsPath(trace, constants.TRACE_SRC_ATTRIBUTES);
+
+    // Extract data directly from trace properties
+    const dataColumns = new Set();
+    const traceDataValues = {};
+
+    Object.entries(traceDataAttrs).forEach(([dataAttrPath, dataValue]) => {
+      if (dataValue && Array.isArray(dataValue)) {
+        const columnName = dataAttrPath.replace(/\./g, '_');
+        dataColumns.add(columnName);
+        traceDataValues[columnName] = dataValue;
       }
     });
+    if (dataColumns.size > 0) {
+      const maxLength = Math.max(
+        ...Array.from(dataColumns).map((col) =>
+          traceDataValues[col] ? traceDataValues[col].length : 0,
+        ),
+      );
+
+      for (let i = 0; i < maxLength; i++) {
+        const row = {};
+        dataColumns.forEach((col) => {
+          if (traceDataValues[col] && traceDataValues[col][i] !== undefined) {
+            row[col] = traceDataValues[col][i];
+          }
+        });
+        if (Object.keys(row).length > 0) {
+          processedData.push(row);
+        }
+      }
+    }
   }
-
-  // If no specific columns found, use all available data sources
-  if (usedColumns.size === 0) {
-    Object.keys(dataSources).forEach((key) => {
-      if (Array.isArray(dataSources[key])) {
-        usedColumns.add(key);
-      }
-    });
-  }
-
-  const maxLength = Math.max(
-    ...Array.from(usedColumns).map((col) =>
-      dataSources[col] ? dataSources[col].length : 0,
-    ),
-  );
-
-  for (let i = 0; i < maxLength; i++) {
-    const row = {};
-    usedColumns.forEach((col) => {
-      if (dataSources[col] && dataSources[col][i] !== undefined) {
-        row[col] = dataSources[col][i];
-      }
-    });
-    processedData.push(row);
-  }
-
-  // Ensure all rows have the same columns (fill missing columns with empty values)
-  const allColumns = new Set();
-  processedData.forEach((row) => {
-    Object.keys(row).forEach((col) => allColumns.add(col));
-  });
-
-  processedData.forEach((row) => {
-    allColumns.forEach((col) => {
-      if (!(col in row)) {
-        row[col] = '';
-      }
-    });
-  });
-
   // Apply transforms if they exist
   if (trace.transforms && Array.isArray(trace.transforms)) {
     trace.transforms.forEach((transform) => {
