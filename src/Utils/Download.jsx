@@ -159,7 +159,7 @@ function Download(props) {
     if (!layout.margin) layout.margin = {};
 
     const ratio = gdWidth / gdHeight;
-    const width = 1000;
+    const width = chartData.minWidth || 1000;
     const height = width / ratio;
 
     if (!filters.length) {
