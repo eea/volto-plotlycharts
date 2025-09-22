@@ -1,7 +1,7 @@
-import { useMemo, useRef, useEffect, useState } from 'react';
+import { useMemo, useRef, useEffect, useState, useCallback } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { mapKeys, isArray, uniqBy, sortBy, isNil } from 'lodash';
+import { mapKeys, isArray, uniqBy, sortBy, isNil, debounce } from 'lodash';
 import cx from 'classnames';
 import { FormField } from 'semantic-ui-react';
 // import { constants } from '@eeacms/react-chart-editor';
@@ -55,6 +55,7 @@ function UnconnectedPlotlyComponent(props) {
   const { constants } = reactChartEditor;
   const container = useRef();
   const el = useRef();
+  const blockEditorEl = useRef();
   const Select = props.reactSelect.default;
   const {
     block,
@@ -72,6 +73,8 @@ function UnconnectedPlotlyComponent(props) {
   const { height, vis_url, with_metadata_section = true } = props.data;
   const [initialized, setInitialized] = useState(false);
   const [filtersState, setFiltersState] = useState([]);
+  const [autoscaleHeight, setAutoscaleHeight] = useState(null);
+  const [autoscaleWidth, setAutoscaleWidth] = useState(null);
   const [mobile, setMobile] = useState(false);
 
   const loadingVisualization =
@@ -146,6 +149,10 @@ function UnconnectedPlotlyComponent(props) {
     );
   }, [value.layout, dataSources, constants.LAYOUT_SRC_ATTRIBUTES]);
 
+  const defaultHeight = useMemo(() => {
+    return height || layout._height || layout.height || 450;
+  }, [height, layout._height, layout.height]);
+
   const toolbarData = useMemo(() => {
     return {
       ...props.data,
@@ -162,10 +169,76 @@ function UnconnectedPlotlyComponent(props) {
     };
   }, [props.data, data, layout, dataSources]);
 
+  // Define the core scale update logic as a separate function
+  const updateScaleCore = useCallback(() => {
+    if (!container.current) return;
+
+    const vizEl = container.current.querySelector('.visualization');
+    if (!vizEl) return;
+
+    let blockEditorWidth = 0;
+
+    if (typeof blockEditorEl.current === 'undefined') {
+      let el = container.current;
+
+      while (el && el !== document.body) {
+        if (el.classList && el.classList.contains('block-editor-group')) {
+          blockEditorEl.current = el;
+          break;
+        }
+        el = el.parentElement;
+        if (el === document.body) {
+          blockEditorEl.current = null;
+        }
+      }
+    }
+
+    if (blockEditorEl.current) {
+      blockEditorWidth = blockEditorEl.current.firstChild.clientWidth;
+    }
+
+    const svgEl = vizEl.querySelector('.svg-container');
+    if (!svgEl) return;
+
+    // Get the visualization container width
+    const vizWidth = vizEl.clientWidth;
+
+    // If we have a block editor group width, use that as a constraint
+    const availableWidth =
+      blockEditorWidth > 0 ? Math.min(vizWidth, blockEditorWidth) : vizWidth;
+
+    let minWidth = autoscaleWidth;
+    if (!minWidth && layout?.width) {
+      minWidth = layout.width;
+    } else if (!minWidth) {
+      minWidth = vizWidth;
+    }
+
+    if (!autoscaleWidth) {
+      setAutoscaleWidth(minWidth);
+    }
+
+    // Use the available width (constrained by block-editor-group if present) for scaling
+    const scale = Math.min(availableWidth / minWidth, 1);
+    svgEl.style.transform = `scale(${scale})`;
+    svgEl.style.transformOrigin = 'left top';
+    svgEl.style.width = `${availableWidth}px`;
+    svgEl.style.height = `${scale * defaultHeight}px`;
+
+    setAutoscaleHeight(scale * defaultHeight);
+  }, [defaultHeight, autoscaleWidth, layout, blockEditorEl]);
+
+  // Create a debounced version for event handlers
+  const updateScale = useMemo(
+    () => debounce(() => updateScaleCore(), 150),
+    [updateScaleCore],
+  );
+
   function onInitialized(...args) {
     if (props.onInitialized) {
       props.onInitialized(...args);
     }
+    updateScaleCore();
     setInitialized(true);
   }
 
@@ -187,6 +260,23 @@ function UnconnectedPlotlyComponent(props) {
       setMobile(false);
     }
   }, [screen, mobile]);
+
+  // Update scale
+  useEffect(() => {
+    if (!initialized) return;
+
+    if (layout.autoscale) {
+      // Call immediately without debounce for initial render
+      updateScaleCore(); // Use non-debounced version for immediate execution
+      window.addEventListener('resize', updateScale); // Use debounced version for event handler
+    }
+
+    return () => {
+      // Clean up event listener and cancel any pending debounced calls
+      window.removeEventListener('resize', updateScale);
+      updateScale.cancel();
+    };
+  }, [initialized, layout.autoscale, updateScale, updateScaleCore]);
 
   // Insert metadata section
   useEffect(() => {
@@ -283,17 +373,16 @@ function UnconnectedPlotlyComponent(props) {
         )}
         {!loadingProviderData && (
           <div
-            className="visualization"
+            className={cx('visualization', { autoscale: layout.autoscale })}
             style={{
-              '--svg-container-height': `${
-                height || layout._height || layout.height || 450
-              }px`,
+              '--svg-container-height': `${autoscaleHeight || defaultHeight}px`,
             }}
           >
             <Plot
               ref={el}
               data={data}
               layout={layout}
+              autoscale={layout.autoscale}
               onInitialized={onInitialized}
             />
           </div>
@@ -306,6 +395,7 @@ function UnconnectedPlotlyComponent(props) {
             data,
             layout,
             height,
+            minWidth: autoscaleWidth,
           }}
           filters={filters}
           data={toolbarData}

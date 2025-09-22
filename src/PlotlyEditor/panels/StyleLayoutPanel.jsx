@@ -16,6 +16,7 @@ import {
   HovermodeDropdown,
   Flaglist,
   Radio,
+  ScaleRadio,
   Info,
 } from '@eeacms/react-chart-editor';
 import {
@@ -253,6 +254,16 @@ const StyleLayoutPanel = (props, { localize: _ }) => (
         showOn={false}
         defaultOpt={true}
       >
+        <ScaleRadio
+          attr="autoscale"
+          label={_('Autoscale')}
+          options={[
+            { label: _('Enabled'), value: true },
+            { label: _('Disabled'), value: false },
+          ]}
+          defaultValue={false}
+          show
+        />
         <Numeric label={_('Fixed Width')} attr="width" units="px" />
         <Numeric label={_('Fixed height')} attr="height" units="px" />
       </SizeVisibilitySelect>
