@@ -229,8 +229,8 @@ function UnconnectedPlotlyComponent(props) {
   }, [defaultHeight, autoscaleWidth, layout, blockEditorEl]);
 
   // Create a debounced version for event handlers
-  const updateScale = useCallback(
-    debounce(() => updateScaleCore(), 150), // 150ms debounce time - adjust as needed
+  const updateScale = useMemo(
+    () => debounce(() => updateScaleCore(), 150),
     [updateScaleCore],
   );
 
