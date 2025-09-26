@@ -51,16 +51,63 @@ export const generateOriginalCSV = (
   provider_metadata,
   url_source,
   core_metadata,
+  chartData,
+  reactChartEditorLib,
 ) => {
   let array = [];
   let readme = provider_metadata?.readme ? [provider_metadata?.readme] : [];
+  const hasDataSources =
+    dataSources &&
+    Object.keys(dataSources).some(
+      (key) => Array.isArray(dataSources[key]) && dataSources[key].length > 0,
+    );
 
-  Object.entries(dataSources).forEach(([key, items]) => {
-    items.forEach((item, index) => {
-      if (!array[index]) array[index] = {};
-      array[index][key] = item;
+  if (hasDataSources) {
+    Object.entries(dataSources).forEach(([key, items]) => {
+      items.forEach((item, index) => {
+        if (!array[index]) array[index] = {};
+        array[index][key] = item;
+      });
     });
-  });
+  } else if (chartData?.data && Array.isArray(chartData.data)) {
+    // Extract data from traces when dataSources is empty
+    const allTraceData = [];
+    for (const trace of chartData.data) {
+      const traceData = processTraceData(
+        trace,
+        dataSources || {},
+        reactChartEditorLib,
+      );
+      allTraceData.push(traceData);
+    }
+    // Process all trace data
+    if (
+      allTraceData.length > 0 &&
+      !allTraceData.every((data) => data.length === 0)
+    ) {
+      const maxLength =
+        allTraceData.length > 0
+          ? Math.max(...allTraceData.map((data) => data.length))
+          : 0;
+
+      for (let i = 0; i < maxLength; i++) {
+        if (!array[i]) array[i] = {};
+
+        allTraceData.forEach((traceData) => {
+          if (traceData[i]) {
+            Object.keys(traceData[i]).forEach((key) => {
+              if (
+                traceData[i][key] !== null &&
+                traceData[i][key] !== undefined
+              ) {
+                array[i][key] = traceData[i][key];
+              }
+            });
+          }
+        });
+      }
+    }
+  }
 
   const metadataFlags = getMetadataFlags(core_metadata);
   const metadataArrays = processMetadataArrays(core_metadata, metadataFlags);
