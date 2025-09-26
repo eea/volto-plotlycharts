@@ -4,6 +4,13 @@
   }
 }
 
+.visualization {
+  .plot-container {
+    display: flex;
+    justify-content: center;
+  }
+}
+
 .visualization:not(.autoscale) {
   .plot-container {
     overflow-x: auto;
@@ -31,7 +38,6 @@
 .plotly-component {
   margin-bottom: 1rem;
 
-  .visualization,
   .js-plotly-plot {
     height: var(--svg-container-height) !important;
   }
