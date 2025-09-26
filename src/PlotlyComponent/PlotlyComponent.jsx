@@ -377,15 +377,13 @@ function UnconnectedPlotlyComponent(props) {
               '--svg-container-height': `${autoscaleHeight || defaultHeight}px`,
             }}
           >
-            <div className="autoscale-container">
-              <Plot
-                ref={el}
-                data={data}
-                layout={layout}
-                autoscale={layout.autoscale}
-                onInitialized={onInitialized}
-              />
-            </div>
+            <Plot
+              ref={el}
+              data={data}
+              layout={layout}
+              autoscale={layout.autoscale}
+              onInitialized={onInitialized}
+            />
           </div>
         )}
       </div>
