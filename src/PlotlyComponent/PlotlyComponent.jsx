@@ -176,6 +176,8 @@ function UnconnectedPlotlyComponent(props) {
     const vizEl = container.current.querySelector('.visualization');
     if (!vizEl) return;
 
+    const vizWrapperEl = vizEl.parentElement;
+
     let blockEditorWidth = 0;
 
     if (typeof blockEditorEl.current === 'undefined') {
@@ -197,11 +199,8 @@ function UnconnectedPlotlyComponent(props) {
       blockEditorWidth = blockEditorEl.current.firstChild.clientWidth;
     }
 
-    const svgEl = vizEl.querySelector('.svg-container');
-    if (!svgEl) return;
-
     // Get the visualization container width
-    const vizWidth = vizEl.clientWidth;
+    const vizWidth = vizWrapperEl.clientWidth;
 
     // If we have a block editor group width, use that as a constraint
     const availableWidth =
@@ -220,10 +219,10 @@ function UnconnectedPlotlyComponent(props) {
 
     // Use the available width (constrained by block-editor-group if present) for scaling
     const scale = Math.min(availableWidth / minWidth, 1);
-    svgEl.style.transform = `scale(${scale})`;
-    svgEl.style.transformOrigin = 'left top';
-    svgEl.style.width = `${availableWidth}px`;
-    svgEl.style.height = `${scale * defaultHeight}px`;
+    vizEl.style.transform = `scale(${scale})`;
+    vizEl.style.transformOrigin = 'left top';
+    vizEl.style.width = `${availableWidth}px`;
+    vizEl.style.height = `${scale * defaultHeight}px`;
 
     setAutoscaleHeight(scale * defaultHeight);
   }, [defaultHeight, autoscaleWidth, layout, blockEditorEl]);
@@ -378,13 +377,15 @@ function UnconnectedPlotlyComponent(props) {
               '--svg-container-height': `${autoscaleHeight || defaultHeight}px`,
             }}
           >
-            <Plot
-              ref={el}
-              data={data}
-              layout={layout}
-              autoscale={layout.autoscale}
-              onInitialized={onInitialized}
-            />
+            <div className="autoscale-container">
+              <Plot
+                ref={el}
+                data={data}
+                layout={layout}
+                autoscale={layout.autoscale}
+                onInitialized={onInitialized}
+              />
+            </div>
           </div>
         )}
       </div>
