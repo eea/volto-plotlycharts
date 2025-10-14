@@ -163,11 +163,12 @@ function UnconnectedPlotlyComponent(props) {
               data,
               layout,
               dataSources,
+              columns: value.columns.map((column) => column.key),
             },
           }
         : {}),
     };
-  }, [props.data, data, layout, dataSources]);
+  }, [props.data, data, layout, dataSources, value.columns]);
 
   // Define the core scale update logic as a separate function
   const updateScaleCore = useCallback(() => {

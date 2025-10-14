@@ -35,7 +35,7 @@ function Download(props) {
     geo_coverage: geo_coverage?.geolocation,
   };
 
-  const { dataSources } = props.data?.visualization || {};
+  const { dataSources, columns } = props.data?.visualization || {};
 
   const [open, setOpen] = React.useState(false);
 
@@ -79,6 +79,7 @@ function Download(props) {
         provider_metadata,
         url_source,
         core_metadata,
+        columns,
       );
       zip.file(`${title}.csv`, completeCSVData);
 
@@ -96,6 +97,7 @@ function Download(props) {
       provider_metadata,
       url_source,
       core_metadata,
+      columns,
     );
     exportCSVFile(csvData, title);
   };
