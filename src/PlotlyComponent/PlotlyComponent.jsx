@@ -172,7 +172,7 @@ function UnconnectedPlotlyComponent(props) {
 
   // Define the core scale update logic as a separate function
   const updateScaleCore = useCallback(() => {
-    if (!container.current) return;
+    if (!container.current || !layout.autoscale) return;
 
     const vizEl = container.current.querySelector('.visualization');
     if (!vizEl) return;
