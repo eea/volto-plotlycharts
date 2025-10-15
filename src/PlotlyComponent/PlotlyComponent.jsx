@@ -163,7 +163,7 @@ function UnconnectedPlotlyComponent(props) {
               data,
               layout,
               dataSources,
-              columns: value.columns.map((column) => column.key),
+              columns: value.columns?.map((column) => column.key) || [],
             },
           }
         : {}),
