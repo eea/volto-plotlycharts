@@ -51,11 +51,28 @@ export const generateOriginalCSV = (
   provider_metadata,
   url_source,
   core_metadata,
+  columns,
 ) => {
   let array = [];
+  let sortedDataSources;
   let readme = provider_metadata?.readme ? [provider_metadata?.readme] : [];
 
-  Object.entries(dataSources).forEach(([key, items]) => {
+  if (columns.length) {
+    function findIndex(key) {
+      let index = columns.findIndex((column) => column === key);
+      if (index === -1) index = columns.length;
+      return index;
+    }
+    sortedDataSources = Object.entries(dataSources).sort(([key1], [key2]) => {
+      let index1 = findIndex(key1);
+      let index2 = findIndex(key2);
+      return index1 - index2;
+    });
+  } else {
+    sortedDataSources = Object.entries(dataSources);
+  }
+
+  sortedDataSources.forEach(([key, items]) => {
     items.forEach((item, index) => {
       if (!array[index]) array[index] = {};
       array[index][key] = item;
