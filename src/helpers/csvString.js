@@ -1,3 +1,4 @@
+import isString from 'lodash/isString';
 import { trackLink } from '@eeacms/volto-matomo/utils';
 
 function downloadDataURL(dataURL, filename) {
@@ -37,10 +38,11 @@ function getHeaders(headers, onlySectionHeader = false) {
 function getData(array) {
   let str = '';
   for (let i = 0; i < array.length; i++) {
+    let j = 0;
     let row = '';
     for (let key in array[i]) {
       const column = array[i][key];
-      if (row !== '') row += ',';
+      if (j > 0) row += ',';
       if (
         (typeof column === 'number' && column.toString().includes(',')) ||
         (typeof column === 'string' && column.includes(','))
@@ -49,6 +51,7 @@ function getData(array) {
       } else {
         row += column;
       }
+      j++;
     }
 
     str += row + '\r\n';
@@ -141,6 +144,16 @@ const spreadCoreMetadata = (core_metadata) => {
   Object.keys(core_metadata).forEach((key) => {
     if (core_metadata[key]?.length > 0) {
       core_metadata[key].forEach((item) => {
+        if (isString(item)) {
+          if (!spread_metadata[`${renameKey(key)}`]) {
+            spread_metadata[`${renameKey(key)}`] = [' '];
+          }
+          if (!spread_metadata[key]) {
+            spread_metadata[key] = [];
+          }
+          spread_metadata[key].push(item);
+          return;
+        }
         Object.keys(item).forEach((subkey) => {
           if (subkey !== '@id' && subkey !== 'value') {
             if (!spread_metadata[`${renameKey(key)}`]) {
@@ -156,7 +169,7 @@ const spreadCoreMetadata = (core_metadata) => {
                 ) {
                   // don't add empty space for temporal and geo coverage
                 } else {
-                  spread_metadata[`${renameKey(key)}`].push(` `);
+                  spread_metadata[`${renameKey(key)}`].push(' ');
                 }
               }
             }

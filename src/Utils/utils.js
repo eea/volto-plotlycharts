@@ -48,10 +48,10 @@ export const generateFinalCSV = (
 
 export const generateOriginalCSV = (
   dataSources,
+  columns,
   provider_metadata,
   url_source,
   core_metadata,
-  columns,
 ) => {
   let array = [];
   let sortedDataSources;
@@ -71,6 +71,7 @@ export const generateOriginalCSV = (
   } else {
     sortedDataSources = Object.entries(dataSources);
   }
+  sortedDataSources = Object.entries(dataSources);
 
   sortedDataSources.forEach(([key, items]) => {
     items.forEach((item, index) => {
@@ -108,54 +109,51 @@ export const processMetadataArrays = (core_metadata, metadataFlags) => {
     publisher_array: [],
   };
 
-  if (
-    metadataFlags.hasDataProvenance ||
-    metadataFlags.hasOtherOrganisation ||
-    metadataFlags.hasTemporalCoverage ||
-    metadataFlags.hasGeoCoverage ||
-    metadataFlags.hasPublisher
-  ) {
-    Object.entries(spreadCoreMetadata(core_metadata)).forEach(
-      ([key, items]) => {
-        items.forEach((item, index) => {
-          if (key.includes('data_provenance') || key.includes('Sources')) {
-            if (!arrays.data_provenance_array[index])
-              arrays.data_provenance_array[index] = {};
-            arrays.data_provenance_array[index][key] = item;
-          }
-          if (
-            key.includes('other_organisation') ||
-            key.includes('Other organisations involved')
-          ) {
-            if (!arrays.other_organisation_array[index])
-              arrays.other_organisation_array[index] = {};
-            arrays.other_organisation_array[index][key] = item;
-          }
-          if (
-            key.includes('temporal_coverage') ||
-            key.includes('Temporal coverage')
-          ) {
-            if (!arrays.temporal_coverage_array[index])
-              arrays.temporal_coverage_array[index] = {};
-            arrays.temporal_coverage_array[index][key] = item;
-          }
-          if (
-            key.includes('geo_coverage') ||
-            key.includes('Geographical coverage')
-          ) {
-            if (!arrays.geo_coverage_array[index])
-              arrays.geo_coverage_array[index] = {};
-            arrays.geo_coverage_array[index][key] = item;
-          }
-          if (key.includes('publisher') || key.includes('Publisher')) {
-            if (!arrays.publisher_array[index])
-              arrays.publisher_array[index] = {};
-            arrays.publisher_array[index][key] = item;
-          }
-        });
-      },
-    );
+  // Skip processing if no relevant metadata flags are set
+  if (!Object.values(metadataFlags).some(Boolean)) {
+    return arrays;
   }
+
+  const metadataMappings = [
+    {
+      keys: ['data_provenance', 'Sources'],
+      target: 'data_provenance_array',
+      flag: 'hasDataProvenance',
+    },
+    {
+      keys: ['other_organisation', 'Other organisations involved'],
+      target: 'other_organisation_array',
+      flag: 'hasOtherOrganisation',
+    },
+    {
+      keys: ['temporal_coverage', 'Temporal coverage'],
+      target: 'temporal_coverage_array',
+      flag: 'hasTemporalCoverage',
+    },
+    {
+      keys: ['geo_coverage', 'Geographical coverage'],
+      target: 'geo_coverage_array',
+      flag: 'hasGeoCoverage',
+    },
+    {
+      keys: ['publisher', 'Publisher'],
+      target: 'publisher_array',
+      flag: 'hasPublisher',
+    },
+  ];
+
+  Object.entries(spreadCoreMetadata(core_metadata)).forEach(([key, items]) => {
+    items.forEach((item, index) => {
+      metadataMappings.forEach(({ keys, target, flag }) => {
+        if (metadataFlags[flag] && keys.some((k) => key.includes(k))) {
+          if (!arrays[target][index]) {
+            arrays[target][index] = {};
+          }
+          arrays[target][index][key] = item;
+        }
+      });
+    });
+  });
 
   return arrays;
 };
