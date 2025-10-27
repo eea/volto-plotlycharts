@@ -76,10 +76,10 @@ function Download(props) {
       // Add the complete CSV with all data
       const completeCSVData = generateOriginalCSV(
         dataSources,
+        columns,
         provider_metadata,
         url_source,
         core_metadata,
-        columns,
       );
       zip.file(`${title}.csv`, completeCSVData);
 
@@ -94,10 +94,10 @@ function Download(props) {
   const handleDownloadSingleCSV = () => {
     const csvData = generateOriginalCSV(
       dataSources,
+      columns,
       provider_metadata,
       url_source,
       core_metadata,
-      columns,
     );
     exportCSVFile(csvData, title);
   };
