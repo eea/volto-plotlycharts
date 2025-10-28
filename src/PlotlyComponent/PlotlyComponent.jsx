@@ -29,8 +29,6 @@ import {
 // generateCSVForDataset,
 // generateOriginalCSV,
 
-const MOBILE_MAX_WIDTH = '700px';
-
 function getFilterOptions(rows, rowsOrder = null) {
   if (!isArray(rows)) return [];
   return sortBy(
@@ -269,7 +267,7 @@ function UnconnectedPlotlyComponent(props) {
       // Don't use container.current width as it may be constrained by maxWidth
       const parentWidth = container.current.parentElement?.offsetWidth || 0;
       const windowWidth = window.innerWidth;
-      const availableWidth = Math.max(parentWidth, windowWidth);
+      const availableWidth = parentWidth || windowWidth;
       setMeasuredWidth(availableWidth);
     };
 
@@ -394,7 +392,6 @@ function UnconnectedPlotlyComponent(props) {
         mobile,
       })}
       data-chart-id={block}
-      style={mobile ? { maxWidth: MOBILE_MAX_WIDTH } : {}}
     >
       {initialized && filters.length > 0 && (
         <div className="visualization-filters">
