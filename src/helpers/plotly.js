@@ -25,6 +25,10 @@ export function getPlotlyDataSources({ data, layout, originalDataSources }) {
       Object.entries(
         getAttrsPath(trace, constants.TRACE_SRC_ATTRIBUTES),
       ).forEach(([attr, value]) => {
+        // Skip attrs that are not well supported
+        if (['marker.color', 'marker.size'].includes(attr)) {
+          return;
+        }
         acc.push({
           attr,
           value,
