@@ -65,7 +65,6 @@ const Plot = forwardRef((props, ref) => {
           history.push(correspondingLink);
         }
       } else if (type === 'sunburst' && shouldComposeLinks) {
-        console.log(meta, id, data);
         const correspondingLinkIndex = data.ids.indexOf(id);
         const correspondingLink = meta[correspondingLinkIndex];
         if (correspondingLink) {
