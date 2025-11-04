@@ -1,10 +1,12 @@
 import React from 'react';
 import Plot from './Plot';
 import 'remixicon/fonts/remixicon.css';
+import { withReduxProvider } from '@root/../.storybook/redux-decorator';
 
 export default {
   title: 'PlotlyCharts/Plot',
   component: Plot,
+  decorators: [withReduxProvider],
   argTypes: {
     data: {
       control: 'object',
