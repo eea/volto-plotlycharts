@@ -71,7 +71,6 @@ export const generateOriginalCSV = (
   } else {
     sortedDataSources = Object.entries(dataSources);
   }
-  sortedDataSources = Object.entries(dataSources);
 
   sortedDataSources.forEach(([key, items]) => {
     items.forEach((item, index) => {
