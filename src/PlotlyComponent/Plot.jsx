@@ -64,6 +64,12 @@ const Plot = forwardRef((props, ref) => {
           const correspondingLink = meta[correspondingLinkPosition];
           history.push(correspondingLink);
         }
+      } else if (type === 'sunburst' && shouldComposeLinks) {
+        const correspondingLinkIndex = data.ids?.indexOf(id);
+        const correspondingLink = meta[correspondingLinkIndex];
+        if (correspondingLink) {
+          window.open(correspondingLink, '_blank');
+        }
       } else if (shouldRedirect) {
         const link = customLink
           .replace('{value}', id || label)
