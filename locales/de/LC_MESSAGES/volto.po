@@ -11,4 +11,27 @@ msgstr ""
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
 
+#. Default: "Back"
+#: Controlpanels/PlotlyControlPanel
+msgid "Back"
+msgstr ""
 
+#. Default: "Cancel"
+#: Controlpanels/PlotlyControlPanel
+msgid "Cancel"
+msgstr ""
+
+#. Default: "Changes saved."
+#: Controlpanels/PlotlyControlPanel
+msgid "Changes saved."
+msgstr ""
+
+#. Default: "Info"
+#: Controlpanels/PlotlyControlPanel
+msgid "Info"
+msgstr ""
+
+#. Default: "Save"
+#: Controlpanels/PlotlyControlPanel
+msgid "Save"
+msgstr ""
