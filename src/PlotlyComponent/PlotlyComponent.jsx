@@ -65,6 +65,7 @@ function UnconnectedPlotlyComponent(props) {
     provider_data,
     provider_metadata,
     screen,
+    isPrint,
     selfProvided,
     onInsertBlock,
     onSelectBlock,
@@ -142,12 +143,23 @@ function UnconnectedPlotlyComponent(props) {
   }, [value.data, dataSources, filters, constants.TRACE_SRC_ATTRIBUTES]);
 
   const layout = useMemo(() => {
-    return updateDataSources(
+    const baseLayout = updateDataSources(
       value.layout || {},
       dataSources,
       constants.LAYOUT_SRC_ATTRIBUTES,
     );
-  }, [value.layout, dataSources, constants.LAYOUT_SRC_ATTRIBUTES]);
+
+    // When in mobile/print mode, remove fixed width to allow responsive behavior
+    if (mobile) {
+      const { width, ...layoutWithoutWidth } = baseLayout;
+      return {
+        ...layoutWithoutWidth,
+        autosize: true,
+      };
+    }
+
+    return baseLayout;
+  }, [value.layout, dataSources, constants.LAYOUT_SRC_ATTRIBUTES, mobile]);
 
   const defaultHeight = useMemo(() => {
     return height || layout._height || layout.height || 450;
@@ -245,21 +257,30 @@ function UnconnectedPlotlyComponent(props) {
   // Trigger resize event
   useEffect(() => {
     window.dispatchEvent(new Event('resize'));
-  }, [initialized, height, mobile, variation]);
+  }, [initialized, height, variation]);
 
-  // Set mobile state
+  // Set mobile state based on print mode or screen width
   useEffect(() => {
-    if (!container.current) {
+    if (isPrint) {
+      // Force mobile layout for print preview
+      setMobile(true);
       return;
     }
-    const width = container.current.offsetWidth;
 
-    if (width < 768 && !mobile) {
-      setMobile(true);
-    } else if (width >= 768 && mobile) {
-      setMobile(false);
-    }
-  }, [screen, mobile]);
+    // When not printing, determine mobile based on viewport width
+    // Use screen.page.width from Redux (updated on resize) or fallback to window.innerWidth
+    // Important: Don't use container.offsetWidth as it's constrained by max-width CSS
+    const viewportWidth = screen?.page?.width || window.innerWidth;
+    const shouldBeMobile = viewportWidth < 768;
+
+    setMobile(shouldBeMobile);
+  }, [isPrint, screen]);
+
+  // Trigger Plotly resize when mobile state changes
+  useEffect(() => {
+    if (!initialized) return;
+    window.dispatchEvent(new Event('resize'));
+  }, [initialized, mobile]);
 
   // Update scale
   useEffect(() => {
@@ -564,6 +585,7 @@ const ConnectedPlotlyComponent = compose(
   }),
   connect((state, props) => ({
     screen: state.screen,
+    isPrint: state.print?.isPrint || false,
     selfProvided:
       props.data.visualization?.provider_url === props.data.properties?.['@id'],
   })),
