@@ -64,7 +64,7 @@ function UnconnectedPlotlyComponent(props) {
     properties,
     provider_data,
     provider_metadata,
-    isPrint,
+    screen,
     selfProvided,
     onInsertBlock,
     onSelectBlock,
@@ -75,8 +75,7 @@ function UnconnectedPlotlyComponent(props) {
   const [filtersState, setFiltersState] = useState([]);
   const [autoscaleHeight, setAutoscaleHeight] = useState(null);
   const [autoscaleWidth, setAutoscaleWidth] = useState(null);
-  // Track measured container width for responsive behavior
-  const [measuredWidth, setMeasuredWidth] = useState(null);
+  const [mobile, setMobile] = useState(false);
 
   const loadingVisualization =
     !props.failedVisualization && props.loadingVisualization;
@@ -86,10 +85,6 @@ function UnconnectedPlotlyComponent(props) {
     props.loadingProviderData;
 
   const variation = props.data.visualization?.variation || 'filters_on_top';
-
-  // Derive mobile state from isPrint and measured width (no separate state needed)
-  // This eliminates cascading state updates and multiple useEffects
-  const mobile = isPrint || (measuredWidth !== null && measuredWidth < 768);
 
   const filters = useMemo(
     () =>
@@ -147,23 +142,16 @@ function UnconnectedPlotlyComponent(props) {
   }, [value.data, dataSources, filters, constants.TRACE_SRC_ATTRIBUTES]);
 
   const layout = useMemo(() => {
-    const baseLayout = updateDataSources(
+    return updateDataSources(
       value.layout || {},
       dataSources,
       constants.LAYOUT_SRC_ATTRIBUTES,
     );
+  }, [value.layout, dataSources, constants.LAYOUT_SRC_ATTRIBUTES]);
 
-    // When in mobile/print mode, remove fixed width to allow responsive behavior
-    if (mobile) {
-      const { width, ...layoutWithoutWidth } = baseLayout;
-      return {
-        ...layoutWithoutWidth,
-        autosize: true, // Ensure autosize is enabled
-      };
-    }
-
-    return baseLayout;
-  }, [value.layout, dataSources, constants.LAYOUT_SRC_ATTRIBUTES, mobile]);
+  const defaultHeight = useMemo(() => {
+    return height || layout._height || layout.height || 450;
+  }, [height, layout._height, layout.height]);
 
   const toolbarData = useMemo(() => {
     return {
@@ -181,10 +169,6 @@ function UnconnectedPlotlyComponent(props) {
         : {}),
     };
   }, [props.data, data, layout, dataSources, value.columns]);
-
-  const defaultHeight = useMemo(() => {
-    return height || layout._height || layout.height || 450;
-  }, [height, layout._height, layout.height]);
 
   // Define the core scale update logic as a separate function
   const updateScaleCore = useCallback(() => {
@@ -258,58 +242,24 @@ function UnconnectedPlotlyComponent(props) {
     setInitialized(true);
   }
 
-  // Measure container width for responsive behavior
+  // Trigger resize event
   useEffect(() => {
-    if (!container.current) return;
+    window.dispatchEvent(new Event('resize'));
+  }, [initialized, height, mobile, variation]);
 
-    const measureWidth = () => {
-      // Use parent container width or window width
-      // Don't use container.current width as it may be constrained by maxWidth
-      const parentWidth = container.current.parentElement?.offsetWidth || 0;
-      const windowWidth = window.innerWidth;
-      const availableWidth = parentWidth || windowWidth;
-      setMeasuredWidth(availableWidth);
-    };
-
-    // Initial measurement
-    measureWidth();
-
-    // Use ResizeObserver for efficient resize detection
-    let resizeObserver;
-    if (typeof ResizeObserver !== 'undefined') {
-      resizeObserver = new ResizeObserver(measureWidth);
-      resizeObserver.observe(container.current);
-    } else {
-      // Fallback to window resize listener for older browsers
-      window.addEventListener('resize', measureWidth);
+  // Set mobile state
+  useEffect(() => {
+    if (!container.current) {
+      return;
     }
+    const width = container.current.offsetWidth;
 
-    return () => {
-      if (resizeObserver) {
-        resizeObserver.disconnect();
-      } else {
-        window.removeEventListener('resize', measureWidth);
-      }
-    };
-  }, []);
-
-  // Notify Plotly when mobile state changes (derived from isPrint or width)
-  useEffect(() => {
-    if (!initialized || !el.current) return;
-
-    // Use requestAnimationFrame to ensure DOM has updated
-    const rafId = requestAnimationFrame(() => {
-      // Trigger Plotly's resize handler if available
-      if (el.current && typeof el.current.resizeHandler === 'function') {
-        el.current.resizeHandler();
-      } else {
-        // Fallback: dispatch resize event only if Plotly doesn't expose resize API
-        window.dispatchEvent(new Event('resize'));
-      }
-    });
-
-    return () => cancelAnimationFrame(rafId);
-  }, [initialized, mobile]);
+    if (width < 768 && !mobile) {
+      setMobile(true);
+    } else if (width >= 768 && mobile) {
+      setMobile(false);
+    }
+  }, [screen, mobile]);
 
   // Update scale
   useEffect(() => {
@@ -328,14 +278,9 @@ function UnconnectedPlotlyComponent(props) {
     };
   }, [initialized, layout.autoscale, updateScale, updateScaleCore]);
 
-  // Manage metadata section in edit mode
-  // Use ref to track if metadata has been initialized to prevent repeated insertions
-  const metadataInitialized = useRef(false);
-
+  // Insert metadata section
   useEffect(() => {
     if (mode !== 'edit') return;
-
-    // Handle metadata section removal
     if (!with_metadata_section) {
       let metadataBlock = null;
       mapKeys(properties.blocks, (data, b) => {
@@ -347,22 +292,18 @@ function UnconnectedPlotlyComponent(props) {
         onDeleteBlock(metadataBlock);
         onSelectBlock(block);
       }
-      metadataInitialized.current = false;
       return;
     }
-
-    // Handle metadata section insertion (only once when conditions are met)
-    if (vis_url && !loadingVisualization && !metadataInitialized.current) {
+    if (vis_url && !loadingVisualization) {
       const position = getFigurePosition(metadata || properties, block);
       const metadataSection = getFigureMetadata(
         block,
         props.data.properties,
         position,
       );
-      if (metadataSection) {
-        onInsertBlock(block, metadataSection);
-        metadataInitialized.current = true;
-      }
+      if (!metadataSection) return;
+
+      onInsertBlock(block, metadataSection);
     }
   }, [
     block,
@@ -623,7 +564,6 @@ const ConnectedPlotlyComponent = compose(
   }),
   connect((state, props) => ({
     screen: state.screen,
-    isPrint: state.print?.isPrint || false,
     selfProvided:
       props.data.visualization?.provider_url === props.data.properties?.['@id'],
   })),
