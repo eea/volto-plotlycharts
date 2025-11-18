@@ -104,9 +104,22 @@ function convertMatrixToCSV(matrix, readme = []) {
 
 function exportCSVFile(csv, title = 'data') {
   let fileTitle = title.toLowerCase().replace(' ', '_');
+
+  // Truncate filename to 100 characters maximum (excluding extension)
+  const maxLength = 100;
+  const extension = '.csv';
+
+  if (fileTitle.includes('.csv')) {
+    const nameWithoutExt = fileTitle.replace('.csv', '');
+    const truncatedName = nameWithoutExt.substring(0, maxLength);
+    fileTitle = truncatedName + extension;
+  } else {
+    fileTitle = fileTitle.substring(0, maxLength);
+  }
+
   let exportedFilenmae = fileTitle.includes('.csv')
     ? fileTitle
-    : fileTitle + '.csv';
+    : fileTitle + extension;
   trackLink({
     href: window.location.href + exportedFilenmae,
     linkType: 'download',
