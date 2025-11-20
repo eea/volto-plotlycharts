@@ -18,6 +18,7 @@ import {
   updateTrace,
   updateDataSources,
 } from '@eeacms/volto-plotlycharts/helpers/plotly';
+import { applyFilters } from '@eeacms/volto-plotlycharts/helpers/transforms';
 import { Toolbar } from '@eeacms/volto-plotlycharts/Utils';
 import Plot from './Plot';
 import Placeholder from './Placeholder';
@@ -112,40 +113,28 @@ function UnconnectedPlotlyComponent(props) {
     [provider_data, value.dataSources, selfProvided],
   );
 
+  const filteredDataSources = useMemo(
+    () => applyFilters(dataSources, filters),
+    [dataSources, filters],
+  );
+
   const data = useMemo(() => {
     return (value.data || []).reduce((acc, trace) => {
       const updatedTrace = updateDataSources(
         updateTrace(trace),
-        dataSources,
+        filteredDataSources,
         constants.TRACE_SRC_ATTRIBUTES,
       );
-
-      filters.forEach((filter) => {
-        if (!updatedTrace.transforms) {
-          updatedTrace.transforms = [];
-        }
-        updatedTrace.transforms.push({
-          type: 'filter',
-          target: dataSources[filter.field],
-          targetsrc: filter.field,
-          meta: {
-            columnNames: {
-              target: filter.field,
-            },
-          },
-          value: filter.data?.value || null,
-        });
-      });
 
       acc.push(updatedTrace);
       return acc;
     }, []);
-  }, [value.data, dataSources, filters, constants.TRACE_SRC_ATTRIBUTES]);
+  }, [value.data, filteredDataSources, constants.TRACE_SRC_ATTRIBUTES]);
 
   const layout = useMemo(() => {
     const baseLayout = updateDataSources(
       value.layout || {},
-      dataSources,
+      filteredDataSources,
       constants.LAYOUT_SRC_ATTRIBUTES,
     );
 
@@ -159,7 +148,12 @@ function UnconnectedPlotlyComponent(props) {
     }
 
     return baseLayout;
-  }, [value.layout, dataSources, constants.LAYOUT_SRC_ATTRIBUTES, mobile]);
+  }, [
+    value.layout,
+    filteredDataSources,
+    constants.LAYOUT_SRC_ATTRIBUTES,
+    mobile,
+  ]);
 
   const defaultHeight = useMemo(() => {
     return height || layout._height || layout.height || 450;
@@ -174,13 +168,13 @@ function UnconnectedPlotlyComponent(props) {
               ...props.data.visualization,
               data,
               layout,
-              dataSources,
+              dataSources: filteredDataSources,
               columns: value.columns?.map((column) => column.key) || [],
             },
           }
         : {}),
     };
-  }, [props.data, data, layout, dataSources, value.columns]);
+  }, [props.data, data, layout, filteredDataSources, value.columns]);
 
   // Define the core scale update logic as a separate function
   const updateScaleCore = useCallback(() => {
