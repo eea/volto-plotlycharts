@@ -19,11 +19,13 @@ import {
   updateTrace,
   updateDataSources,
 } from '@eeacms/volto-plotlycharts/helpers/plotly';
+import {} from '@eeacms/volto-plotlycharts/helpers/transforms';
 
 import { TemplateSelector } from './widgets';
 import DefaultEditor from './DefaultEditor';
 
 import chartHelp from './chartHelp.json';
+import { applyFilters } from '../helpers/transforms';
 
 const config = { editable: false, displayModeBar: false, responsive: true };
 
@@ -77,6 +79,11 @@ const UnconnectedPlotlyEditor = forwardRef((props, ref) => {
     [provider_data, value.dataSources],
   );
 
+  const filteredDataSources = useMemo(
+    () => applyFilters(dataSources, value.filters),
+    [dataSources, value.filters],
+  );
+
   const dataSourceOptions = useMemo(
     () =>
       Object.keys(dataSources).map((name) => ({
@@ -90,22 +97,22 @@ const UnconnectedPlotlyEditor = forwardRef((props, ref) => {
     return (value.data || []).reduce((acc, trace) => {
       const updatedTrace = updateDataSources(
         updateTrace(trace),
-        dataSources,
+        filteredDataSources,
         TRACE_SRC_ATTRIBUTES,
       );
 
       acc.push(updatedTrace);
       return acc;
     }, []);
-  }, [value.data, dataSources, TRACE_SRC_ATTRIBUTES]);
+  }, [value.data, filteredDataSources, TRACE_SRC_ATTRIBUTES]);
 
   const layout = useMemo(() => {
     return updateDataSources(
       value.layout || {},
-      dataSources,
+      filteredDataSources,
       LAYOUT_SRC_ATTRIBUTES,
     );
-  }, [value.layout, dataSources, LAYOUT_SRC_ATTRIBUTES]);
+  }, [value.layout, filteredDataSources, LAYOUT_SRC_ATTRIBUTES]);
 
   const ctx = useMemo(
     () => ({
