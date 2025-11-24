@@ -1,6 +1,34 @@
 import isString from 'lodash/isString';
 import { trackLink } from '@eeacms/volto-matomo/utils';
 
+/**
+ * Truncates a filename to a maximum length, preserving the extension
+ * @param {string} filename - The filename to truncate
+ * @param {number} maxLength - Maximum length for the filename (excluding extension)
+ * @returns {string} - The truncated filename with extension
+ */
+function truncateFilename(filename, maxLength = 100) {
+  if (!filename) return 'data';
+
+  let processedName = filename.toLowerCase().replace(/ /g, '_');
+
+  // Extract extension if present
+  const lastDotIndex = processedName.lastIndexOf('.');
+  let name = processedName;
+  let extension = '';
+
+  if (lastDotIndex > 0) {
+    name = processedName.substring(0, lastDotIndex);
+    extension = processedName.substring(lastDotIndex);
+  }
+
+  if (name.length > maxLength) {
+    name = name.substring(0, maxLength);
+  }
+
+  return name + extension;
+}
+
 function downloadDataURL(dataURL, filename) {
   // Create a temporary anchor element
   const a = document.createElement('a');
@@ -103,23 +131,14 @@ function convertMatrixToCSV(matrix, readme = []) {
 }
 
 function exportCSVFile(csv, title = 'data') {
-  let fileTitle = title.toLowerCase().replace(' ', '_');
-
   // Truncate filename to 100 characters maximum (excluding extension)
-  const maxLength = 100;
-  const extension = '.csv';
+  let fileTitle = truncateFilename(title, 100);
 
-  if (fileTitle.includes('.csv')) {
-    const nameWithoutExt = fileTitle.replace('.csv', '');
-    const truncatedName = nameWithoutExt.substring(0, maxLength);
-    fileTitle = truncatedName + extension;
-  } else {
-    fileTitle = fileTitle.substring(0, maxLength);
+  if (!fileTitle.endsWith('.csv')) {
+    fileTitle = fileTitle + '.csv';
   }
 
-  let exportedFilenmae = fileTitle.includes('.csv')
-    ? fileTitle
-    : fileTitle + extension;
+  let exportedFilenmae = fileTitle;
   trackLink({
     href: window.location.href + exportedFilenmae,
     linkType: 'download',
@@ -218,10 +237,14 @@ const spreadCoreMetadata = (core_metadata) => {
 };
 
 function exportZipFile(zipData, title = 'data') {
-  let fileTitle = title.toLowerCase().replace(' ', '_');
-  let exportedFilename = fileTitle.includes('.zip')
-    ? fileTitle
-    : fileTitle + '.zip';
+  // Truncate filename to 100 characters maximum (excluding extension)
+  let fileTitle = truncateFilename(title, 100);
+
+  if (!fileTitle.endsWith('.zip')) {
+    fileTitle = fileTitle + '.zip';
+  }
+
+  let exportedFilename = fileTitle;
 
   trackLink({
     href: window.location.href + exportedFilename,
@@ -488,4 +511,5 @@ export {
   applySplitTransform,
   spreadCoreMetadata,
   renameKey,
+  truncateFilename,
 };
