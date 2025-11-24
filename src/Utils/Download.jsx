@@ -73,7 +73,9 @@ function Download(props) {
         // Truncate dataset filename to 100 characters (excluding extension)
         const datasetName = datasetData.name || 'data';
         const truncatedName = truncateFilename(datasetName, 100);
-        const fileName = truncatedName.endsWith('.csv') ? truncatedName : `${truncatedName}.csv`;
+        const fileName = truncatedName.endsWith('.csv')
+          ? truncatedName
+          : `${truncatedName}.csv`;
         zip.file(fileName, csvData);
       }
 
@@ -87,7 +89,9 @@ function Download(props) {
       );
       // Truncate complete CSV filename to 100 characters (excluding extension)
       const truncatedTitle = truncateFilename(title, 100);
-      const completeFileName = truncatedTitle.endsWith('.csv') ? truncatedTitle : `${truncatedTitle}.csv`;
+      const completeFileName = truncatedTitle.endsWith('.csv')
+        ? truncatedTitle
+        : `${truncatedTitle}.csv`;
       zip.file(completeFileName, completeCSVData);
 
       const zipBlob = await zip.generateAsync({ type: 'blob' });
