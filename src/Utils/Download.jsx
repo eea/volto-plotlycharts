@@ -189,9 +189,15 @@ function Download(props) {
         height,
       });
 
+      // Truncate filename to 100 characters (excluding extension)
+      const truncatedTitle = truncateFilename(title, 100);
+      const imageFileName = truncatedTitle.endsWith(`.${type.toLowerCase()}`)
+        ? truncatedTitle
+        : `${truncatedTitle}.${type.toLowerCase()}`;
+
       const link = document.createElement('a');
       link.href = base64;
-      link.download = `${title}.${type.toLowerCase()}`;
+      link.download = imageFileName;
       link.click();
 
       document.body.removeChild(container);
@@ -243,9 +249,15 @@ function Download(props) {
       height,
     });
 
+    // Truncate filename to 100 characters (excluding extension)
+    const truncatedTitle = truncateFilename(title, 100);
+    const imageFileName = truncatedTitle.endsWith(`.${type.toLowerCase()}`)
+      ? truncatedTitle
+      : `${truncatedTitle}.${type.toLowerCase()}`;
+
     const link = document.createElement('a');
     link.href = base64;
-    link.download = `${title}.${type.toLowerCase()}`;
+    link.download = imageFileName;
     link.click();
 
     document.body.removeChild(container);
