@@ -3,16 +3,16 @@
 [![Releases](https://img.shields.io/github/v/release/eea/volto-plotlycharts)](https://github.com/eea/volto-plotlycharts/releases)
 
 [![Pipeline](https://ci.eionet.europa.eu/buildStatus/icon?job=volto-addons%2Fvolto-plotlycharts%2Fmaster&subject=master)](https://ci.eionet.europa.eu/view/Github/job/volto-addons/job/volto-plotlycharts/job/master/display/redirect)
-[![Lines of Code](https://sonarqube.eea.europa.eu/api/project_badges/measure?project=volto-plotlycharts-master&metric=ncloc)](https://sonarqube.eea.europa.eu/dashboard?id=volto-plotlycharts-master)
-[![Coverage](https://sonarqube.eea.europa.eu/api/project_badges/measure?project=volto-plotlycharts-master&metric=coverage)](https://sonarqube.eea.europa.eu/dashboard?id=volto-plotlycharts-master)
-[![Bugs](https://sonarqube.eea.europa.eu/api/project_badges/measure?project=volto-plotlycharts-master&metric=bugs)](https://sonarqube.eea.europa.eu/dashboard?id=volto-plotlycharts-master)
-[![Duplicated Lines (%)](https://sonarqube.eea.europa.eu/api/project_badges/measure?project=volto-plotlycharts-master&metric=duplicated_lines_density)](https://sonarqube.eea.europa.eu/dashboard?id=volto-plotlycharts-master)
+[![Lines of Code](https://sonarqube.eea.europa.eu/api/project_badges/measure?project=volto-plotlycharts&metric=ncloc)](https://sonarqube.eea.europa.eu/dashboard?id=volto-plotlycharts)
+[![Coverage](https://sonarqube.eea.europa.eu/api/project_badges/measure?project=volto-plotlycharts&metric=coverage)](https://sonarqube.eea.europa.eu/dashboard?id=volto-plotlycharts)
+[![Bugs](https://sonarqube.eea.europa.eu/api/project_badges/measure?project=volto-plotlycharts&metric=bugs)](https://sonarqube.eea.europa.eu/dashboard?id=volto-plotlycharts)
+[![Duplicated Lines (%)](https://sonarqube.eea.europa.eu/api/project_badges/measure?project=volto-plotlycharts&metric=duplicated_lines_density)](https://sonarqube.eea.europa.eu/dashboard?id=volto-plotlycharts)
 
 [![Pipeline](https://ci.eionet.europa.eu/buildStatus/icon?job=volto-addons%2Fvolto-plotlycharts%2Fdevelop&subject=develop)](https://ci.eionet.europa.eu/view/Github/job/volto-addons/job/volto-plotlycharts/job/develop/display/redirect)
-[![Lines of Code](https://sonarqube.eea.europa.eu/api/project_badges/measure?project=volto-plotlycharts-develop&metric=ncloc)](https://sonarqube.eea.europa.eu/dashboard?id=volto-plotlycharts-develop)
-[![Coverage](https://sonarqube.eea.europa.eu/api/project_badges/measure?project=volto-plotlycharts-develop&metric=coverage)](https://sonarqube.eea.europa.eu/dashboard?id=volto-plotlycharts-develop)
-[![Bugs](https://sonarqube.eea.europa.eu/api/project_badges/measure?project=volto-plotlycharts-develop&metric=bugs)](https://sonarqube.eea.europa.eu/dashboard?id=volto-plotlycharts-develop)
-[![Duplicated Lines (%)](https://sonarqube.eea.europa.eu/api/project_badges/measure?project=volto-plotlycharts-develop&metric=duplicated_lines_density)](https://sonarqube.eea.europa.eu/dashboard?id=volto-plotlycharts-develop)
+[![Lines of Code](https://sonarqube.eea.europa.eu/api/project_badges/measure?project=volto-plotlycharts&branch=develop&metric=ncloc)](https://sonarqube.eea.europa.eu/dashboard?id=volto-plotlycharts&branch=develop)
+[![Coverage](https://sonarqube.eea.europa.eu/api/project_badges/measure?project=volto-plotlycharts&branch=develop&metric=coverage)](https://sonarqube.eea.europa.eu/dashboard?id=volto-plotlycharts&branch=develop)
+[![Bugs](https://sonarqube.eea.europa.eu/api/project_badges/measure?project=volto-plotlycharts&branch=develop&metric=bugs)](https://sonarqube.eea.europa.eu/dashboard?id=volto-plotlycharts&branch=develop)
+[![Duplicated Lines (%)](https://sonarqube.eea.europa.eu/api/project_badges/measure?project=volto-plotlycharts&branch=develop&metric=duplicated_lines_density)](https://sonarqube.eea.europa.eu/dashboard?id=volto-plotlycharts&branch=develop)
 
 [Volto](https://github.com/plone/volto) add-on
 
