@@ -47,6 +47,11 @@ Plotly Charts and Plotly Chart Editor integration with Volto
 
 Go to http://localhost:3000
 
+`make start` now defaults to Volto 18. To run the same setup against Volto 17, use:
+
+      VOLTO_VERSION=17 make
+      VOLTO_VERSION=17 make start
+
 ### Add volto-plotlycharts to your Volto project
 
 1. Make sure you have a [Plone backend](https://plone.org/download) up-and-running at http://localhost:8080/Plone
@@ -69,20 +74,27 @@ Go to http://localhost:3000
   }
   ```
 
-- If not, create one:
+- If not, create one with Cookieplone, as recommended by the official Plone documentation for Volto 18+:
 
   ```
-  npm install -g yo @plone/generator-volto
-  yo @plone/volto my-volto-project --canary --addon @eeacms/volto-plotlycharts
-  cd my-volto-project
+  uvx cookieplone project
+  cd project-title
   ```
 
-1. Install new add-ons and restart Volto:
+1. Install or update dependencies, then start the project:
 
    ```
-   yarn
-   yarn start
+   make install
    ```
+
+   For a Cookieplone project, start the backend and frontend in separate terminals:
+
+   ```
+   make backend-start
+   make frontend-start
+   ```
+
+   For a legacy Volto 17 project, install the package with `yarn` and restart the frontend as usual.
 
 1. Go to http://localhost:3000
 
