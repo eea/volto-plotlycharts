@@ -3,16 +3,16 @@
 [![Releases](https://img.shields.io/github/v/release/eea/volto-plotlycharts)](https://github.com/eea/volto-plotlycharts/releases)
 
 [![Pipeline](https://ci.eionet.europa.eu/buildStatus/icon?job=volto-addons%2Fvolto-plotlycharts%2Fmaster&subject=master)](https://ci.eionet.europa.eu/view/Github/job/volto-addons/job/volto-plotlycharts/job/master/display/redirect)
-[![Lines of Code](https://sonarqube.eea.europa.eu/api/project_badges/measure?project=volto-plotlycharts-master&metric=ncloc)](https://sonarqube.eea.europa.eu/dashboard?id=volto-plotlycharts-master)
-[![Coverage](https://sonarqube.eea.europa.eu/api/project_badges/measure?project=volto-plotlycharts-master&metric=coverage)](https://sonarqube.eea.europa.eu/dashboard?id=volto-plotlycharts-master)
-[![Bugs](https://sonarqube.eea.europa.eu/api/project_badges/measure?project=volto-plotlycharts-master&metric=bugs)](https://sonarqube.eea.europa.eu/dashboard?id=volto-plotlycharts-master)
-[![Duplicated Lines (%)](https://sonarqube.eea.europa.eu/api/project_badges/measure?project=volto-plotlycharts-master&metric=duplicated_lines_density)](https://sonarqube.eea.europa.eu/dashboard?id=volto-plotlycharts-master)
+[![Lines of Code](https://sonarqube.eea.europa.eu/api/project_badges/measure?project=volto-plotlycharts&metric=ncloc)](https://sonarqube.eea.europa.eu/dashboard?id=volto-plotlycharts)
+[![Coverage](https://sonarqube.eea.europa.eu/api/project_badges/measure?project=volto-plotlycharts&metric=coverage)](https://sonarqube.eea.europa.eu/dashboard?id=volto-plotlycharts)
+[![Bugs](https://sonarqube.eea.europa.eu/api/project_badges/measure?project=volto-plotlycharts&metric=bugs)](https://sonarqube.eea.europa.eu/dashboard?id=volto-plotlycharts)
+[![Duplicated Lines (%)](https://sonarqube.eea.europa.eu/api/project_badges/measure?project=volto-plotlycharts&metric=duplicated_lines_density)](https://sonarqube.eea.europa.eu/dashboard?id=volto-plotlycharts)
 
 [![Pipeline](https://ci.eionet.europa.eu/buildStatus/icon?job=volto-addons%2Fvolto-plotlycharts%2Fdevelop&subject=develop)](https://ci.eionet.europa.eu/view/Github/job/volto-addons/job/volto-plotlycharts/job/develop/display/redirect)
-[![Lines of Code](https://sonarqube.eea.europa.eu/api/project_badges/measure?project=volto-plotlycharts-develop&metric=ncloc)](https://sonarqube.eea.europa.eu/dashboard?id=volto-plotlycharts-develop)
-[![Coverage](https://sonarqube.eea.europa.eu/api/project_badges/measure?project=volto-plotlycharts-develop&metric=coverage)](https://sonarqube.eea.europa.eu/dashboard?id=volto-plotlycharts-develop)
-[![Bugs](https://sonarqube.eea.europa.eu/api/project_badges/measure?project=volto-plotlycharts-develop&metric=bugs)](https://sonarqube.eea.europa.eu/dashboard?id=volto-plotlycharts-develop)
-[![Duplicated Lines (%)](https://sonarqube.eea.europa.eu/api/project_badges/measure?project=volto-plotlycharts-develop&metric=duplicated_lines_density)](https://sonarqube.eea.europa.eu/dashboard?id=volto-plotlycharts-develop)
+[![Lines of Code](https://sonarqube.eea.europa.eu/api/project_badges/measure?project=volto-plotlycharts&branch=develop&metric=ncloc)](https://sonarqube.eea.europa.eu/dashboard?id=volto-plotlycharts&branch=develop)
+[![Coverage](https://sonarqube.eea.europa.eu/api/project_badges/measure?project=volto-plotlycharts&branch=develop&metric=coverage)](https://sonarqube.eea.europa.eu/dashboard?id=volto-plotlycharts&branch=develop)
+[![Bugs](https://sonarqube.eea.europa.eu/api/project_badges/measure?project=volto-plotlycharts&branch=develop&metric=bugs)](https://sonarqube.eea.europa.eu/dashboard?id=volto-plotlycharts&branch=develop)
+[![Duplicated Lines (%)](https://sonarqube.eea.europa.eu/api/project_badges/measure?project=volto-plotlycharts&branch=develop&metric=duplicated_lines_density)](https://sonarqube.eea.europa.eu/dashboard?id=volto-plotlycharts&branch=develop)
 
 [Volto](https://github.com/plone/volto) add-on
 
@@ -47,6 +47,11 @@ Plotly Charts and Plotly Chart Editor integration with Volto
 
 Go to http://localhost:3000
 
+`make start` now defaults to Volto 18. To run the same setup against Volto 17, use:
+
+      VOLTO_VERSION=17 make
+      VOLTO_VERSION=17 make start
+
 ### Add volto-plotlycharts to your Volto project
 
 1. Make sure you have a [Plone backend](https://plone.org/download) up-and-running at http://localhost:8080/Plone
@@ -60,29 +65,38 @@ Go to http://localhost:3000
 - If you already have a volto project, just update `package.json`:
 
   ```JSON
-  "addons": [
-      "@eeacms/volto-plotlycharts"
-  ],
-
   "dependencies": {
       "@eeacms/volto-plotlycharts": "*"
   }
   ```
 
-- If not, create one:
+   and `volto.config.js`:
+
+   ```JavaScript
+   const addons = ['@eeacms/volto-plotlycharts'];
+   ```
+
+- If not, create one with Cookieplone, as recommended by the official Plone documentation for Volto 18+:
 
   ```
-  npm install -g yo @plone/generator-volto
-  yo @plone/volto my-volto-project --canary --addon @eeacms/volto-plotlycharts
-  cd my-volto-project
+  uvx cookieplone project
+  cd project-title
   ```
 
-1. Install new add-ons and restart Volto:
+1. Install or update dependencies, then start the project:
 
    ```
-   yarn
-   yarn start
+   make install
    ```
+
+   For a Cookieplone project, start the backend and frontend in separate terminals:
+
+   ```
+   make backend-start
+   make frontend-start
+   ```
+
+   For a legacy Volto 17 project, install the package with `yarn` and restart the frontend as usual.
 
 1. Go to http://localhost:3000
 
