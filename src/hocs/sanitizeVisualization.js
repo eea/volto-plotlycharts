@@ -1,5 +1,6 @@
 import React, { forwardRef } from 'react';
-import { cloneDeep, merge } from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
+import merge from 'lodash/merge';
 
 const sanitizeVisualization = (WrappedComponent) =>
   forwardRef((props, ref) => {

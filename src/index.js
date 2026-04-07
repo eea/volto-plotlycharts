@@ -68,11 +68,11 @@ const applyConfig = (config) => {
   config.settings.loadables = {
     ...config.settings.loadables,
     reactChartEditor: loadable.lib(() => import('@eeacms/react-chart-editor')),
-    reactChartEditorLib: loadable.lib(() =>
-      import('@eeacms/react-chart-editor/lib'),
+    reactChartEditorLib: loadable.lib(
+      () => import('@eeacms/react-chart-editor/lib'),
     ),
-    plotlyComponentFactory: loadable.lib(() =>
-      import('react-plotly.js/factory'),
+    plotlyComponentFactory: loadable.lib(
+      () => import('react-plotly.js/factory'),
     ),
     plotlyLib: loadable.lib(() => import('plotly.js/dist/plotly-with-meta')),
     plotlyMinLib: loadable.lib(() => import('plotly.js/dist/plotly.min')),

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { map } from 'lodash';
+import map from 'lodash/map';
 import cx from 'classnames';
 import { Button, Modal, Label } from 'semantic-ui-react';
 
-import { FormFieldWrapper } from '@plone/volto/components';
+import { FormFieldWrapper } from '@plone/volto/components/manage/Widgets';
 
 import { pickMetadata } from '@eeacms/volto-embed/helpers';
 

@@ -4,7 +4,7 @@
  */
 
 import { GET_VISUALIZATION, REMOVE_VISUALIZATION } from '../constants';
-import { without } from 'lodash';
+import without from 'lodash/without';
 
 const initialState = {
   data: {},

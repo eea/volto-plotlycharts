@@ -1,7 +1,8 @@
 import { injectLazyLibs } from '@plone/volto/helpers/Loadable/Loadable';
 import { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { sortBy, omit } from 'lodash';
+import sortBy from 'lodash/sortBy';
+import omit from 'lodash/omit';
 import cx from 'classnames';
 import loadable from '@loadable/component';
 import { Modal, Popup, Menu } from 'semantic-ui-react';
@@ -9,11 +10,11 @@ import { PlusIcon } from 'plotly-icons';
 
 import PlotlyEditor from '@eeacms/volto-plotlycharts/PlotlyEditor';
 
-const PlotlyButton = loadable(() =>
-  import('@eeacms/react-chart-editor/lib/components/widgets/Button'),
+const PlotlyButton = loadable(
+  () => import('@eeacms/react-chart-editor/lib/components/widgets/Button'),
 );
-const plotlyUtils = loadable.lib(() =>
-  import('@eeacms/volto-plotlycharts/helpers/plotly'),
+const plotlyUtils = loadable.lib(
+  () => import('@eeacms/volto-plotlycharts/helpers/plotly'),
 );
 
 const EditTemplate = (props) => {
