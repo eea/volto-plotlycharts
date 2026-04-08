@@ -3,7 +3,10 @@
  * @module reducers/data_providers
  */
 
-import { GET_VISUALIZATION, REMOVE_VISUALIZATION } from '../constants';
+import {
+  GET_VISUALIZATION,
+  REMOVE_VISUALIZATION,
+} from '@eeacms/volto-plotlycharts/constants';
 import without from 'lodash/without';
 
 const initialState = {
