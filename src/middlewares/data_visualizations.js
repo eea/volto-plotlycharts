@@ -1,4 +1,4 @@
-import { GET_VISUALIZATION } from '../constants';
+import { GET_VISUALIZATION } from '@eeacms/volto-plotlycharts/constants';
 
 export const data_visualizations = (middlewares) => [
   (store) => (next) => (action) => {

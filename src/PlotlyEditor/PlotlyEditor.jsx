@@ -29,7 +29,7 @@ import { TemplateSelector } from './widgets';
 import DefaultEditor from './DefaultEditor';
 
 import chartHelp from './chartHelp.json';
-import { applyFilters } from '../helpers/transforms';
+import { applyFilters } from '@eeacms/volto-plotlycharts/helpers/transforms';
 
 const config = { editable: false, displayModeBar: false, responsive: true };
 
