@@ -3,7 +3,7 @@ import map from 'lodash/map';
 import cx from 'classnames';
 import { Button, Modal, Label } from 'semantic-ui-react';
 
-import { FormFieldWrapper } from '@plone/volto/components/manage/Widgets';
+import FormFieldWrapper from '@plone/volto/components/manage/Widgets/FormFieldWrapper';
 
 import { pickMetadata } from '@eeacms/volto-embed/helpers';
 

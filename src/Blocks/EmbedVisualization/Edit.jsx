@@ -1,7 +1,7 @@
 import React from 'react';
 import { Message } from 'semantic-ui-react';
 import SidebarPortal from '@plone/volto/components/manage/Sidebar/SidebarPortal';
-import { BlockDataForm } from '@plone/volto/components/manage/Form';
+import BlockDataForm from '@plone/volto/components/manage/Form/BlockDataForm';
 import PlotlyComponent from '@eeacms/volto-plotlycharts/PlotlyComponent';
 import schema from './schema';
 

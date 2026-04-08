@@ -17,7 +17,7 @@ import { toast } from 'react-toastify';
 import Icon from '@plone/volto/components/theme/Icon/Icon';
 import Toolbar from '@plone/volto/components/manage/Toolbar/Toolbar';
 import Toast from '@plone/volto/components/manage/Toast/Toast';
-import { Form } from '@plone/volto/components/manage/Form';
+import Form from '@plone/volto/components/manage/Form/Form';
 import {
   updateControlpanel,
   getControlpanel,
