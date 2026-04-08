@@ -1,4 +1,4 @@
-import { uniqBy } from 'lodash';
+import uniqBy from 'lodash/uniqBy';
 import installEmbedVisualization from './EmbedVisualization';
 import installPlotlyChart from './PlotlyChart';
 import installTreemap from './Treemap';

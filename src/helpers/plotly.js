@@ -1,4 +1,7 @@
-import { isArray, isEqual, isString, cloneDeep } from 'lodash';
+import isArray from 'lodash/isArray';
+import isEqual from 'lodash/isEqual';
+import isString from 'lodash/isString';
+import cloneDeep from 'lodash/cloneDeep';
 import nestedProperty from 'plotly.js/src/lib/nested_property';
 import {
   constants,

@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
-import { omit, sortBy } from 'lodash';
+import omit from 'lodash/omit';
+import sortBy from 'lodash/sortBy';
 import { injectLazyLibs } from '@plone/volto/helpers/Loadable/Loadable';
 
 function Template(props) {

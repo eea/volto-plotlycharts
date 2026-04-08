@@ -9,7 +9,7 @@ import {
   DropdownItem,
   DropdownDivider,
 } from 'semantic-ui-react';
-import { Toast } from '@plone/volto/components';
+import Toast from '@plone/volto/components/manage/Toast/Toast';
 import {
   initEditor,
   destroyEditor,
@@ -18,8 +18,8 @@ import {
 
 import 'jsoneditor/dist/jsoneditor.min.css';
 
-const Button = loadable(() =>
-  import('@eeacms/react-chart-editor/lib/components/widgets/Button'),
+const Button = loadable(
+  () => import('@eeacms/react-chart-editor/lib/components/widgets/Button'),
 );
 
 const JsonEditor = (props) => {

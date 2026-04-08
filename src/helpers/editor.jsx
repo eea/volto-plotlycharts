@@ -1,11 +1,11 @@
-import { isString } from 'lodash';
+import isString from 'lodash/isString';
 import { toast } from 'react-toastify';
-import { Toast } from '@plone/volto/components';
+import Toast from '@plone/volto/components/manage/Toast/Toast';
 
 import loadable from '@loadable/component';
 
-const LoadableJsonEditor = loadable.lib(() =>
-  import('jsoneditor/dist/jsoneditor.min'),
+const LoadableJsonEditor = loadable.lib(
+  () => import('jsoneditor/dist/jsoneditor.min'),
 );
 
 const jsoneditor = __CLIENT__ && LoadableJsonEditor;

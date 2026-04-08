@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
-import { isUndefined } from 'lodash';
+import isUndefined from 'lodash/isUndefined';
 import { connect, useDispatch } from 'react-redux';
 import { getVisualization } from '@eeacms/volto-plotlycharts/actions';
 

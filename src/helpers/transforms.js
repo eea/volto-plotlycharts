@@ -1,4 +1,6 @@
-import { cloneDeep, keys, mapValues } from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
+import keys from 'lodash/keys';
+import mapValues from 'lodash/mapValues';
 
 export const applyFilters = (dataSources, filters) => {
   // Early return if no filters or empty dataSources
