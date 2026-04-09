@@ -25,7 +25,7 @@ import {
 } from '@eeacms/react-chart-editor/lib/components/fields/derived';
 import DataSelector from '@eeacms/react-chart-editor/lib/components/fields/DataSelector';
 
-import { TextInput } from '../fields';
+import { TextInput } from '@eeacms/volto-plotlycharts/PlotlyEditor/fields';
 
 const Sizes = (_, { graphDiv }) => {
   if (!graphDiv) {

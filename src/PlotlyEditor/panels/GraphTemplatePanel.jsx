@@ -1,4 +1,4 @@
-import { findIndex } from 'lodash';
+import findIndex from 'lodash/findIndex';
 import PropTypes from 'prop-types';
 import PlotlyPanel from '@eeacms/react-chart-editor/lib/components/containers/PlotlyPanel';
 import PlotlyFold from '@eeacms/react-chart-editor/lib/components/containers/PlotlyFold';

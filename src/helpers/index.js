@@ -1,4 +1,4 @@
-import { cloneDeep } from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
 import { v4 as uuid } from 'uuid';
 import { getAllBlocks } from '@plone/volto-slate/utils';
 

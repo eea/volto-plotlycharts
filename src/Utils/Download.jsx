@@ -1,10 +1,10 @@
 import { injectLazyLibs } from '@plone/volto/helpers/Loadable/Loadable';
 import React from 'react';
 import cx from 'classnames';
-import { cloneDeep } from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
 import { useLocation } from 'react-router-dom';
 import { Popup } from 'semantic-ui-react';
-import { toPublicURL } from '@plone/volto/helpers';
+import { toPublicURL } from '@plone/volto/helpers/Url/Url';
 import {
   exportCSVFile,
   exportZipFile,

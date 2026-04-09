@@ -8,10 +8,14 @@ import React, {
 } from 'react';
 import { compose } from 'redux';
 import { useLocation } from 'react-router-dom';
-import { cloneDeep, isEqual, isNil, sortBy, debounce } from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
+import isEqual from 'lodash/isEqual';
+import isNil from 'lodash/isNil';
+import sortBy from 'lodash/sortBy';
+import debounce from 'lodash/debounce';
 import { injectLazyLibs } from '@plone/volto/helpers/Loadable/Loadable';
 
-import { Api } from '@plone/volto/helpers';
+import Api from '@plone/volto/helpers/Api/Api';
 
 import { connectToProviderData } from '@eeacms/volto-datablocks/hocs';
 
@@ -25,7 +29,7 @@ import { TemplateSelector } from './widgets';
 import DefaultEditor from './DefaultEditor';
 
 import chartHelp from './chartHelp.json';
-import { applyFilters } from '../helpers/transforms';
+import { applyFilters } from '@eeacms/volto-plotlycharts/helpers/transforms';
 
 const config = { editable: false, displayModeBar: false, responsive: true };
 

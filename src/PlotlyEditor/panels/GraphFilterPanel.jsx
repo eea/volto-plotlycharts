@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
-import { isArray, uniq } from 'lodash';
+import isArray from 'lodash/isArray';
+import uniq from 'lodash/uniq';
 
 import PlotlyPanel from '@eeacms/react-chart-editor/lib/components/containers/PlotlyPanel';
 import PlotlyFold from '@eeacms/react-chart-editor/lib/components/containers/PlotlyFold';
