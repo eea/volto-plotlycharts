@@ -14,6 +14,7 @@ const View = (props) => {
           download_button: true,
           has_data_query_by_context: data.has_data_query_by_context ?? true,
           with_sources: true,
+          llm_summary: data.properties?.llm_summary,
         }}
       />
     </div>

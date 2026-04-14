@@ -24,6 +24,7 @@ const VisualizationView = (props) => {
               with_share: true,
               properties: pickMetadata(props.content),
               visualization: props.content.visualization,
+              llm_summary: props.content.llm_summary,
             }}
           />
         </div>

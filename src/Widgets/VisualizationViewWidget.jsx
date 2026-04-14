@@ -14,6 +14,7 @@ function VisualizationViewWidget(props) {
         with_share: true,
         visualization: props.value,
         properties: pickMetadata(props.content),
+        llm_summary: props.content.llm_summary,
       }}
     />
   );
