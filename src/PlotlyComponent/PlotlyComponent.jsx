@@ -77,7 +77,12 @@ function UnconnectedPlotlyComponent(props) {
     onSelectBlock,
     onDeleteBlock,
   } = props;
-  const { height, vis_url, with_metadata_section = true } = props.data;
+  const {
+    height,
+    vis_url,
+    with_metadata_section = true,
+    llm_summary,
+  } = props.data;
   const [initialized, setInitialized] = useState(false);
   const [filtersState, setFiltersState] = useState([]);
   const [autoscaleHeight, setAutoscaleHeight] = useState(null);
@@ -429,6 +434,16 @@ function UnconnectedPlotlyComponent(props) {
         data={toolbarData}
         provider_metadata={provider_metadata}
       />
+
+      {llm_summary && (
+        <div
+          className="llm-summary"
+          style={{ display: 'none' }}
+          aria-hidden="true"
+        >
+          {llm_summary}
+        </div>
+      )}
     </div>
   );
 }
