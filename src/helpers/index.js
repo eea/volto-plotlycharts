@@ -1,6 +1,7 @@
 import cloneDeep from 'lodash/cloneDeep';
 import { v4 as uuid } from 'uuid';
 import { getAllBlocks } from '@plone/volto-slate/utils';
+import { insertBlock } from '@plone/volto/helpers/Blocks/Blocks';
 
 export const defaults = {
   axis: {
@@ -203,9 +204,67 @@ export const getFigurePosition = (metadata, block) => {
   return position > 0 ? position + 1 : 1;
 };
 
+export const getFigureMetadataId = (block) => `figure-metadata-${block}`;
+
+export function getGeneratedFigureMetadataBlockId(properties, block) {
+  const metadataId = getFigureMetadataId(block);
+  return (
+    Object.keys(properties?.blocks || {}).find(
+      (blockId) => properties.blocks[blockId]?.id === metadataId,
+    ) || null
+  );
+}
+
+export function deleteGeneratedFigureMetadataBlock({
+  properties,
+  block,
+  onDeleteBlock,
+  onSelectBlock,
+}) {
+  const metadataBlock = getGeneratedFigureMetadataBlockId(properties, block);
+  if (!metadataBlock) return;
+
+  onDeleteBlock(metadataBlock);
+  onSelectBlock(block);
+  return metadataBlock;
+}
+
+export function insertFigureMetadataBeforeBlock({
+  properties,
+  block,
+  metadataSection,
+  blocksConfig,
+  intl,
+  onChangeFormData,
+  onInsertBlock,
+}) {
+  if (
+    !metadataSection ||
+    getGeneratedFigureMetadataBlockId(properties, block)
+  ) {
+    return;
+  }
+
+  if (properties && onChangeFormData) {
+    const [newBlock, newFormData] = insertBlock(
+      properties,
+      block,
+      metadataSection,
+      {},
+      0,
+      blocksConfig,
+      intl,
+    );
+    onChangeFormData(newFormData);
+    return newBlock;
+  }
+
+  return onInsertBlock?.(block, metadataSection);
+}
+
 export function getFigureMetadata(block, metadata, position = 1) {
   const { title, description } = metadata || {};
-  const id = `figure-metadata-${block}`;
+  const id = getFigureMetadataId(block);
   const metadataEl = document.getElementById(id);
   if (metadataEl || (!title && !description)) return;
 
