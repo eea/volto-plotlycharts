@@ -1,7 +1,7 @@
 import { useMemo, useRef, useEffect, useState, useCallback } from 'react';
+import { useIntl } from 'react-intl';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import mapKeys from 'lodash/mapKeys';
 import isArray from 'lodash/isArray';
 import uniqBy from 'lodash/uniqBy';
 import sortBy from 'lodash/sortBy';
@@ -16,8 +16,10 @@ import { VisibilitySensor } from '@eeacms/volto-datablocks/components';
 import { connectToProviderData } from '@eeacms/volto-datablocks/hocs';
 import { connectBlockToVisualization } from '@eeacms/volto-plotlycharts/hocs';
 import {
+  deleteGeneratedFigureMetadataBlock,
   getFigurePosition,
   getFigureMetadata,
+  insertFigureMetadataBeforeBlock,
 } from '@eeacms/volto-plotlycharts/helpers';
 import {
   updateTrace,
@@ -57,6 +59,7 @@ function stripHtml(html) {
 }
 
 function UnconnectedPlotlyComponent(props) {
+  const intl = useIntl();
   const { reactChartEditor } = props;
   const { constants } = reactChartEditor;
   const container = useRef();
@@ -74,8 +77,10 @@ function UnconnectedPlotlyComponent(props) {
     isPrint,
     selfProvided,
     onInsertBlock,
+    onChangeFormData,
     onSelectBlock,
     onDeleteBlock,
+    blocksConfig,
   } = props;
   const {
     height,
@@ -307,16 +312,12 @@ function UnconnectedPlotlyComponent(props) {
   useEffect(() => {
     if (mode !== 'edit') return;
     if (!with_metadata_section) {
-      let metadataBlock = null;
-      mapKeys(properties.blocks, (data, b) => {
-        if (data?.['id'] === `figure-metadata-${block}`) {
-          metadataBlock = b;
-        }
+      deleteGeneratedFigureMetadataBlock({
+        properties,
+        block,
+        onDeleteBlock,
+        onSelectBlock,
       });
-      if (metadataBlock) {
-        onDeleteBlock(metadataBlock);
-        onSelectBlock(block);
-      }
       return;
     }
     if (vis_url && !loadingVisualization) {
@@ -328,16 +329,27 @@ function UnconnectedPlotlyComponent(props) {
       );
       if (!metadataSection) return;
 
-      onInsertBlock(block, metadataSection);
+      insertFigureMetadataBeforeBlock({
+        properties,
+        block,
+        metadataSection,
+        blocksConfig,
+        intl,
+        onChangeFormData,
+        onInsertBlock,
+      });
     }
   }, [
     block,
+    blocksConfig,
+    intl,
     metadata,
     properties,
     mode,
     vis_url,
     with_metadata_section,
     loadingVisualization,
+    onChangeFormData,
     onInsertBlock,
     onDeleteBlock,
     onSelectBlock,
