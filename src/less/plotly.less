@@ -109,3 +109,32 @@
     }
   }
 }
+
+@media print {
+  .visualization:not(.autoscale) {
+    .plot-container {
+      overflow: visible !important;
+    }
+  }
+
+  .plotly-component,
+  .visualization,
+  .plot-container,
+  .svg-container,
+  .js-plotly-plot {
+    max-width: 100% !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .svg-container,
+  .main-svg {
+    overflow: visible !important;
+  }
+
+  .modebar,
+  .modebar-container,
+  .visualization-toolbar {
+    display: none !important;
+  }
+}
