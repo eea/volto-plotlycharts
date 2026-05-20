@@ -1,38 +1,38 @@
-import { useMemo, useRef, useEffect, useState, useCallback } from 'react';
-import { useIntl } from 'react-intl';
-import { compose } from 'redux';
-import { connect } from 'react-redux';
-import isArray from 'lodash/isArray';
-import uniqBy from 'lodash/uniqBy';
-import sortBy from 'lodash/sortBy';
-import isNil from 'lodash/isNil';
-import debounce from 'lodash/debounce';
-import cx from 'classnames';
-import { FormField } from 'semantic-ui-react';
 // import { constants } from '@eeacms/react-chart-editor';
-import { injectLazyLibs } from '@plone/volto/helpers/Loadable/Loadable';
-import { flattenToAppURL } from '@plone/volto/helpers/Url/Url';
 import { VisibilitySensor } from '@eeacms/volto-datablocks/components';
 import { connectToProviderData } from '@eeacms/volto-datablocks/hocs';
-import { connectBlockToVisualization } from '@eeacms/volto-plotlycharts/hocs';
-import {
-  deleteGeneratedFigureMetadataBlock,
-  getFigurePosition,
-  getFigureMetadata,
-  insertFigureMetadataBeforeBlock,
-} from '@eeacms/volto-plotlycharts/helpers';
-import {
-  updateTrace,
-  updateDataSources,
-} from '@eeacms/volto-plotlycharts/helpers/plotly';
-import { applyFilters } from '@eeacms/volto-plotlycharts/helpers/transforms';
 import { Toolbar } from '@eeacms/volto-plotlycharts/Utils';
-import Plot from './Plot';
-import Placeholder from './Placeholder';
 import {
   getMetadataFlags,
   processMetadataArrays,
 } from '@eeacms/volto-plotlycharts/Utils/utils';
+import {
+  deleteGeneratedFigureMetadataBlock,
+  getFigureMetadata,
+  getFigurePosition,
+  insertFigureMetadataBeforeBlock,
+} from '@eeacms/volto-plotlycharts/helpers';
+import {
+  updateDataSources,
+  updateTrace,
+} from '@eeacms/volto-plotlycharts/helpers/plotly';
+import { applyFilters } from '@eeacms/volto-plotlycharts/helpers/transforms';
+import { connectBlockToVisualization } from '@eeacms/volto-plotlycharts/hocs';
+import { injectLazyLibs } from '@plone/volto/helpers/Loadable/Loadable';
+import { flattenToAppURL } from '@plone/volto/helpers/Url/Url';
+import cx from 'classnames';
+import debounce from 'lodash/debounce';
+import isArray from 'lodash/isArray';
+import isNil from 'lodash/isNil';
+import sortBy from 'lodash/sortBy';
+import uniqBy from 'lodash/uniqBy';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useIntl } from 'react-intl';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { FormField } from 'semantic-ui-react';
+import Placeholder from './Placeholder';
+import Plot from './Plot';
 
 // generateCSVForDataset,
 // generateOriginalCSV,
@@ -460,16 +460,32 @@ function UnconnectedPlotlyComponent(props) {
   );
 }
 
-function prepareEmbedData(dataSources, provider_metadata, core_metadata) {
-  let array = [];
+function prepareEmbedData(
+  dataSources,
+  traces,
+  provider_metadata,
+  core_metadata,
+) {
+  const array = [];
+  const srcKeys = traces.reduce((acc, trace) => {
+    Object.keys(trace).forEach((key) => {
+      if (key.endsWith('src')) {
+        if (!acc.includes(trace[key])) {
+          acc.push(trace[key]);
+        }
+      }
+    });
+    return acc;
+  }, []);
   Object.entries(dataSources).forEach(([key, items]) => {
+    if (!srcKeys.includes(key)) return;
     items.forEach((item, index) => {
       if (!array[index]) array[index] = {};
       array[index][key] = item;
     });
   });
 
-  let readme = provider_metadata?.readme ? [provider_metadata?.readme] : [];
+  const readme = provider_metadata?.readme ? [provider_metadata?.readme] : [];
   const metadataFlags = getMetadataFlags(core_metadata);
   const metadataArrays = processMetadataArrays(core_metadata, metadataFlags);
 
@@ -504,7 +520,7 @@ function Table({ rows }) {
 function EmbedData(props) {
   const { provider_metadata, content, block } = props; // reactChartEditorLib,
   const visualization = props.data?.visualization || {};
-  const { dataSources = {}, layout } = visualization;
+  const { dataSources = {}, layout, data: traces = [] } = visualization;
 
   const {
     data_provenance,
@@ -524,6 +540,7 @@ function EmbedData(props) {
 
   const embedData = prepareEmbedData(
     dataSources,
+    traces,
     provider_metadata,
     core_metadata,
   );
