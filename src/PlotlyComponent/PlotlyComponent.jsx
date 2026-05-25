@@ -90,8 +90,7 @@ function UnconnectedPlotlyComponent(props) {
   const {
     height,
     vis_url,
-    with_metadata_section = true,
-    llm_summary,
+    with_metadata_section = true
   } = props.data;
   const [initialized, setInitialized] = useState(false);
   const [filtersState, setFiltersState] = useState([]);
