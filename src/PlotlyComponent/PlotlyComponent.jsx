@@ -87,11 +87,7 @@ function UnconnectedPlotlyComponent(props) {
     onDeleteBlock,
     blocksConfig,
   } = props;
-  const {
-    height,
-    vis_url,
-    with_metadata_section = true
-  } = props.data;
+  const { height, vis_url, with_metadata_section = true } = props.data;
   const [initialized, setInitialized] = useState(false);
   const [filtersState, setFiltersState] = useState([]);
   const [autoscaleHeight, setAutoscaleHeight] = useState(null);
