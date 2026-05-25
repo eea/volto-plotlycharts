@@ -1,38 +1,38 @@
-import { useMemo, useRef, useEffect, useState, useCallback } from 'react';
-import { useIntl } from 'react-intl';
-import { compose } from 'redux';
-import { connect } from 'react-redux';
-import isArray from 'lodash/isArray';
-import uniqBy from 'lodash/uniqBy';
-import sortBy from 'lodash/sortBy';
-import isNil from 'lodash/isNil';
-import debounce from 'lodash/debounce';
-import cx from 'classnames';
-import { FormField } from 'semantic-ui-react';
 // import { constants } from '@eeacms/react-chart-editor';
-import { injectLazyLibs } from '@plone/volto/helpers/Loadable/Loadable';
-import { flattenToAppURL } from '@plone/volto/helpers/Url/Url';
 import { VisibilitySensor } from '@eeacms/volto-datablocks/components';
 import { connectToProviderData } from '@eeacms/volto-datablocks/hocs';
-import { connectBlockToVisualization } from '@eeacms/volto-plotlycharts/hocs';
-import {
-  deleteGeneratedFigureMetadataBlock,
-  getFigurePosition,
-  getFigureMetadata,
-  insertFigureMetadataBeforeBlock,
-} from '@eeacms/volto-plotlycharts/helpers';
-import {
-  updateTrace,
-  updateDataSources,
-} from '@eeacms/volto-plotlycharts/helpers/plotly';
-import { applyFilters } from '@eeacms/volto-plotlycharts/helpers/transforms';
 import { Toolbar } from '@eeacms/volto-plotlycharts/Utils';
-import Plot from './Plot';
-import Placeholder from './Placeholder';
 import {
   getMetadataFlags,
   processMetadataArrays,
 } from '@eeacms/volto-plotlycharts/Utils/utils';
+import {
+  deleteGeneratedFigureMetadataBlock,
+  getFigureMetadata,
+  getFigurePosition,
+  insertFigureMetadataBeforeBlock,
+} from '@eeacms/volto-plotlycharts/helpers';
+import {
+  updateDataSources,
+  updateTrace,
+} from '@eeacms/volto-plotlycharts/helpers/plotly';
+import { applyFilters } from '@eeacms/volto-plotlycharts/helpers/transforms';
+import { connectBlockToVisualization } from '@eeacms/volto-plotlycharts/hocs';
+import { injectLazyLibs } from '@plone/volto/helpers/Loadable/Loadable';
+import { flattenToAppURL } from '@plone/volto/helpers/Url/Url';
+import cx from 'classnames';
+import debounce from 'lodash/debounce';
+import isArray from 'lodash/isArray';
+import isNil from 'lodash/isNil';
+import sortBy from 'lodash/sortBy';
+import uniqBy from 'lodash/uniqBy';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useIntl } from 'react-intl';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { FormField } from 'semantic-ui-react';
+import Placeholder from './Placeholder';
+import Plot from './Plot';
 
 // generateCSVForDataset,
 // generateOriginalCSV,
@@ -56,6 +56,11 @@ function stripHtml(html) {
   const parser = new DOMParser();
   const doc = parser.parseFromString(html, 'text/html');
   return doc.body.textContent || '';
+}
+
+// Only null/undefined/blank strings are empty. `0` and `false` are real data.
+function isEmptyValue(value) {
+  return isNil(value) || (typeof value === 'string' && value.trim() === '');
 }
 
 function UnconnectedPlotlyComponent(props) {
@@ -82,12 +87,7 @@ function UnconnectedPlotlyComponent(props) {
     onDeleteBlock,
     blocksConfig,
   } = props;
-  const {
-    height,
-    vis_url,
-    with_metadata_section = true,
-    llm_summary,
-  } = props.data;
+  const { height, vis_url, with_metadata_section = true } = props.data;
   const [initialized, setInitialized] = useState(false);
   const [filtersState, setFiltersState] = useState([]);
   const [autoscaleHeight, setAutoscaleHeight] = useState(null);
@@ -446,65 +446,89 @@ function UnconnectedPlotlyComponent(props) {
         data={toolbarData}
         provider_metadata={provider_metadata}
       />
-
-      {llm_summary && (
-        <div
-          className="llm-summary"
-          style={{ display: 'none' }}
-          aria-hidden="true"
-        >
-          {llm_summary}
-        </div>
-      )}
     </div>
   );
 }
 
-function prepareEmbedData(dataSources, provider_metadata, core_metadata) {
-  let array = [];
+function prepareEmbedData(
+  dataSources,
+  traces,
+  provider_metadata,
+  core_metadata,
+) {
+  const array = [];
+  const srcKeys = traces.reduce((acc, trace) => {
+    Object.keys(trace).forEach((key) => {
+      if (key.endsWith('src')) {
+        if (!acc.includes(trace[key])) {
+          acc.push(trace[key]);
+        }
+      }
+    });
+    return acc;
+  }, []);
   Object.entries(dataSources).forEach(([key, items]) => {
+    if (!srcKeys.includes(key)) return;
     items.forEach((item, index) => {
       if (!array[index]) array[index] = {};
       array[index][key] = item;
     });
   });
 
-  let readme = provider_metadata?.readme ? [provider_metadata?.readme] : [];
+  const readme = provider_metadata?.readme ? [provider_metadata?.readme] : [];
   const metadataFlags = getMetadataFlags(core_metadata);
   const metadataArrays = processMetadataArrays(core_metadata, metadataFlags);
 
-  return { array, readme, metadataArrays, metadataFlags };
+  return { array, readme, metadataArrays };
 }
 
-function Table({ rows }) {
-  const stableKeys = Object.keys(rows?.[0] || {});
+// Column-major rendering: one line per column, values comma-joined in their
+// original row order so positional meaning is preserved. Blank cells become "-",
+// fully-empty columns are dropped. Generic — also used for metadata tables.
+function Table({ rows, title }) {
+  if (!isArray(rows) || rows.length === 0) return null;
+
+  // Union of keys across all rows, preserving first-appearance order.
+  const keys = rows.reduce((acc, row) => {
+    Object.keys(row || {}).forEach((key) => {
+      if (!acc.includes(key)) acc.push(key);
+    });
+    return acc;
+  }, []);
+
+  const columns = keys
+    .map((key) => {
+      const values = rows.map((row) =>
+        isEmptyValue(row?.[key]) ? '-' : String(row[key]),
+      );
+      // Drop columns that carry no data at all.
+      if (values.every((value) => value === '-')) return null;
+      return { key, text: values.join(', ') };
+    })
+    .filter(Boolean);
+
+  // No renderable column -> render nothing, including the heading. This keeps
+  // the heading and its content as a single visibility decision.
+  if (columns.length === 0) return null;
 
   return (
-    <table className="embed-data-table">
-      <thead>
-        <tr>
-          {stableKeys.map((key) => (
-            <th key={key}>{key}</th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {rows.map((row, index) => (
-          <tr key={index}>
-            {stableKeys.map((key) => (
-              <td key={key}>{row[key]}</td>
-            ))}
-          </tr>
+    <>
+      {title && <p>{title}:</p>}
+      <ul className="embed-data-table embed-data-list">
+        {columns.map((column) => (
+          <li key={column.key}>
+            {column.key}: {column.text}
+          </li>
         ))}
-      </tbody>
-    </table>
+      </ul>
+    </>
   );
 }
 
 function EmbedData(props) {
-  const { provider_metadata, content, block } = props; // reactChartEditorLib,
+  const { provider_metadata, block } = props; // reactChartEditorLib,
   const visualization = props.data?.visualization || {};
-  const { dataSources = {}, layout } = visualization;
+  const { dataSources = {}, layout, data: traces = [] } = visualization;
 
   const {
     data_provenance,
@@ -524,65 +548,71 @@ function EmbedData(props) {
 
   const embedData = prepareEmbedData(
     dataSources,
+    traces,
     provider_metadata,
     core_metadata,
   );
-  const { array, readme, metadataArrays, metadataFlags } = embedData;
+  const { array, readme, metadataArrays } = embedData;
+
+  const subtitle = stripHtml(layout?.title?.subtitle?.text || '');
+  const llmSummary = stripHtml(props.data?.llm_summary || '');
 
   return (
     <div
-      className="figure-data-table"
+      className="figure-info"
       data-for-chart-id={block}
       style={{ display: 'none' }}
     >
-      <h3 className="page-title">{content.title}</h3>
       {!!layout?.title?.text && (
-        <h4 className="chart-title">{stripHtml(layout.title.text)}</h4>
+        <p className="chart-title">
+          Visualization title: {stripHtml(layout.title.text)}
+        </p>
       )}
-      {!!layout?.title?.subtitle?.text && (
-        <h4 className="chart-sub-title">
-          {stripHtml(layout.title.subtitle.text)}
-        </h4>
+      {!!subtitle && subtitle !== layout?.yaxis?.title?.text && (
+        <p className="chart-sub-title">
+          {layout?.yaxis?.title?.text
+            ? 'Subtitle: '
+            : 'Secondary label (shown as chart subtitle; may also serve as the y-axis title): '}
+          {subtitle}
+        </p>
       )}
+      {!!llmSummary && <p className="llm-summary">Summary: {llmSummary}</p>}
       {!!layout?.xaxis?.title?.text && (
-        <p className="x-axis-label">{stripHtml(layout.xaxis.title.text)}</p>
+        <p className="x-axis-label">
+          X axis title: {stripHtml(layout.xaxis.title.text)}
+        </p>
       )}
       {!!layout?.yaxis?.title?.text && (
-        <p className="y-axis-label">{stripHtml(layout.yaxis.title.text)}</p>
+        <p className="y-axis-label">
+          Y axis title: {stripHtml(layout.yaxis.title.text)}
+        </p>
       )}
 
-      <Table rows={array} />
+      <p className="data-reading-note">
+        In each data section below, every line is one column: its values are
+        listed in row order and align by position across columns — the Nth value
+        in every column belongs to the same record. "-" means no value.
+      </p>
 
-      {metadataFlags.hasDataProvenance && (
-        <>
-          <h4>Data Provenance</h4>
-          <Table rows={metadataArrays.data_provenance_array} />
-        </>
-      )}
-      {metadataFlags.hasOtherOrganisation && (
-        <>
-          <h4>Other Organisations</h4>
-          <Table rows={metadataArrays.other_organisation_array} />
-        </>
-      )}
-      {metadataFlags.hasTemporalCoverage && (
-        <>
-          <h4>Temporal Coverage</h4>
-          <Table rows={metadataArrays.temporal_coverage_array} />
-        </>
-      )}
-      {metadataFlags.hasGeoCoverage && (
-        <>
-          <h4>Geographical Coverage</h4>
-          <Table rows={metadataArrays.geo_coverage_array} />
-        </>
-      )}
-      {metadataFlags.hasPublisher && (
-        <>
-          <h4>Publisher</h4>
-          <Table rows={metadataArrays.publisher_array} />
-        </>
-      )}
+      <Table title="Data" rows={array} />
+
+      <Table
+        title="Data Provenance"
+        rows={metadataArrays.data_provenance_array}
+      />
+      <Table
+        title="Other Organisations"
+        rows={metadataArrays.other_organisation_array}
+      />
+      <Table
+        title="Temporal Coverage"
+        rows={metadataArrays.temporal_coverage_array}
+      />
+      <Table
+        title="Geographical Coverage"
+        rows={metadataArrays.geo_coverage_array}
+      />
+      <Table title="Publisher" rows={metadataArrays.publisher_array} />
 
       <div>{readme}</div>
     </div>
