@@ -1,4 +1,4 @@
-import React, { forwardRef, useMemo } from 'react';
+import React, { forwardRef, useEffect, useMemo, useRef } from 'react';
 import { injectLazyLibs } from '@plone/volto/helpers/Loadable/Loadable';
 import { useHistory } from 'react-router-dom';
 
@@ -16,6 +16,8 @@ const Plot = forwardRef((props, ref) => {
   const plotly = props.plotlyMinLib?.default || props.plotlyMinLib;
   const plotlyComponentFactory =
     props.plotlyComponentFactory?.default || props.plotlyComponentFactory;
+  const graphDiv = useRef(null);
+  const originalPrintLayout = useRef(null);
 
   const PlotlyComponent = useMemo(() => {
     return plotlyComponentFactory(plotly);
@@ -94,6 +96,130 @@ const Plot = forwardRef((props, ref) => {
     }
   };
 
+  const setGraphDiv = (value) => {
+    graphDiv.current = value;
+
+    if (typeof ref === 'function') {
+      ref(value);
+    } else if (ref) {
+      ref.current = value;
+    }
+  };
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return undefined;
+
+    const resizePlot = () => {
+      if (!graphDiv.current || !plotly?.Plots?.resize) return;
+
+      try {
+        plotly.Plots.resize(graphDiv.current);
+      } catch {
+        // Plotly can throw if the graph is being unmounted during print cleanup.
+      }
+    };
+
+    const relayoutPlot = (layoutUpdate) => {
+      if (!graphDiv.current || !plotly?.relayout) return false;
+
+      try {
+        const result = plotly.relayout(graphDiv.current, layoutUpdate);
+        result?.catch?.(() => {});
+        return true;
+      } catch {
+        return false;
+      }
+    };
+
+    const getWidth = (element) =>
+      Math.floor(element?.getBoundingClientRect?.().width || 0);
+
+    const getPrintWidth = () => {
+      const chart = graphDiv.current?.closest?.(
+        '.embed-visualization, .plotly-component',
+      );
+      const content = graphDiv.current?.closest?.(
+        '#page-document, .content-area',
+      );
+      const widths = [
+        getWidth(chart),
+        getWidth(content),
+        getWidth(graphDiv.current?.parentElement),
+      ].filter((width) => width > 0);
+
+      return widths.length ? Math.min(...widths) : 0;
+    };
+
+    const fitPlotToPrintWidth = () => {
+      const targetWidth = getPrintWidth();
+      const currentWidth =
+        graphDiv.current?._fullLayout?.width || layout?.width || 0;
+
+      if (!targetWidth || !currentWidth || currentWidth <= targetWidth) {
+        resizePlot();
+        return;
+      }
+
+      if (!originalPrintLayout.current) {
+        originalPrintLayout.current = {
+          width: graphDiv.current?._fullLayout?.width || layout?.width,
+          height: graphDiv.current?._fullLayout?.height || layout?.height,
+        };
+      }
+
+      if (!relayoutPlot({ width: targetWidth })) {
+        resizePlot();
+      }
+    };
+
+    const restorePlotWidth = () => {
+      if (!originalPrintLayout.current) {
+        resizePlot();
+        return;
+      }
+
+      const { width, height } = originalPrintLayout.current;
+      originalPrintLayout.current = null;
+
+      const layoutUpdate = {
+        ...(width ? { width } : {}),
+        ...(height ? { height } : {}),
+      };
+
+      if (!Object.keys(layoutUpdate).length || !relayoutPlot(layoutUpdate)) {
+        resizePlot();
+      }
+    };
+
+    const handleBeforePrint = () => {
+      fitPlotToPrintWidth();
+      const nextFrame = window.requestAnimationFrame
+        ? (callback) => window.requestAnimationFrame(callback)
+        : (callback) => window.setTimeout(callback, 0);
+      nextFrame(fitPlotToPrintWidth);
+      window.setTimeout(fitPlotToPrintWidth, 100);
+    };
+
+    const printMediaQuery = window.matchMedia?.('print');
+    const handlePrintMediaChange = (event) => {
+      if (event.matches) {
+        handleBeforePrint();
+      } else {
+        restorePlotWidth();
+      }
+    };
+
+    window.addEventListener('beforeprint', handleBeforePrint);
+    window.addEventListener('afterprint', restorePlotWidth);
+    printMediaQuery?.addEventListener?.('change', handlePrintMediaChange);
+
+    return () => {
+      window.removeEventListener('beforeprint', handleBeforePrint);
+      window.removeEventListener('afterprint', restorePlotWidth);
+      printMediaQuery?.removeEventListener?.('change', handlePrintMediaChange);
+    };
+  }, [layout?.height, layout?.width, plotly]);
+
   return (
     <PlotlyComponent
       data={data}
@@ -102,9 +228,7 @@ const Plot = forwardRef((props, ref) => {
         ...(autoscale ? { autosize: false } : {}),
       }}
       onInitialized={(...args) => {
-        if (ref) {
-          ref.current = args[1];
-        }
+        setGraphDiv(args[1]);
         if (onInitialized) {
           onInitialized(...args);
         }
