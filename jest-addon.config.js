@@ -1,19 +1,22 @@
-require('dotenv').config({ path: __dirname + '/.env' })
+require('dotenv').config({ path: __dirname + '/.env' });
 
-const fs = require('fs')
-const path = require('path')
+const fs = require('fs');
+const path = require('path');
 
 const voltoSlatePath = fs.existsSync(
   path.join(__dirname, '../../../node_modules/@plone/volto-slate/src'),
 )
   ? '<rootDir>/node_modules/@plone/volto-slate/src'
-  : '<rootDir>/node_modules/@plone/volto/packages/volto-slate/src'
+  : '<rootDir>/node_modules/@plone/volto/packages/volto-slate/src';
 
 module.exports = {
   testMatch: ['**/src/addons/**/?(*.)+(spec|test).[jt]s?(x)'],
   collectCoverageFrom: [
-    'src/addons/**/src/**/*.{js,jsx,ts,tsx}',
+    'src/addons/volto-plotlycharts/src/**/*.{js,jsx,ts,tsx}',
     '!src/**/*.d.ts',
+    '!**/*.test.{js,jsx,ts,tsx}',
+    '!**/*.stories.{js,jsx,ts,tsx}',
+    '!**/*.spec.{js,jsx,ts,tsx}',
   ],
   moduleNameMapper: {
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
@@ -55,4 +58,4 @@ module.exports = {
       '<rootDir>/node_modules/@eeacms/volto-plotlycharts/jest.setup.js',
     ],
   }),
-}
+};
