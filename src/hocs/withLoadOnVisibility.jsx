@@ -1,13 +1,27 @@
 import React, { useState, useEffect, useRef } from 'react';
+import qs from 'query-string';
+import { useLocation } from 'react-router-dom';
 import loadable from '@loadable/component';
 
 const withLoadOnVisibility = (loadComponent) => {
   return (props) => {
-    const [isVisible, setIsVisible] = useState(false);
+    const location = useLocation();
+    const queryParams = qs.parse(location?.search);
+    // Mount regardless of viewport position when the visibility sensor is
+    // disabled via ?visibility_sensor=off, so charts render for indexing
+    // without needing to be scrolled into view.
+    const forceVisible = queryParams?.visibility_sensor === 'off';
+
+    const [isVisible, setIsVisible] = useState(forceVisible);
     const [DynamicComponent, setDynamicComponent] = useState(null);
     const ref = useRef(null);
 
     useEffect(() => {
+      if (forceVisible) {
+        setIsVisible(true);
+        return;
+      }
+
       const observer = new IntersectionObserver(
         ([entry]) => {
           if (entry.isIntersecting) {
@@ -27,7 +41,7 @@ const withLoadOnVisibility = (loadComponent) => {
           observer.unobserve(currentElement);
         }
       };
-    }, []);
+    }, [forceVisible]);
 
     useEffect(() => {
       if (isVisible && !DynamicComponent) {
