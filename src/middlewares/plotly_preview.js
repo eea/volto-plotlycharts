@@ -33,7 +33,7 @@ const getAPIResourceWithAuth = (req) =>
       )
       .maxResponseSize(settings.maxResponseSize)
       .responseType('blob');
-    const authToken = req.universalCookies.get('auth_token');
+    const authToken = req.universalCookies.get('auth_token'); //betterleaks:allow
     if (authToken) {
       request.set('Authorization', `Bearer ${authToken}`);
     }
