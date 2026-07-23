@@ -250,4 +250,7 @@ const Plot = forwardRef((props, ref) => {
   );
 });
 
-export default injectLazyLibs(['plotlyMinLib', 'plotlyComponentFactory'])(Plot);
+export default injectLazyLibs(
+  ['plotlyMinLib', 'plotlyComponentFactory'],
+  true,
+)(Plot);
