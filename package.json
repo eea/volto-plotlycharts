@@ -35,7 +35,8 @@
     "jszip": "3.10.1",
     "plotly.js": "^2.35.3",
     "react-plotly.js": "2.6.0",
-    "remixicon": "4.6.0"
+    "remixicon": "4.6.0",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@cypress/code-coverage": "^3.10.0",
