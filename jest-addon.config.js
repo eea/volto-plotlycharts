@@ -9,6 +9,14 @@ const voltoSlatePath = fs.existsSync(
   ? '<rootDir>/node_modules/@plone/volto-slate/src'
   : '<rootDir>/node_modules/@plone/volto/packages/volto-slate/src';
 
+// In Volto 18+ the root-level uuid is ESM-only (v14), which Jest 26 cannot
+// resolve.  When the addon ships its own CJS uuid (v8), map to it so that
+// transitive imports from @plone/volto can be resolved.
+const addonUuidPath = path.join(__dirname, 'node_modules', 'uuid');
+const uuidMapper = fs.existsSync(addonUuidPath)
+  ? { '^uuid$': addonUuidPath }
+  : {};
+
 module.exports = {
   testMatch: ['**/src/addons/**/?(*.)+(spec|test).[jt]s?(x)'],
   collectCoverageFrom: [
@@ -20,7 +28,7 @@ module.exports = {
   ],
   moduleNameMapper: {
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
-    '^uuid$': path.resolve(__dirname, 'node_modules', 'uuid'),
+    ...uuidMapper,
     '@plone/volto/cypress': '<rootDir>/node_modules/@plone/volto/cypress',
     '@plone/volto/babel': '<rootDir>/node_modules/@plone/volto/babel',
     '@plone/volto/(.*)$': '<rootDir>/node_modules/@plone/volto/src/$1',
