@@ -2,8 +2,8 @@ import { data_visualizations } from './data_visualizations';
 import { GET_VISUALIZATION } from '@eeacms/volto-plotlycharts/constants';
 
 const runMiddleware = (action, state) => {
-  const dispatch = jest.fn();
-  const next = jest.fn((a) => a);
+  const dispatch = vi.fn();
+  const next = vi.fn((a) => a);
   const store = {
     getState: () => state,
     dispatch,

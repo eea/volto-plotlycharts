@@ -2,11 +2,11 @@ import React from 'react';
 import renderer, { act } from 'react-test-renderer';
 import Edit from './Edit';
 
-jest.mock('semantic-ui-react', () => ({
+vi.mock('semantic-ui-react', () => ({
   Message: ({ children }) => <div className="mock-message">{children}</div>,
 }));
 
-jest.mock('@plone/volto/components/manage/Sidebar/SidebarPortal', () => ({
+vi.mock('@plone/volto/components/manage/Sidebar/SidebarPortal', () => ({
   __esModule: true,
   default: ({ children, selected }) => (
     <aside className="mock-sidebar" data-selected={selected}>
@@ -15,21 +15,23 @@ jest.mock('@plone/volto/components/manage/Sidebar/SidebarPortal', () => ({
   ),
 }));
 
-jest.mock('@plone/volto/components/manage/Form/BlockDataForm', () => ({
+vi.mock('@plone/volto/components/manage/Form/BlockDataForm', () => ({
   __esModule: true,
   default: (props) => (
     <form className="mock-block-data-form" data-props={props} />
   ),
 }));
 
-jest.mock('@eeacms/volto-plotlycharts/PlotlyComponent', () => (props) => (
-  <div className="mock-plotly-component" data-props={props} />
-));
+vi.mock('@eeacms/volto-plotlycharts/PlotlyComponent', () => ({
+  default: (props) => (
+    <div className="mock-plotly-component" data-props={props} />
+  ),
+}));
 
 describe('EmbedVisualization Edit', () => {
   it('shows a message until a visualization is selected', () => {
     const component = renderer.create(
-      <Edit data={{}} block="block-id" onChangeBlock={jest.fn()} />,
+      <Edit data={{}} block="block-id" onChangeBlock={vi.fn()} />,
     );
 
     expect(
@@ -41,7 +43,7 @@ describe('EmbedVisualization Edit', () => {
   });
 
   it('renders PlotlyComponent and updates block data from the sidebar form', () => {
-    const onChangeBlock = jest.fn();
+    const onChangeBlock = vi.fn();
     const component = renderer.create(
       <Edit
         selected

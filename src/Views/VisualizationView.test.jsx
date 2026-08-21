@@ -2,25 +2,27 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 import VisualizationView from './VisualizationView';
 
-jest.mock('semantic-ui-react', () => ({
+vi.mock('semantic-ui-react', () => ({
   Container: ({ children, ...props }) => <div {...props}>{children}</div>,
 }));
 
-jest.mock('@plone/volto/helpers/Blocks/Blocks', () => ({
-  hasBlocksData: jest.fn((content) => Boolean(content.blocks_layout)),
+vi.mock('@plone/volto/helpers/Blocks/Blocks', () => ({
+  hasBlocksData: vi.fn((content) => Boolean(content.blocks_layout)),
 }));
 
-jest.mock('@plone/volto/components/theme/View/RenderBlocks', () => (props) => (
-  <div className="mock-render-blocks" data-props={props} />
-));
-
-jest.mock('@eeacms/volto-embed/helpers', () => ({
-  pickMetadata: jest.fn((content) => ({ picked: content.title })),
+vi.mock('@plone/volto/components/theme/View/RenderBlocks', () => ({
+  default: (props) => <div className="mock-render-blocks" data-props={props} />,
 }));
 
-jest.mock('@eeacms/volto-plotlycharts/PlotlyComponent', () => (props) => (
-  <div className="mock-plotly-component" data-props={props} />
-));
+vi.mock('@eeacms/volto-embed/helpers', () => ({
+  pickMetadata: vi.fn((content) => ({ picked: content.title })),
+}));
+
+vi.mock('@eeacms/volto-plotlycharts/PlotlyComponent', () => ({
+  default: (props) => (
+    <div className="mock-plotly-component" data-props={props} />
+  ),
+}));
 
 describe('VisualizationView', () => {
   it('renders PlotlyComponent when content has no blocks', () => {

@@ -2,7 +2,7 @@ import React from 'react';
 import renderer, { act } from 'react-test-renderer';
 import Edit from './Edit';
 
-jest.mock('semantic-ui-react', () => {
+vi.mock('semantic-ui-react', () => {
   const Modal = ({ children, open, className }) => (
     <div className={className} data-open={open}>
       {children}
@@ -24,21 +24,21 @@ jest.mock('semantic-ui-react', () => {
   };
 });
 
-jest.mock('@plone/volto/components/manage/Sidebar/SidebarPortal', () => ({
+vi.mock('@plone/volto/components/manage/Sidebar/SidebarPortal', () => ({
   __esModule: true,
   default: ({ children }) => <aside className="mock-sidebar">{children}</aside>,
 }));
 
-jest.mock('@plone/volto/components/manage/Form/BlockDataForm', () => ({
+vi.mock('@plone/volto/components/manage/Form/BlockDataForm', () => ({
   __esModule: true,
   default: (props) => (
     <form className="mock-block-data-form" data-props={props} />
   ),
 }));
 
-jest.mock('./View', () => (props) => (
-  <div className="mock-plotly-view" data-props={props} />
-));
+vi.mock('./View', () => ({
+  default: (props) => <div className="mock-plotly-view" data-props={props} />,
+}));
 
 describe('PlotlyChart Edit', () => {
   beforeEach(() => {
@@ -64,9 +64,9 @@ describe('PlotlyChart Edit', () => {
   });
 
   it('opens the chart editor modal and updates fields from the sidebar form', () => {
-    const onChangeBlock = jest.fn();
-    const preventDefault = jest.fn();
-    const stopPropagation = jest.fn();
+    const onChangeBlock = vi.fn();
+    const preventDefault = vi.fn();
+    const stopPropagation = vi.fn();
     const component = renderer.create(
       <Edit
         data={{ title: 'Chart', visualization: { data: [] } }}

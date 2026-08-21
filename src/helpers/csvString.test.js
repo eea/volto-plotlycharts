@@ -13,8 +13,8 @@ import {
   truncateFilename,
 } from './csvString';
 
-jest.mock('@eeacms/volto-matomo/utils', () => ({
-  trackLink: jest.fn(),
+vi.mock('@eeacms/volto-matomo/utils', () => ({
+  trackLink: vi.fn(),
 }));
 
 describe('csvString helpers', () => {

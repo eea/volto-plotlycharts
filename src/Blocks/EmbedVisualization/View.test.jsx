@@ -2,9 +2,11 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 import View from './View';
 
-jest.mock('@eeacms/volto-plotlycharts/PlotlyComponent', () => (props) => (
-  <div className="mock-plotly-component" data-props={props} />
-));
+vi.mock('@eeacms/volto-plotlycharts/PlotlyComponent', () => ({
+  default: (props) => (
+    <div className="mock-plotly-component" data-props={props} />
+  ),
+}));
 
 describe('EmbedVisualization View', () => {
   it('passes embedded visualization defaults to PlotlyComponent', () => {

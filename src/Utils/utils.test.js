@@ -6,8 +6,8 @@ import {
   generateCSVForDataset,
 } from './utils';
 
-jest.mock('@eeacms/volto-matomo/utils', () => ({
-  trackLink: jest.fn(),
+vi.mock('@eeacms/volto-matomo/utils', () => ({
+  trackLink: vi.fn(),
 }));
 
 const emptyCoreMetadata = {};

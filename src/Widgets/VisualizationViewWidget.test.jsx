@@ -2,7 +2,7 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 import VisualizationViewWidget from './VisualizationViewWidget';
 
-jest.mock('react-redux', () => ({
+vi.mock('react-redux', () => ({
   connect: (mapStateToProps) => (Component) => (props) => (
     <Component
       {...props}
@@ -14,13 +14,15 @@ jest.mock('react-redux', () => ({
   ),
 }));
 
-jest.mock('@eeacms/volto-embed/helpers', () => ({
-  pickMetadata: jest.fn((content) => ({ picked: content.title })),
+vi.mock('@eeacms/volto-embed/helpers', () => ({
+  pickMetadata: vi.fn((content) => ({ picked: content.title })),
 }));
 
-jest.mock('@eeacms/volto-plotlycharts/PlotlyComponent', () => (props) => (
-  <div className="mock-plotly-component" data-props={props} />
-));
+vi.mock('@eeacms/volto-plotlycharts/PlotlyComponent', () => ({
+  default: (props) => (
+    <div className="mock-plotly-component" data-props={props} />
+  ),
+}));
 
 describe('VisualizationViewWidget', () => {
   it('uses provided content metadata and selected visualization value', () => {

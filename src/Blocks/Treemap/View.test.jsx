@@ -2,11 +2,11 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 import View from './View';
 
-jest.mock('./Treemap', () => (props) => (
-  <div className="mock-treemap" data-props={props} />
-));
+vi.mock('./Treemap', () => ({
+  default: (props) => <div className="mock-treemap" data-props={props} />,
+}));
 
-jest.mock('@eeacms/volto-datablocks/hocs', () => ({
+vi.mock('@eeacms/volto-datablocks/hocs', () => ({
   withBlockData: (Component) => (props) => (
     <Component {...props} provider_data={{ value: [1] }} />
   ),

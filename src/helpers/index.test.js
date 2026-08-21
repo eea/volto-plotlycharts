@@ -12,8 +12,8 @@ import {
 import config from '@plone/volto/registry';
 
 let mockUuidCounter = 0;
-jest.mock('uuid', () => ({
-  v4: jest.fn(() => {
+vi.mock('uuid', () => ({
+  v4: vi.fn(() => {
     const value =
       mockUuidCounter === 0 ? 'mock-uuid' : `mock-uuid${mockUuidCounter}`;
     mockUuidCounter += 1;
@@ -29,7 +29,7 @@ describe('helpers.js', () => {
       ...config.blocks.blocksConfig,
       group: {},
     };
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('applyPlotlyDefaults', () => {
@@ -165,7 +165,7 @@ describe('helpers.js', () => {
 
   describe('getFigureMetadata', () => {
     it('should build generated figure metadata with title and description', () => {
-      document.getElementById = jest.fn().mockReturnValue(null);
+      document.getElementById = vi.fn().mockReturnValue(null);
 
       const result = getFigureMetadata(
         'embed_visualization',
@@ -209,7 +209,7 @@ describe('helpers.js', () => {
     });
 
     it('should return generated figure metadata with the expected markers', () => {
-      document.getElementById = jest.fn().mockReturnValue(null);
+      document.getElementById = vi.fn().mockReturnValue(null);
 
       const result = getFigureMetadata('embed_visualization', {
         title: 'Test Title',
@@ -223,7 +223,7 @@ describe('helpers.js', () => {
     });
 
     it('should return undefined when generated metadata already exists in the DOM', () => {
-      document.getElementById = jest.fn().mockReturnValue(true);
+      document.getElementById = vi.fn().mockReturnValue(true);
 
       expect(
         getFigureMetadata('embed_visualization', { title: 'Test Title' }),
@@ -231,7 +231,7 @@ describe('helpers.js', () => {
     });
 
     it('should return undefined without a title or description', () => {
-      document.getElementById = jest.fn().mockReturnValue(null);
+      document.getElementById = vi.fn().mockReturnValue(null);
 
       expect(getFigureMetadata('embed_visualization', {})).toBeUndefined();
     });
@@ -276,7 +276,7 @@ describe('helpers.js', () => {
         '@type': 'group',
         id: 'figure-metadata-embed_visualization',
       };
-      const onChangeFormData = jest.fn();
+      const onChangeFormData = vi.fn();
 
       const newBlock = insertFigureMetadataBeforeBlock({
         properties,
@@ -305,7 +305,7 @@ describe('helpers.js', () => {
         '@type': 'group',
         id: 'figure-metadata-embed_content',
       };
-      const onChangeFormData = jest.fn();
+      const onChangeFormData = vi.fn();
 
       const newBlock = insertFigureMetadataBeforeBlock({
         properties,
@@ -322,8 +322,8 @@ describe('helpers.js', () => {
     });
 
     it('should not insert a duplicate metadata block', () => {
-      const onChangeFormData = jest.fn();
-      const onInsertBlock = jest.fn();
+      const onChangeFormData = vi.fn();
+      const onInsertBlock = vi.fn();
 
       const result = insertFigureMetadataBeforeBlock({
         properties: {
@@ -351,8 +351,8 @@ describe('helpers.js', () => {
     });
 
     it('should return undefined when no metadata section is provided', () => {
-      const onChangeFormData = jest.fn();
-      const onInsertBlock = jest.fn();
+      const onChangeFormData = vi.fn();
+      const onInsertBlock = vi.fn();
 
       expect(
         insertFigureMetadataBeforeBlock({
@@ -372,7 +372,7 @@ describe('helpers.js', () => {
     });
 
     it('should fall back to onInsertBlock when form data mutation is unavailable', () => {
-      const onInsertBlock = jest.fn().mockReturnValue('inserted');
+      const onInsertBlock = vi.fn().mockReturnValue('inserted');
       const metadataSection = {
         '@type': 'group',
         id: 'figure-metadata-embed_visualization',
@@ -394,8 +394,8 @@ describe('helpers.js', () => {
 
   describe('deleteGeneratedFigureMetadataBlock', () => {
     it('should delete the matching generated metadata block when toggled off', () => {
-      const onDeleteBlock = jest.fn();
-      const onSelectBlock = jest.fn();
+      const onDeleteBlock = vi.fn();
+      const onSelectBlock = vi.fn();
 
       const result = deleteGeneratedFigureMetadataBlock({
         properties: {
@@ -421,8 +421,8 @@ describe('helpers.js', () => {
     });
 
     it('should return undefined when there is no generated metadata block', () => {
-      const onDeleteBlock = jest.fn();
-      const onSelectBlock = jest.fn();
+      const onDeleteBlock = vi.fn();
+      const onSelectBlock = vi.fn();
 
       expect(
         deleteGeneratedFigureMetadataBlock({
