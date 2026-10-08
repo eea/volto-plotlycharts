@@ -33,7 +33,6 @@
     "@eeacms/volto-datablocks": "*",
     "@eeacms/volto-embed": "*",
     "@eeacms/volto-matomo": "*",
-    "@plone/scripts": "^3.10.6",
     "handsontable": "^15.2.0",
     "jsoneditor": "10.2.0",
     "jszip": "3.10.1",
