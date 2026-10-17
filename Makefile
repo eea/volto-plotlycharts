@@ -152,7 +152,9 @@ start-ci:		## Start frontend in production mode (used by CI)
 
 .PHONY: check-ci
 check-ci:		## Wait for frontend to be ready
-	@timeout 600 bash -c 'until (echo > /dev/tcp/localhost/3000) 2>/dev/null; do sleep 2; done'
+	# The instrumented production build of this add-on is close to the old
+	# 10 min limit on busy CI nodes; give it more room to finish.
+	@timeout 1200 bash -c 'until (echo > /dev/tcp/localhost/3000) 2>/dev/null; do sleep 2; done'
 
 .PHONY: cypress-ci
 cypress-ci:		## Run Cypress tests headless (used by CI)
