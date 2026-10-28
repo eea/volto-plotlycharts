@@ -1,0 +1,7 @@
+{
+  "title": "Plotlycharts",
+  "frontend_addon_name": "volto-plotlycharts",
+  "description": "Plotly Charts and Editor integration for Volto",
+  "volto_version": "19.3.0",
+  "__template__": "frontend_addon"
+}
