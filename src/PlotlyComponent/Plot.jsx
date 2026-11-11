@@ -12,7 +12,7 @@ const animationsMS = {
 
 const Plot = forwardRef((props, ref) => {
   const history = useHistory();
-  const { data, layout, autoscale, onInitialized } = props;
+  const { data, layout, autoscale, onAfterPlot, onInitialized } = props;
   const plotly = props.plotlyMinLib?.default || props.plotlyMinLib;
   const plotlyComponentFactory =
     props.plotlyComponentFactory?.default || props.plotlyComponentFactory;
@@ -233,6 +233,7 @@ const Plot = forwardRef((props, ref) => {
           onInitialized(...args);
         }
       }}
+      onAfterPlot={onAfterPlot}
       config={{ ...config, responsive: !autoscale }}
       onClick={(trace) => handleChartClick(trace, layout)}
       onHover={(trace) => handleChartHover(trace, layout)}

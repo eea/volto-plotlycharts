@@ -86,9 +86,12 @@ function UnconnectedPlotlyComponent(props) {
     onSelectBlock,
     onDeleteBlock,
     blocksConfig,
+    onAfterPlot: notifyAfterPlot,
+    onPrintStatusChange,
   } = props;
   const { height, vis_url, with_metadata_section = true } = props.data;
   const [initialized, setInitialized] = useState(false);
+  const [rendered, setRendered] = useState(false);
   const [filtersState, setFiltersState] = useState([]);
   const [autoscaleHeight, setAutoscaleHeight] = useState(null);
   const [autoscaleWidth, setAutoscaleWidth] = useState(null);
@@ -263,6 +266,11 @@ function UnconnectedPlotlyComponent(props) {
     setInitialized(true);
   }
 
+  function onAfterPlot(...args) {
+    setRendered(true);
+    notifyAfterPlot?.(...args);
+  }
+
   // Trigger resize event
   useEffect(() => {
     window.dispatchEvent(new Event('resize'));
@@ -284,6 +292,32 @@ function UnconnectedPlotlyComponent(props) {
 
     setMobile(shouldBeMobile);
   }, [isPrint, screen]);
+
+  useEffect(() => {
+    // A desktop chart changes layout when print mode forces the mobile
+    // presentation. Wait for the following Plotly afterplot event. Charts
+    // that were already mobile do not need another render.
+    if (isPrint && !mobile) {
+      setRendered(false);
+    }
+  }, [isPrint, mobile]);
+
+  useEffect(() => {
+    if (loadingVisualization || loadingProviderData) {
+      setRendered(false);
+    }
+  }, [loadingProviderData, loadingVisualization]);
+
+  const printStatus =
+    props.failedVisualization || props.failedProviderData
+      ? 'failed'
+      : initialized && rendered && !loadingVisualization && !loadingProviderData
+      ? 'ready'
+      : 'loading';
+
+  useEffect(() => {
+    onPrintStatusChange?.(printStatus);
+  }, [onPrintStatusChange, printStatus]);
 
   // Trigger Plotly resize when mobile state changes
   useEffect(() => {
@@ -420,6 +454,7 @@ function UnconnectedPlotlyComponent(props) {
               data={data}
               layout={layout}
               autoscale={layout.autoscale}
+              onAfterPlot={onAfterPlot}
               onInitialized={onInitialized}
             />
           </div>

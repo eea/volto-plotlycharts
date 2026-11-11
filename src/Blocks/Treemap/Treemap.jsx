@@ -2,7 +2,7 @@
  * The most basic connected block chart
  */
 
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { compose } from 'redux';
 import { injectLazyLibs } from '@plone/volto/helpers/Loadable/Loadable';
 import config from '@plone/volto/registry';
@@ -16,6 +16,9 @@ import { VisibilitySensor } from '@eeacms/volto-datablocks/components';
  *
  */
 function Treemap(props) {
+  const { failedProviderData, loadingProviderData, onPrintStatusChange } =
+    props;
+  const [rendered, setRendered] = useState(false);
   const plotly = props.plotlyMinLib?.default || props.plotlyMinLib;
   const plotlyComponentFactory =
     props.plotlyComponentFactory?.default || props.plotlyComponentFactory;
@@ -52,6 +55,22 @@ function Treemap(props) {
     },
   ];
 
+  const printStatus = failedProviderData
+    ? 'failed'
+    : rendered && !loadingProviderData
+    ? 'ready'
+    : 'loading';
+
+  useEffect(() => {
+    onPrintStatusChange?.(printStatus);
+  }, [onPrintStatusChange, printStatus]);
+
+  useEffect(() => {
+    if (loadingProviderData) {
+      setRendered(false);
+    }
+  }, [loadingProviderData]);
+
   return (
     <div className="treemap-chart">
       <VisibilitySensor>
@@ -71,6 +90,7 @@ function Treemap(props) {
               height: '450px',
               margin: 'auto',
             }}
+            onAfterPlot={() => setRendered(true)}
           />
         </div>
       </VisibilitySensor>

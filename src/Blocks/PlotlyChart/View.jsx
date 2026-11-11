@@ -7,6 +7,7 @@ const View = (props) => {
   return (
     <div className="plotly-chart">
       <PlotlyComponent
+        {...props}
         data={{
           ...data,
           download_button: true,
