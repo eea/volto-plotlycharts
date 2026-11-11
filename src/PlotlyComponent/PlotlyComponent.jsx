@@ -312,8 +312,8 @@ function UnconnectedPlotlyComponent(props) {
     props.failedVisualization || props.failedProviderData
       ? 'failed'
       : initialized && rendered && !loadingVisualization && !loadingProviderData
-      ? 'ready'
-      : 'loading';
+        ? 'ready'
+        : 'loading';
 
   useEffect(() => {
     onPrintStatusChange?.(printStatus);

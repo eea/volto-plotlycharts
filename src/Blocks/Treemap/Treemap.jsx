@@ -58,8 +58,8 @@ function Treemap(props) {
   const printStatus = failedProviderData
     ? 'failed'
     : rendered && !loadingProviderData
-    ? 'ready'
-    : 'loading';
+      ? 'ready'
+      : 'loading';
 
   useEffect(() => {
     onPrintStatusChange?.(printStatus);
