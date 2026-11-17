@@ -1,6 +1,7 @@
 {
   "name": "@eeacms/volto-plotlycharts-dev",
-  "version": "1.0.0-alpha.0",
+  "private": true,
+  "version": "15.0.0",
   "description": "Plotly Charts and Editor integration for Volto",
   "author": "European Environment Agency: IDM2 A-Team",
   "homepage": "https://github.com/eea/volto-plotlycharts",
