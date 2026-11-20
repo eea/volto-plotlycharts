@@ -89,7 +89,7 @@ const JsonEditor = (props) => {
   }
 
   async function exportJson() {
-    if (!validateEditor(editor)) {
+    if (!(await validateEditor(editor))) {
       return;
     }
     try {
