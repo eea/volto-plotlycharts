@@ -18,6 +18,8 @@ Plotly Charts and Plotly Chart Editor integration with Volto
 ![Plotlycharts](https://raw.githubusercontent.com/eea/volto-plotlycharts/master/docs/volto-plotlycharts.gif)
 
 ## Upgrade
+- Version `^15.0.0` adds Volto 19 support and publishes from `packages/volto-plotlycharts`. It requires Node.js 22 and React 18 as peers, declares `plotly-icons`, `qs` and `react-portal` instead of resolving them through hoisting, and no longer applies `resolutions.moment` (a yarn-only field) under pnpm or npm.
+
 - Version `^12.0.0` requires `^eea.plotly@1.0` and `^eea.api.dataconnector@12.0`
 
 - Version `^9.0.0` requires `^eea.api.dataconnector@9.0`
