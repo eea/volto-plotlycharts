@@ -309,7 +309,9 @@ function UnconnectedPlotlyComponent(props) {
   }, [loadingProviderData, loadingVisualization]);
 
   const printStatus =
-    props.failedVisualization || props.failedProviderData
+    props.data.visualization?.error ||
+    props.failedVisualization ||
+    props.failedProviderData
       ? 'failed'
       : initialized && rendered && !loadingVisualization && !loadingProviderData
         ? 'ready'
